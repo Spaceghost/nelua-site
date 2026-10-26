@@ -1,6 +1,35 @@
-const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
-const datasets={hybrid:{nelua:55,delegated:15,missing:30,label:'Hybrid coverage',detail:'Nelibc provides 813 of 1,471 tracked musl function symbols in at least one hybrid profile. The remaining surface can come from the host libc or is still unimplemented.'},standalone:{nelua:42,delegated:0,missing:58,label:'Standalone direction',detail:'Standalone is a separate runtime profile. It removes host-libc delegation and has its own completion gaps; symbol presence alone does not prove behavior.'}};
-$$('[data-profile]').forEach(btn=>btn.addEventListener('click',()=>{const d=datasets[btn.dataset.profile];$$('[data-profile]').forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));const bar=$('[data-profile-bar]');if(bar){bar.children[0].style.width=d.nelua+'%';bar.children[1].style.width=d.delegated+'%';bar.children[2].style.width=d.missing+'%';$('[data-profile-label]').textContent=d.label;$('[data-profile-detail]').textContent=d.detail}}));
-$$('[data-copy]').forEach(btn=>btn.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(btn.dataset.copy);const t=$('.toast');if(t){t.textContent='Copied to clipboard';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1400)}}catch{btn.textContent='Select and copy'}}));
-const table=$('[data-symbol-table]');if(table){const body=$('tbody',table),search=$('[data-symbol-search]'),filterButtons=$$('[data-symbol-filter]');let all=[],status='all';const draw=()=>{const q=search.value.trim().toLowerCase();const rows=all.filter(r=>(status==='all'||r.status===status)&&(!q||r.api.toLowerCase().includes(q)||r.exports.toLowerCase().includes(q)));body.innerHTML=rows.slice(0,120).map(r=>`<tr><td>${r.api.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}</td><td><span class="status ${r.status}">${r.status}</span></td><td>${r.exports?r.exports.split(';').join(' · '):'—'}</td></tr>`).join('');$('[data-result-count]').textContent=`${rows.length.toLocaleString()} matching symbols${rows.length>120?' · first 120 shown':''}`};fetch('../assets/api-coverage.json').then(r=>r.json()).then(rows=>{all=rows;draw()}).catch(()=>{$('[data-result-count]').textContent='Symbol inventory could not be loaded.'});search.addEventListener('input',draw);filterButtons.forEach(b=>b.addEventListener('click',()=>{status=b.dataset.symbolFilter;filterButtons.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw()}))}
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const profiles={
+  hybrid:{measured:true,exports:55,delegated:15,missing:30,label:'Hybrid coverage',detail:'Nelibc provides 813 of 1,471 tracked musl function symbols in at least one hybrid profile. The remaining surface can come from the host libc or is still unimplemented.'},
+  standalone:{measured:false,label:'Separate runtime profile',detail:'Standalone is a separate profile with its own completion gaps. The 1,471-symbol chart tracks hybrid coverage only; standalone percentages are not shown here.'}
+};
+$$('[data-profile]').forEach(button=>button.addEventListener('click',()=>{
+  const profile=profiles[button.dataset.profile];
+  $$('[data-profile]').forEach(other=>other.setAttribute('aria-pressed',String(other===button)));
+  const chart=$('.progress'),note=$('[data-standalone-note]');
+  if(profile.measured){
+    chart?.classList.remove('hide');note?.classList.add('hide');
+    const bar=$('[data-profile-bar]');
+    if(bar){bar.children[0].style.width=profile.exports+'%';bar.children[1].style.width=profile.delegated+'%';bar.children[2].style.width=profile.missing+'%'}
+    $('[data-profile-label]').textContent=profile.label;
+  }else{chart?.classList.add('hide');note?.classList.remove('hide')}
+  $('[data-profile-detail]').textContent=profile.detail;
+}));
+$$('[data-copy]').forEach(button=>button.addEventListener('click',async()=>{
+  try{await navigator.clipboard.writeText(button.dataset.copy);const toast=$('.toast');if(toast){toast.textContent='Copied to clipboard';toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1400)}}
+  catch{button.textContent='Select and copy'}
+}));
+const table=$('[data-symbol-table]');
+if(table){
+  const body=$('tbody',table),search=$('[data-symbol-search]'),filters=$$('[data-symbol-filter]');let all=[],status='all';
+  const draw=()=>{
+    const query=search.value.trim().toLowerCase();
+    const rows=all.filter(row=>(status==='all'||row.status===status)&&(!query||row.api.toLowerCase().includes(query)||row.exports.toLowerCase().includes(query)));
+    body.innerHTML=rows.slice(0,120).map(row=>`<tr><td>${row.api.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}</td><td><span class="status ${row.status}">${row.status}</span></td><td>${row.exports?row.exports.split(';').join(' · '):'—'}</td></tr>`).join('');
+    $('[data-result-count]').textContent=`${rows.length.toLocaleString()} matching symbols${rows.length>120?' · first 120 shown':''}`;
+  };
+  fetch('../assets/api-coverage.json').then(response=>response.json()).then(rows=>{all=rows;draw()}).catch(()=>{$('[data-result-count]').textContent='Symbol inventory could not be loaded.'});
+  search.addEventListener('input',draw);
+  filters.forEach(button=>button.addEventListener('click',()=>{status=button.dataset.symbolFilter;filters.forEach(other=>other.setAttribute('aria-pressed',String(other===button)));draw()}));
+}
 const year=$('[data-year]');if(year)year.textContent=new Date().getFullYear();

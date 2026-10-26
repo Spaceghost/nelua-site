@@ -29,7 +29,7 @@ PY
 
 ## Domain path
 
-`edge/spacegho-st-router.js` is the Cloudflare Worker source for the narrow `spacegho.st/lang/nelua*` route. It forwards that path to the public Sites deployment and leaves other host paths to their existing routes.
+`edge/spacegho-st-router.js` is the Cloudflare Worker source for the narrow `spacegho.st/langs/nelua*` route. It forwards that path to the public Sites deployment and leaves other host paths to their existing routes.
 
 ## Design
 

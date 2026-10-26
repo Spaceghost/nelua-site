@@ -1,6 +1,7 @@
 // Routes only /langs/nelua/* on spacegho.st to the public Sites deployment.
 const SITE = "https://nelua-language.spaceghostc2c.chatgpt.site";
 const PREFIX = "/langs/nelua";
+const LEGACY_PREFIX = "/lang/nelua";
 
 addEventListener("fetch", (event) => {
   event.respondWith(route(event.request));
@@ -8,6 +9,13 @@ addEventListener("fetch", (event) => {
 
 async function route(request) {
   const incoming = new URL(request.url);
+  if (incoming.pathname === LEGACY_PREFIX || incoming.pathname.startsWith(LEGACY_PREFIX + "/")) {
+    incoming.pathname = PREFIX + incoming.pathname.slice(LEGACY_PREFIX.length);
+    if (incoming.pathname === PREFIX || incoming.pathname === PREFIX + "/nelibc") {
+      incoming.pathname += "/";
+    }
+    return Response.redirect(incoming.toString(), 308);
+  }
   if (incoming.pathname === PREFIX || incoming.pathname === PREFIX + "/nelibc") {
     incoming.pathname += "/";
     return Response.redirect(incoming.toString(), 308);

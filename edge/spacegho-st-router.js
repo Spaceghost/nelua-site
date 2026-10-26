@@ -1,4 +1,4 @@
-// Routes only /lang/nelua/* on spacegho.st to the public Sites deployment.
+// Routes only /langs/nelua/* on spacegho.st to the public Sites deployment.
 const SITE = "https://nelua-language.spaceghostc2c.chatgpt.site";
 const PREFIX = "/langs/nelua";
 

@@ -1,0 +1,11 @@
+{
+  "name": "nelua-projects-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "imba build src/main.imba --outdir dist/assets --production --bundle --force"
+  },
+  "devDependencies": {
+    "imba": "2.0.0-alpha.253"
+  }
+}

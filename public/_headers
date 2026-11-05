@@ -1,0 +1,11 @@
+# Static-asset headers for spacegho.st/nelua. Pages revalidate quickly; the
+# assets are small and change rarely, so they get a day with revalidation.
+/nelua/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'
+  ! Cache-Control
+  Cache-Control: public, max-age=600, stale-while-revalidate=86400
+/nelua/assets/*
+  ! Cache-Control
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800

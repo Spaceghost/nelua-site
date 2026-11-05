@@ -1,36 +1,50 @@
-# Nelua field notes
+# nelua-site
 
-A compact, interactive guide to Nelua in working systems. Nelibc leads; Atlas firmware and Atlas Webware show two more places where Nelua owns real native logic.
+The pages at [spacegho.st/nelua](https://spacegho.st/nelua/): the Nelua core
+ecosystem (the compiler fork, nelibc, nebox), the workshop libraries built on
+it, and the wider Nelua world.
 
-## Local preview
+## Layout
 
-Serve `dist/` with any static HTTP server. The site has no package install or build step.
-
-```sh
-python3 -m http.server 8080 --directory dist
+```
+public/nelua/            the site, served as-is (index, compiler/, nelibc/, nebox/, 404)
+public/nelua/assets/     site.css, icon.svg, explorer.js (built), nelibc-coverage.json (generated)
+public/_headers          caching and security headers for the asset route
+src/explorer.imba        the nelibc coverage explorer (Imba), the only script on the site
+scripts/coverage.py      regenerates nelibc-coverage.json from a nelibc checkout
+scripts/place.mjs        copies the Imba bundle to its fixed public path
+legacy/                  the earlier field-notes site that lived under /langs/nelua
 ```
 
-Open `http://localhost:8080/`. The Nelibc page is at `/nelibc/`.
+Everything is static. The Worker has no script: `wrangler.toml` declares only
+the assets directory and the two `spacegho.st/nelua*` routes, so page views are
+static-asset requests on the free tier.
 
-## Coverage data
-
-`dist/assets/api-coverage.json` is generated from the pinned musl 1.2.5 symbol inventory in `Spaceghost/nelibc`. Refresh it from a current checkout with:
+## Work on it
 
 ```sh
-python3 - <<'PY'
-import csv, json
-with open('../nelibc/docs/musl-1.2.5-api-coverage.csv', newline='') as source:
-    rows = csv.DictReader(source)
-    data = [{'api': r['api'], 'status': r['status'], 'exports': r['nelibc_exports']} for r in rows]
-with open('dist/assets/api-coverage.json', 'w') as output:
-    json.dump(data, output, separators=(',', ':'))
-PY
+npm install
+npm run build          # src/explorer.imba -> public/nelua/assets/explorer.js
+python3 -m http.server 8080 --directory public   # http://localhost:8080/nelua/
 ```
 
-## Domain path
+## Refresh the numbers
 
-`edge/spacegho-st-router.js` is the Cloudflare Worker source for the narrow `spacegho.st/langs/nelua*` route. It forwards that path to the public Sites deployment and redirects the former `/lang/nelua*` path to its new location. Other host paths keep their existing routes.
+- Coverage: `python3 scripts/coverage.py ../nelibc`, then update the three
+  summary counts in `public/nelua/nelibc/index.html` and the hero line in
+  `public/nelua/index.html`.
+- nebox: applet list, case count and binary size come from the last recorded
+  container run in the nebox repository's commit messages.
+- Compiler: the additions list mirrors "Fork additions" in the fork's README.
+
+## Deploy
+
+```sh
+npm run deploy         # wrangler deploy, needs a wrangler login
+```
 
 ## Design
 
-The visual direction adapts the warm-black, kinpaku-gold and verdigris-patina palette from [Impeccable](https://github.com/pbakaus/impeccable), under its Apache-2.0 license. The page is buildless HTML, CSS, and JavaScript.
+Same ink/gold family as the rest of spacegho.st (see the melodica minisite):
+system fonts only, nothing fetched from another origin, no inline styles, a
+light scheme under `prefers-color-scheme: light`.

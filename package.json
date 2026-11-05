@@ -1,0 +1,16 @@
+{
+  "name": "nelua-site",
+  "private": true,
+  "type": "module",
+  "description": "spacegho.st/nelua: the Nelua core ecosystem (compiler fork, nelibc, nebox), served as static assets from a Cloudflare Worker.",
+  "scripts": {
+    "build": "imba build src/explorer.imba --web --production --bundle --minify --no-sourcemap --outdir build/explorer && node scripts/place.mjs",
+    "coverage": "python3 scripts/coverage.py",
+    "check": "wrangler deploy --dry-run",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "devDependencies": {
+    "imba": "2.0.0-alpha.253",
+    "wrangler": "^4.135.0"
+  }
+}

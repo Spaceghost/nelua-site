@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nebox · a toybox-style userland in Nelua on nelibc · spacegho.st/nelua</title>
+<meta name="description" content="nebox is a toybox/busybox-style multicall binary written in Nelua and linked against nelibc's standalone profile: 85 applets in one static x86-64 executable with no host libc, checked against GNU coreutils by 550 conformance cases.">
+<link rel="stylesheet" href="/nelua/assets/site.css">
+<link rel="icon" href="/nelua/assets/icon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://spacegho.st/nelua/nebox/">
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="home" href="/nelua/">spacegho.st / nelua</a>
+  <nav aria-label="Sections">
+    <a href="/nelua/">Overview</a>
+    <a href="/nelua/compiler/">Compiler</a>
+    <a href="/nelua/nelibc/">nelibc</a>
+    <a href="/nelua/nebox/" aria-current="page">nebox</a>
+    <a href="https://nelua.io/" rel="external">nelua.io ↗</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <p class="eyebrow">Core · 03</p>
+  <h1>nebox</h1>
+  <p class="tagline">A toybox-style userland: 85 applets, one static binary, no host libc.</p>
+  <p class="blurb"><a href="https://github.com/Spaceghost/nebox">Spaceghost/nebox</a> is a multicall binary written in Nelua and linked against <a href="/nelua/nelibc/">nelibc</a>'s standalone archive. Each applet is chosen from <code>argv[0]</code> (a hard or symbolic link named after the applet) or from the first operand. It carries its own regex engine, stream editor, find, diff and checksum implementations, all in about 7,600 lines of Nelua.</p>
+  <p class="stats"><span><strong>85 applets</strong></span><span><strong>550</strong> conformance cases, 0 failing</span><span><strong>1,047,472 bytes</strong> static, stripped</span><span><strong>nm -u</strong> empty</span><span>run 2026-11-05</span></p>
+</section>
+
+<main>
+<h2 class="section">Applets</h2>
+<p class="lead"><code>nebox --list</code> prints these; <code>nebox --install [-s] DIR</code> creates one link per applet in <code>DIR</code>.</p>
+<ul class="applets"><li>[</li><li>base64</li><li>basename</li><li>cat</li><li>chgrp</li><li>chmod</li><li>chown</li><li>cksum</li><li>cmp</li><li>comm</li><li>cp</li><li>cut</li><li>date</li><li>dd</li><li>df</li><li>diff</li><li>dirname</li><li>du</li><li>echo</li><li>env</li><li>expand</li><li>expr</li><li>factor</li><li>false</li><li>find</li><li>fold</li><li>free</li><li>grep</li><li>groups</li><li>head</li><li>hexdump</li><li>hostname</li><li>id</li><li>install</li><li>kill</li><li>link</li><li>ln</li><li>ls</li><li>md5sum</li><li>mkdir</li><li>mktemp</li><li>mv</li><li>nl</li><li>nproc</li><li>od</li><li>paste</li><li>printenv</li><li>printf</li><li>pwd</li><li>readlink</li><li>realpath</li><li>rev</li><li>rm</li><li>rmdir</li><li>sed</li><li>seq</li><li>sha1sum</li><li>sha256sum</li><li>shuf</li><li>sleep</li><li>sort</li><li>split</li><li>stat</li><li>strings</li><li>sync</li><li>tac</li><li>tail</li><li>tee</li><li>test</li><li>timeout</li><li>touch</li><li>tr</li><li>true</li><li>truncate</li><li>tsort</li><li>tty</li><li>unexpand</li><li>uname</li><li>uniq</li><li>unlink</li><li>wc</li><li>which</li><li>whoami</li><li>xargs</li><li>yes</li></ul>
+
+<h2 class="section">How it is checked</h2>
+<p class="lead">Every case in <code>tests/run.sh</code> runs one shell command twice from identical fixture trees: once with the host's GNU coreutils, once with nebox's applet links first on <code>PATH</code>. stdout, the exit status and a snapshot of the resulting directory (names, modes, checksums) must match. Where the host has no reference tool, a pinned expected output is used instead.</p>
+<div class="grid grid-3">
+  <article class="card card-core">
+    <h3>Link recipe</h3>
+    <p class="small muted">Nelua emits C; <code>zig cc</code> links the whole nelibc standalone archive with no libc, no PIE and nelibc's own <code>_start</code>.</p>
+<pre><code>nelua -r --cc 'zig cc -mcpu=x86_64' \
+  --cflags='-DNELIBC_STANDALONE -nostdlib -static \
+    -ffreestanding -fno-builtin -Wl,-e,_start' \
+  --ldflags='-Wl,--whole-archive \
+    libnelibc-standalone-zig.a -Wl,--no-whole-archive' \
+  -o nebox src/nebox.nelua
+nm -u nebox   # must print nothing</code></pre>
+  </article>
+  <article class="card">
+    <h3>What the GC situation is</h3>
+    <p class="small muted">The program is compiled with <code>pragmas.nogc</code>: nelibc has no <code>_setjmp</code>, which Nelua's collector needs, and a shell toolbox does not need a collector. Applets allocate with the default allocator and exit; memory is reclaimed by the kernel.</p>
+  </article>
+  <article class="card">
+    <h3>Own regex engine</h3>
+    <p class="small muted">POSIX basic and extended syntax with brackets, classes, intervals, groups, alternation, back-references and the GNU word escapes, as a backtracking VM in <code>src/nebox/regex.nelua</code>. grep, sed, expr and find share it.</p>
+  </article>
+</div>
+
+<h2 class="section">Known limits</h2>
+<p class="lead">Stated rather than worked around. The full list is in the repository's README.</p>
+<ul>
+  <li>Regex matching is leftmost-first (backtracking), not POSIX leftmost-longest; this only shows with alternations whose branches are prefixes of each other. No multibyte locales.</li>
+  <li><code>date</code> and <code>stat</code> print UTC: nelibc has no zone database.</li>
+  <li><code>ls</code> prints one entry per line in every mode. <code>du</code> and <code>find</code> walk directories in sorted name order where GNU uses directory order.</li>
+  <li><code>sed</code> has no <code>e</code>, <code>M</code> or <code>-z</code>; <code>grep</code> has no context lines; <code>sort</code> has no <code>-M</code>, <code>-V</code> or <code>-h</code>; <code>xargs</code> has no <code>-P</code>.</li>
+  <li><code>tail -f</code> polls once a second. <code>timeout</code> polls the child every 2 ms instead of using signals.</li>
+  <li>Names for ids come from reading <code>/etc/passwd</code> and <code>/etc/group</code> directly; nelibc has no <code>getpwuid</code>.</li>
+</ul>
+
+<h2 class="section">Build</h2>
+<pre><code>git clone https://github.com/Spaceghost/nelibc
+make -C nelibc lib-standalone-zig
+git clone https://github.com/Spaceghost/nebox
+make -C nebox NELIBC=../nelibc        # build/nebox
+make -C nebox NELIBC=../nelibc test   # the conformance suite</code></pre>
+<p class="note">Builds and tests are recorded in a Debian 12 container with Nelua <code>3c29419</code>, Zig 0.17.0 and GNU coreutils as the reference. The repository's CI runs the same suite on every push.</p>
+<div class="actions">
+  <a class="button" href="https://github.com/Spaceghost/nebox">Repository</a>
+  <a class="button button-ghost" href="https://github.com/Spaceghost/nebox/blob/main/tests/run.sh">Conformance suite</a>
+</div>
+</main>
+
+<footer>
+  <span>spacegho.st / nelua / nebox</span>
+  <a href="https://github.com/Spaceghost/nebox">Spaceghost/nebox</a>
+</footer>
+</div>
+</body>
+</html>

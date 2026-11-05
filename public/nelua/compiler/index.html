@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nelua compiler fork · spacegho.st/nelua</title>
+<meta name="description" content="Spaceghost/nelua-lang: upstream Nelua plus const pointers, a compiler-enforced freestanding pragma, cross-compilation with --target, nelua-bindgen, variants and closures. What each addition is, how it is gated, and how to install it.">
+<link rel="stylesheet" href="/nelua/assets/site.css">
+<link rel="icon" href="/nelua/assets/icon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://spacegho.st/nelua/compiler/">
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="home" href="/nelua/">spacegho.st / nelua</a>
+  <nav aria-label="Sections">
+    <a href="/nelua/">Overview</a>
+    <a href="/nelua/compiler/" aria-current="page">Compiler</a>
+    <a href="/nelua/nelibc/">nelibc</a>
+    <a href="/nelua/nebox/">nebox</a>
+    <a href="https://nelua.io/" rel="external">nelua.io ↗</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <p class="eyebrow">Core · 01</p>
+  <h1>The compiler</h1>
+  <p class="tagline">Upstream Nelua, tracked closely, plus the pieces a self-hosted libc and freestanding targets asked for.</p>
+  <p class="blurb"><a href="https://github.com/Spaceghost/nelua-lang">Spaceghost/nelua-lang</a> is a fork of <a href="https://github.com/edubart/nelua-lang">edubart/nelua-lang</a> at commit <code>a584505</code> (2025-06-24). Each addition lands with specs in <code>spec/</code> and a page under <code>docs/pages/</code>, and the gate runs upstream's <code>make test</code> together with nelibc's smoke matrix against the freshly built compiler.</p>
+  <p class="stats"><span><strong>Base</strong> a584505 · 2025-06-24</span><span><strong>7 additions</strong>, each spec-gated</span><span><strong>Lua 5.4</strong> compiler, C99 output</span></p>
+</section>
+
+<main>
+<h2 class="section">What the fork adds</h2>
+<p class="lead">Everything below is opt-in syntax or tooling. Code written for upstream Nelua compiles unchanged.</p>
+
+<div class="grid">
+  <article class="card card-core" id="const">
+    <h3>Const pointers</h3>
+    <p><code>*const T</code> maps to C <code>const T*</code>. Reads through it are read-only; dropping <code>const</code> needs an explicit cast. The analyzer checks constness on the pointer type before implicit dereference.</p>
+    <p class="meta"><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#const-pointers">overview ↗</a></p>
+  </article>
+  <article class="card card-core" id="freestanding">
+    <h3><code>pragmas.freestanding</code></h3>
+    <p>A compiler-enforced runtime-free profile. It implies <code>nogc</code> and <code>noentrypoint</code>, traps on abort, and rejects heap, process, stdio and <code>main</code> symbols at compile time. nelibc's host profile and Drift's kernel build on it.</p>
+    <p class="meta"><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/runtime-free.md">runtime-free guide ↗</a></p>
+  </article>
+  <article class="card card-core" id="target">
+    <h3><code>--target &lt;triple&gt;</code></h3>
+    <p>Cross compile with clang or <code>zig cc</code>. The triple reaches the type-size probe, the cache hash and the compile, so a build for another architecture never reuses the host's cached sizes.</p>
+  </article>
+  <article class="card card-core" id="bindgen">
+    <h3><code>tools/nelua-bindgen</code></h3>
+    <p>Generates <code>&lt;cimport&gt;</code> bindings from C headers with libclang: typedef struct tags on forward declarations, array parameters decayed to unbounded array pointers, committed expected output for the sample.</p>
+  </article>
+  <article class="card card-core" id="variants">
+    <h3>Variants</h3>
+    <p>Tagged unions as <code>variant(A, B)</code> or the shorthand <code>A|B</code> through <code>require 'variant'</code>. A variant is a plain record: a <code>uint8</code> tag followed by a C union, so it works without the GC.</p>
+<pre><code>require 'variant'
+local Shape = @variant(integer, string)
+local s: Shape = 'circle'
+if s:is(string) then print(s:get(string)) end</code></pre>
+  </article>
+  <article class="card card-core" id="closures">
+    <h3>Closures</h3>
+    <p>Anonymous functions capture upvalues by value as closure records. The rewrite is deferred until captured types resolve. Older releases of the fork (and upstream) reject upvalue access in nested functions; nebox was written against one of those, which is why it uses records and module-level locals instead.</p>
+  </article>
+  <article class="card">
+    <h3>Toolchain and editor support</h3>
+    <p>A compact C codegen profile for distributable output, Tree-sitter and TextMate grammars under <code>tools/</code> (the Tree-sitter scanner is itself written in Nelua), and a binary cache that also hashes imported C sources so a changed header rebuilds.</p>
+  </article>
+</div>
+
+<h2 class="section">Install</h2>
+<p class="lead">Nelua needs Git, a C compiler and make. The fork builds the same way upstream does.</p>
+<pre><code>git clone https://github.com/Spaceghost/nelua-lang
+cd nelua-lang
+make
+sudo make install   # or: make install PREFIX=$HOME/.local
+nelua --version</code></pre>
+<p class="note">Pinning: the nelibc gate and nebox's container builds run Nelua <code>3c29419</code>, the merge of the Tree-sitter work. Newer fork commits add variants and closures on top; nelibc and nebox do not yet require them.</p>
+
+<h2 class="section">How changes are gated</h2>
+<dl class="kv">
+  <dt>Specs</dt><dd><code>make test</code> runs upstream's spec suite plus one spec file per addition (const pointers, freestanding, target, bindgen, variant, closures).</dd>
+  <dt>Consumers</dt><dd>nelibc's seven-profile smoke matrix is rebuilt against the fresh compiler before a change is merged.</dd>
+  <dt>Runtime-free audits</dt><dd>A standalone GCC and Clang workflow links the freestanding examples and checks the emitted symbols: no allocator, no GC, no entry point.</dd>
+  <dt>Upstream</dt><dd>The fork rebases rather than diverges; language additions are kept small enough to offer upstream.</dd>
+</dl>
+</main>
+
+<footer>
+  <span>spacegho.st / nelua / compiler</span>
+  <a href="https://github.com/Spaceghost/nelua-lang">Spaceghost/nelua-lang</a>
+  <a href="https://nelua.io/overview/">language overview ↗</a>
+</footer>
+</div>
+</body>
+</html>

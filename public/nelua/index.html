@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nelua at spacegho.st · the compiler, nelibc and nebox</title>
+<meta name="description" content="The Nelua core ecosystem as built at spacegho.st: a Nelua compiler fork, nelibc (a C library written in Nelua) and nebox (a static toybox-style userland on nelibc), with the workshop libraries around them and the wider Nelua world.">
+<link rel="stylesheet" href="/nelua/assets/site.css">
+<link rel="icon" href="/nelua/assets/icon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://spacegho.st/nelua/">
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="home" href="/nelua/">spacegho.st / nelua</a>
+  <nav aria-label="Sections">
+    <a href="/nelua/" aria-current="page">Overview</a>
+    <a href="/nelua/compiler/">Compiler</a>
+    <a href="/nelua/nelibc/">nelibc</a>
+    <a href="/nelua/nebox/">nebox</a>
+    <a href="https://nelua.io/" rel="external">nelua.io ↗</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <p class="eyebrow">Native Extensible Lua, all the way down</p>
+  <h1>Nelua, with its own libc and userland</h1>
+  <p class="tagline">One language from the compiler to the shell prompt: a Nelua compiler fork, a C library written in Nelua, and a toybox-style userland linked against it.</p>
+  <p class="blurb">Nelua is a statically typed, metaprogrammable systems language with Lua syntax that compiles to C. This site tracks the three pieces that make it self-sufficient, the workshop libraries built on top of them, and the wider Nelua world they sit in. Every number here comes from a recorded run; nothing is claimed that was not observed.</p>
+  <p class="stats"><span><strong>1 compiler</strong> fork, 40+ commits past upstream</span><span><strong>813 / 1,471</strong> musl symbols in nelibc</span><span><strong>85 applets</strong> in nebox, 550 conformance cases green</span><span>updated 2026-11-05</span></p>
+</section>
+
+<main>
+<h2 class="section">Three rings</h2>
+<p class="lead">The core is what the language needs to stand on its own. The workshop is what gets built here with it. The world is everything upstream and around it. The rings are kept apart on purpose: core pieces depend only on each other, workshop pieces depend on the core, and nothing in the core depends on the outer rings.</p>
+
+<div class="rings">
+  <section class="ring ring-core" aria-labelledby="ring-core">
+    <h2 id="ring-core"><span class="n">01</span> Core</h2>
+    <p>The language and the two things every program needs: a C library and a userland. All three are Nelua.</p>
+    <ul>
+      <li><a href="/nelua/compiler/">Nelua compiler</a><span>Spaceghost/nelua-lang: upstream Nelua plus const pointers, a freestanding pragma, <code>--target</code>, bindgen, variants and closures.</span></li>
+      <li><a href="/nelua/nelibc/">nelibc</a><span>A C library rebuilt piece by piece in Nelua. Hybrid archives over glibc or musl, a standalone Linux x86-64 runtime, and a host profile for kernels.</span></li>
+      <li><a href="/nelua/nebox/">nebox</a><span>A toybox-style multicall binary: 85 applets, one static executable, no host libc. Linked against nelibc standalone; checked against GNU coreutils.</span></li>
+    </ul>
+  </section>
+
+  <section class="ring" aria-labelledby="ring-workshop">
+    <h2 id="ring-workshop"><span class="n">02</span> Workshop</h2>
+    <p>Libraries and programs built here on the core. They consume the compiler and nelibc; they are not part of them.</p>
+    <ul>
+      <li><a href="https://github.com/Spaceghost/drift">Drift</a><span>Device drivers that travel between operating systems: Virtio, xHCI, NVMe, Ethernet and AHCI in Nelua, linked as generated C into any kernel.</span></li>
+      <li><a href="https://github.com/Spaceghost/atlas-firmware">Atlas firmware</a><span>ESP32-S3 LoRa field controller where Nelua owns the bounded native mechanisms beside system Lua and ESP-IDF.</span></li>
+      <li><a href="https://spacegho.st/melodica/">melodica.h</a><span>A Pandora protocol library with five implementations behind one C ABI; one of them is Nelua.</span></li>
+      <li><a href="https://github.com/Spaceghost/libc.bend">libc.bend</a><span>The same libc idea in Bend 2, resting on nelibc. nelibc's host profile is what the Bend runtime boots on.</span></li>
+      <li><a href="https://github.com/Spaceghost/writ">Writ</a><span>Information-flow control in Bend 2; the first consumer of nelibc's host profile.</span></li>
+    </ul>
+  </section>
+
+  <section class="ring" aria-labelledby="ring-world">
+    <h2 id="ring-world"><span class="n">03</span> World</h2>
+    <p>Upstream and the community. The fork tracks upstream closely and sends what it can back.</p>
+    <ul>
+      <li><a href="https://nelua.io/">nelua.io</a><span>The language's home: tutorial, overview, manual, and the standard libraries that ship with the compiler.</span></li>
+      <li><a href="https://github.com/edubart/nelua-lang">edubart/nelua-lang</a><span>Upstream. This fork's base is commit <code>a584505</code> from 2025-06-24.</span></li>
+      <li><a href="https://github.com/edubart/nelua-batteries">nelua-batteries</a> · <a href="https://github.com/edubart/nelua-decl">nelua-decl</a> · <a href="https://github.com/edubart/nene">nene</a><span>Extra libraries, C binding generation, and a 2D game engine from upstream's author.</span></li>
+      <li><a href="https://discord.gg/7aaGeG7">Discord</a><span>Where the Nelua community talks.</span></li>
+    </ul>
+  </section>
+</div>
+
+<h2 class="section">Why keep a libc and a userland in the language</h2>
+<p class="lead">A systems language is only as portable as the runtime beneath it. With nelibc the program, its C library and its startup code are all Nelua, compiled by one toolchain to one static binary. nebox is the proof: a working shell toolbox, 1.0 MB, with <code>nm -u</code> empty. When a nelibc function misbehaves the fix is a Nelua edit, and the same compiler fork builds every layer.</p>
+
+<div class="grid grid-3">
+  <article class="card card-core">
+    <h3>Build everything</h3>
+    <p class="small muted">Nelua (the fork), Zig for <code>zig cc</code>, and a Linux x86-64 box. GCC and TinyCC are comparison profiles.</p>
+<pre><code>git clone https://github.com/Spaceghost/nelua-lang
+make -C nelua-lang
+git clone https://github.com/Spaceghost/nelibc
+make -C nelibc lib-standalone-zig
+git clone https://github.com/Spaceghost/nebox
+make -C nebox NELIBC=../nelibc test</code></pre>
+  </article>
+  <article class="card">
+    <h3>Evidence standard</h3>
+    <p class="small muted">Every counted thing on this site, from the musl coverage table to nebox's conformance suite, is the output of a recorded run in a container with pinned toolchains. Docs say "unimplemented" where it is unimplemented rather than writing around it.</p>
+    <p class="meta"><span>Nelua 3c29419 · Zig 0.17.0 · Debian 12</span></p>
+  </article>
+  <article class="card">
+    <h3>Runtime-free by construction</h3>
+    <p class="small muted">The fork's <code>pragmas.freestanding</code> rejects heap, process, stdio and <code>main</code> symbols at compile time. nelibc's host profile and Drift's kernel example are built that way: no GC, no allocator, no entry point unless you ask for one.</p>
+    <p class="meta"><a href="/nelua/compiler/#freestanding">freestanding pragma</a><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/runtime-free.md">runtime-free guide ↗</a></p>
+  </article>
+</div>
+</main>
+
+<footer>
+  <span>spacegho.st / nelua</span>
+  <span>Static page, no scripts on this one, nothing fetched from another origin.</span>
+  <a href="https://github.com/Spaceghost">github.com/Spaceghost</a>
+</footer>
+</div>
+</body>
+</html>

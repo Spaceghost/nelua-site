@@ -1,0 +1,19 @@
+name = "nelua-site"
+compatibility_date = "2026-10-01"
+
+# Only reachable through the zone route: no *.workers.dev or preview URLs.
+workers_dev = false
+preview_urls = false
+
+# Exactly the /nelua prefix on spacegho.st; every other route on the zone is untouched.
+routes = [
+  { pattern = "spacegho.st/nelua", zone_name = "spacegho.st" },
+  { pattern = "spacegho.st/nelua/*", zone_name = "spacegho.st" }
+]
+
+# Assets-only Worker: no script, so page views are static-asset requests (not
+# Worker invocations). public/_headers sets caching; nothing is dynamic.
+[assets]
+directory = "public"
+html_handling = "auto-trailing-slash"
+not_found_handling = "404-page"

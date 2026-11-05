@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nelibc · a C library written in Nelua · spacegho.st/nelua</title>
+<meta name="description" content="nelibc replaces C library functions with Nelua implementations: hybrid archives over glibc or musl, a standalone Linux x86-64 runtime, and a host profile for kernels. Explore coverage of all 1,471 musl 1.2.5 function symbols.">
+<link rel="stylesheet" href="/nelua/assets/site.css">
+<link rel="icon" href="/nelua/assets/icon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://spacegho.st/nelua/nelibc/">
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="home" href="/nelua/">spacegho.st / nelua</a>
+  <nav aria-label="Sections">
+    <a href="/nelua/">Overview</a>
+    <a href="/nelua/compiler/">Compiler</a>
+    <a href="/nelua/nelibc/" aria-current="page">nelibc</a>
+    <a href="/nelua/nebox/">nebox</a>
+    <a href="https://nelua.io/" rel="external">nelua.io ↗</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <p class="eyebrow">Core · 02</p>
+  <h1>nelibc</h1>
+  <p class="tagline">A C library, rebuilt piece by piece in Nelua.</p>
+  <p class="blurb">Replace selected libc functions with Nelua implementations and keep the rest on glibc or musl; then grow the replacement into a standalone runtime. <a href="https://github.com/Spaceghost/nelibc">Spaceghost/nelibc</a> is experimental, Linux x86-64, with hybrid builds working and the standalone profile in progress. About 36,000 lines of Nelua, with x86-64 assembly for memory primitives and a handful of C adapters at the seams.</p>
+  <p class="stats"><span><strong>813</strong> of 1,471 musl symbols exported</span><span><strong>223</strong> delegated to the host libc</span><span><strong>435</strong> not yet declared</span><span>gate 2026-11-04 · 112 targets green</span></p>
+</section>
+
+<main>
+<h2 class="section">Three profiles</h2>
+<div class="grid grid-3">
+  <article class="card card-core">
+    <h3>Hybrid</h3>
+    <p>Link <code>libnelibc-zig.a</code> (or the GCC, musl or TinyCC variant) before the host libc. Nelibc's symbols win; uncovered ones keep coming from glibc or musl. The incremental replacement model.</p>
+    <pre><code>make lib-zig
+zig cc -Iinclude -fno-builtin app.c \
+  build/libnelibc-zig.a -o app</code></pre>
+  </article>
+  <article class="card card-core">
+    <h3>Standalone</h3>
+    <p>No host libc at all: Nelibc owns <code>_start</code>, the Linux x86-64 syscall backend, malloc, stdio, pthreads (a subset), locale data and math. This is what <a href="/nelua/nebox/">nebox</a> links against.</p>
+    <pre><code>make lib-standalone-zig
+# -nostdlib -static, whole-archive, -Wl,-e,_start</code></pre>
+  </article>
+  <article class="card card-core">
+    <h3>Host</h3>
+    <p>Standalone minus Linux: the same objects over a table of host callbacks (console, memory, clock, exit) for kernels and unikernels. Threads run as cooperative lanes on the host's one hardware thread. First consumer: the unmodified Bend 2 runtime that <a href="https://github.com/Spaceghost/writ">Writ</a> compiles to.</p>
+    <p class="meta"><a href="https://github.com/Spaceghost/nelibc/blob/main/docs/host-profile.md">host profile ↗</a></p>
+  </article>
+</div>
+
+<h2 class="section">What works today</h2>
+<div class="table-wrap"><table>
+  <thead><tr><th>Area</th><th>Hybrid builds</th><th>Standalone</th></tr></thead>
+  <tbody>
+    <tr><td>Memory, strings, conversions</td><td>Broad Nelua implementation</td><td>Broad and growing</td></tr>
+    <tr><td>Math</td><td>Broad real and complex coverage, incl. x86-64 long double and fenv</td><td>Broad; edge cases remain</td></tr>
+    <tr><td>Stdio</td><td>Mostly host libc</td><td>Partial Nelua implementation</td></tr>
+    <tr><td>Files, processes, threads</td><td>Host and Nelua mix</td><td>Linux x86-64 base; gaps remain</td></tr>
+    <tr><td>Locale, wide chars, networking</td><td>Host and Nelua mix</td><td>Partial; resolver APIs remain</td></tr>
+  </tbody>
+</table></div>
+<p class="note">Counts track exported names, not behavioral conformance. "Implemented" means the symbol is present in the archive. See the <a href="https://github.com/Spaceghost/nelibc/blob/main/docs/api-coverage.md">coverage notes</a> for the methodology and the <a href="https://github.com/Spaceghost/nelibc/blob/main/docs/core-roadmap.md">roadmap</a> for the priority order.</p>
+
+<h2 class="section" id="coverage">musl 1.2.5 coverage explorer</h2>
+<p class="lead">All 1,471 function symbols musl 1.2.5 declares, with Nelibc's status in the pinned hybrid comparison. Filter by name, header or status. The data is <a href="/nelua/assets/nelibc-coverage.json">one JSON file</a> generated from <code>docs/musl-1.2.5-api-coverage.csv</code> in the repository.</p>
+
+<div class="bars" aria-label="Coverage summary">
+  <span class="st-implemented">Implemented</span><span class="bar"><i class="fill-implemented w-impl"></i></span><span class="n">813 · 55%</span>
+  <span class="st-host-delegated">Host-delegated</span><span class="bar"><i class="fill-host-delegated w-host"></i></span><span class="n">223 · 15%</span>
+  <span class="st-not-declared">Not declared</span><span class="bar"><i class="fill-not-declared w-nd"></i></span><span class="n">435 · 30%</span>
+</div>
+
+<div id="explorer" class="explorer">
+  <noscript><p class="muted">The explorer needs JavaScript. The same data is in <a href="https://github.com/Spaceghost/nelibc/blob/main/docs/musl-1.2.5-api-coverage.csv">the CSV on GitHub</a>.</p></noscript>
+</div>
+
+<h2 class="section">Build and gate</h2>
+<dl class="kv">
+  <dt>Requirements</dt><dd>Nelua, Zig (<code>zig cc</code>). GCC for the GCC profile; TinyCC mob branch for the TinyCC profile.</dd>
+  <dt>First build</dt><dd><code>make dogfood-zig</code> builds the hybrid archive, compiles <code>examples/incremental.c</code>, runs it and checks Nelibc's <code>memcpy</code>, <code>strlen</code>, <code>strchr</code> and <code>strtol</code> are the ones linked.</dd>
+  <dt>Matrices</dt><dd><code>make smoke-matrix</code> (seven profiles), <code>make dogfood-matrix</code> (four consumers), <code>make host-matrix</code>, <code>make host-bend-hello-zig</code>.</dd>
+  <dt>Last recorded gate</dt><dd>2026-11-04 on main <code>5c54547</code>: Debian 12, glibc 2.36, GCC 12.2, Zig 0.17.0, Nelua <code>3c29419</code>, Bend 2.0.39. 112 targets passed across hybrid Zig/glibc, GCC/glibc and Zig/musl, standalone Zig and GCC, freestanding Zig and GCC, and the host profile.</dd>
+  <dt>CPU baseline</dt><dd>Zig builds default to <code>-mcpu=x86_64</code>; override with <code>ZIGFLAGS='-mcpu=x86_64_v3'</code> on purpose.</dd>
+</dl>
+<div class="actions">
+  <a class="button" href="https://github.com/Spaceghost/nelibc">Repository</a>
+  <a class="button button-ghost" href="https://github.com/Spaceghost/nelibc/blob/main/docs/quickstart.md">Quickstart</a>
+  <a class="button button-ghost" href="https://github.com/Spaceghost/nelibc/blob/main/docs/core-roadmap.md">Roadmap</a>
+</div>
+</main>
+
+<footer>
+  <span>spacegho.st / nelua / nelibc</span>
+  <span>Coverage data 2026-11-05.</span>
+  <a href="https://github.com/Spaceghost/nelibc">Spaceghost/nelibc</a>
+</footer>
+</div>
+<script src="/nelua/assets/explorer.js" defer></script>
+</body>
+</html>

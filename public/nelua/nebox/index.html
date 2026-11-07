@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>nebox · a toybox-style userland in Nelua on nelibc · spacegho.st/nelua</title>
-<meta name="description" content="nebox is a toybox/busybox-style multicall binary written in Nelua and linked against nelibc's standalone profile: 87 applets, including a POSIX shell, in one static x86-64 executable with no host libc, checked against GNU coreutils, gawk and dash by 1,306 conformance cases.">
+<meta name="description" content="nebox is a toybox/busybox-style multicall binary written in Nelua and linked against nelibc's standalone profile: 87 applets, including a POSIX shell, in one static x86-64 executable with no host libc, checked against GNU coreutils, gawk and dash by 1,358 conformance cases.">
 <link rel="stylesheet" href="/nelua/assets/site.css">
 <link rel="icon" href="/nelua/assets/icon.svg" type="image/svg+xml">
 <link rel="canonical" href="https://spacegho.st/nelua/nebox/">
@@ -27,7 +27,7 @@
   <h1>nebox</h1>
   <p class="tagline">A toybox-style userland: 87 applets including a POSIX shell, one static binary, no host libc.</p>
   <p class="blurb"><a href="https://github.com/Spaceghost/nebox">Spaceghost/nebox</a> is a multicall binary written in Nelua and linked against <a href="/nelua/nelibc/">nelibc</a>'s standalone archive. Each applet is chosen from <code>argv[0]</code> (a hard or symbolic link named after the applet) or from the first operand. It carries its own POSIX shell, regex engine, awk, stream editor, sort, find, diff and checksum implementations, all in Nelua.</p>
-  <p class="stats"><span><strong>87 applets</strong></span><span><strong>1,306</strong> conformance cases, 0 failing</span><span><strong>1,578,560 bytes</strong> static</span><span><strong>nm -u</strong> empty</span><span>run 2026-11-07</span></p>
+  <p class="stats"><span><strong>87 applets</strong></span><span><strong>1,358</strong> conformance cases, 0 failing</span><span><strong>1,609,440 bytes</strong> static</span><span><strong>nm -u</strong> empty</span><span>run 2026-11-07</span></p>
 </section>
 
 <main>
@@ -66,8 +66,8 @@ nm -u nebox   # must print nothing</code></pre>
   <li><code>sh</code> is a POSIX shell checked against dash by 444 cases: the full grammar, expansions, redirections, traps and the special and regular builtins. Not implemented: interactive use (no prompts, history or line editing), job control, <code>ulimit</code>. Where POSIX and dash disagree, nebox follows POSIX and the case is pinned.</li>
   <li><code>awk</code> is POSIX awk checked against GNU Awk 5.2.1 <code>--posix</code>; GNU extensions such as <code>gensub</code>, <code>strftime</code> and <code>BEGINFILE</code> are not there, and <code>RS</code> uses only its first character.</li>
   <li><code>date</code> follows GNU date's formatting rules in local time (TZif files, POSIX TZ strings, <code>TZDIR</code>), but <code>-d</code> takes only <code>@SECONDS</code>, and <code>-I</code>, <code>--rfc-3339</code>, <code>-f</code> and setting the clock are not there.</li>
-  <li><code>ls</code> prints one entry per line in every mode. <code>du</code> and <code>find</code> walk directories in sorted name order where GNU uses directory order.</li>
-  <li><code>sed</code> has no <code>e</code>, <code>M</code> or <code>-z</code>; <code>grep</code> has no context lines; <code>sort</code> has the GNU option surface (<code>-k</code> modifiers, <code>-h</code>, <code>-V</code>) but no <code>-M</code>; <code>xargs</code> has no <code>-P</code>. <code>seq</code> matches GNU seq 9.1 for floats, <code>-f</code>, <code>-w</code> and integers past 2<sup>64</sup>.</li>
+  <li><code>ls</code> lays out columns like GNU ls 9.1 (<code>-C</code>, <code>-x</code>, <code>-m</code>, <code>-w</code>, <code>TABSIZE</code>) but has no quoting styles, colour, <code>-L</code>/<code>-H</code> or <code>BLOCK_SIZE</code>. <code>du</code> and <code>find</code> walk directories in sorted name order where GNU uses directory order.</li>
+  <li><code>sed</code> has <code>-z</code>, <code>M</code> and <code>e</code> but no <code>--posix</code>, <code>-u</code>, <code>v</code> or the <code>\d \o \x \c</code> escapes; <code>grep</code> has GNU context lines but no <code>-z</code>, <code>-L</code>, <code>-f</code> or binary-file detection; <code>sort</code> has the GNU option surface (<code>-k</code> modifiers, <code>-h</code>, <code>-V</code>) but no <code>-M</code>; <code>xargs</code> has no <code>-P</code>. <code>seq</code> matches GNU seq 9.1 for floats, <code>-f</code>, <code>-w</code> and integers past 2<sup>64</sup>.</li>
   <li><code>tail -f</code> polls once a second. <code>timeout</code> polls the child every 2 ms instead of using signals.</li>
   <li>Names for ids come from reading <code>/etc/passwd</code> and <code>/etc/group</code> directly; nelibc has no <code>getpwuid</code>.</li>
 </ul>

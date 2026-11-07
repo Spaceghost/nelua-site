@@ -122,6 +122,25 @@ print(CRC[1])                         -- 1996959894</code></pre>
     <p class="meta"><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md#compile-time-evaluation">guide ↗</a><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#compile-time-function-evaluation">overview ↗</a></p>
   </article>
 
+  <article class="card card-core" id="syntax">
+    <h3>Syntax extensions</h3>
+    <p>A top-level <code>#syntax</code> directive runs Lua inside the compiler that adds statements, expressions, prefix operators or binary operators (at an existing precedence) to the grammar for the rest of that file. Each rule's builder rewrites what it matched into ordinary AST, so the type checker and the code generators see nothing new. Two ship with the fork: <code>syntax.compound</code> (<code>+=</code> through <code>&gt;&gt;=</code>, a target with a call in it evaluated once) and <code>syntax.pipe</code> (<code>|&gt;</code>). Extensions reach neither required files nor the files that require this one.</p>
+<pre><code>#syntax 'syntax.compound'
+#syntax 'syntax.pipe'
+#syntax [[
+  syntax.statement("`unless` @expr @`then` Block @`end`", function(cond, body)
+    return syntax.stat('if not (c) then body() end', {c = cond, body = body})
+  end)
+]]
+
+local x = 5
+x += 3
+local function add(a: integer, b: integer) return a + b end
+local function half(a: integer) return a // 2 end
+unless x &gt; 10 then print(x |&gt; half |&gt; add(20)) end   -- 24</code></pre>
+    <p class="meta"><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md#syntax-extensions">guide ↗</a></p>
+  </article>
+
   <article class="card card-core" id="const">
     <h3>Const pointers</h3>
     <p><code>*const T</code> maps to C <code>const T*</code>. Reads through it are read-only, <code>*T</code> converts to it implicitly, and dropping <code>const</code> needs an explicit cast. It is what most C APIs take, so nelibc and generated bindings can state their intent and have the compiler check it.</p>

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>nebox · a toybox-style userland in Nelua on nelibc · spacegho.st/nelua</title>
-<meta name="description" content="nebox is a toybox/busybox-style multicall binary written in Nelua and linked against nelibc's standalone profile: 86 applets in one static x86-64 executable with no host libc, checked against GNU coreutils and gawk by 825 conformance cases.">
+<meta name="description" content="nebox is a toybox/busybox-style multicall binary written in Nelua and linked against nelibc's standalone profile: 87 applets, including a POSIX shell, in one static x86-64 executable with no host libc, checked against GNU coreutils, gawk and dash by 1,271 conformance cases.">
 <link rel="stylesheet" href="/nelua/assets/site.css">
 <link rel="icon" href="/nelua/assets/icon.svg" type="image/svg+xml">
 <link rel="canonical" href="https://spacegho.st/nelua/nebox/">
@@ -25,15 +25,15 @@
 <section class="hero">
   <p class="eyebrow">Core · 03</p>
   <h1>nebox</h1>
-  <p class="tagline">A toybox-style userland: 86 applets, one static binary, no host libc.</p>
-  <p class="blurb"><a href="https://github.com/Spaceghost/nebox">Spaceghost/nebox</a> is a multicall binary written in Nelua and linked against <a href="/nelua/nelibc/">nelibc</a>'s standalone archive. Each applet is chosen from <code>argv[0]</code> (a hard or symbolic link named after the applet) or from the first operand. It carries its own regex engine, awk, stream editor, sort, find, diff and checksum implementations, all in Nelua.</p>
-  <p class="stats"><span><strong>86 applets</strong></span><span><strong>825</strong> conformance cases, 0 failing</span><span><strong>about 1.1 MB</strong> static (1,090,992 bytes at the last recorded size, before awk)</span><span><strong>nm -u</strong> empty</span><span>run 2026-11-06</span></p>
+  <p class="tagline">A toybox-style userland: 87 applets including a POSIX shell, one static binary, no host libc.</p>
+  <p class="blurb"><a href="https://github.com/Spaceghost/nebox">Spaceghost/nebox</a> is a multicall binary written in Nelua and linked against <a href="/nelua/nelibc/">nelibc</a>'s standalone archive. Each applet is chosen from <code>argv[0]</code> (a hard or symbolic link named after the applet) or from the first operand. It carries its own POSIX shell, regex engine, awk, stream editor, sort, find, diff and checksum implementations, all in Nelua.</p>
+  <p class="stats"><span><strong>87 applets</strong></span><span><strong>1,271</strong> conformance cases, 0 failing</span><span><strong>1,508,640 bytes</strong> static</span><span><strong>nm -u</strong> empty</span><span>run 2026-11-07</span></p>
 </section>
 
 <main>
 <h2 class="section">Applets</h2>
 <p class="lead"><code>nebox --list</code> prints these; <code>nebox --install [-s] DIR</code> creates one link per applet in <code>DIR</code>.</p>
-<ul class="applets"><li>[</li><li>awk</li><li>base64</li><li>basename</li><li>cat</li><li>chgrp</li><li>chmod</li><li>chown</li><li>cksum</li><li>cmp</li><li>comm</li><li>cp</li><li>cut</li><li>date</li><li>dd</li><li>df</li><li>diff</li><li>dirname</li><li>du</li><li>echo</li><li>env</li><li>expand</li><li>expr</li><li>factor</li><li>false</li><li>find</li><li>fold</li><li>free</li><li>grep</li><li>groups</li><li>head</li><li>hexdump</li><li>hostname</li><li>id</li><li>install</li><li>kill</li><li>link</li><li>ln</li><li>ls</li><li>md5sum</li><li>mkdir</li><li>mktemp</li><li>mv</li><li>nl</li><li>nproc</li><li>od</li><li>paste</li><li>printenv</li><li>printf</li><li>pwd</li><li>readlink</li><li>realpath</li><li>rev</li><li>rm</li><li>rmdir</li><li>sed</li><li>seq</li><li>sha1sum</li><li>sha256sum</li><li>shuf</li><li>sleep</li><li>sort</li><li>split</li><li>stat</li><li>strings</li><li>sync</li><li>tac</li><li>tail</li><li>tee</li><li>test</li><li>timeout</li><li>touch</li><li>tr</li><li>true</li><li>truncate</li><li>tsort</li><li>tty</li><li>unexpand</li><li>uname</li><li>uniq</li><li>unlink</li><li>wc</li><li>which</li><li>whoami</li><li>xargs</li><li>yes</li></ul>
+<ul class="applets"><li>[</li><li>awk</li><li>base64</li><li>basename</li><li>cat</li><li>chgrp</li><li>chmod</li><li>chown</li><li>cksum</li><li>cmp</li><li>comm</li><li>cp</li><li>cut</li><li>date</li><li>dd</li><li>df</li><li>diff</li><li>dirname</li><li>du</li><li>echo</li><li>env</li><li>expand</li><li>expr</li><li>factor</li><li>false</li><li>find</li><li>fold</li><li>free</li><li>grep</li><li>groups</li><li>head</li><li>hexdump</li><li>hostname</li><li>id</li><li>install</li><li>kill</li><li>link</li><li>ln</li><li>ls</li><li>md5sum</li><li>mkdir</li><li>mktemp</li><li>mv</li><li>nl</li><li>nproc</li><li>od</li><li>paste</li><li>printenv</li><li>printf</li><li>pwd</li><li>readlink</li><li>realpath</li><li>rev</li><li>rm</li><li>rmdir</li><li>sed</li><li>seq</li><li>sh</li><li>sha1sum</li><li>sha256sum</li><li>shuf</li><li>sleep</li><li>sort</li><li>split</li><li>stat</li><li>strings</li><li>sync</li><li>tac</li><li>tail</li><li>tee</li><li>test</li><li>timeout</li><li>touch</li><li>tr</li><li>true</li><li>truncate</li><li>tsort</li><li>tty</li><li>unexpand</li><li>uname</li><li>uniq</li><li>unlink</li><li>wc</li><li>which</li><li>whoami</li><li>xargs</li><li>yes</li></ul>
 
 <h2 class="section">How it is checked</h2>
 <p class="lead">Every case in <code>tests/run.sh</code> runs one shell command twice from identical fixture trees: once with the host's GNU coreutils, once with nebox's applet links first on <code>PATH</code>. stdout, the exit status and a snapshot of the resulting directory (names, modes, checksums) must match. Where the host has no reference tool, a pinned expected output is used instead.</p>
@@ -63,6 +63,7 @@ nm -u nebox   # must print nothing</code></pre>
 <p class="lead">Stated rather than worked around. The full list is in the repository's README.</p>
 <ul>
   <li>No multibyte locales anywhere: strings are bytes, collation is byte order, <code>-i</code> folds ASCII.</li>
+  <li><code>sh</code> is a POSIX shell checked against dash by 444 cases: the full grammar, expansions, redirections, traps and the special and regular builtins. Not implemented: interactive use (no prompts, history or line editing), job control, <code>ulimit</code>. Where POSIX and dash disagree, nebox follows POSIX and the case is pinned.</li>
   <li><code>awk</code> is POSIX awk checked against GNU Awk 5.2.1 <code>--posix</code>; GNU extensions such as <code>gensub</code>, <code>strftime</code> and <code>BEGINFILE</code> are not there, and <code>RS</code> uses only its first character.</li>
   <li><code>date</code> and <code>stat</code> print UTC: nelibc has no zone database.</li>
   <li><code>ls</code> prints one entry per line in every mode. <code>du</code> and <code>find</code> walk directories in sorted name order where GNU uses directory order.</li>

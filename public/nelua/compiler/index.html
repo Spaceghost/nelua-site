@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nelua compiler fork · spacegho.st/nelua</title>
-<meta name="description" content="Spaceghost/nelua-lang: upstream Nelua plus variants, optionals, an exhaustive match statement, owned records with move, closures, const pointers, a compiler-enforced freestanding pragma, cross-compilation with --target and nelua-bindgen. What each addition is, what it costs at run time, how it is gated, and how to install it.">
+<meta name="description" content="Spaceghost/nelua-lang: upstream Nelua plus variants, optionals, an exhaustive match statement, owned records with move, closures, compile-time evaluation, const pointers, a compiler-enforced freestanding pragma, cross-compilation with --target and nelua-bindgen. What each addition is, what it costs at run time, how it is gated, and how to install it.">
 <link rel="stylesheet" href="/nelua/assets/site.css">
 <link rel="icon" href="/nelua/assets/icon.svg" type="image/svg+xml">
 <link rel="canonical" href="https://spacegho.st/nelua/compiler/">
@@ -27,7 +27,7 @@
   <h1>The compiler</h1>
   <p class="tagline">Upstream Nelua, tracked closely, plus the pieces a self-hosted libc and freestanding targets asked for.</p>
   <p class="blurb"><a href="https://github.com/Spaceghost/nelua-lang">Spaceghost/nelua-lang</a> is a fork of <a href="https://github.com/edubart/nelua-lang">edubart/nelua-lang</a> at commit <code>a584505</code> (2025-06-24). Each addition lands with specs in <code>spec/</code> and a section in the docs, and nothing below needs a garbage collector: every feature compiles to the same kind of C upstream emits and works under <code>pragmas.nogc</code> and <code>pragmas.freestanding</code>. The guide <a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md">What this fork adds</a> walks through each one with examples.</p>
-  <p class="stats"><span><strong>Base</strong> a584505 · 2025-06-24</span><span><strong>87 commits</strong> past upstream, 10 additions</span><span><strong>557 specs</strong> green on master <code>7d1db0d</code></span><span>updated 2026-11-07</span></p>
+  <p class="stats"><span><strong>Base</strong> a584505 · 2025-06-24</span><span><strong>102 commits</strong> past upstream, 11 additions</span><span><strong>566 specs</strong> green on master <code>f745ca8</code></span><span>updated 2026-11-07</span></p>
 </section>
 
 <main>
@@ -103,6 +103,25 @@ add(4) add(6)             -- total == 10</code></pre>
     <p class="meta"><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md#closures">guide ↗</a><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#closures">overview ↗</a></p>
   </article>
 
+  <article class="card card-core" id="comptime">
+    <h3>Compile-time evaluation</h3>
+    <p><code>comptime(f(args))</code> runs an ordinary Nelua function inside the compiler and folds its result into the program: scalars, strings, and arrays or records as C static initializers. A function marked <code>&lt;comptime&gt;</code> is evaluated at every call and never emitted to C. The sandbox keeps C semantics (integer widths, unsigned division, <code>float32</code> rounding) and is bounded in steps and depth. No pointers beyond references, no allocator, no I/O.</p>
+<pre><code>local function crc32_table(): [256]uint32
+  local t: [256]uint32
+  for i: uint32 = 0, 255 do
+    local c: uint32 = i
+    for _ = 1, 8 do
+      if c &amp; 1 == 1 then c = 0xEDB88320 ~ (c &gt;&gt; 1) else c = c &gt;&gt; 1 end
+    end
+    t[i] = c
+  end
+  return t
+end
+local CRC = comptime(crc32_table())   -- a static table in the C output
+print(CRC[1])                         -- 1996959894</code></pre>
+    <p class="meta"><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md#compile-time-evaluation">guide ↗</a><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#compile-time-function-evaluation">overview ↗</a></p>
+  </article>
+
   <article class="card card-core" id="const">
     <h3>Const pointers</h3>
     <p><code>*const T</code> maps to C <code>const T*</code>. Reads through it are read-only, <code>*T</code> converts to it implicitly, and dropping <code>const</code> needs an explicit cast. It is what most C APIs take, so nelibc and generated bindings can state their intent and have the compiler check it.</p>
@@ -138,9 +157,6 @@ add(4) add(6)             -- total == 10</code></pre>
   </article>
 </div>
 
-<h2 class="section">In progress, not yet on master</h2>
-<p class="lead">Compile-time evaluation of Nelua code (running ordinary Nelua functions in the preprocessor, as a complement to the Lua preprocessor) is being built on the <code>comptime</code> branch. It is not described above because it has not landed.</p>
-
 <h2 class="section">Install</h2>
 <p class="lead">Nelua needs Git, a C compiler and make. The fork builds the same way upstream does.</p>
 <pre><code>git clone https://github.com/Spaceghost/nelua-lang
@@ -152,7 +168,7 @@ nelua --version</code></pre>
 
 <h2 class="section">How changes are gated</h2>
 <dl class="kv">
-  <dt>Specs</dt><dd><code>make test</code> runs upstream's spec suite plus the fork's specs (const pointers, freestanding, target, bindgen, variant, optional, match, ownership, closures, the batteries libraries). Last run: 557 specs on master <code>7d1db0d</code>, 2026-11-07, all green except one that needs libasan on the machine that ran it.</dd>
+  <dt>Specs</dt><dd><code>make test</code> runs upstream's spec suite plus the fork's specs (const pointers, freestanding, target, bindgen, variant, optional, match, ownership, closures, the batteries libraries, comptime). Last run: 566 specs on master <code>f745ca8</code>, 2026-11-07, all green except one that needs libasan on the machine that ran it.</dd>
   <dt>Examples</dt><dd>Every example in the fork guide was compiled and run with the checkout it documents and prints what its comments say.</dd>
   <dt>Consumers</dt><dd>nelibc's smoke matrix and nebox's conformance suite are rebuilt against the fresh compiler in a pinned container before the pin moves.</dd>
   <dt>Runtime-free audits</dt><dd>A standalone GCC and Clang workflow links the freestanding examples and checks the emitted symbols: no allocator, no GC, no entry point.</dd>

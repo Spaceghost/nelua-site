@@ -27,7 +27,7 @@
   <h1>Nelua, with its own libc and userland</h1>
   <p class="tagline">One language from the compiler to the shell prompt: a Nelua compiler fork, a C library written in Nelua, and a toybox-style userland linked against it.</p>
   <p class="blurb">Nelua is a statically typed, metaprogrammable systems language with Lua syntax that compiles to C. This site tracks the three pieces that make it self-sufficient, the workshop libraries built on top of them, and the wider Nelua world they sit in. Every number here comes from a recorded run; nothing is claimed that was not observed.</p>
-  <p class="stats"><span><strong>1 compiler</strong> fork, 87 commits past upstream</span><span><strong>813 / 1,471</strong> musl symbols in nelibc</span><span><strong>86 applets</strong> in nebox, 825 conformance cases green</span><span>updated 2026-11-07</span></p>
+  <p class="stats"><span><strong>1 compiler</strong> fork, 102 commits past upstream</span><span><strong>813 / 1,471</strong> musl symbols in nelibc</span><span><strong>87 applets</strong> in nebox, 1,271 conformance cases green</span><span>updated 2026-11-07</span></p>
 </section>
 
 <main>
@@ -39,9 +39,9 @@
     <h2 id="ring-core"><span class="n">01</span> Core</h2>
     <p>The language and the two things every program needs: a C library and a userland. All three are Nelua.</p>
     <ul>
-      <li><a href="/nelua/compiler/">Nelua compiler</a><span>Spaceghost/nelua-lang: upstream Nelua plus variants, optionals, an exhaustive <code>match</code>, owned records with <code>move</code>, closures, const pointers, a freestanding pragma, <code>--target</code> and bindgen.</span></li>
+      <li><a href="/nelua/compiler/">Nelua compiler</a><span>Spaceghost/nelua-lang: upstream Nelua plus variants, optionals, an exhaustive <code>match</code>, owned records with <code>move</code>, closures, compile-time evaluation, const pointers, a freestanding pragma, <code>--target</code> and bindgen.</span></li>
       <li><a href="/nelua/nelibc/">nelibc</a><span>A C library rebuilt piece by piece in Nelua. Hybrid archives over glibc or musl, a standalone Linux x86-64 runtime, and a host profile for kernels.</span></li>
-      <li><a href="/nelua/nebox/">nebox</a><span>A toybox-style multicall binary: 86 applets including awk, sed, sort and find, one static executable, no host libc. Linked against nelibc standalone; checked case by case against GNU coreutils and gawk.</span></li>
+      <li><a href="/nelua/nebox/">nebox</a><span>A toybox-style multicall binary: 87 applets including a POSIX shell, awk, sed, sort and find, one static executable, no host libc. Linked against nelibc standalone; checked case by case against GNU coreutils, gawk and dash.</span></li>
     </ul>
   </section>
 
@@ -70,7 +70,7 @@
 </div>
 
 <h2 class="section">Why keep a libc and a userland in the language</h2>
-<p class="lead">A systems language is only as portable as the runtime beneath it. With nelibc the program, its C library and its startup code are all Nelua, compiled by one toolchain to one static binary. nebox is the proof: a working shell toolbox, about 1.1 MB, with <code>nm -u</code> empty. When a nelibc function misbehaves the fix is a Nelua edit, and the same compiler fork builds every layer.</p>
+<p class="lead">A systems language is only as portable as the runtime beneath it. With nelibc the program, its C library and its startup code are all Nelua, compiled by one toolchain to one static binary. nebox is the proof: a working shell and toolbox, about 1.5 MB, with <code>nm -u</code> empty. When a nelibc function misbehaves the fix is a Nelua edit, and the same compiler fork builds every layer.</p>
 
 <div class="grid grid-3">
   <article class="card card-core">

@@ -62,7 +62,7 @@
   <h1>nsh</h1>
   <p class="tagline">A POSIX shell to live in, written in Nelua all the way down to the C library.</p>
   <p class="blurb"><code>nsh</code> is the interactive side of <a href="/nelua/nebox/">nebox</a>'s <code>sh</code>: the same POSIX command language, checked against dash case by case, with a line editor, history, completion and a prompt built for everyday use. It is one applet of a static x86-64 binary that links no host libc at all; everything under it, down to <code>tcgetattr</code> and <code>setjmp</code>, is <a href="/nelua/nelibc/">nelibc</a>.</p>
-  <p class="stats"><span><strong>444</strong> POSIX cases against dash</span><span><strong>19</strong> pseudo-terminal sessions</span><span><strong>1,686,816 bytes</strong> for all 88 applets</span><span><strong>nm -u</strong> empty</span><span>recorded 2026-11-07</span></p>
+  <p class="stats"><span><strong>444</strong> POSIX cases against dash</span><span><strong>24</strong> pseudo-terminal sessions</span><span><strong>1,686,816 bytes</strong> for all 88 applets</span><span><strong>nm -u</strong> empty</span><span>recorded 2026-11-07</span></p>
 </section>
 
 <main>
@@ -96,6 +96,10 @@
     <h3>Prompts that compute</h3>
     <p><code>PS1</code> gets parameter, command and arithmetic expansion before each prompt, then <code>!</code> becomes the history number. The default shows the directory's name in colour, <code>~</code> at home, and <code>#</code> for root. <code>PS2</code> marks continuation lines and here-documents.</p>
   </article>
+  <article class="card card-core">
+    <h3>Job control</h3>
+    <p>Every pipeline gets its own process group and the foreground one owns the terminal. Ctrl-Z stops it and hands the terminal back with the shell's own modes; <code>fg</code> restores the job's modes and continues it, <code>bg</code> lets it run behind you, and <code>jobs</code>, <code>kill %1</code> and <code>wait %vim</code> name jobs by number, prefix or substring. Finished background jobs are reported before the next prompt, and leaving with stopped jobs warns first.</p>
+  </article>
   <article class="card">
     <h3>The whole POSIX language</h3>
     <p>Pipelines, lists, subshells, functions, <code>case</code> and loops, every redirection and here-document form, aliases, all parameter expansions, command substitution, 64-bit arithmetic, traps, <code>set -e</code> and the special and regular built-ins, compared with dash 0.5.12 in 444 cases.</p>
@@ -115,6 +119,7 @@
   <dt>Tab</dt><dd>complete; a second Tab lists the candidates</dd>
   <dt>Ctrl-L</dt><dd>clear the screen</dd>
   <dt>Ctrl-C, Ctrl-D</dt><dd>discard the line; exit on an empty line</dd>
+  <dt>Ctrl-Z</dt><dd>stop the foreground job; <code>fg</code> and <code>bg</code> continue it</dd>
 </dl>
 
 <h2 class="section">Install</h2>
@@ -128,11 +133,8 @@ nsh</code></pre>
 
 <h2 class="section">Not there yet</h2>
 <ul>
-  <li>Job control: <code>&amp;</code> runs commands in the background, but there is no <code>fg</code>, <code>bg</code>, <code>jobs</code> or Ctrl-Z.</li>
   <li><code>fc</code>, vi editing mode and <code>set -o emacs/vi</code>.</li>
   <li>Characters are one column wide each: East Asian wide and combining characters misalign the cursor.</li>
-  <li>A multi-line history entry is edited as one line with the newlines in it.</li>
-  <li>Error messages say <code>sh:</code>, not <code>nsh:</code>.</li>
 </ul>
 <div class="actions">
   <a class="button" href="https://github.com/Spaceghost/nebox/tree/main/src/nebox/sh">Shell source</a>
@@ -156,7 +158,7 @@ nsh</code></pre>
     ['ps', 'nelua'], ['t', 'cd'], ['e'],
     ['ps', '~'], ['t', 'for lang in nelua lua c; do'], ['e'],
     ['ps2'], ['t', 'printf "%s " "$lang"; done; echo'], ['e'], ['o', 'nelua lua c '],
-    ['ps', '~'], ['t', 'echo ('], ['e'], ['oe', 'sh: line 7: Syntax error: newline unexpected (expecting ")")'],
+    ['ps', '~'], ['t', 'echo ('], ['e'], ['oe', 'nsh: line 7: Syntax error: newline unexpected (expecting ")")'],
     ['ps', '~'], ['t', 'echo "still here, status $?"'], ['e'], ['o', 'still here, status 2'],
     ['ps', '~'], ['t', 'cat <<EOF'], ['e'],
     ['ps2'], ['t', 'home is $HOME'], ['e'],

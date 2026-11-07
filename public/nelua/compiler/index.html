@@ -80,7 +80,7 @@ end</code></pre>
 
   <article class="card card-core" id="ownership">
     <h3>Owned records and <code>move</code></h3>
-    <p>A record that releases something in <code>__close</code> can be marked <code>&lt;owned&gt;</code>. Its values are then affine: copying an lvalue needs the <code>move</code> builtin (which zeroes the source), a moved variable cannot be read until it is assigned again, and the check follows the control flow through branches, loops and early exits. Records with owned fields and arrays of owned values are owned implicitly; pointers never move. Everything is checked at compile time and costs nothing at run time.</p>
+    <p>A record that releases something in <code>__close</code> can be marked <code>&lt;owned&gt;</code>. Its values are then affine: copying an lvalue needs the <code>move</code> builtin (which zeroes the source), a moved variable cannot be read until it is assigned again, and the check follows the control flow through branches, loops and early exits. Records with owned fields and arrays of owned values are owned implicitly; pointers never move. <code>vector</code>, <code>sequence</code> and <code>hashmap</code> of owned values own their elements: values move in and out, and whatever the container drops (<code>clear</code>, <code>remove</code>/<code>erase</code>, a shrinking <code>resize</code>, <code>destroy</code>) is closed. Everything is checked at compile time and costs nothing at run time.</p>
 <pre><code>local Buf &lt;owned&gt; = @record{data: pointer, size: usize}
 local a = Buf.create(16)
 local c = move(a)   -- `a` is zeroed; reading it now is an error

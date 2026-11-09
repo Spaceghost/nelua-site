@@ -124,7 +124,7 @@ print(CRC[1])                         -- 1996959894</code></pre>
 
   <article class="card card-core" id="syntax">
     <h3>Syntax extensions</h3>
-    <p>A top-level <code>#syntax</code> directive runs Lua inside the compiler that adds statements, expressions, prefix operators or binary operators (at an existing precedence) to the grammar for the rest of that file. Each rule's builder rewrites what it matched into ordinary AST, so the type checker and the code generators see nothing new. Three ship with the fork: <code>syntax.compound</code> (<code>+=</code> through <code>&gt;&gt;=</code>, a target with a call in it evaluated once), <code>syntax.pipe</code> (<code>|&gt;</code>) and <code>syntax.interp</code> (<code>$"x = {x}, {pi:%.2f}"</code>, rewritten to concatenation with <code>tostring</code> and <code>string.format</code>; it claims <code>$"</code> ahead of the <code>$</code> dereference through the new <code>syntax.prefixexpr</code>). Extensions reach neither required files nor the files that require this one.</p>
+    <p>A top-level <code>#syntax</code> directive runs Lua inside the compiler that adds statements, expressions, prefix operators or binary operators (at an existing precedence) to the grammar for the rest of that file. Each rule's builder rewrites what it matched into ordinary AST, so the type checker and the code generators see nothing new. Three ship with the fork: <code>syntax.compound</code> (<code>+=</code> through <code>&gt;&gt;=</code>, a target with a call in it evaluated once), <code>syntax.pipe</code> (<code>|&gt;</code>) and <code>syntax.interp</code> (<code>$"x = {x}, {pi:%.2f}"</code>, rewritten to concatenation with <code>tostring</code> and <code>string.format</code>; it claims <code>$"</code> ahead of the <code>$</code> dereference through the new <code>syntax.prefixexpr</code>). Templates (<code>syntax.expr</code>, <code>stat</code>, <code>block</code>) are parsed with the grammar the file has where the extension is used, so extensions compose: <code>$"{x |&gt; half}"</code> works under <code>syntax.pipe</code>. Extensions reach neither required files nor the files that require this one.</p>
 <pre><code>#syntax 'syntax.compound'
 #syntax 'syntax.pipe'
 #syntax [[
@@ -141,7 +141,7 @@ unless x &gt; 10 then print(x |&gt; half |&gt; add(20)) end   -- 24
 
 #syntax 'syntax.interp'
 require 'string'
-print($"x is {x}, half {half(x):%03d}")                 -- x is 8, half 004</code></pre>
+print($"x is {x}, half {x |&gt; half:%03d}")              -- x is 8, half 004</code></pre>
     <p class="meta"><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md#syntax-extensions">guide ↗</a></p>
   </article>
 

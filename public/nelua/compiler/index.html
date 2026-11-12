@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Nelua compiler fork · spacegho.st/nelua</title>
-<meta name="description" content="Spaceghost/nelua-lang: upstream Nelua plus variants, optionals, an exhaustive match statement, owned records with move, closures, compile-time evaluation, const pointers, a compiler-enforced freestanding pragma, cross-compilation with --target and nelua-bindgen. What each addition is, what it costs at run time, how it is gated, and how to install it.">
+<meta name="description" content="Spaceghost/nelua-lang: upstream Nelua plus variants, optionals, an exhaustive match statement, owned records with move, closures, structured compile-time evaluation, const pointers, a compiler-enforced freestanding pragma, cross-compilation with --target and nelua-bindgen.">
 <link rel="stylesheet" href="/nelua/assets/site.css">
 <link rel="icon" href="/nelua/assets/icon.svg" type="image/svg+xml">
 <link rel="canonical" href="https://spacegho.st/nelua/compiler/">
@@ -105,7 +105,7 @@ add(4) add(6)             -- total == 10</code></pre>
 
   <article class="card card-core" id="comptime">
     <h3>Compile-time evaluation</h3>
-    <p><code>comptime(f(args))</code> runs an ordinary Nelua function inside the compiler and folds its result into the program: scalars, strings, and arrays or records as C static initializers. A function marked <code>&lt;comptime&gt;</code> is evaluated at every call and never emitted to C. The sandbox keeps C semantics (integer widths, unsigned division, <code>float32</code> rounding) and is bounded in steps and depth. No pointers beyond references, no allocator, no I/O.</p>
+    <p><code>comptime(f(args))</code> runs an ordinary Nelua function inside the compiler and folds its result into the program: scalars, strings, and arrays or records as C static initializers. Named <code>&lt;comptime&gt;</code> record configs can be reused across calls, including nested records and arrays. A function marked <code>&lt;comptime&gt;</code> is evaluated at every call and never emitted to C. The sandbox keeps C semantics (integer widths, unsigned division, <code>float32</code> rounding) and is bounded in steps and depth; it does not execute target memory or perform I/O.</p>
 <pre><code>local function crc32_table(): [256]uint32
   local t: [256]uint32
   for i: uint32 = 0, 255 do
@@ -119,7 +119,7 @@ add(4) add(6)             -- total == 10</code></pre>
 end
 local CRC = comptime(crc32_table())   -- a static table in the C output
 print(CRC[1])                         -- 1996959894</code></pre>
-    <p class="meta"><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md#compile-time-evaluation">guide ↗</a><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#compile-time-function-evaluation">overview ↗</a></p>
+    <p class="meta"><a href="/nelua/compiler/comptime/">full guide ↗</a><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/comptime.md">compiler docs ↗</a><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#compile-time-function-evaluation">overview ↗</a></p>
   </article>
 
   <article class="card card-core" id="syntax">

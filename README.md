@@ -25,6 +25,7 @@ static-asset requests on the free tier.
 ```sh
 npm install
 npm run build          # src/explorer.imba -> public/nelua/assets/explorer.js
+npm run guide -- ../nelua-lang/docs/pages/syntax-extensions.md  # refresh the static syntax guide
 python3 -m http.server 8080 --directory public   # http://localhost:8080/nelua/
 ```
 
@@ -36,6 +37,12 @@ python3 -m http.server 8080 --directory public   # http://localhost:8080/nelua/
 - nebox: applet list, case count and binary size come from the last recorded
   container run in the nebox repository's commit messages.
 - Compiler: the additions list mirrors "Fork additions" in the fork's README.
+
+The syntax guide at `public/nelua/compiler/syntax-extensions/` is generated from
+the compiler's `docs/pages/syntax-extensions.md` with `npm run guide`. The generated
+HTML is committed, so normal site builds need no compiler checkout. Refresh it
+when the canonical guide changes; the renderer adds the contents navigation and
+uses the shared static stylesheet.
 
 ## Deploy
 

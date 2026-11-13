@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Syntax extensions: the full guide · Nelua · spacegho.st</title>
+<meta name="description" content="Load Nelua syntax modules for control flow, lambdas, destructuring, scoped resources, comprehensions, literals, pipes and interpolation. A complete guide to file-local grammars, templates, precedence and reusable packs.">
+<link rel="stylesheet" href="/nelua/assets/site.css">
+<link rel="icon" href="/nelua/assets/icon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://spacegho.st/nelua/compiler/syntax-extensions/">
+</head>
+<body>
+<a class="skip-link" href="#guide">Skip to guide</a>
+<div class="wrap">
+<header class="top">
+  <a class="home" href="/nelua/">spacegho.st / nelua</a>
+  <nav aria-label="Sections">
+    <a href="/nelua/">Overview</a>
+    <a href="/nelua/compiler/" aria-current="page">Compiler</a>
+    <a href="/nelua/nelibc/">nelibc</a>
+    <a href="/nelua/nebox/">nebox</a>
+    <a href="https://nelua.io/" rel="external">nelua.io ↗</a>
+  </nav>
+</header>
+<section class="hero">
+  <p class="eyebrow">Compiler · syntax workshop</p>
+  <h1>Make room for your notation</h1>
+  <p class="tagline">A full guide to Nelua's file-local syntax extensions.</p>
+  <p class="blurb">Start with the opt-in library, compose a project pack, then build your own grammar rules. Every form becomes ordinary Nelua before type checking.</p>
+  <div class="actions">
+    <a class="button" href="#start-here">Try the complete pack</a>
+    <a class="button button-ghost" href="#write-an-inline-extension">Write an extension</a>
+  </div>
+</section>
+<div class="guide-layout">
+  <nav class="guide-toc" aria-label="Guide contents">
+    <p class="eyebrow">In this guide</p>
+    <ol><li><a href="#start-here">Start here</a></li>
+<li><a href="#choose-your-modules">Choose your modules</a></li>
+<li><a href="#compound-assignment">Compound assignment</a></li>
+<li><a href="#pipe-calls">Pipe calls</a></li>
+<li><a href="#interpolated-strings">Interpolated strings</a></li>
+<li><a href="#control-flow">Control flow</a></li>
+<li><a href="#conditional-expressions">Conditional expressions</a></li>
+<li><a href="#concise-functions-and-closures">Concise functions and closures</a></li>
+<li><a href="#destructuring-locals">Destructuring locals</a></li>
+<li><a href="#scoped-resources">Scoped resources</a></li>
+<li><a href="#vector-comprehensions">Vector comprehensions</a></li>
+<li><a href="#literal-notation">Literal notation</a></li>
+<li><a href="#alternative-operators-and-precedence">Alternative operators and precedence</a></li>
+<li><a href="#write-an-inline-extension">Write an inline extension</a></li>
+<li><a href="#builder-api-reference">Builder API reference</a></li>
+<li><a href="#templates-substitution-and-generated-names">Templates, substitution and generated names</a></li>
+<li><a href="#package-and-compose-extensions">Package and compose extensions</a></li>
+<li><a href="#diagnostics-and-practical-limits">Diagnostics and practical limits</a></li></ol>
+  </nav>
+  <main class="guide-article" id="guide" tabindex="-1">
+<p>Extend the language one file at a time. Load a ready-made syntax module, combine a
+pack, or write grammar rules that turn your own notation into ordinary Nelua.
+The type checker, ownership checks and C generator continue to do their usual work.
+There is no extension interpreter in the resulting program.</p>
+<h2 class="section" id="start-here">Start here</h2>
+<p>Use the complete pack for exploration, or load only the modules your file uses:</p>
+<pre><code class="language-nelua">#syntax &#39;syntax.all&#39;
+require &#39;string&#39;
+local double = fn(x: integer) =&gt; x * 2
+local n = 1_000
+times 3 do n += 1 end
+print($&quot;{n |&gt; double}: {choose n &gt; 1_000 then &#39;grown&#39; else &#39;same&#39; end}&quot;)
+-- 2006: grown
+assert(n == 1003)
+</code></pre>
+<p><code>#syntax</code> runs during parsing and affects the rest of its source file. Put it
+between top-level statements. A required file enables its own syntax; enabling a
+module in a library does not enable it for that library&#39;s callers. Nothing is
+enabled implicitly in ordinary upstream-compatible source files.</p>
+<p>Run the complete tour with <code>./nelua examples/syntax_tour.nelua</code> from the compiler
+checkout. Its source is in
+<a href="https://github.com/Spaceghost/nelua-lang/blob/master/examples/syntax_tour.nelua">examples/syntax_tour.nelua</a>.</p>
+<h2 class="section" id="choose-your-modules">Choose your modules</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Adds</th>
+<th>Lowers to</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>syntax.compound</code></td>
+<td><code>x += 1</code>, <code>a[i] *= 2</code></td>
+<td>Assignments, with a temporary pointer for complex targets</td>
+</tr>
+<tr>
+<td><code>syntax.pipe</code></td>
+<td>`x</td>
+<td>&gt; f(a)</td>
+</tr>
+<tr>
+<td><code>syntax.interp</code></td>
+<td><code>$&quot;hello {name}, {n:%04d}&quot;</code></td>
+<td>String literals, concatenation, <code>tostring</code>, <code>string.format</code></td>
+</tr>
+<tr>
+<td><code>syntax.control</code></td>
+<td><code>unless</code>, <code>until … do</code>, <code>guard</code>, <code>loop</code>, <code>times</code></td>
+<td><code>if</code>, <code>while</code>, numeric <code>for</code></td>
+</tr>
+<tr>
+<td><code>syntax.choose</code></td>
+<td><code>choose test then a else b end</code></td>
+<td>A <code>do</code> expression containing <code>if</code> and <code>in</code></td>
+</tr>
+<tr>
+<td><code>syntax.lambda</code></td>
+<td><code>fn(x) =&gt; expr</code>, <code>fn(x) do … end</code></td>
+<td>An anonymous function</td>
+</tr>
+<tr>
+<td><code>syntax.let</code></td>
+<td><code>let {x, y = other} = value</code>, <code>let [a, _, c] = value</code></td>
+<td>One source temporary and local declarations</td>
+</tr>
+<tr>
+<td><code>syntax.using</code></td>
+<td><code>using name = value do … end</code></td>
+<td>A scoped local with <code>&lt;close&gt;</code></td>
+</tr>
+<tr>
+<td><code>syntax.collect</code></td>
+<td><code>collect(T; i = lo, hi when test =&gt; value)</code></td>
+<td>A <code>vector(T)</code>, a loop, an optional <code>if</code>, and <code>push</code></td>
+</tr>
+<tr>
+<td><code>syntax.literals</code></td>
+<td><code>1_000</code>, <code>b&quot;1010_0101&quot;</code>, <code>hex&quot;de ad be ef&quot;</code></td>
+<td>Number and string literals</td>
+</tr>
+<tr>
+<td><code>syntax.operators</code></td>
+<td><code>**</code>, <code>!=</code>, <code>&amp;&amp;</code>, `</td>
+<td></td>
+</tr>
+</tbody></table>
+</div>
+<p><code>syntax.all</code> loads all the modules above. Loading a module again is a no-op in
+that file, including when two packs share it. It does not add <code>require &#39;string&#39;</code>
+or <code>require &#39;vector&#39;</code>: runtime dependencies remain explicit.</p>
+<h2 class="section" id="compound-assignment">Compound assignment</h2>
+<pre><code class="language-nelua">#syntax &#39;syntax.compound&#39;
+local n = 10
+n += 2
+n *= 3
+n //= 4
+assert(n == 9)
+local data: [2]integer = {5, 6}
+local calls = 0
+local function index() calls = calls + 1 return 0 end
+data[index()] += 7
+assert(data[0] == 12 and calls == 1)
+</code></pre>
+<p>Supported spellings are <code>+= -= *= /= //= %= ^= ..= |= &amp;= &lt;&lt;= &gt;&gt;=</code>. Here <code>^=</code>
+means power, as <code>^</code> does in Nelua. <code>~=</code> keeps its existing meaning, not-equal.
+There is no xor-assignment spelling. The operator module does not add <code>**=</code>.</p>
+<p>A complex target such as <code>data[index()]</code> is addressed once through a temporary
+pointer, before the assignment. Simple names, fields, and constant or plain-name
+indexes use the ordinary <code>target = target op value</code> rewrite. They therefore keep
+the native assignment rules, including ownership restrictions and any changes
+to an index variable caused by the right-hand side.</p>
+<h2 class="section" id="pipe-calls">Pipe calls</h2>
+<pre><code class="language-nelua">#syntax &#39;syntax.pipe&#39;
+local function add(a: integer, b: integer) return a + b end
+local function twice(a: integer) return a * 2 end
+local result = 3 |&gt; add(4) |&gt; twice
+assert(result == 14)
+</code></pre>
+<p><code>x |&gt; f</code> becomes <code>f(x)</code>. <code>x |&gt; f(a, b)</code> becomes <code>f(x, a, b)</code>, and
+<code>x |&gt; object:method(a)</code> becomes <code>object:method(x, a)</code>. The right side must be a
+function name, field, or call. The left expression appears once in the result.
+It is not a placeholder-based pipeline, and it does not implicitly move an owned
+variable.</p>
+<p>Pipes group left at the bitwise-or level: arithmetic binds more tightly,
+comparisons less tightly. Write parentheses around a larger boolean or comparison
+that you want to pipe. Generated calls follow native argument evaluation rules;
+use separate local declarations to sequence side effects in multiple arguments.</p>
+<h2 class="section" id="interpolated-strings">Interpolated strings</h2>
+<pre><code class="language-nelua">#syntax &#39;syntax.interp&#39;
+#syntax &#39;syntax.pipe&#39;
+require &#39;string&#39;
+local name, n = &#39;world&#39;, 3
+local function twice(x: integer) return x * 2 end
+local greeting = $&quot;hello {name}, {n + 1} times&quot;
+local formatted = $&quot;{{count}} {n:%04d}, doubled {n |&gt; twice}&quot;
+assert(greeting == &#39;hello world, 4 times&#39;)
+assert(formatted == &#39;{count} 0003, doubled 6&#39;)
+</code></pre>
+<p><code>{expression}</code> calls <code>tostring</code>; <code>{expression:%format}</code> calls <code>string.format</code>.
+Only a top-level colon followed by <code>%</code> starts a format, so method calls such as
+<code>{name:upper()}</code> work. <code>{{</code> and <code>}}</code> produce literal braces. Ordinary string
+escapes, quoted strings inside expressions, nested braces and nested interpolated
+strings are supported. Embedded expressions use the grammar active at the string&#39;s
+position, including pipes and your own extensions.</p>
+<p><code>$&quot;</code> must be adjacent. <code>$ pointer</code> remains dereference. Interpolation can allocate
+strings, just as its generated concatenation and formatting calls can. Separate
+side effects into statements when their order matters. Empty expressions,
+unclosed expressions and an unmatched single <code>}</code> produce compile errors.</p>
+<h2 class="section" id="control-flow">Control flow</h2>
+<pre><code class="language-nelua">#syntax &#39;syntax.control&#39;
+local total = 0
+times 4 as i: integer do
+  if i == 2 then continue end
+  total = total + i
+end
+assert(total == 8)
+until total &gt;= 10 do total = total + 1 end
+unless total &gt; 10 then total = 20 else total = 30 end
+loop do
+  total = total + 1
+  if total == 22 then break end
+end
+local function positive(n: integer): boolean
+  guard n &gt; 0 else return false end
+  return true
+end
+assert(total == 22 and positive(total) and not positive(0))
+repeat total = total - 1 until total == 20
+assert(total == 20)
+</code></pre>
+<p><code>unless condition then … [else …] end</code> tests the negated condition.
+<code>until condition do … end</code> is a pre-test loop equivalent to <code>while not condition</code>;
+ordinary <code>repeat … until condition</code> still works and remains a post-test loop.
+<code>loop do … end</code> is <code>while true</code>.</p>
+<p><code>guard condition else … end</code> runs its block when the condition is false. It does
+not insert a return or require the block to exit; write <code>return</code>, <code>break</code>, or
+<code>continue</code> when that is your intent.</p>
+<p><code>times count [as index] do … end</code> is a numeric <code>for</code> from one through <code>count</code>.
+The count is evaluated once on entry. Zero and negative integer counts run no
+iterations. An explicit index accepts the normal declaration type and annotations;
+an omitted index gets a generated name. Count and index types follow native
+numeric-for rules. <code>break</code> and <code>continue</code> target this loop as usual.</p>
+<p>The new words are contextual. You can still declare variables named <code>guard</code>,
+<code>times</code>, <code>unless</code>, or <code>loop</code>, and call functions with those names.</p>
+<h2 class="section" id="conditional-expressions">Conditional expressions</h2>
+<pre><code class="language-nelua">#syntax &#39;syntax.choose&#39;
+local calls = 0
+local function expensive(): integer calls = calls + 1 return 99 end
+local condition = true
+local n = choose condition then 42 else expensive() end
+local flag = choose condition then false else true end
+local nested = choose condition then choose false then 1 else 7 end else 0 end
+assert(n == 42 and flag == false and nested == 7 and calls == 0)
+</code></pre>
+<p>Only the selected branch runs, and the condition runs once. A selected <code>false</code>,
+<code>nil</code>, or <code>nilptr</code> is preserved; this is not an <code>and</code>/<code>or</code> fallback idiom. Both
+branches are still analyzed and must satisfy the normal type rules for a <code>do</code>
+expression. It is an expression form: use <code>if</code> when you need statements in a branch.</p>
+<h2 class="section" id="concise-functions-and-closures">Concise functions and closures</h2>
+<pre><code class="language-nelua">#syntax &#39;syntax.lambda&#39;
+local function make_adder(offset: integer)
+  return fn(x: integer): integer =&gt; x + offset
+end
+local add = make_adder(10)
+local half = fn(x: integer) do
+  local result = x // 2
+  return result
+end
+assert(add(2) == 12 and half(8) == 4)
+do
+  local total = 0
+  local bump = fn(x: integer) &lt;byref&gt; =&gt; (do total = total + x in total end)
+  local first = bump(3)
+  local second = bump(4)
+  assert(first == 3 and second == 7 and total == 7)
+end
+</code></pre>
+<p>The parameter list, optional <code>: returntype</code>, and optional function annotations
+are the same as for <code>function</code>. <code>=&gt; expression</code> becomes <code>return expression</code>;
+<code>do … end</code> uses its statements as the function body. Use a block for multiple
+returns or early exits. Parenthesize the whole concise function if you need to
+call it immediately: <code>(fn(x: integer) =&gt; x + 1)(2)</code>.</p>
+<p>Captures are the fork&#39;s existing closure records. By-value captures copy their
+values; <code>&lt;byref&gt;</code> captures pointers and must not outlive the captured frame. Native
+closure restrictions, including which scopes accept <code>&lt;byref&gt;</code>, still apply.</p>
+<h2 class="section" id="destructuring-locals">Destructuring locals</h2>
+<pre><code class="language-nelua">#syntax &#39;syntax.let&#39;
+local Point = @record{x: integer, y: integer}
+local calls = 0
+local function make_point(): Point calls = calls + 1 return {20, 22} end
+let {x, y = height: integer,} = make_point()
+let [first, _, third] = (@[3]integer){10, 20, 30}
+assert(x + height == 42 and first + third == 40 and calls == 1)
+</code></pre>
+<p>Record patterns bind fields by name; <code>field = localname</code> renames a binding and
+accepts a typed local declaration. Record patterns allow a trailing comma. Array
+patterns start at index zero, accept typed declarations, and use <code>_</code> to skip a
+position. A record alias of <code>_</code> skips that field. Duplicate bound names are an
+extension error. Missing fields and out-of-bounds constant indexes receive the
+normal compiler diagnostics.</p>
+<p>The source is evaluated once into a temporary; bindings are separate local
+declarations visible after the statement. They are values, not references, and
+do not track later source changes. Pointers to records can be destructured using
+normal field access. Copying an owned lvalue is still rejected; use native
+references and explicit <code>move</code> where ownership is involved. Keep resource-owning
+sources in a <code>using</code> block and destructure a borrowed pointer; the hidden source
+temporary does not schedule cleanup. Nested patterns and assignment into existing
+locals are not part of this form.</p>
+<h2 class="section" id="scoped-resources">Scoped resources</h2>
+<pre><code class="language-nelua">#syntax &#39;syntax.using&#39;
+local Resource = @record{closed: *integer}
+function Resource:__close() $self.closed = $self.closed + 1 end
+local closed = 0
+local function use_resource(): integer
+  using resource: Resource = Resource{&amp;closed} do
+    return 42
+  end
+  return 0
+end
+local answer = use_resource()
+assert(answer == 42 and closed == 1)
+</code></pre>
+<p><code>using name = expression do … end</code> creates a <code>do</code> scope with a local <code>&lt;close&gt;</code>
+binding. The initializer runs once and cleanup follows normal Nelua rules on
+fallthrough, <code>return</code>, <code>break</code>, and <code>continue</code>. The binding is visible only inside
+the block. Type annotations and existing declaration annotations work; an
+explicit <code>&lt;close&gt;</code> is not duplicated. Nest blocks for multiple resources; cleanup
+runs in the usual reverse scope order. This is deterministic scope cleanup and
+does not add exception handling or cleanup after process termination.</p>
+<h2 class="section" id="vector-comprehensions">Vector comprehensions</h2>
+<pre><code class="language-nelua">## pragmas.nogc = true
+#syntax &#39;syntax.collect&#39;
+require &#39;vector&#39;
+local squares &lt;close&gt; = collect(integer; i = 1, 8 when i % 2 == 0 =&gt; i * i)
+local descending &lt;close&gt; = collect(integer; i = 5, 1, -2 =&gt; i)
+local exclusive &lt;close&gt; = collect(integer; i = 0, &lt; 3 =&gt; i)
+local input: [4]integer = {10, 20, 30, 40}
+local selected &lt;close&gt; = collect(integer; i, value in ipairs(input) when i % 2 == 0 =&gt; value + 1)
+assert(#squares == 4 and squares[3] == 64)
+assert(#descending == 3 and descending[2] == 1)
+assert(#exclusive == 3 and exclusive[2] == 2)
+assert(#selected == 2 and selected[0] == 11 and selected[1] == 31)
+</code></pre>
+<p>Write <code>collect(ElementType; iterator =&gt; expression)</code> with an optional
+<code>when condition</code> before <code>=&gt;</code>. The iterator can be a numeric loop, including a
+step or comparison bound, or a generic iterator such as <code>i, value in ipairs(a)</code>.
+The semicolon distinguishes this notation from an ordinary <code>collect(value)</code> call.
+Its initialization follows the corresponding native <code>for</code> rules. The filter runs
+once per visited iteration; the mapped expression runs once per accepted one.
+Elements are pushed in iteration order into a zero-based <code>vector(ElementType)</code>.
+An empty range or a filter that never matches produces an empty vector.</p>
+<p>The element type is explicit and <code>vector</code> must be in scope. This form allocates
+and grows a vector using the normal default allocator. It works under <code>nogc</code> with
+<code>&lt;close&gt;</code>, <code>using</code>, or explicit destruction. It is not a lazy iterator, a fixed
+array constructor, or a freestanding heap substitute. Element insertion and
+returning the result retain the vector library&#39;s normal ownership rules.</p>
+<h2 class="section" id="literal-notation">Literal notation</h2>
+<pre><code class="language-nelua">#syntax &#39;syntax.literals&#39;
+require &#39;string&#39;
+local size = 1_024
+local wide: uint64 = 18_446_744_073_709_551_615_u64
+local decimal = 1_234.5_625e-1
+local flags = b&quot;10 1010&quot;
+local bytes = hex&quot;00 41_ff&quot;
+assert(size == 1024 and wide == 0xffffffffffffffff_u64)
+assert(decimal == 123.45625 and flags == 42)
+assert(#bytes == 3 and bytes:byte(1) == 0 and bytes:byte(3) == 255)
+</code></pre>
+<p>Grouped decimal literals require a separator in their integer part. Groups must
+contain digits; fractional and exponent groups may also use <code>_</code>. Existing suffixes
+such as <code>_u64</code> are passed to the native literal machinery. Ungrouped decimals,
+hexadecimal numbers and native binary numbers retain their existing syntax.
+The decimal digits are passed as text, so wide integers are not rounded through
+Lua&#39;s floating-point type.</p>
+<p><code>b&quot;…&quot;</code> is a binary integer with optional spaces or underscores. It needs at least
+one digit and permits only <code>0</code> and <code>1</code> after separators are removed. <code>hex&quot;…&quot;</code> is a
+byte string; each byte needs two hexadecimal digits. Spaces and underscores are
+ignored, upper and lower case both work, and an empty byte string is allowed.
+Embedded zero bytes are preserved. These forms do not interpret string escapes.
+Overflow and supported integer widths remain the native compiler&#39;s responsibility.</p>
+<h2 class="section" id="alternative-operators-and-precedence">Alternative operators and precedence</h2>
+<pre><code class="language-nelua">#syntax &#39;syntax.operators&#39;
+local calls = 0
+local function tick(): boolean calls = calls + 1 return true end
+local a = false &amp;&amp; tick()
+local b = true || tick()
+assert(not a and b and calls == 0)
+assert(4 != 5 &amp;&amp; 2 ** 3 ** 2 == 512)
+assert(1 + 2 ** 3 * 2 == 17)
+</code></pre>
+<p><code>!=</code> is <code>~=</code>, <code>&amp;&amp;</code> is <code>and</code>, <code>||</code> is <code>or</code>, and <code>**</code> is <code>^</code>. Both boolean operators
+short-circuit exactly as their native equivalents do. Power groups to the right
+and follows Nelua&#39;s native numeric promotion rules, so an integer-looking power
+can produce a floating-point value. Built-in spellings remain available.</p>
+<p><code>syntax.binary(level, token, builder)</code> attaches an operator at an existing level.
+The table runs from weakest to strongest; these are the actual API level names.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Native examples</th>
+<th>Shipped additions</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>or</code></td>
+<td><code>or</code></td>
+<td>`</td>
+</tr>
+<tr>
+<td><code>and</code></td>
+<td><code>and</code></td>
+<td><code>&amp;&amp;</code></td>
+</tr>
+<tr>
+<td><code>cmp</code></td>
+<td><code>== ~= &lt; &lt;= &gt; &gt;=</code></td>
+<td><code>!=</code></td>
+</tr>
+<tr>
+<td><code>orelse</code></td>
+<td><code>orelse</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>bor</code></td>
+<td>bitwise <code>|</code></td>
+<td><code>|&gt;</code></td>
+</tr>
+<tr>
+<td><code>bxor</code></td>
+<td><code>~</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>band</code></td>
+<td><code>&amp;</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>bshift</code></td>
+<td><code>&lt;&lt; &gt;&gt; &gt;&gt;&gt;</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>concat</code></td>
+<td><code>..</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>arit</code></td>
+<td><code>+ -</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>fact</code></td>
+<td><code>* / // /// % %%%</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>pow</code></td>
+<td><code>^</code></td>
+<td><code>**</code></td>
+</tr>
+</tbody></table>
+</div>
+<p>The power level&#39;s right operand is a unary expression, which can contain another
+power; this gives power its right grouping. Prefix unary operators sit between
+multiplication and power, as in the base grammar. Other added binary operators
+fold left at their level, including added operators at <code>concat</code>. Native <code>..</code>
+retains its own right-recursive operand rule. Use parentheses to make mixed
+operator intent clear; the API does not create arbitrary new precedence levels.</p>
+<h2 class="section" id="write-an-inline-extension">Write an inline extension</h2>
+<p>The following adds a contextual <code>check condition else message</code> statement:</p>
+<pre><code class="language-nelua">#syntax [[
+  syntax.statement(&quot;&#39;check&#39; WORDSKIP expr `else` @expr&quot;, function(condition, message)
+    return syntax.stat(&#39;assert(c, message)&#39;, {c=condition, message=message})
+  end)
+]]
+local answer = 42
+check answer == 42 else &#39;unexpected answer&#39;
+</code></pre>
+<p>The pattern uses <a href="https://github.com/edubart/lpegrex">LPegRex</a> and can reference
+base grammar rules from <code>lualib/nelua/syntaxdefs.lua</code>: <code>expr</code>, <code>exprs</code>, <code>Block</code>,
+<code>name</code>, <code>iddecl</code>, <code>iddecls</code>, <code>typeexpr</code>, <code>funcargs</code>, and more. Captures become
+builder arguments in order. <code>name</code> captures text; <code>expr</code> captures an AST node;
+<code>iddecls</code> captures a list. <code>@expr</code> commits to an expression and reports an error
+if it is missing. Delay committed matches until the extension&#39;s opening is
+unambiguous, so normal calls and assignments can backtrack into the base grammar.</p>
+<p>Backticks use Nelua&#39;s token machinery, including whitespace and comments. A new
+word in backticks becomes reserved for the remainder of the file. For contextual
+words use <code>&#39;word&#39; WORDSKIP</code>, which also checks the identifier boundary. A raw
+quoted punctuation literal does not skip whitespace; add <code>SKIP</code> explicitly when
+that is required.</p>
+<h2 class="section" id="builder-api-reference">Builder API reference</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Call</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>syntax.statement(peg, builder, options)</code></td>
+<td>Add a statement before built-in alternatives. Return one AST node or a <code>Block</code> to splice into its enclosing block. Optional <code>{fallback=true}</code> tries the rule after specific statements, before native assignments and calls.</td>
+</tr>
+<tr>
+<td><code>syntax.expression(peg, builder)</code></td>
+<td>Add a primary expression before the built-in simple expressions. Return one expression AST.</td>
+</tr>
+<tr>
+<td><code>syntax.prefixexpr(peg, builder)</code></td>
+<td>Match an expression before built-in prefix operators; useful for claiming <code>$&quot;</code> before <code>$</code>.</td>
+</tr>
+<tr>
+<td><code>syntax.unary(token, builder)</code></td>
+<td>Add a prefix operator. The builder receives its operand.</td>
+</tr>
+<tr>
+<td><code>syntax.binary(level, token, builder)</code></td>
+<td>Add an infix operator at a listed precedence. The builder receives left and right operands.</td>
+</tr>
+<tr>
+<td><code>syntax.rules(text)</code></td>
+<td>Add named LPegRex helper rules. Existing rule names cannot be shadowed; use a module-specific prefix.</td>
+</tr>
+<tr>
+<td><code>syntax.error(label, message)</code></td>
+<td>Give a PEG error label a readable diagnostic. Use <code>@rule</code> or <code>^Label</code> to throw it.</td>
+</tr>
+<tr>
+<td><code>syntax.def(name, value)</code></td>
+<td>Expose an LPegRex definition, for example a <code>-&gt;name</code> capture transform.</td>
+</tr>
+<tr>
+<td><code>syntax.use(module)</code></td>
+<td>Load another extension into the same file&#39;s state. Shared dependencies are applied once; cycles are errors.</td>
+</tr>
+<tr>
+<td><code>syntax.gensym(prefix)</code></td>
+<td>Get a compiler-unique identifier for a temporary. Reserve the <code>__sx_</code> namespace for generated code.</td>
+</tr>
+<tr>
+<td><code>syntax.expr(text, substitutions)</code></td>
+<td>Parse a template containing exactly one expression.</td>
+</tr>
+<tr>
+<td><code>syntax.stat(text, substitutions)</code></td>
+<td>Parse statements; return a single node or a spliced block.</td>
+</tr>
+<tr>
+<td><code>syntax.block(text, substitutions)</code></td>
+<td>Parse statements and always return a block.</td>
+</tr>
+<tr>
+<td><code>syntax.raise(message, ...)</code></td>
+<td>Raise a formatted compile error at the syntax use being expanded.</td>
+</tr>
+<tr>
+<td><code>syntax.aster</code></td>
+<td>Access ordinary AST constructors, such as <code>BinaryOp</code>, <code>Function</code>, and <code>VarDecl</code>.</td>
+</tr>
+<tr>
+<td><code>syntax.levels</code></td>
+<td>Inspect the level-to-right-operand-rule mapping used by <code>binary</code>.</td>
+</tr>
+</tbody></table>
+</div>
+<p>Builders execute bottom-up after parsing. Child extensions have already become
+ordinary AST before a parent builder sees them. A builder must return an AST
+node, not a Lua number, string, or plain list. Use <code>syntax.aster.Number{&#39;42&#39;}</code>,
+<code>syntax.aster.String{&#39;text&#39;}</code>, or a template to create literal expressions.
+An expression builder cannot return a block of statements; wrap statements in
+a native <code>(do … in value end)</code> expression instead.</p>
+<p>Call registration methods and <code>syntax.use</code> while the module loads or inside an
+inline <code>#syntax</code> directive. Builders run after the source has been parsed; their
+job is to construct the replacement AST, rather than change the accepted grammar.</p>
+<h2 class="section" id="templates-substitution-and-generated-names">Templates, substitution and generated names</h2>
+<pre><code class="language-nelua">#syntax [[
+  syntax.statement(&quot;&#39;twice&#39; WORDSKIP expr `do` Block @`end`&quot;, function(value, body)
+    local name = syntax.gensym(&#39;repeat&#39;)
+    return syntax.stat(&#39;for index = 1, count do body() end&#39;, {
+      index=name, count=value, body=body,
+    })
+  end)
+]]
+local n = 0
+twice 2 do n = n + 3 end
+assert(n == 6)
+</code></pre>
+<p>Substitution is structural. An identifier whose name is a substitution key is
+replaced by an AST clone, a numeric or boolean literal, or an identifier when the
+value is a Lua string. A string substitution is an identifier, not a string
+literal: use <code>syntax.aster.String{value}</code> for a literal. String substitutions
+also rename declarations, field names, labels and other named AST slots.</p>
+<p>An empty statement call such as <code>body()</code> splices a captured <code>Block</code> or list of
+statements. A placeholder in an argument or expression list can splice a list
+of expressions. Lists cannot replace a single expression. Cloning substitutions
+lets a builder reuse a captured tree without sharing mutable AST nodes.</p>
+<p>Templates use the grammar active where the extension is used, so they can contain
+other enabled extensions. That grammar is recorded per syntax use, rather than
+taken from the end of the file. A template cannot contain <code>#syntax</code>. Expansion
+inside a template happens before its placeholders are substituted: placeholder
+names should stand on their own, rather than depend on a type known only after
+substitution. Generated trees receive the original syntax use&#39;s source location,
+so analyzer errors refer to the source construct.</p>
+<p><code>gensym</code> prevents accidental reuse between builders. It does not make arbitrary
+captured user code hygienic: avoid fixed helper names, and keep generated locals
+in the narrowest appropriate scope. A returned statement <code>Block</code> is spliced and
+does not add scope; return a <code>Do</code> statement when bindings must remain private.</p>
+<h2 class="section" id="package-and-compose-extensions">Package and compose extensions</h2>
+<p>Save a Lua module next to your source file, for example <code>project_syntax.lua</code>:</p>
+<pre><code class="language-lua">return function(syntax)
+  syntax.use(&#39;syntax.control&#39;)
+  syntax.use(&#39;syntax.compound&#39;)
+  syntax.statement(&quot;&#39;bump&#39; WORDSKIP name&quot;, function(name)
+    return syntax.stat(&#39;target += 1&#39;, {target=name})
+  end)
+end
+</code></pre>
+<p>Then use <code>#syntax &#39;project_syntax&#39;</code> in your source file. Dots in module names map
+to directories as in Lua. A top-level directive searches beside the source file,
+then the Nelua library path and the Lua package path. A nested <code>syntax.use</code> first
+searches beside the module doing the loading. The module must return a function
+taking the syntax API; it should keep file-specific state inside that function,
+because the compiler caches the loaded Lua module across parsed files.</p>
+<p>Helpers should use module-specific rule and definition names. Two different
+modules defining the same helper rule are an error; two modules claiming the same
+surface spelling may compete by PEG registration order. The first matching
+alternative wins. Use a single project pack to make registration order explicit,
+and test it with every extension you plan to combine.</p>
+<p>Broad statement rules that start with <code>var</code>, such as compound assignment, should
+use <code>{fallback=true}</code>. A committed index error while probing <code>var</code> can otherwise
+consume a contextual opening such as <code>let [a, b]</code> before its own rule gets tried.</p>
+<h2 class="section" id="diagnostics-and-practical-limits">Diagnostics and practical limits</h2>
+<p>Read the compiler&#39;s named error and its highlighted source construct. A missing
+module names the module and searched paths; circular <code>syntax.use</code> dependencies
+are rejected. Invalid PEG rules are reported at the directive, and
+<code>syntax.raise</code> reports at the construct the builder is expanding. A bad template
+adds an <code>in syntax template</code> diagnostic. Once expansion succeeds, normal Nelua
+diagnostics handle types, declarations, ownership and unsupported target features.</p>
+<p>Extension Lua has the compiler process&#39;s host access, like preprocessor Lua;
+load modules you trust. It is distinct from the bounded <code>comptime</code> evaluator.
+Do not use host-dependent builder decisions when cross-target output needs to
+be reproducible. The extensions add no runtime framework, but their generated
+code has the same costs and platform requirements as hand-written equivalents.</p>
+<p>In particular, interpolation may allocate, comprehensions allocate a vector,
+closures retain their lifetime rules, and freestanding mode continues to reject
+heap-dependent code. Loading <code>syntax.all</code> alone requires none of those runtime
+libraries. Static editor grammars cannot infer arbitrary file-local PEG rules;
+custom forms may need your editor&#39;s grammar updated, even when the compiler
+accepts them. Both code generators receive standard AST, and their existing
+feature restrictions still apply.</p>
+<p>To validate an extension, compare its expansion to ordinary Nelua, run it with
+side-effecting operands, try its malformed forms, and check that unrelated source
+still parses. The regression coverage is in <code>spec/syntaxext_spec.lua</code> and
+<code>spec/syntaxlib_spec.lua</code>; the complete guide examples are executable checks.</p>
+
+  </main>
+</div>
+<footer>
+  <span>spacegho.st / nelua / compiler / syntax extensions</span>
+  <a href="/nelua/compiler/">← Compiler</a>
+  <a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/syntax-extensions.md">Guide source ↗</a>
+  <a href="https://github.com/Spaceghost/nelua-lang/blob/master/examples/syntax_tour.nelua">Runnable tour ↗</a>
+</footer>
+</div>
+</body>
+</html>

@@ -55,3 +55,34 @@ npm run deploy         # wrangler deploy, needs a wrangler login
 Same ink/gold family as the rest of spacegho.st (see the melodica minisite):
 system fonts only, nothing fetched from another origin, no inline styles, a
 light scheme under `prefers-color-scheme: light`.
+
+## Refresh the matched libc comparison
+
+Build and run `benchmarks/comparison/run.py` and `conformance.py` from Nelibc
+on its prescribed Bak container. Preserve each libc-only baseline alongside
+its Nelibc-linked consumer; do not convert expected failures into passes.
+Copy the recorded results into a new dated `public/nelua/assets/comparison-*`
+directory, with the exact source snapshot and commands, then run:
+
+```sh
+python3 scripts/nelibc-comparison.py public/nelua/assets/comparison-YYYYMMDD
+npm run build
+npm run check
+npm run deploy
+```
+
+The renderer updates completion, conformance and performance on both the
+landing page and the Nelibc page. Historical coverage and standalone gates
+remain labelled with their original dates. `summary.json` is the per-case
+performance summary; `raw.csv` retains alternating pairs. `conformance.json`
+retains every planned test, including build/link failures, runtime failures,
+timeouts and new regressions. Keep the methodology and any loader/toolchain
+limitations beside the numbers. Delegated calls are not Nelibc speed wins.
+
+Before copying the result files, run `scripts/nelibc-runtime-census.py` on the
+build host with `--root` pointing to Nelibc, `--results` to the comparison
+output, `--zig-cache` to that run's Zig cache and `--cosmo-library` to its
+x86-64 `libcosmo.a`. It adds the baseline/combined runtime name census and
+records library hashes. Include Zig's `libzigc.a` and `libcompiler_rt.a`;
+counting only its musl `libc.a` would falsely report math APIs as missing.
+The table counts symbol presence, not independent linkability or conformance.

@@ -169,3 +169,21 @@ coverage-explorer { display: block; }
   .guide-toc { position: static; max-height: none; padding: 0 0 18px; border-right: 0; border-bottom: 1px solid var(--line); }
   .guide-toc ol { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 16px; }
 }
+
+/* Recorded libc comparison: readable tables and keyboard-native disclosures. */
+caption { text-align: left; padding: 12px 10px; color: var(--gold-2); font-weight: 600; }
+.table-wrap table { min-width: 600px; }
+.table-wrap small { display: block; }
+details { margin: 16px 0; padding: 12px 14px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--glass); }
+summary { cursor: pointer; color: var(--gold-2); font-weight: 600; }
+summary:focus-visible { outline: 2px solid var(--aether); outline-offset: 4px; }
+details[open] > summary { margin-bottom: 12px; }
+details .table-wrap { margin-bottom: 16px; }
+details code { overflow-wrap: anywhere; }
+main > ol { padding-left: 24px; }
+main > ol li { margin-block: 10px; }
+@media (max-width: 640px) {
+  .kv { grid-template-columns: 1fr; gap: 4px; }
+  .kv dt { margin-top: 12px; }
+  .kv dd { min-width: 0; overflow-wrap: anywhere; }
+}

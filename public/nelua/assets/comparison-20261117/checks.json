@@ -1,0 +1,50 @@
+{
+  "glibc-baseline": {
+    "exit": 0,
+    "result": {
+      "checks": 1995,
+      "failures": 0
+    },
+    "stderr": ""
+  },
+  "glibc-nelibc": {
+    "exit": 0,
+    "result": {
+      "checks": 1995,
+      "failures": 0
+    },
+    "stderr": ""
+  },
+  "musl-baseline": {
+    "exit": 0,
+    "result": {
+      "checks": 1995,
+      "failures": 0
+    },
+    "stderr": ""
+  },
+  "musl-nelibc": {
+    "exit": 0,
+    "result": {
+      "checks": 1995,
+      "failures": 0
+    },
+    "stderr": ""
+  },
+  "cosmopolitan-baseline": {
+    "exit": 0,
+    "result": {
+      "checks": 1995,
+      "failures": 0
+    },
+    "stderr": ""
+  },
+  "cosmopolitan-nelibc": {
+    "exit": 0,
+    "result": {
+      "checks": 1995,
+      "failures": 0
+    },
+    "stderr": ""
+  }
+}

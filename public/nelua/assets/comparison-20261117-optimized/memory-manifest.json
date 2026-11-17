@@ -1,0 +1,57 @@
+{
+  "commands": {
+    "baseline": [
+      "gcc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "/srv/ai/workspaces/nelibc/cosmo/tools/memory_bench.c",
+      "-lm",
+      "-pthread",
+      "-o",
+      "/srv/ai/artifacts/nelibc-cosmo/gap-reduction-20261117/memory-distribution/baseline"
+    ],
+    "candidate": [
+      "gcc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "/srv/ai/workspaces/nelibc/cosmo/tools/memory_bench.c",
+      "/srv/ai/workspaces/nelibc/cosmo/build/libnelibc-gcc.a",
+      "-lm",
+      "-pthread",
+      "-o",
+      "/srv/ai/artifacts/nelibc-cosmo/gap-reduction-20261117/memory-distribution/candidate"
+    ],
+    "previous": [
+      "gcc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "/srv/ai/workspaces/nelibc/cosmo/tools/memory_bench.c",
+      "/srv/ai/artifacts/nelibc-cosmo/gap-reduction-20261117/before/libnelibc-gcc.a",
+      "-lm",
+      "-pthread",
+      "-o",
+      "/srv/ai/artifacts/nelibc-cosmo/gap-reduction-20261117/memory-distribution/previous"
+    ]
+  },
+  "pairs": 7,
+  "cpu": 10,
+  "load_start": [
+    2.63330078125,
+    2.4443359375,
+    2.083984375
+  ],
+  "archive_sha256": {
+    "candidate": "b4975eb427ce91c52bc6238d9660c97db973b022226cc559d47117140a7a04e1",
+    "previous": "aa93d82e5887d195a8e3be1efadda15154996e932a0df742a8e6fe0f0ecc4009"
+  },
+  "source": "/srv/ai/workspaces/nelibc/cosmo/tools/memory_bench.c",
+  "source_sha256": "48276e430d23000c24bed97cefe2a8f01bdbdd1641b4b1bcb9bc1875782b5e31",
+  "load_end": [
+    2.1142578125,
+    2.287109375,
+    2.0654296875
+  ]
+}

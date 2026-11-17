@@ -1,0 +1,57 @@
+{
+  "commands": {
+    "baseline": [
+      "gcc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "/srv/ai/workspaces/nelibc/cosmo/tools/scan_bench.c",
+      "-lm",
+      "-pthread",
+      "-o",
+      "/srv/ai/artifacts/nelibc-cosmo/easy-first-20261117/scan-final/baseline"
+    ],
+    "candidate": [
+      "gcc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "/srv/ai/workspaces/nelibc/cosmo/tools/scan_bench.c",
+      "/srv/ai/workspaces/nelibc/cosmo/build/libnelibc-gcc.a",
+      "-lm",
+      "-pthread",
+      "-o",
+      "/srv/ai/artifacts/nelibc-cosmo/easy-first-20261117/scan-final/candidate"
+    ],
+    "previous": [
+      "gcc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "/srv/ai/workspaces/nelibc/cosmo/tools/scan_bench.c",
+      "/srv/ai/artifacts/nelibc-cosmo/easy-first-20261117/before/libnelibc-gcc.a",
+      "-lm",
+      "-pthread",
+      "-o",
+      "/srv/ai/artifacts/nelibc-cosmo/easy-first-20261117/scan-final/previous"
+    ]
+  },
+  "pairs": 7,
+  "cpu": 10,
+  "load_start": [
+    6.69873046875,
+    6.97314453125,
+    4.923828125
+  ],
+  "archive_sha256": {
+    "candidate": "fa2d59c962178b2ebb22cd81f7d78606eb0852c08f3c4751d139a37a04cc4138",
+    "previous": "b4975eb427ce91c52bc6238d9660c97db973b022226cc559d47117140a7a04e1"
+  },
+  "source": "/srv/ai/workspaces/nelibc/cosmo/tools/scan_bench.c",
+  "source_sha256": "5a11c5b346eacc8666b269b9a13a33f80d5282a4adb779a76f28bde2d6838938",
+  "load_end": [
+    5.86328125,
+    6.7255859375,
+    5.0
+  ]
+}

@@ -13,6 +13,7 @@ data=Path(sys.argv[1]).resolve()
 def load(name):return json.loads((data/name).read_text())
 meta=load('manifest.json');rows=load('summary.json');coverage=load('coverage.json');checks=load('checks.json');conf=load('conformance.json');deltas=load('deltas.json')
 url='/'+str(data.relative_to(ROOT/'public')).replace('\\','/')
+followup=load('optimization.json') if (data/'optimization.json').exists() else {}
 date=meta['date_utc'][:10]+' UTC';labels={'glibc':'glibc','musl':'musl / Zig','cosmopolitan':'Cosmopolitan'}
 def esc(s):return html.escape(str(s))
 def table(caption,headers,body):
@@ -62,11 +63,11 @@ for case,size in selected:
 if any('previous_ns' in r for r in rows):
  block+='<h3 id="gap-reduction">Optimization follow-up: the previous candidate versus this one</h3><p>The previous production archives were saved before changing the implementations. Each profile now rotates three builds of the same consumer: libc alone, the previous Nelibc candidate, and the new candidate. This table uses GCC/glibc only. These are concurrent measurements, not a comparison with historical timings.</p>'
  improvements=[]
- for case,size in [('memcpy',128),('memcpy',1024),('memset',1024),('memcmp-equal',8),('memchr-absent',1024),('strlen',1024),('strcmp-equal',32)]:
+ for case,size in followup.get('cases',[('memcpy',128),('memcpy',1024),('memset',1024),('memcmp-equal',8),('memchr-absent',1024),('strlen',1024),('strcmp-equal',32)]):
   r=find('glibc',case,size)
-  improvements.append([esc(case)+' · '+str(size)+' B',f'{r["previous_ns"]:.2f}',f'{r["nelibc_ns"]:.2f}',f'{r["baseline_ns"]:.2f}',f'{r["speedup_vs_previous"]:.2f}×'])
+  improvements.append([esc(case)+(f' · {size} B' if size else ''),f'{r["previous_ns"]:.2f}',f'{r["nelibc_ns"]:.2f}',f'{r["baseline_ns"]:.2f}',f'{r["speedup_vs_previous"]:.2f}×'])
  block+=table('GCC/glibc, seven rotating process triplets; nanoseconds per operation',['Case','Previous Nelibc','New Nelibc','glibc alone','Gain vs previous'],improvements)
- block+='<p>Changes: bounded head/tail copies and fills, runtime AVX2 paths for mid-size buffers and long strings, word-sized tiny comparisons, and fewer page checks on short strings. Read-only queries carry C purity metadata; operations that write memory or errno retain their effects. The timed wrappers keep calls observable, so these gains measure the implementations. Slower cases and all raw samples remain below.</p>'
+ block+='<p>'+esc(followup.get('changes','Changes: bounded head/tail copies and fills, runtime AVX2 paths for mid-size buffers and long strings, word-sized tiny comparisons, and fewer page checks on short strings. Read-only queries carry C purity metadata; operations that write memory or errno retain their effects.'))+' The timed wrappers keep calls observable, so these gains measure the implementations. Slower cases and all raw samples remain below.</p>'
  for case,size in [('memset',8),('memchr-absent',8)]:
   r=find('glibc',case,size)
   block+=f'<p class="small muted">Tradeoff: {esc(case)}({size}) measured {r["previous_ns"]:.2f} → {r["nelibc_ns"]:.2f} ns; glibc alone {r["baseline_ns"]:.2f} ns.</p>'
@@ -74,7 +75,8 @@ if any('previous_ns' in r for r in rows):
   r=next(r for r in load('strcmp-distribution.json') if r['bytes']==65536 and r['left_offset']==r['right_offset']==0 and r['case']=='equal')
   ns=r['median_ns']
   block+=f'<p class="small muted">The separate alignment consumer measured equal 64 KiB strcmp at offsets (0,0): previous {ns["previous"]:.2f}, new {ns["candidate"]:.2f}, glibc {ns["baseline"]:.2f} ns. Long-string results differ between consumers; the headline gains do not mean every case improved.</p>'
- block+=f'<p><a href="{url}/optimization-notes.md">Optimization notes and verification</a> · <a href="{url}/strcmp-distribution.json">String alignment/mismatch results</a> · <a href="{url}/memory-distribution.json">Memory alignment results</a> · <a href="{url}/previous-source.tar.gz">Previous candidate source</a></p>'
+ evidence_links=[('optimization-notes.md','Optimization notes and verification'),('strcmp-distribution.json','String alignment/mismatch results'),('memory-distribution.json','Memory alignment results'),('scan-distribution.json','Length/search alignment and match positions'),('previous-source.tar.gz','Previous candidate source')]
+ block+='<p>'+' · '.join(f'<a href="{url}/{file}">{label}</a>' for file,label in evidence_links if (data/file).exists())+'</p>'
  block+='<p><a href="/nelua/assets/comparison-20261117/manifest.json">Original comparison manifest</a>. The new source is still an unmerged candidate; the repository’s full integration gate remains separate from these focused checks and the independent corpus.</p>'
 block+=table('Representative cases, median of seven paired speedups', ['Case','glibc → +Nelibc','musl/Zig → +Nelibc','Cosmopolitan → +Nelibc'],performance)
 block+=f'''<p class="small muted">{esc(meta['cpu_model'])}; {esc(meta['platform'])}; CPU {meta['cpu']} pinned; {meta['pairs']} process rounds ({'rotating triplets with the previous candidate' if 'previous_archive_sha256' in meta else 'alternating pairs'}), rotating profile order. Each timed loop runs for at least 5 ms after calibration. Consumer flags include <code>-O2 -fno-builtin</code>; volatile pointers to noinline direct-call wrappers stop pure-function calls being hoisted out of the loop. The same wrappers are used in every profile. Taking the address of Cosmopolitan 4.0.2’s strstr IFUNC failed in this toolchain; direct calls passed, so this measures the direct-call path and does not establish function-pointer ABI conformance. Loop, pointer-call and checksum overhead is included equally, not subtracted. Buffers are hot and aligned; this is not a DRAM bandwidth, cold-cache, multicore or application throughput result. The record parser is a synthetic combined workload; qsort includes initializing its input, and malloc/free includes writing the first and last byte. Other jobs shared the host; affinity does not reserve a CPU. Start/end load averages: {esc(meta['load_start'])} / {esc(meta['load_end'])}.</p>
@@ -138,7 +140,7 @@ overview=f'''<!-- nelibc-overview:start -->
 <!-- nelibc-overview:end -->
 '''
 if any('previous_ns' in r for r in rows):
- gains='; '.join(case+'('+str(size)+') '+f'{find("glibc",case,size)["speedup_vs_previous"]:.2f}×' for case,size in [('memcpy',1024),('memset',1024),('strlen',1024)])
+ gains='; '.join(case+(('('+str(size)+')') if size else '')+' '+f'{find("glibc",case,size)["speedup_vs_previous"]:.2f}×' for case,size in followup.get('overview_cases',[('memcpy',1024),('memset',1024),('strlen',1024)]))
  overview=overview.replace('<div class="actions">','<p><strong>Optimization follow-up:</strong> '+gains+' faster than the previous candidate in the concurrent GCC/glibc comparison. Slower cases and alignment results are included on the <a href="/nelua/nelibc/#gap-reduction">detailed page</a>.</p><div class="actions">',1)
 if start in s:s=s[:s.index(start)]+overview+s[s.index(end)+len(end):]
 else:s=s.replace('<h2 class="section">Three rings</h2>',overview+'\n<h2 class="section">Three rings</h2>',1)

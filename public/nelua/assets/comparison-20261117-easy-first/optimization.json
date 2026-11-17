@@ -1,0 +1,31 @@
+{
+  "cases": [
+    [
+      "memchr-absent",
+      32
+    ],
+    [
+      "strtol-decimal",
+      0
+    ],
+    [
+      "qsort-128-integers",
+      0
+    ]
+  ],
+  "overview_cases": [
+    [
+      "memchr-absent",
+      32
+    ],
+    [
+      "strtol-decimal",
+      0
+    ],
+    [
+      "qsort-128-integers",
+      0
+    ]
+  ],
+  "changes": "This pass targets the easiest valuable cases first: bounded SIMD searches for 16\u201363-byte buffers with a scalar first-byte exit, constant-base overflow cutoffs in integer parsing, and constant-width specialization of the existing sorter for 4- and 8-byte elements."
+}

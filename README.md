@@ -106,5 +106,31 @@ python3 scripts/community-assets.py --directory public/nelua/community --no-font
 ```
 
 The snapshot is a current indexed sample, not an exhaustive GitHub census.
-Numbers and snapshot date travel together in `data.json`. No scheduled refresh
-is configured.
+Numbers and snapshot date travel together in `data.json`.
+
+### Daily refresh
+
+Bak refreshes the public community page every day at **07:17 America/Los_Angeles**
+(Pacific time, following daylight saving time). Its user crontab calls
+`/srv/ai/bin/nelua-community-daily`; this is a host job, not a GitHub-hosted build.
+The host clock uses `America/Los_Angeles`. The job uses the host's existing `gh`
+and Wrangler authentication; no credentials live in this repository.
+
+`scripts/community-daily.py` fetches current `main`, creates a separate release
+worktree, refreshes the indexed public default branches and same-origin avatars,
+and validates totals, deduplication, visibility and collection coverage. A large
+coverage loss or source decrease stops publication for review. It then checks
+the static deployment package, commits the snapshot, pushes normally to `main`,
+deploys the assets-only site, and checks the live JSON against its SHA-256 hash.
+A lock prevents overlapping runs; a concurrent change to `main` stops the run.
+Collection or validation failures leave the last published snapshot in place.
+No compiler build or CI polling is involved.
+
+Run the same job manually on Bak with `/srv/ai/bin/nelua-community-daily`.
+Its control checkout and run worktrees are under
+`/srv/ai/workspaces/nelua-site/community-daily*`, public blob and locked dependency
+caches under `/srv/ai/cache/nelua-community`, and dated logs, snapshots and
+`last-success.json` under `/srv/ai/artifacts/nelua-site/community-daily`.
+The launcher sources `/srv/ai/env.sh`, verifies ZFS, and sets task scratch and
+the npm cache before invoking the runner. Existing crontab entries are preserved.
+New repository candidates can be added to `scripts/community-candidates.json`.

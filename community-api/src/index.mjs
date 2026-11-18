@@ -125,7 +125,7 @@ export async function handle(request, env, options = {}) {
     need(url.origin === ORIGIN && url.pathname.startsWith(BASE + '/'), 404, 'not_found');
     if (path === '/private-totals' && request.method === 'GET') {
       const result = await env.DB.prepare('SELECT id,login,name,totals,counted_at FROM users WHERE consent=1 AND totals IS NOT NULL AND counted_at>?').bind(now - 36 * 3600).all();
-      return json({people: result.results.map(row => ({id: row.id, login: row.login, name: row.name, ...JSON.parse(row.totals), generatedAt: new Date(row.counted_at * 1000).toISOString()}))});
+      return json({people: result.results.map(row => ({id: row.id, login: row.login, name: row.login, ...JSON.parse(row.totals), generatedAt: new Date(row.counted_at * 1000).toISOString()}))});
     }
     if (path === '/auth/start' && request.method === 'GET') {
       const verifier = random() + random(); const nonce = random();

@@ -93,6 +93,7 @@ test('public totals contain aggregates only and opt-out removes them immediately
   await env.DB.prepare('UPDATE users SET consent=1,installation_id=789,selection=?,totals=?,counted_at=? WHERE id=?').bind(await seal([999],env.ENCRYPTION_KEY,'selection:'+who.id),JSON.stringify({lines:50,files:2,bytes:400,repositories:1}),now,who.id).run();
   const before=await (await go(env,'/private-totals')).json();
   assert.equal(before.people[0].lines,50);
+  assert.equal(before.people[0].name,'builder-251370','shared account names stay private; public identity uses GitHub');
   assert.doesNotMatch(JSON.stringify(before),/installation|selection|token|task|sourceFiles|789|999/);
   assert.equal((await go(env,'/settings',who,{enabled:false})).status,200);
   assert.deepEqual(await (await go(env,'/private-totals')).json(),{people:[]});

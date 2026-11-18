@@ -162,6 +162,29 @@ test('a failed metadata call retains encrypted manifest keys for retry without r
   assert.equal((await go(env,'/app/retry',who,body,headers,{fetch})).status,302);
   assert.equal(conversions,1);
 });
+test('a rejected foreign App does not block a subsequent correct App registration',async()=>{
+  const env=environment(); const who=await user(env); const configured=await manifestFixture();
+  const headers={'Content-Type':'application/x-www-form-urlencoded'}; let foreign=true; let conversions=0;
+  const fetch=async url=>{
+    if(url.includes('/app-manifests/')){conversions++;return Response.json(configured);}
+    return Response.json({...configured,owner:{id:foreign?999:251370}});
+  };
+  const body=code=>new URLSearchParams({csrf:who.csrf,code}).toString();
+  assert.equal((await go(env,'/app/retry',who,body('foreign-code'),headers,{fetch})).status,200);
+  assert.equal(await env.DB.prepare("SELECT payload FROM states WHERE hash='github-app-pending'").first(),null);
+  foreign=false;
+  assert.equal((await go(env,'/app/retry',who,body('correct-code'),headers,{fetch})).status,302);
+  assert.equal(conversions,2);
+});
+test('expired pending credentials are not reused instead of a fresh manifest code',async()=>{
+  const env=environment(); const who=await user(env); const configured=await manifestFixture();
+  await env.DB.prepare("INSERT INTO states(hash,purpose,payload,expires) VALUES('github-app-pending','app-recovery',?,?)")
+    .bind(await seal(configured,env.ENCRYPTION_KEY,'pending-github-app'),now-1).run();
+  let conversions=0;
+  const fetch=async url=>{if(url.includes('/app-manifests/'))conversions++;return Response.json(configured);};
+  const response=await go(env,'/app/retry',who,new URLSearchParams({csrf:who.csrf,code:'fresh-code'}).toString(),{'Content-Type':'application/x-www-form-urlencoded'},{fetch});
+  assert.equal(response.status,302);assert.equal(conversions,1);
+});
 test('public, forked and unowned repository IDs cannot be selected',async()=>{
   const env=environment(); const who=await user(env); await app(env);
   await env.DB.prepare('UPDATE users SET installation_id=44 WHERE id=?').bind(who.id).run();

@@ -59,12 +59,12 @@ function appRecovery(user, code, reason) {
     app_requires_read_only_contents:'Set the App’s Contents permission to read-only in GitHub, then retry.',
     app_owner_mismatch:'Connect the GitHub App owned by Spaceghost.'})[reason] || 'The App connection is not complete yet. Retry below.';
   const html = '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Finish GitHub App connection</title><link rel="stylesheet" href="/nelua/community/styles.css"><main class="page-shell private-panel"><h1>Finish the App connection</h1><p>Your existing App can be connected here. You do not need to create another App.</p><p class="account-status">Connection status: ' + escape(reason) + '</p><form method="post" action="' + BASE + '/app/retry"><input type="hidden" name="csrf" value="' + escape(user.csrf) + '"><input type="hidden" name="code" value="' + escape(code) + '"><button class="account-button" type="submit">Retry App connection</button></form><p><a href="/nelua/community/">Return to the community</a></p></main></html>';
-  return new Response(html, {headers: {'Content-Type':'text/html; charset=utf-8', 'Cache-Control':'private, no-store', 'Referrer-Policy':'no-referrer',
+  return new Response(html, {headers: {'Content-Type':'text/html; charset=utf-8', 'Cache-Control':'private, no-store', 'Referrer-Policy':'strict-origin',
     'Content-Security-Policy':"default-src 'none'; style-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"}});
 }
 async function finishApp(env, code, fetcher, now) {
   // A failed metadata request must not discard the one-time manifest credentials.
-  const pending = await env.DB.prepare("SELECT payload FROM states WHERE hash='github-app-pending' AND purpose='app-recovery'").first();
+  const pending = await env.DB.prepare("SELECT payload FROM states WHERE hash='github-app-pending' AND purpose='app-recovery' AND expires>?").bind(now).first();
   let app;
   if (pending) app = await open(pending.payload, env.ENCRYPTION_KEY, 'pending-github-app');
   else {
@@ -82,7 +82,11 @@ async function finishApp(env, code, fetcher, now) {
       .bind(await seal(app, env.ENCRYPTION_KEY, 'pending-github-app'), now + 7 * 86400).run();
   }
   const info = await github('/app', await appJwt(app, now), fetcher);
-  need(String(info.owner?.id) === env.OWNER_ID, 403, 'app_owner_mismatch');
+  if (String(info.owner?.id) !== env.OWNER_ID) {
+    // A rejected foreign App must not trap the owner in a retry loop.
+    await env.DB.prepare("DELETE FROM states WHERE hash IN ('github-app-pending','github-app-code')").run();
+    throw new Failure(403, 'app_owner_mismatch');
+  }
   need(info.permissions?.contents === 'read' && Object.values(info.permissions).every(value => value === 'read'), 403, 'app_requires_read_only_contents');
   need(typeof info.slug === 'string' && info.slug.length > 0 && info.slug.length <= 200, 502, 'invalid_app_name');
   app.slug = info.slug;

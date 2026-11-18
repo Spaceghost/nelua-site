@@ -51,6 +51,45 @@ async function appOf(env) {
   const row = await env.DB.prepare('SELECT value FROM app_config WHERE id=1').first();
   return row ? open(row.value, env.ENCRYPTION_KEY, 'github-app') : null;
 }
+function appRecovery(user, code, reason) {
+  reason = ({pending_connection:'The App has a saved setup attempt. Confirm its connection below.',
+    invalid_state:'The original setup session is no longer available. Confirm to reconnect your existing App.',
+    expired_state:'The setup session expired. Confirm to reconnect your existing App.',
+    github_access_unavailable:'GitHub has not completed the connection. Retry using the saved setup.',
+    app_requires_read_only_contents:'Set the App’s Contents permission to read-only in GitHub, then retry.',
+    app_owner_mismatch:'Connect the GitHub App owned by Spaceghost.'})[reason] || 'The App connection is not complete yet. Retry below.';
+  const html = '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Finish GitHub App connection</title><link rel="stylesheet" href="/nelua/community/styles.css"><main class="page-shell private-panel"><h1>Finish the App connection</h1><p>Your existing App can be connected here. You do not need to create another App.</p><p class="account-status">Connection status: ' + escape(reason) + '</p><form method="post" action="' + BASE + '/app/retry"><input type="hidden" name="csrf" value="' + escape(user.csrf) + '"><input type="hidden" name="code" value="' + escape(code) + '"><button class="account-button" type="submit">Retry App connection</button></form><p><a href="/nelua/community/">Return to the community</a></p></main></html>';
+  return new Response(html, {headers: {'Content-Type':'text/html; charset=utf-8', 'Cache-Control':'private, no-store', 'Referrer-Policy':'no-referrer',
+    'Content-Security-Policy':"default-src 'none'; style-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"}});
+}
+async function finishApp(env, code, fetcher, now) {
+  // A failed metadata request must not discard the one-time manifest credentials.
+  const pending = await env.DB.prepare("SELECT payload FROM states WHERE hash='github-app-pending' AND purpose='app-recovery'").first();
+  let app;
+  if (pending) app = await open(pending.payload, env.ENCRYPTION_KEY, 'pending-github-app');
+  else {
+    if (!code) {
+      const saved = await env.DB.prepare("SELECT payload FROM states WHERE hash='github-app-code' AND expires>?").bind(now).first();
+      if (saved) code = (await open(saved.payload, env.ENCRYPTION_KEY, 'pending-github-code')).code;
+    }
+    need(typeof code === 'string' && code.length > 0 && code.length <= 512 && !/[\u0000-\u001f]/.test(code), 400, 'invalid_code');
+    await env.DB.prepare("INSERT INTO states(hash,purpose,payload,expires) VALUES('github-app-code','app-recovery',?,?) ON CONFLICT(hash) DO UPDATE SET payload=excluded.payload,expires=excluded.expires")
+      .bind(await seal({code}, env.ENCRYPTION_KEY, 'pending-github-code'), now + 3600).run();
+    const converted = await github('/app-manifests/' + encodeURIComponent(code) + '/conversions', null, fetcher, {});
+    need(converted.id && converted.pem && converted.webhook_secret, 502, 'incomplete_app_configuration');
+    app = {id: converted.id, pem: converted.pem, webhook_secret: converted.webhook_secret};
+    await env.DB.prepare("INSERT INTO states(hash,purpose,payload,expires) VALUES('github-app-pending','app-recovery',?,?) ON CONFLICT(hash) DO UPDATE SET payload=excluded.payload,expires=excluded.expires")
+      .bind(await seal(app, env.ENCRYPTION_KEY, 'pending-github-app'), now + 7 * 86400).run();
+  }
+  const info = await github('/app', await appJwt(app, now), fetcher);
+  need(String(info.owner?.id) === env.OWNER_ID, 403, 'app_owner_mismatch');
+  need(info.permissions?.contents === 'read' && Object.values(info.permissions).every(value => value === 'read'), 403, 'app_requires_read_only_contents');
+  need(typeof info.slug === 'string' && info.slug.length > 0 && info.slug.length <= 200, 502, 'invalid_app_name');
+  app.slug = info.slug;
+  await env.DB.prepare('INSERT INTO app_config(id,value) VALUES(1,?) ON CONFLICT(id) DO NOTHING')
+    .bind(await seal(app, env.ENCRYPTION_KEY, 'github-app')).run();
+  await env.DB.prepare("DELETE FROM states WHERE hash IN ('github-app-pending','github-app-code')").run();
+}
 async function state(env, purpose, payload, now) {
   const value = random();
   await env.DB.prepare('INSERT INTO states(hash,purpose,payload,expires) VALUES(?,?,?,?)')
@@ -174,6 +213,8 @@ export async function handle(request, env, options = {}) {
       if (!user) return redirect(ORIGIN + BASE + '/auth/start?setup=1');
       need(user.id === env.OWNER_ID, 403, 'owner_required');
       if (await appOf(env)) return redirect(HOME + '#private-projects');
+      const pending = await env.DB.prepare("SELECT hash FROM states WHERE purpose='app-recovery' AND expires>? LIMIT 1").bind(now).first();
+      if (pending) return appRecovery(user, '', 'pending_connection');
       const value = await state(env, 'app', {id: user.id}, now);
       const manifest = {name: 'Nelua Builders at spacegho.st', url: HOME, public: true,
         redirect_url: ORIGIN + BASE + '/app/callback', setup_url: ORIGIN + BASE + '/installation/callback',
@@ -187,23 +228,36 @@ export async function handle(request, env, options = {}) {
     }
     if (path === '/app/callback' && request.method === 'GET') {
       const user = await session(request, env, now);
-      const flow = await consume(request, env, url, 'app', now);
-      need(user.id === env.OWNER_ID && flow.id === user.id, 403, 'owner_required');
+      need(user.id === env.OWNER_ID, 403, 'owner_required');
+      if (await appOf(env)) return redirect(HOME + '#private-projects');
       const code = url.searchParams.get('code') || '';
-      need(/^[a-z0-9]+$/i.test(code), 400, 'invalid_code');
-      const app = await github('/app-manifests/' + code + '/conversions', null, fetcher, {});
-      need(String(app.owner?.id) === env.OWNER_ID && app.permissions?.contents === 'read'
-        && !Object.values(app.permissions).includes('write') && app.pem && app.webhook_secret
-        && /^[a-z0-9-]+$/i.test(app.slug), 403, 'invalid_app_permissions');
-      const value = await seal({id: app.id, slug: app.slug, pem: app.pem, webhook_secret: app.webhook_secret}, env.ENCRYPTION_KEY, 'github-app');
-      await env.DB.prepare('INSERT INTO app_config(id,value) VALUES(1,?) ON CONFLICT(id) DO NOTHING').bind(value).run();
+      try {
+        const flow = await consume(request, env, url, 'app', now);
+        need(flow.id === user.id, 403, 'owner_required');
+        await finishApp(env, code, fetcher, now);
+      } catch (error) {
+        return appRecovery(user, code, error instanceof Failure ? error.message : 'temporarily_unavailable');
+      }
+      return redirect(HOME + '#private-projects', cookie(FLOW, '', 0));
+    }
+    if (path === '/app/retry' && request.method === 'POST') {
+      const user = await session(request, env, now);
+      need(user.id === env.OWNER_ID, 403, 'owner_required');
+      need(request.headers.get('Origin') === ORIGIN, 403, 'same_origin_required');
+      need(request.headers.get('Content-Type')?.split(';')[0] === 'application/x-www-form-urlencoded', 415, 'form_required');
+      const form = new URLSearchParams(await limitedBody(request));
+      need(await equal(form.get('csrf') || '', user.csrf), 403, 'invalid_csrf');
+      if (await appOf(env)) return redirect(HOME + '#private-projects');
+      const code = form.get('code') || '';
+      try { await finishApp(env, code, fetcher, now); }
+      catch (error) { return appRecovery(user, code, error instanceof Failure ? error.message : 'temporarily_unavailable'); }
       return redirect(HOME + '#private-projects', cookie(FLOW, '', 0));
     }
     if (path === '/installation/start' && request.method === 'GET') {
       const user = await session(request, env, now); const app = await appOf(env);
       need(app, 409, 'private_app_not_configured');
       const value = await state(env, 'installation', {id: user.id}, now);
-      return redirect('https://github.com/apps/' + app.slug + '/installations/new?state=' + value, cookie(FLOW, value, 600));
+      return redirect('https://github.com/apps/' + encodeURIComponent(app.slug) + '/installations/new?state=' + value, cookie(FLOW, value, 600));
     }
     if (path === '/installation/callback' && request.method === 'GET') {
       const user = await session(request, env, now); const app = await appOf(env);

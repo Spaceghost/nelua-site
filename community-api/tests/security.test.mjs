@@ -116,6 +116,52 @@ test('a valid app installation for a different numeric GitHub owner is rejected'
   assert.equal(response.status,403);
   assert.equal((await env.DB.prepare('SELECT installation_id FROM users WHERE id=?').bind(who.id).first()).installation_id,null);
 });
+async function manifestFixture() {
+  const key=await signing;
+  return {id:1,pem:'-----BEGIN PRIVATE KEY-----\n'+b64(await crypto.subtle.exportKey('pkcs8',key.privateKey))+'\n-----END PRIVATE KEY-----',webhook_secret:random(),owner:{id:251370},slug:'nelua-builders',permissions:{contents:'read',metadata:'read'}};
+}
+test('opaque manifest codes complete setup and credentials are encrypted',async()=>{
+  const env=environment(); const who=await user(env); const configured=await manifestFixture();
+  const start=await go(env,'/app/setup',who);
+  const html=await start.text(); const value=html.match(/apps\/new\?state=([^\"]+)/)[1];
+  const fetch=async url=>{
+    if(url.includes('/app-manifests/')){assert.match(url,/opaque_code%3Awith-prefix\/conversions$/);return Response.json(configured,{status:201});}
+    assert.equal(url,'https://api.github.com/app');return Response.json(configured);
+  };
+  const response=await go(env,'/app/callback?code=opaque_code%3Awith-prefix&state='+value,{...who,cookie:who.cookie+'; __Secure-nelua_flow='+value},undefined,undefined,{fetch});
+  assert.equal(response.status,302);
+  assert.equal((await(await go(env,'/me')).json()).privateAvailable,true);
+  const row=await env.DB.prepare('SELECT value FROM app_config').first();
+  assert.doesNotMatch(row.value,/BEGIN PRIVATE KEY/);
+  assert.equal((await open(row.value,env.ENCRYPTION_KEY,'github-app')).id,1);
+});
+test('expired setup state can recover only through owner same-origin CSRF confirmation',async()=>{
+  const env=environment(); const who=await user(env); const configured=await manifestFixture();
+  const page=await go(env,'/app/callback?code=opaque_code&state=expired',who);
+  assert.equal(page.status,200); assert.match(await page.text(),/Retry App connection/);
+  const body=new URLSearchParams({csrf:who.csrf,code:'opaque_code'}).toString();
+  const headers={'Content-Type':'application/x-www-form-urlencoded'};
+  assert.equal((await go(env,'/app/retry',who,body,{...headers,Origin:'https://attacker.example'})).status,403);
+  assert.equal((await go(env,'/app/retry',who,new URLSearchParams({csrf:'forged',code:'opaque_code'}).toString(),headers)).status,403);
+  const response=await go(env,'/app/retry',who,body,headers,{fetch:async()=>Response.json(configured)});
+  assert.equal(response.status,302); assert.equal((await(await go(env,'/me')).json()).privateAvailable,true);
+});
+test('a failed metadata call retains encrypted manifest keys for retry without redeeming again',async()=>{
+  const env=environment(); const who=await user(env); const configured=await manifestFixture();
+  const body=new URLSearchParams({csrf:who.csrf,code:'opaque_code'}).toString();
+  const headers={'Content-Type':'application/x-www-form-urlencoded'};
+  let conversions=0;let fail=true;
+  const fetch=async url=>{
+    if(url.includes('/app-manifests/')){conversions++;return Response.json(configured,{status:201});}
+    return fail?new Response(null,{status:503}):Response.json(configured);
+  };
+  assert.equal((await go(env,'/app/retry',who,body,headers,{fetch})).status,200);
+  const pending=await env.DB.prepare("SELECT payload FROM states WHERE hash='github-app-pending'").first();
+  assert.ok(pending);assert.doesNotMatch(pending.payload,/BEGIN PRIVATE KEY/);
+  fail=false;
+  assert.equal((await go(env,'/app/retry',who,body,headers,{fetch})).status,302);
+  assert.equal(conversions,1);
+});
 test('public, forked and unowned repository IDs cannot be selected',async()=>{
   const env=environment(); const who=await user(env); await app(env);
   await env.DB.prepare('UPDATE users SET installation_id=44 WHERE id=?').bind(who.id).run();

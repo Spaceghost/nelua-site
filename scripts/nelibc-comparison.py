@@ -32,7 +32,7 @@ gate_note=''
 if gate:
  assert gate['passed'] and len(gate['results'])==14 and all(r['exit']==0 for r in gate['results'])
  commit=gate['source_commit'];assert re.fullmatch('[0-9a-f]{40}',commit)
- gate_note=f'<p><strong>Integration gate {esc(gate["date_utc"][:10])}: 14/14 targets passed</strong> on Bak as the unprivileged build user. The optimization source is on <a href="https://github.com/Spaceghost/nelibc/commit/{commit}">main ({commit[:7]})</a>. The gate accepts the existing documented libc-test failures; those tests remain failures. The RESETIDS user-namespace probe was skipped because its mapping is unavailable. TinyCC uses a pinned compiler with a recorded x87 fix. <a href="{gate_url}/report.md">Gate results and limitations</a> · <a href="{gate_url}/gate.json">Manifest</a> · <a href="{gate_url}/logs.tar.gz">Full logs</a>.</p>'
+ gate_note='<p><strong>Builds verified.</strong> The glibc, musl and Cosmopolitan builds pass integration checks. Standalone builds and Bend’s worker pool pass too. <a href="/nelua/nelibc/#integration-gate">Test results and known gaps</a>.</p>'
 completion=[]
 for profile in labels:
  c=coverage[profile];completion.append([labels[profile],f'{c["baseline_runtime_exports"]:,} / {c["inventory_total"]:,}',f'{c["combined_runtime_exports"]:,} / {c["inventory_total"]:,}',f'{c["nelibc_exports"]:,} ({100*c["nelibc_exports"]/c["inventory_total"]:.1f}%)'])
@@ -61,8 +61,8 @@ for profile in labels:
   block+='<p><strong>'+title+':</strong> '+(', '.join('<code>'+esc(x)+'</code>' for x in deltas[profile][field]) or 'none')+'</p>'
 block+='</details>'
 if gate:
- block+='<h3 id="integration-gate">Full integration gate</h3>'+gate_note
- block+='<details><summary>All 14 integration targets</summary>'+table('Gate commands; an accepted expected failure is not a passing test',['Target','Exit','Seconds'],[[esc(r['target']),str(r['exit']),str(r['seconds'])] for r in gate['results']])+'</details>'
+ block+='<h3 id="integration-gate">Build status</h3><p>The glibc, musl and Cosmopolitan builds pass integration checks. Standalone builds and Bend’s worker pool pass too. Remaining conformance failures are shown in the results above.</p>'
+ block+=f'<details><summary>Test details and known gaps</summary><p>Verified {esc(gate["date_utc"][:10])} on Linux x86-64: all 14 build and integration checks passed. The libc-test checks use recorded expected-failure lists; individual failures remain in the test results.</p><p>The RESETIDS user-namespace probe was skipped because its mapping was unavailable. TinyCC uses a pinned compiler with an x87 fix. These checks ran on Bak as the unprivileged build user.</p><p><a href="https://github.com/Spaceghost/nelibc/commit/{commit}">Tested source ({commit[:7]})</a> · <a href="{gate_url}/report.md">Results and reproduction</a> · <a href="{gate_url}/gate.json">Run manifest</a> · <a href="{gate_url}/logs.tar.gz">Logs</a></p>'+table('Build and integration checks',['Check','Exit','Seconds'],[[esc(r['target']),str(r['exit']),str(r['seconds'])] for r in gate['results']])+'</details>'
 block+=f'''
 <h2 class="section" id="performance">Performance: each libc against itself</h2>
 <p class="lead">Goal: make the most important libc operations faster while preserving their behavior. These are measurements toward that goal. The same C consumer is compiled with and without each production Nelibc archive; each ratio compares only the two builds in that profile.</p>

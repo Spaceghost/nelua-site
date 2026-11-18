@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Meet the Nelua community. Explore a transparent index of current original public Nelua source and the people building it.">
+  <meta name="theme-color" content="#173b2d">
+  <title>Nelua Builders — a community source index</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#leaderboard">Skip to the index</a>
+  <div class="page-shell">
+    <header class="nav">
+      <a class="brand" href="#" aria-label="Nelua Builders home"><span class="brand-icon">{n}</span><span>nelua<span class="brand-slash"> / </span>builders</span></a>
+      <nav aria-label="Main navigation"><a class="nav-active" href="#leaderboard">The index</a><a href="#methodology">How we count <span aria-hidden="true">↗</span></a></nav>
+      <span class="community-label"><span class="dot"></span> Community edition</span>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="tiny-mark">✳</span> A LITTLE LANGUAGE. A LOT HAPPENING.</div>
+          <h1 id="hero-title">Small language.<br><span>Big builders.</span></h1>
+          <p>Meet the people growing the Nelua ecosystem.<br>Public source, counted in the open.</p>
+          <a class="hero-link" href="#leaderboard">Explore the community <span aria-hidden="true">↓</span></a>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="art-top"><span>nelua.community</span><span>● ● ●</span></div>
+          <div class="art-grid"><div class="code-symbol">n<span>_</span></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><span class="code-note note-one">require 'community'</span><span class="code-note note-two">local potential = ∞</span><span class="art-star">✳</span><span class="art-square"></span></div>
+          <div class="art-bottom"><span>OPEN SOURCE, OPEN POSSIBILITIES</span><span>↗</span></div>
+        </div>
+      </section>
+
+      <section class="stats" aria-label="Index totals">
+        <div class="stat"><span class="stat-label">BUILDERS IN THE INDEX</span><strong id="stat-people">—</strong><span class="stat-note">People & teams making things</span></div>
+        <div class="stat stat-highlight"><span class="stat-label">ORIGINAL NELUA LINES</span><strong id="stat-lines">—</strong><span class="stat-note">Current public source footprint</span><span class="stat-spark" aria-hidden="true">✳</span></div>
+        <div class="stat"><span class="stat-label">PUBLIC PROJECTS</span><strong id="stat-repos">—</strong><span class="stat-note">Each one a place to explore</span></div>
+      </section>
+
+      <section class="index-section" id="leaderboard" aria-labelledby="index-title">
+        <div class="section-heading"><div><div class="eyebrow">THE COMMUNITY INDEX</div><h2 id="index-title">See who's building.</h2></div><div class="snapshot"><span class="dot"></span><span id="snapshot-label">Loading source snapshot…</span></div></div>
+        <div class="toolbar">
+          <div class="filters" role="group" aria-label="Builder type"><button class="filter active" data-type="all" aria-pressed="true">Everyone</button><button class="filter" data-type="people" aria-pressed="false">People</button><button class="filter" data-type="teams" aria-pressed="false">Teams</button></div>
+          <label class="search"><span aria-hidden="true">⌕</span><span class="sr-only">Search builders or projects</span><input id="search" type="search" placeholder="Find a builder or project" autocomplete="off"><kbd aria-hidden="true">/</kbd></label>
+          <label class="sort"><span class="sr-only">Sort the index</span><select id="sort"><option value="lines">Most Nelua lines</option><option value="repositories">Most projects</option><option value="files">Most source files</option></select></label>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th class="rank-head" scope="col">#</th><th scope="col">BUILDER / REPOSITORY OWNER</th><th class="number" scope="col">ORIGINAL NELUA <span aria-hidden="true">↓</span></th><th class="number secondary-col" scope="col">FILES</th><th class="number projects-head" scope="col">PROJECTS</th></tr></thead><tbody id="builders"><tr><td colspan="5" class="empty">Reading the public source snapshot…</td></tr></tbody></table></div>
+        <div class="table-footer"><span id="result-count" role="status" aria-live="polite">Loading the index</span><button id="show-more" class="more-button" hidden>Show more builders <span aria-hidden="true">↓</span></button><a href="data.json" download="nelua-builders.json">Download the data <span aria-hidden="true">↗</span></a></div>
+        <p class="ranking-note">Ranked by current original <code>.nelua</code> source lines across indexed public default branches. Open a builder to explore the projects behind the number.</p>
+      </section>
+
+      <section id="methodology" class="methodology" aria-labelledby="method-title">
+        <div class="method-intro"><span class="method-icon" aria-hidden="true">{ }</span><div class="eyebrow">A NUMBER YOU CAN INSPECT</div><h2 id="method-title">Count the code.<br>Show the work.</h2><p>A useful community list starts with visible rules and links back to the source.</p><a href="data.json" download>Inspect the full snapshot ↗</a></div>
+        <div class="method-rules"><article><span>01</span><div><h3>A current footprint</h3><p>Original public Nelua source on each indexed repository's default branch, across all time. Blank and comment-only lines are excluded.</p></div></article><article><span>02</span><div><h3>One copy counts</h3><p>Forks, known vendored and generated files, and exact duplicate source are excluded. The snapshot records coverage and unavailable repositories.</p></div></article><article><span>03</span><div><h3>Projects belong to a community</h3><p>Numbers aggregate projects under their GitHub repository owner. Project links and pinned commit hashes make the calculation inspectable; individual line authorship is not inferred.</p></div></article><div class="coverage-note" id="coverage-note">Coverage details are included in the downloadable snapshot.</div></div>
+      </section>
+      <section class="closing"><span aria-hidden="true">✳</span><p>Every little project<br>makes the language bigger.</p><a href="https://github.com/topics/nelua" target="_blank" rel="noopener noreferrer">Find your next Nelua project ↗</a></section>
+    </main>
+    <footer><a class="brand footer-brand" href="#"><span class="brand-icon">{n}</span><span>nelua / builders</span></a><span>An independent community index.</span><a href="https://nelua.io" target="_blank" rel="noopener noreferrer">Explore Nelua ↗</a></footer>
+  </div>
+</body>
+</html>

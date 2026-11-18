@@ -1,0 +1,566 @@
+[
+  {
+    "repo": "edubart/nelua-lang",
+    "branch": "master"
+  },
+  {
+    "repo": "edubart/nelua-decl",
+    "branch": "main"
+  },
+  {
+    "repo": "znzsofficial/NeLuaJ",
+    "branch": "main"
+  },
+  {
+    "repo": "AuzFox/Raylib.nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "edubart/nelua-vscode",
+    "branch": "master"
+  },
+  {
+    "repo": "edubart/nelua-batteries",
+    "branch": "main"
+  },
+  {
+    "repo": "edubart/riscvm",
+    "branch": "master"
+  },
+  {
+    "repo": "edubart/nelua-lsp",
+    "branch": "master"
+  },
+  {
+    "repo": "edubart/minicoro",
+    "branch": "main"
+  },
+  {
+    "repo": "edubart/nelua-game2048",
+    "branch": "master"
+  },
+  {
+    "repo": "edubart/nelua-samples",
+    "branch": "main"
+  },
+  {
+    "repo": "edubart/lpegrex",
+    "branch": "main"
+  },
+  {
+    "repo": "root7211/nelua-wgpu",
+    "branch": "main"
+  },
+  {
+    "repo": "nsauzede/realist",
+    "branch": "master"
+  },
+  {
+    "repo": "stefanos82/nelua.vim",
+    "branch": "main"
+  },
+  {
+    "repo": "Andre-LA/rotor-nelua",
+    "branch": "master"
+  },
+  {
+    "repo": "edubart/nelua-sublime",
+    "branch": "master"
+  },
+  {
+    "repo": "edubart/nelua-benchmarks",
+    "branch": "main"
+  },
+  {
+    "repo": "aduros/wasm4",
+    "branch": "main"
+  },
+  {
+    "repo": "Andre-LA/awesome-nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "edubart/lester",
+    "branch": "main"
+  },
+  {
+    "repo": "edubart/tetrix",
+    "branch": "master"
+  },
+  {
+    "repo": "edubart/lunray",
+    "branch": "master"
+  },
+  {
+    "repo": "dinau/neluaImGui",
+    "branch": "main"
+  },
+  {
+    "repo": "Andre-LA/nprof",
+    "branch": "master"
+  },
+  {
+    "repo": "radgeRayden/nelua-osdev-barebones",
+    "branch": "main"
+  },
+  {
+    "repo": "Enter1he/nelua-highlight",
+    "branch": "main"
+  },
+  {
+    "repo": "Charmunks/nelua-mini",
+    "branch": "main"
+  },
+  {
+    "repo": "edubart/nelua-vim",
+    "branch": "main"
+  },
+  {
+    "repo": "linkpy/pancake-pm",
+    "branch": "master"
+  },
+  {
+    "repo": "edubart/nldoc",
+    "branch": "main"
+  },
+  {
+    "repo": "Andre-LA/ta-nelua",
+    "branch": "master"
+  },
+  {
+    "repo": "edubart/luamon",
+    "branch": "master"
+  },
+  {
+    "repo": "Elpersonn/NeluaWS",
+    "branch": "main"
+  },
+  {
+    "repo": "Caleb-o/nelua-sfml",
+    "branch": "main"
+  },
+  {
+    "repo": "dcurrie/nelua-bbtree",
+    "branch": "main"
+  },
+  {
+    "repo": "leap0x7b/micro-nelua-plugin",
+    "branch": "main"
+  },
+  {
+    "repo": "Andre-LA/baixada-game-jam-game",
+    "branch": "master"
+  },
+  {
+    "repo": "Andre-LA/irene",
+    "branch": "master"
+  },
+  {
+    "repo": "edubart/nelua-webview-demo",
+    "branch": "master"
+  },
+  {
+    "repo": "edubart/aoc",
+    "branch": "main"
+  },
+  {
+    "repo": "edubart/seqtoy",
+    "branch": "main"
+  },
+  {
+    "repo": "dylanmcdiarmid/tree-sitter-neluablk",
+    "branch": "main"
+  },
+  {
+    "repo": "LucasTavaresA/nelua-cellular-automata",
+    "branch": "main"
+  },
+  {
+    "repo": "Andre-LA/nelua-gamercade",
+    "branch": "main"
+  },
+  {
+    "repo": "aquapi/nuws",
+    "branch": "main"
+  },
+  {
+    "repo": "asumbek/nelua-cpp-example",
+    "branch": "main"
+  },
+  {
+    "repo": "Andre-LA/totally-not-sumo",
+    "branch": "main"
+  },
+  {
+    "repo": "linkpy/clang-nelua",
+    "branch": "master"
+  },
+  {
+    "repo": "kmafeni04/tree-sitter-nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "leap0x7b/stivale2-nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "asumbek/coc-nelua",
+    "branch": "master"
+  },
+  {
+    "repo": "Andre-LA/nelua-raytracing-card-mirror",
+    "branch": "master"
+  },
+  {
+    "repo": "dinau/nelua-platformer",
+    "branch": "main"
+  },
+  {
+    "repo": "kcvinker/Nforms",
+    "branch": "master"
+  },
+  {
+    "repo": "linkpy/pancake-lib",
+    "branch": "master"
+  },
+  {
+    "repo": "codehz/tree-sitter-nelua",
+    "branch": "🧬"
+  },
+  {
+    "repo": "edubart/nelua-decl-extra",
+    "branch": "main"
+  },
+  {
+    "repo": "SomeUnusualGames/Arcade-Fight",
+    "branch": "main"
+  },
+  {
+    "repo": "wess/nenv",
+    "branch": "master"
+  },
+  {
+    "repo": "lunaboards-dev/Nelua-PS2-Hello",
+    "branch": "master"
+  },
+  {
+    "repo": "DASKR515/cube-nelua-not-c",
+    "branch": "main"
+  },
+  {
+    "repo": "ArnaudValensi/nelua-sdl2-emscripten-docker",
+    "branch": "master"
+  },
+  {
+    "repo": "ffunatsu/nelua-studies",
+    "branch": "main"
+  },
+  {
+    "repo": "sarvex/nelua125",
+    "branch": "master"
+  },
+  {
+    "repo": "Rahyulty/TempName",
+    "branch": "main"
+  },
+  {
+    "repo": "edubart/antcopter",
+    "branch": "main"
+  },
+  {
+    "repo": "dinau/neluaImGui2",
+    "branch": "main"
+  },
+  {
+    "repo": "NotLandon1202/qdTUI",
+    "branch": "main"
+  },
+  {
+    "repo": "christopher-kleine/wasm-4-tutorial-games",
+    "branch": "main"
+  },
+  {
+    "repo": "edubart/marcherstein3d",
+    "branch": "master"
+  },
+  {
+    "repo": "apnyuup33/nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "nelodignaturut/neLua",
+    "branch": "main"
+  },
+  {
+    "repo": "mikemehl/termbox2-nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "neluas/neluas",
+    "branch": "main"
+  },
+  {
+    "repo": "sarvex/offensive-nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "DeanHnter/Nelua-Emacs",
+    "branch": "main"
+  },
+  {
+    "repo": "edubart/forkmon",
+    "branch": "main"
+  },
+  {
+    "repo": "nsauzede/neluatest",
+    "branch": "main"
+  },
+  {
+    "repo": "Andre-LA/micro-quest",
+    "branch": "main"
+  },
+  {
+    "repo": "Juamapa0/Neluanes",
+    "branch": "main"
+  },
+  {
+    "repo": "sarvex/leetcode-nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "root7211/neptune",
+    "branch": "main"
+  },
+  {
+    "repo": "sarvex/nelua-raylib",
+    "branch": "main"
+  },
+  {
+    "repo": "asumbek/zed-nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "asumbek/nelhv",
+    "branch": "main"
+  },
+  {
+    "repo": "sarvex/nelua-maelstrom",
+    "branch": "main"
+  },
+  {
+    "repo": "asumbek/ez",
+    "branch": "main"
+  },
+  {
+    "repo": "icyselec/lbind.nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "jordan4ibanez/nelua_adventure",
+    "branch": "main"
+  },
+  {
+    "repo": "scizzorz/playdate-nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "asumbek/nelua-ts-parser",
+    "branch": "main"
+  },
+  {
+    "repo": "JLPLabs/learning_nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "isb4u2cvo1g6h/repo-neluamlm",
+    "branch": "main"
+  },
+  {
+    "repo": "djsdoodle/nelua-terminal",
+    "branch": "main"
+  },
+  {
+    "repo": "asumbek/nelua-lua",
+    "branch": "main"
+  },
+  {
+    "repo": "Andre-LA/nelua-lite-xl",
+    "branch": "main"
+  },
+  {
+    "repo": "voxaloo/limine.nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "codingjq/nelua-what-is",
+    "branch": "main"
+  },
+  {
+    "repo": "dylanmcdiarmid/tree-sitter-nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "ravinder387/nelua-restapi",
+    "branch": "main"
+  },
+  {
+    "repo": "asumbek/nelua-fsxx",
+    "branch": "main"
+  },
+  {
+    "repo": "rebuilt/bunnymark-nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "notnullgames/cart_nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "pcornier/nelua-dockerfile",
+    "branch": "main"
+  },
+  {
+    "repo": "asumbek/nelua-buttplug",
+    "branch": "main"
+  },
+  {
+    "repo": "asumbek/tree-sitter-nelua",
+    "branch": "master"
+  },
+  {
+    "repo": "LukeGary462/nelua-stm32",
+    "branch": "main"
+  },
+  {
+    "repo": "lunaboards-dev/nelua-statx-test",
+    "branch": "main"
+  },
+  {
+    "repo": "asumbek/null",
+    "branch": "main"
+  },
+  {
+    "repo": "TeaSpillStudios/nelua-ui-manager",
+    "branch": "main"
+  },
+  {
+    "repo": "jrfondren/nelua-raylib-examples",
+    "branch": "master"
+  },
+  {
+    "repo": "djsdoodle/Nelua-Program-Runner",
+    "branch": "main"
+  },
+  {
+    "repo": "jrfondren/csvbench",
+    "branch": "master"
+  },
+  {
+    "repo": "Elpersonn/shoot-the-red",
+    "branch": "main"
+  },
+  {
+    "repo": "znzsofficial/NeLuaJ-Builder",
+    "branch": "main"
+  },
+  {
+    "repo": "muxueqz/i3status.nelua",
+    "branch": "main"
+  },
+  {
+    "repo": "dinau/cimgui_markdown",
+    "branch": "main"
+  },
+  {
+    "repo": "enqy/entropy",
+    "branch": "main"
+  },
+  {
+    "repo": "stefandd/Console",
+    "branch": "master"
+  },
+  {
+    "repo": "asumbek/luanel",
+    "branch": "main"
+  },
+  {
+    "repo": "DoubleShotgun/Rasm",
+    "branch": "main"
+  },
+  {
+    "repo": "designcord/designcord",
+    "branch": "main"
+  },
+  {
+    "repo": "Andre-LA/alpinist-vs-the-mount-roraima-alien-invasion",
+    "branch": "main"
+  },
+  {
+    "repo": "godDLL/nelu",
+    "branch": "main"
+  },
+  {
+    "repo": "Spaceghost/ghostty-dalamud",
+    "branch": "master"
+  },
+  {
+    "repo": "Spaceghost/xiv-workshop",
+    "branch": "main"
+  },
+  {
+    "repo": "Andre-LA/parabola-gelada",
+    "branch": "main"
+  },
+  {
+    "repo": "christopher-kleine/wasm4-docker",
+    "branch": "main"
+  },
+  {
+    "repo": "Andre-LA/the-sentinels",
+    "branch": "main"
+  },
+  {
+    "repo": "dinau/cimanim",
+    "branch": "main"
+  },
+  {
+    "repo": "dinau/cimgui_toggle",
+    "branch": "main"
+  },
+  {
+    "repo": "dinau/cimspinner_demo",
+    "branch": "main"
+  },
+  {
+    "repo": "dinau/cimgui_zoomable_image",
+    "branch": "main"
+  },
+  {
+    "repo": "dinau/CImGuiTextSelect",
+    "branch": "main"
+  },
+  {
+    "repo": "dinau/raywars",
+    "branch": "main"
+  },
+  {
+    "repo": "stefanos82/colors",
+    "branch": "main"
+  },
+  {
+    "repo": "Spaceghost/drift",
+    "branch": "main"
+  },
+  {
+    "repo": "Spaceghost/melodica.h",
+    "branch": "main"
+  },
+  {
+    "repo": "Spaceghost/multicore-server-challenge",
+    "branch": "main"
+  },
+  {
+    "repo": "Spaceghost/theseus-init",
+    "branch": "main"
+  }
+]

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-18T15:08:14.197184Z",
+  "generatedAt": "2026-11-18T18:07:53.497997Z",
   "metric": "Current original .nelua SLOC",
   "methodology": [
     "A bounded index of candidate GitHub repositories; this is not a complete census of all Nelua code or developers.",
@@ -1693,7 +1693,7 @@
           "name": "Spaceghost/melodica.h",
           "url": "https://github.com/Spaceghost/melodica.h",
           "branch": "main",
-          "sha": "c4624443680b522ae5853d3bff3290c833416cf5",
+          "sha": "4447943dd0c43b1b288f963f542502bb772e5802",
           "public": true,
           "fork": false,
           "lines": 1736,
@@ -17294,7 +17294,7 @@
       "name": "Spaceghost/melodica.h",
       "url": "https://github.com/Spaceghost/melodica.h",
       "branch": "main",
-      "sha": "c4624443680b522ae5853d3bff3290c833416cf5",
+      "sha": "4447943dd0c43b1b288f963f542502bb772e5802",
       "public": true,
       "fork": false,
       "lines": 1736,

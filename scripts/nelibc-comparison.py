@@ -14,6 +14,10 @@ def load(name):return json.loads((data/name).read_text())
 meta=load('manifest.json');rows=load('summary.json');coverage=load('coverage.json');checks=load('checks.json');conf=load('conformance.json');deltas=load('deltas.json')
 url='/'+str(data.relative_to(ROOT/'public')).replace('\\','/')
 followup=load('optimization.json') if (data/'optimization.json').exists() else {}
+gate_path=ROOT/'public/nelua/assets/integration-20261117/gate.json'
+gate=json.loads(gate_path.read_text()) if gate_path.exists() else None
+if gate and gate['comparison_directory']!=data.name:gate=None
+gate_url='/nelua/assets/integration-20261117'
 date=meta['date_utc'][:10]+' UTC';labels={'glibc':'glibc','musl':'musl / Zig','cosmopolitan':'Cosmopolitan'}
 def esc(s):return html.escape(str(s))
 def table(caption,headers,body):
@@ -24,6 +28,11 @@ def ratio(row):
  status='st-implemented' if row['ratio_min']>1 else ('st-not-declared' if row['ratio_max']<1 else '')
  return f'<span class="{status}">{speed(row["speedup"])}×</span>'+ (f' <small class="muted">{label}</small>' if label else '')
 def find(profile,case,size=0):return next(r for r in rows if r['profile']==profile and r['case']==case and r['bytes']==size)
+gate_note=''
+if gate:
+ assert gate['passed'] and len(gate['results'])==14 and all(r['exit']==0 for r in gate['results'])
+ commit=gate['source_commit'];assert re.fullmatch('[0-9a-f]{40}',commit)
+ gate_note=f'<p><strong>Integration gate {esc(gate["date_utc"][:10])}: 14/14 targets passed</strong> on Bak as the unprivileged build user. The optimization source is on <a href="https://github.com/Spaceghost/nelibc/commit/{commit}">main ({commit[:7]})</a>. The gate accepts the existing documented libc-test failures; those tests remain failures. The RESETIDS user-namespace probe was skipped because its mapping is unavailable. TinyCC uses a pinned compiler with a recorded x87 fix. <a href="{gate_url}/report.md">Gate results and limitations</a> · <a href="{gate_url}/gate.json">Manifest</a> · <a href="{gate_url}/logs.tar.gz">Full logs</a>.</p>'
 completion=[]
 for profile in labels:
  c=coverage[profile];completion.append([labels[profile],f'{c["baseline_runtime_exports"]:,} / {c["inventory_total"]:,}',f'{c["combined_runtime_exports"]:,} / {c["inventory_total"]:,}',f'{c["nelibc_exports"]:,} ({100*c["nelibc_exports"]/c["inventory_total"]:.1f}%)'])
@@ -51,6 +60,9 @@ for profile in labels:
  for field,title in [('regressions','New non-passes'),('improvements','New passes')]:
   block+='<p><strong>'+title+':</strong> '+(', '.join('<code>'+esc(x)+'</code>' for x in deltas[profile][field]) or 'none')+'</p>'
 block+='</details>'
+if gate:
+ block+='<h3 id="integration-gate">Full integration gate</h3>'+gate_note
+ block+='<details><summary>All 14 integration targets</summary>'+table('Gate commands; an accepted expected failure is not a passing test',['Target','Exit','Seconds'],[[esc(r['target']),str(r['exit']),str(r['seconds'])] for r in gate['results']])+'</details>'
 block+=f'''
 <h2 class="section" id="performance">Performance: each libc against itself</h2>
 <p class="lead">Goal: make the most important libc operations faster while preserving their behavior. These are measurements toward that goal. The same C consumer is compiled with and without each production Nelibc archive; each ratio compares only the two builds in that profile.</p>
@@ -77,7 +89,7 @@ if any('previous_ns' in r for r in rows):
   block+=f'<p class="small muted">The separate alignment consumer measured equal 64 KiB strcmp at offsets (0,0): previous {ns["previous"]:.2f}, new {ns["candidate"]:.2f}, glibc {ns["baseline"]:.2f} ns. Long-string results differ between consumers; the headline gains do not mean every case improved.</p>'
  evidence_links=[('optimization-notes.md','Optimization notes and verification'),('strcmp-distribution.json','String alignment/mismatch results'),('memory-distribution.json','Memory alignment results'),('scan-distribution.json','Length/search alignment and match positions'),('previous-source.tar.gz','Previous candidate source')]
  block+='<p>'+' · '.join(f'<a href="{url}/{file}">{label}</a>' for file,label in evidence_links if (data/file).exists())+'</p>'
- block+='<p><a href="/nelua/assets/comparison-20261117/manifest.json">Original comparison manifest</a>. The new source is still an unmerged candidate; the repository’s full integration gate remains separate from these focused checks and the independent corpus.</p>'
+ block+='<p><a href="/nelua/assets/comparison-20261117/manifest.json">Original comparison manifest</a>. '+('The dated comparison snapshots remain the exact sources measured; the integrated tree also includes the build, test and benchmark fixes recorded in the full gate above.' if gate else 'The new source is still an unmerged candidate; the repository’s full integration gate remains separate from these focused checks and the independent corpus.')+'</p>'
 block+=table('Representative cases, median of seven paired speedups', ['Case','glibc → +Nelibc','musl/Zig → +Nelibc','Cosmopolitan → +Nelibc'],performance)
 block+=f'''<p class="small muted">{esc(meta['cpu_model'])}; {esc(meta['platform'])}; CPU {meta['cpu']} pinned; {meta['pairs']} process rounds ({'rotating triplets with the previous candidate' if 'previous_archive_sha256' in meta else 'alternating pairs'}), rotating profile order. Each timed loop runs for at least 5 ms after calibration. Consumer flags include <code>-O2 -fno-builtin</code>; volatile pointers to noinline direct-call wrappers stop pure-function calls being hoisted out of the loop. The same wrappers are used in every profile. Taking the address of Cosmopolitan 4.0.2’s strstr IFUNC failed in this toolchain; direct calls passed, so this measures the direct-call path and does not establish function-pointer ABI conformance. Loop, pointer-call and checksum overhead is included equally, not subtracted. Buffers are hot and aligned; this is not a DRAM bandwidth, cold-cache, multicore or application throughput result. The record parser is a synthetic combined workload; qsort includes initializing its input, and malloc/free includes writing the first and last byte. Other jobs shared the host; affinity does not reserve a CPU. Start/end load averages: {esc(meta['load_start'])} / {esc(meta['load_end'])}.</p>
 <details><summary>All sizes, absolute times and observed pair ranges</summary>
@@ -112,9 +124,10 @@ size_rows=[]
 for profile in labels:
  size_rows.append([labels[profile],f'{meta["binary_bytes"][profile]["baseline"]:,}',f'{meta["binary_bytes"][profile]["nelibc"]:,}','Dynamic system libc' if profile=='glibc' else 'Static'])
 block+='<details><summary>Built consumer file sizes</summary>'+table('Unnormalized executable file bytes, as built',['Profile','Alone bytes','+Nelibc bytes','Link mode'],size_rows)+'<p>These are not normalized release sizes. The dynamic glibc executable excludes its shared libraries; symbols, debug information, archive granularity and static runtimes affect these files. No footprint winner is claimed.</p></details>\n<!-- nelibc-comparison:end -->\n'
+if gate:block=block.replace('The snapshot includes the new profile; it is not a claim that these changes have landed on upstream main.', 'The new profile and measured optimizations are now integrated on main; the dated source archive below preserves the exact comparison snapshot.')
 page=ROOT/'public/nelua/nelibc/index.html';s=page.read_text()
 start='<!-- nelibc-comparison:start -->';end='<!-- nelibc-comparison:end -->'
-if start in s:s=s[:s.index(start)]+block+s[s.index(end)+len(end):]
+if start in s:s=s[:s.index(start)]+block.rstrip()+'\n\n'+s[s.index(end)+len(end):].lstrip('\n')
 else:s=s.replace('<h2 class="section">What works today</h2>',block+'\n<h2 class="section">What works today</h2>',1)
 a=s.index('  <p class="stats">');b=s.index('</p>',a)+4
 s=s[:a]+'  <p class="stats">'+''.join(f'<span><strong>{coverage[p]["nelibc_exports"]:,} / {coverage[p]["inventory_total"]:,}</strong> exports · {labels[p]}</span>' for p in labels)+f'<span>comparison {date}</span></p>'+s[b:]
@@ -142,7 +155,8 @@ overview=f'''<!-- nelibc-overview:start -->
 if any('previous_ns' in r for r in rows):
  gains='; '.join(case+(('('+str(size)+')') if size else '')+' '+f'{find("glibc",case,size)["speedup_vs_previous"]:.2f}×' for case,size in followup.get('overview_cases',[('memcpy',1024),('memset',1024),('strlen',1024)]))
  overview=overview.replace('<div class="actions">','<p><strong>Optimization follow-up:</strong> '+gains+' faster than the previous candidate in the concurrent GCC/glibc comparison. Slower cases and alignment results are included on the <a href="/nelua/nelibc/#gap-reduction">detailed page</a>.</p><div class="actions">',1)
-if start in s:s=s[:s.index(start)]+overview+s[s.index(end)+len(end):]
+if gate:overview=overview.replace('<div class="actions">',gate_note+'<div class="actions">',1)
+if start in s:s=s[:s.index(start)]+overview.rstrip()+'\n\n'+s[s.index(end)+len(end):].lstrip('\n')
 else:s=s.replace('<h2 class="section">Three rings</h2>',overview+'\n<h2 class="section">Three rings</h2>',1)
 s=re.sub(r'<span><strong>[0-9,]+ / [0-9,]+</strong> (?:musl symbols in nelibc|tracked exports · glibc hybrid \([^<]*\))</span>', '<span><strong>'+str(coverage['glibc']['nelibc_exports'])+' / '+f"{coverage['glibc']['inventory_total']:,}"+'</strong> tracked exports · glibc hybrid ('+date+')</span>', s)
 s=s.replace('<span>updated 2026-11-07</span>','<span>compiler reference 2026-11-07; nebox reference 2026-11-08</span>')

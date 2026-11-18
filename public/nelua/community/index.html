@@ -8,6 +8,7 @@
   <title>Nelua Builders — a community source index</title>
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
+  <script src="account.js" defer></script>
 </head>
 <body>
   <a class="skip" href="#leaderboard">Skip to the index</a>
@@ -15,7 +16,7 @@
     <header class="nav">
       <a class="brand" href="#" aria-label="Nelua Builders home"><span class="brand-icon">{n}</span><span>nelua<span class="brand-slash"> / </span>builders</span></a>
       <nav aria-label="Main navigation"><a class="nav-active" href="#leaderboard">The index</a><a href="#methodology">How we count <span aria-hidden="true">↗</span></a></nav>
-      <span class="community-label"><span class="dot"></span> Community edition</span>
+      <a class="account-button nav-sign-in" href="api/auth/start" id="nav-sign-in">Sign in with GitHub</a>
     </header>
 
     <main>
@@ -23,7 +24,7 @@
         <div class="hero-copy">
           <div class="eyebrow"><span class="tiny-mark">✳</span> A LITTLE LANGUAGE. A LOT HAPPENING.</div>
           <h1 id="hero-title">Small language.<br><span>Big builders.</span></h1>
-          <p>Meet the people growing the Nelua ecosystem.<br>Public source, counted in the open.</p>
+          <p>Meet the people growing the Nelua ecosystem.<br>Public source and opted-in private projects.</p>
           <a class="hero-link" href="#leaderboard">Explore the community <span aria-hidden="true">↓</span></a>
         </div>
         <div class="hero-art" aria-hidden="true">
@@ -35,8 +36,15 @@
 
       <section class="stats" aria-label="Index totals">
         <div class="stat"><span class="stat-label">BUILDERS IN THE INDEX</span><strong id="stat-people">—</strong><span class="stat-note">People & teams making things</span></div>
-        <div class="stat stat-highlight"><span class="stat-label">ORIGINAL NELUA LINES</span><strong id="stat-lines">—</strong><span class="stat-note">Current public source footprint</span><span class="stat-spark" aria-hidden="true">✳</span></div>
+        <div class="stat stat-highlight"><span class="stat-label">ORIGINAL NELUA LINES</span><strong id="stat-lines">—</strong><span class="stat-note">Public source + opted-in private totals</span><span class="stat-spark" aria-hidden="true">✳</span></div>
         <div class="stat"><span class="stat-label">PUBLIC PROJECTS</span><strong id="stat-repos">—</strong><span class="stat-note">Each one a place to explore</span></div>
+      </section>
+
+      <section class="private-panel" id="private-projects" aria-labelledby="private-title">
+        <div><div class="eyebrow">YOUR NELUA COUNTS TOO</div><h2 id="private-title">Include your private projects.</h2>
+        <p>Sign in with GitHub, connect selected repositories, and choose which to count. Only your combined private source totals appear publicly. Repository names, file paths and code stay private.</p></div>
+        <div id="account-controls"><a class="account-button" href="api/auth/start">Sign in with GitHub</a></div>
+        <p id="account-status" class="account-status" role="status" aria-live="polite"></p>
       </section>
 
       <section class="index-section" id="leaderboard" aria-labelledby="index-title">
@@ -48,8 +56,10 @@
         </div>
         <div class="table-wrap"><table><thead><tr><th class="rank-head" scope="col">#</th><th scope="col">BUILDER / REPOSITORY OWNER</th><th class="number" scope="col">ORIGINAL NELUA <span aria-hidden="true">↓</span></th><th class="number secondary-col" scope="col">FILES</th><th class="number projects-head" scope="col">PROJECTS</th></tr></thead><tbody id="builders"><tr><td colspan="5" class="empty">Reading the public source snapshot…</td></tr></tbody></table></div>
         <div class="table-footer"><span id="result-count" role="status" aria-live="polite">Loading the index</span><button id="show-more" class="more-button" hidden>Show more builders <span aria-hidden="true">↓</span></button><a href="data.json" download="nelua-builders.json">Download the data <span aria-hidden="true">↗</span></a></div>
-        <p class="ranking-note">Ranked by current original <code>.nelua</code> source lines across indexed public default branches. Open a builder to explore the projects behind the number.</p>
+        <p class="ranking-note">Ranked by current original <code>.nelua</code> source on indexed public default branches, plus labeled private totals from owners who opt in. Open a builder to explore its public projects.</p>
       </section>
+
+      <p class="ranking-note" id="private-count-note" aria-live="polite">Private totals require explicit owner consent.</p>
 
       <section id="methodology" class="methodology" aria-labelledby="method-title">
         <div class="method-intro"><span class="method-icon" aria-hidden="true">{ }</span><div class="eyebrow">A NUMBER YOU CAN INSPECT</div><h2 id="method-title">Count the code.<br>Show the work.</h2><p>A useful community list starts with visible rules and links back to the source. Refreshed daily at 7:17 a.m. Pacific.</p><a href="data.json" download>Inspect the full snapshot ↗</a></div>

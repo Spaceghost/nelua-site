@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Collect, validate, commit and publish the daily static community snapshot.
 
-Run through the host launcher documented in README.md. Credentials are supplied
-by the host's existing gh and Wrangler configuration, never by this repository.
+Run through GitHub Actions or the manual host launcher documented in README.md.
+Credentials come from the workflow's job token and deployment secret, or from
+the operator's existing gh and Wrangler configuration, never from source.
 Each run has its own Git worktree and evidence directory. Failed runs retain
 their evidence and leave the last published snapshot available.
 """
 import argparse
+import base64
 import datetime as dt
 import fcntl
 import hashlib
@@ -64,6 +66,20 @@ def run(args):
         os.environ['GIT_TERMINAL_PROMPT'] = '0'
         os.environ['WRANGLER_SEND_METRICS'] = 'false'
         os.environ['WRANGLER_LOG_PATH'] = str(evidence / 'wrangler.log')
+        if os.environ.get('GITHUB_ACTIONS') == 'true':
+            if (os.environ.get('GITHUB_REPOSITORY') != 'Spaceghost/nelua-site'
+                    or os.environ.get('GITHUB_REF') != 'refs/heads/main'
+                    or os.environ.get('GITHUB_EVENT_NAME') not in ('schedule', 'workflow_dispatch')):
+                raise RuntimeError('Only default-branch scheduled or manual Actions runs may publish')
+            token = os.environ.get('GH_TOKEN', '')
+            if not token:
+                raise RuntimeError('The Actions job token is missing')
+            # Environment-only authentication also works in linked Git worktrees.
+            # Do not persist the job token in a checkout, log or artifact.
+            auth = base64.b64encode(('x-access-token:' + token).encode()).decode()
+            os.environ['GIT_CONFIG_COUNT'] = '1'
+            os.environ['GIT_CONFIG_KEY_0'] = 'http.https://github.com/.extraheader'
+            os.environ['GIT_CONFIG_VALUE_0'] = 'AUTHORIZATION: basic ' + auth
         # Keep the control checkout clean: every data change happens in a run worktree.
         if command(['git', 'status', '--porcelain'], capture=True):
             raise RuntimeError('Control checkout has local changes; refusing to overwrite them')
@@ -76,7 +92,7 @@ def run(args):
             raise RuntimeError('Expected the existing assets-only nelua-site configuration')
         if not os.environ.get('CLOUDFLARE_ACCOUNT_ID'):
             raise RuntimeError('CLOUDFLARE_ACCOUNT_ID must select the established deployment account')
-        command(['gh', 'api', 'user', '--jq', '.login'])
+        command(['gh', 'api', 'repos/Spaceghost/nelua-site', '--jq', '.full_name'])
 
         # Reuse exactly the locked dependencies; install only when the lock changes.
         key = hashlib.sha256((worktree / 'package-lock.json').read_bytes()

@@ -344,6 +344,7 @@ def main():
             **stats,
         },
         'people': ranked, 'failures': failures,
+        'excludedGeneratedBlobs': sorted(blob for blob, result in measured.items() if result.get('excluded')),
         'excludedRepositories': [{'repository': r['name'], 'reason': r['reason']} for r in repos if r['status'] == 'excluded'],
         'repositoryAudit': sorted(audit, key=lambda r: r['name'].lower()),
         'generatedOutputEvidence': [

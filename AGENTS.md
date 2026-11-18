@@ -9,3 +9,10 @@
 - Keep the three-ring split: core (compiler, nelibc, nebox) depends on nothing
   outside itself; workshop depends on core; world is upstream and community.
 - `legacy/` is the previous site kept for reference; it is not served.
+
+- Owner-authorized exception, 2026-11-18: `community-api/` is the separate
+  sign-in and private-project consent Worker, routed only at
+  `/nelua/community/api/*`. The main `nelua-site` Worker stays assets-only.
+  Private names, paths, source, tokens and per-file identifiers must never enter
+  public snapshots, logs or Actions artifacts. Private source is measured only
+  by the admitted default-branch Actions workflow, with explicit per-user consent.

@@ -110,27 +110,64 @@ Numbers and snapshot date travel together in `data.json`.
 
 ### Daily refresh
 
-Bak refreshes the public community page every day at **07:17 America/Los_Angeles**
-(Pacific time, following daylight saving time). Its user crontab calls
-`/srv/ai/bin/nelua-community-daily`; this is a host job, not a GitHub-hosted build.
-The host clock uses `America/Los_Angeles`. The job uses the host's existing `gh`
-and Wrangler authentication; no credentials live in this repository.
+[GitHub Actions](https://github.com/Spaceghost/nelua-site/actions/workflows/community.yml)
+refreshes the index daily at **07:17 America/Los_Angeles**, including daylight
+saving time. `workflow_dispatch` also provides a Run workflow button. The job
+uses the existing admitted `fedora-std` self-hosted pool, with the `nelua-site`
+repository label, owner-only actor admission, no fork events, serialized runs,
+and no hosted fallback. The former Bak cron entry is removed during migration;
+its launcher remains available for attended public-only maintenance.
 
-`scripts/community-daily.py` fetches current `main`, creates a separate release
-worktree, refreshes the indexed public default branches and same-origin avatars,
-and validates totals, deduplication, visibility and collection coverage. A large
-coverage loss or source decrease stops publication for review. It then checks
-the static deployment package, commits the snapshot, pushes normally to `main`,
-deploys the assets-only site, and checks the live JSON against its SHA-256 hash.
-A lock prevents overlapping runs; a concurrent change to `main` stops the run.
-Collection or validation failures leave the last published snapshot in place.
-No compiler build or CI polling is involved.
+The workflow validates consent boundaries, collects current public default
+branches, checks coverage and deduplication, pushes the dated public snapshot
+normally to `main`, deploys static assets, and checks the live JSON hash. Failed
+public collection or validation keeps the previous published snapshot. A
+concurrent source change stops the run. Private counting follows public
+publication. Seven-day Actions artifacts contain only the **public** report,
+log and snapshot. The job token supplies repository access; the existing
+Cloudflare deploy credential is encrypted in `CLOUDFLARE_API_TOKEN`.
 
-Run the same job manually on Bak with `/srv/ai/bin/nelua-community-daily`.
-Its control checkout and run worktrees are under
-`/srv/ai/workspaces/nelua-site/community-daily*`, public blob and locked dependency
-caches under `/srv/ai/cache/nelua-community`, and dated logs, snapshots and
-`last-success.json` under `/srv/ai/artifacts/nelua-site/community-daily`.
-The launcher sources `/srv/ai/env.sh`, verifies ZFS, and sets task scratch and
-the npm cache before invoking the runner. Existing crontab entries are preserved.
-New repository candidates can be added to `scripts/community-candidates.json`.
+### GitHub sign-in and private project consent
+
+The public site remains assets-only. `community-api/` is a separate Worker at
+`/nelua/community/api/*`, with its own D1 database. Sign-in uses the existing
+`spaceghost-auth` GitHub provider, PKCE, a one-use state and nonce, signed
+ES256 tokens and an audience-specific immutable GitHub ID. Community session
+cookies are Secure, HttpOnly and SameSite=Lax; writes require same-origin CSRF
+checks. Other shared-auth clients retain their existing token contract.
+URL-bearing invocation logs and automatic trace sampling are disabled because
+OAuth callback URLs contain one-use codes. Structured errors omit queries,
+private metadata and credentials.
+
+The owner signs in and chooses **Enable private repository access** once to
+create the read-only GitHub App using GitHub's manifest approval form. App keys
+and webhook secrets stay encrypted in D1 with the Worker's `ENCRYPTION_KEY`
+secret. Each person installs it on selected repositories, then explicitly
+chooses which owned private, non-fork projects may contribute aggregate totals.
+Private organizations are not included by this personal-account opt-in.
+
+Only the admitted default-branch Actions workflow can request private scan
+tasks, using a verified GitHub OIDC identity pinned to the repository ID, owner,
+workflow file, branch, event and self-hosted environment. Each task gets a
+one-hour, read-only installation token restricted to the selected repository
+IDs. The Python collector holds private source in memory: no disk cache,
+repository names, paths, source, tokens or blob IDs enter public snapshots,
+logs or artifacts. Source hashes, the public lexer, generated/vendor exclusions
+and exact deduplication apply. Public blobs count first; private copies are
+assigned in stable GitHub account-ID order and then repository creation order.
+This deterministic rule does not establish authorship or provenance.
+
+The public API returns only opted-in owner identities and combined totals,
+which the page labels as private. The downloadable public audit stays separate.
+Revoking consent or deleting a community account removes its private totals
+immediately. Signed GitHub installation/access-change webhooks invalidate
+consent and counts; a version check prevents a scan already in flight from
+restoring revoked totals. Private counts expire from display after 36 hours
+without a successful refresh. Signing out keeps saved counting preferences.
+
+Validate with `node --test community-api/tests/security.test.mjs` and
+`python3 scripts/test-community-private.py`. Deploy API source separately with
+`wrangler deploy --config community-api/wrangler.jsonc --strict --keep-vars`;
+apply its D1 migrations first when the schema changes. Generate binding types
+with `wrangler types --config community-api/wrangler.jsonc` after binding changes.
+Never rotate `ENCRYPTION_KEY` without migrating its encrypted records.

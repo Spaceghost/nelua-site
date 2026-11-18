@@ -1,0 +1,25 @@
+{
+  "name": "nelua-community-api",
+  "main": "src/index.mjs",
+  "compatibility_date": "2026-11-18",
+  "workers_dev": false,
+  "preview_urls": false,
+  "secrets": {"required": ["ENCRYPTION_KEY"]},
+  "routes": [{"pattern": "spacegho.st/nelua/community/api/*", "zone_name": "spacegho.st"}],
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "nelua-community",
+    "database_id": "8b449f29-2b0b-4175-9afd-69411430b1bc",
+    "migrations_dir": "migrations"
+  }],
+  "services": [{"binding": "AUTH", "service": "spaceghost-auth"}],
+  "vars": {
+    "OWNER_ID": "251370",
+    "ACTIONS_REPOSITORY_ID": "1447444568"
+  },
+  "observability": {
+    "enabled": true,
+    "logs": {"enabled": true, "invocation_logs": false},
+    "traces": {"enabled": true, "head_sampling_rate": 0}
+  }
+}

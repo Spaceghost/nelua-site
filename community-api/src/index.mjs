@@ -344,7 +344,7 @@ export async function handle(request, env, options = {}) {
       need(selected.every(id => allowed.has(id)), 403, 'repository_not_owned_or_not_selected');
       await env.DB.prepare('UPDATE users SET selection=?,consent=1,totals=NULL,counted_at=NULL,version=version+1 WHERE id=?')
         .bind(await seal(selected, env.ENCRYPTION_KEY, 'selection:' + user.id), user.id).run();
-      return json({enabled: true, nextRefresh: '07:17 America/Los_Angeles'});
+      return json({enabled: true, refreshPending: true, nextRefresh: 'queued'});
     }
     if ((path === '/logout' || path === '/disconnect') && request.method === 'POST') {
       const user = await session(request, env, now); await csrf(request, user);
@@ -370,6 +370,12 @@ export async function handle(request, env, options = {}) {
     }
     if (path.startsWith('/refresh/')) {
       const identity = await actionsIdentity(request, env, fetcher, now);
+      if (path === '/refresh/pending' && request.method === 'GET') {
+        // Saved selections already clear totals and increment the consent
+        // version. A stale scan cannot clear a newer request by publishing.
+        const row = await env.DB.prepare('SELECT EXISTS(SELECT 1 FROM users WHERE consent=1 AND installation_id IS NOT NULL AND selection IS NOT NULL AND (counted_at IS NULL OR json_extract(totals,\'$.metric\') IS NOT ?)) AS pending').bind(PRIVATE_METRIC).first();
+        return json({pending: Boolean(row.pending)});
+      }
       if (path === '/refresh/owners' && request.method === 'GET') {
         await env.DB.batch(['DELETE FROM states WHERE expires<?', 'DELETE FROM sessions WHERE expires<?', 'DELETE FROM scan_tasks WHERE expires<?'].map(sql => env.DB.prepare(sql).bind(now)));
         const result = await env.DB.prepare('SELECT id FROM users WHERE consent=1 AND installation_id IS NOT NULL AND selection IS NOT NULL ORDER BY CAST(id AS INTEGER) LIMIT 1000').all();

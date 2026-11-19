@@ -262,6 +262,31 @@ test('valid Actions signatures from another workflow, actor, branch or repositor
     assert.equal(response.status,403);
   }
 });
+test('saved choices queue a refresh, stale results keep it pending, and completion or opt-out clears it',async()=>{
+  const env=environment();const who=await user(env);await app(env);
+  await env.DB.prepare('UPDATE users SET installation_id=44 WHERE id=?').bind(who.id).run();
+  const identity=await actions();
+  const pending=async()=>await(await go(env,'/refresh/pending',null,undefined,identity.headers,{fetch:identity.fetch})).json();
+  assert.equal((await go(env,'/refresh/pending')).status,401);
+  assert.deepEqual(await pending(),{pending:false});
+  const fetch=async url=>url.endsWith('/access_tokens')?Response.json({token:'never-log-this-token'}):url.includes('/installation/repositories')?Response.json({total_count:2,repositories:[{id:1,full_name:'private-fixture-a',owner:{id:251370},private:true,fork:false},{id:2,full_name:'private-fixture-b',owner:{id:251370},private:true,fork:false}]}):Response.json({account:{id:251370},target_type:'User'});
+  const save=async repositories=>go(env,'/settings',who,{enabled:true,repositories},undefined,{fetch});
+  assert.deepEqual(await(await save([1])).json(),{enabled:true,refreshPending:true,nextRefresh:'queued'});
+  assert.deepEqual(await pending(),{pending:true});
+  async function task(){
+    const record=await env.DB.prepare('SELECT version FROM users WHERE id=?').bind(who.id).first();const token=random();
+    await env.DB.prepare('INSERT INTO scan_tasks(hash,user_id,version,repository_count,run_id,expires) VALUES(?,?,?,?,?,?)').bind(await hash(token),who.id,record.version,1,'123',now+3600).run();
+    return token;
+  }
+  const old=await task();await save([2]);
+  const result=async token=>await(await go(env,'/refresh/result',null,{task:token,metric:PRIVATE_METRIC,lines:100,bytes:1000,files:2,repositories:1},identity.headers,{fetch:identity.fetch})).json();
+  assert.deepEqual(await result(old),{published:false});
+  assert.deepEqual(await pending(),{pending:true},'an in-flight scan cannot discard new repository choices');
+  assert.deepEqual(await result(await task()),{published:true});
+  assert.deepEqual(await pending(),{pending:false});
+  await save([1]);assert.deepEqual(await pending(),{pending:true});
+  await go(env,'/settings',who,{enabled:false});assert.deepEqual(await pending(),{pending:false});
+});
 test('a result issued before opt-out cannot restore private totals',async()=>{
   const env=environment(); const who=await user(env); const task=random();
   await env.DB.prepare('UPDATE users SET consent=1 WHERE id=?').bind(who.id).run();

@@ -4,6 +4,8 @@
   const status = document.querySelector('#account-status');
   const e = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   let account;
+  let updateTimer;
+  let accountVersion = 0;
   async function api(path, body) {
     const response = await fetch('api/' + path, body === undefined ? {cache:'no-store'} : {
       method: 'POST', headers: {'Content-Type':'application/json','X-CSRF-Token':account?.csrf || ''}, body: JSON.stringify(body),
@@ -21,7 +23,27 @@
     select_private_repositories: 'Select at least one private repository.',
   };
   function failure(error) { status.textContent = messages[error.message] || 'This request could not be completed. Try again.'; }
+  function waitForTotals() {
+    clearTimeout(updateTimer);
+    if (!account?.enabled || account.countedAt) return;
+    const version = accountVersion;
+    updateTimer = setTimeout(async () => {
+      if (version !== accountVersion) return;
+      if (document.hidden) { waitForTotals(); return; }
+      try {
+        const current = await api('me');
+        if (version !== accountVersion) return;
+        if (!current.signedIn || !current.enabled) return;
+        if (!current.countedAt) { waitForTotals(); return; }
+        account = current;
+        status.textContent = `Private totals updated ${new Date(current.countedAt).toLocaleString()}.`;
+        window.dispatchEvent(new Event('private-metrics-changed'));
+      } catch { if (version === accountVersion) waitForTotals(); }
+    }, 30000);
+  }
   async function refresh() {
+    accountVersion++;
+    clearTimeout(updateTimer);
     account = await api('me');
     if (!account.signedIn) {
       root.innerHTML = '<a class="account-button" href="api/auth/start">Sign in with GitHub</a>';
@@ -34,9 +56,10 @@
       ${!account.privateAvailable ? `<p>Private repository access needs the community GitHub App.${account.owner ? ' Create it once to enable this for everyone.' : ' The site owner is setting it up.'}</p>${account.owner ? '<a class="account-button" href="api/app/setup">Enable private repository access</a>' : ''}` :
         `<a class="account-button" href="api/installation/start">${account.connected ? 'Manage GitHub access' : 'Connect selected repositories'}</a>
         <p class="account-help">Choose “Only select repositories” on GitHub. Access is read-only. Only private, non-fork repositories owned by your account can count.</p>
-        ${account.connected ? '<form id="private-form"><fieldset><legend>Choose private projects to count</legend><div id="private-repositories">Loading your selected repositories…</div></fieldset><label class="consent-choice"><input id="publish-private" type="checkbox"> Publish my authored private Nelua totals in the ranking.</label><p class="account-help">Only current code attributed to commits linked to your GitHub account counts. Names, source and per-file identifiers are never published. Counts refresh daily at 7:17 a.m. Pacific. Turning this off removes your private totals immediately.</p><button class="account-button" type="submit">Save private project choices</button></form>' : ''}`}
+        ${account.connected ? '<form id="private-form"><fieldset><legend>Choose private projects to count</legend><div id="private-repositories">Loading your selected repositories…</div></fieldset><label class="consent-choice"><input id="publish-private" type="checkbox"> Publish my authored private Nelua totals in the ranking.</label><p class="account-help">Only current code attributed to commits linked to your GitHub account counts. Names, source and per-file identifiers are never published. Saving choices queues an update, checked every five minutes. Counts also refresh daily at 7:17 a.m. Pacific. Turning this off removes your private totals immediately.</p><button class="account-button" type="submit">Save private project choices</button></form>' : ''}`}
       <div class="account-actions">${account.enabled ? '<button type="button" class="account-secondary" data-account="disable">Remove my private totals</button>' : ''}<button type="button" class="account-secondary" data-account="logout">Sign out</button><button type="button" class="account-secondary" data-account="disconnect">Disconnect and delete my community account</button></div>`;
-    if (account.enabled) status.textContent = account.countedAt ? `Private totals last counted ${new Date(account.countedAt).toLocaleString()}.` : 'Your choices are saved. Private totals will appear after the next daily refresh.';
+    if (account.enabled) status.textContent = account.countedAt ? `Private totals last counted ${new Date(account.countedAt).toLocaleString()}.` : 'Your choices are saved. An update is queued; your totals will appear here when it completes.';
+    waitForTotals();
     if (account.connected && account.privateAvailable) {
       const data = await api('repositories');
       document.querySelector('#private-repositories').innerHTML = data.repositories.length ? data.repositories.map(repo => `<label class="repository-choice"><input type="checkbox" name="repository" value="${repo.id}" ${account.selected.includes(repo.id) ? 'checked' : ''}><span>${e(repo.name)}</span></label>`).join('') : '<p>No private repositories are selected in GitHub. Use “Manage GitHub access” to choose them.</p>';
@@ -45,7 +68,7 @@
         event.preventDefault(); const button = event.target.querySelector('button'); button.disabled = true;
         try {
           await api('settings', {enabled:document.querySelector('#publish-private').checked, repositories:[...root.querySelectorAll('input[name="repository"]:checked')].map(input => Number(input.value))});
-          status.textContent = 'Choices saved. Enabled totals refresh daily at 7:17 a.m. Pacific.';
+          status.textContent = 'Choices saved. Your private totals update automatically.';
           await refresh(); window.dispatchEvent(new Event('private-metrics-changed'));
         } catch (error) { failure(error); } finally { button.disabled = false; }
       });

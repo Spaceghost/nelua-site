@@ -4,6 +4,9 @@ import hashlib
 import importlib.util
 from pathlib import Path
 import unittest
+from unittest.mock import patch
+import contextlib
+import io
 
 spec = importlib.util.spec_from_file_location('private_counter', Path(__file__).with_name('community-private.py'))
 private = importlib.util.module_from_spec(spec)
@@ -11,6 +14,20 @@ spec.loader.exec_module(private)
 
 
 class PrivateCounting(unittest.TestCase):
+    def test_pending_check_outputs_only_the_workflow_flag(self):
+        environment={'GITHUB_ACTIONS':'true','GITHUB_REPOSITORY':'Spaceghost/nelua-site','GITHUB_REF':'refs/heads/main'}
+        for value in (False,True):
+            output=io.StringIO()
+            with patch.dict(private.os.environ,environment),patch.object(private,'api',return_value={'pending':value}) as api,contextlib.redirect_stdout(output):
+                private.check_pending()
+            self.assertEqual(output.getvalue(),'pending='+str(value).lower()+'\n')
+            api.assert_called_once_with('pending')
+
+    def test_pending_check_rejects_non_actions_execution(self):
+        with patch.dict(private.os.environ,{'GITHUB_ACTIONS':'false'}),patch.object(private,'api') as api:
+            with self.assertRaises(RuntimeError):private.check_pending()
+            api.assert_not_called()
+
     def fixtures(self, fork=False):
         blobs = {}
         files = []

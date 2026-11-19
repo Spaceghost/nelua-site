@@ -114,7 +114,7 @@ async function refreshPrivate() {
       for (const field of ['lines','bytes','files']) person[field] = number(person[field]) + number(totals[field]);
       privateOwners++;
     }
-    document.querySelector('#private-count-note').textContent = privateOwners ? `Includes authored private code from ${privateOwners} builders. Private projects are shown as aggregate counts; the downloadable audit covers public source.` : 'Private projects appear after their owners opt in and the daily scan completes. Only code attributed to their commits counts. The downloadable audit covers public source.';
+    document.querySelector('#private-count-note').textContent = privateOwners ? `Includes authored private code from ${privateOwners} builders. Private projects are shown as aggregate counts; the downloadable audit covers public source.` : 'Private projects appear after their owners opt in and their saved choices are counted. Only code attributed to their commits counts. The downloadable audit covers public source.';
   } catch {
     document.querySelector('#private-count-note').textContent = 'Private totals are temporarily unavailable. Showing the public source index.';
   }

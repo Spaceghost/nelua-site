@@ -119,6 +119,7 @@ export def body
 						<code> "set -e"
 						" and the special and regular built-ins, compared with dash 0.5.12 in 444 cases."
 			<h2 className="section"> "Keys"
+			<p className="lead"> "Redraw accounts for wide characters and combining marks. Cursor motion follows Unicode code points."
 			<dl className="keys">
 				<dt> "Ctrl-A, Ctrl-E, Home, End"
 				<dd> "start and end of the line"
@@ -180,7 +181,6 @@ export def body
 					", vi editing mode and "
 					<code> "set -o emacs/vi"
 					"."
-				<li> "Characters are one column wide each: East Asian wide and combining characters misalign the cursor."
 			<div className="actions">
 				<a className="button" html:href="https://github.com/Spaceghost/nebox/tree/main/src/nebox/sh"> "Shell source"
 				" "

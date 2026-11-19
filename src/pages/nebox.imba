@@ -544,10 +544,14 @@ export def body
 					<code> "systime"
 					", and local or UTC "
 					<code> "strftime"
-					". Regex literals can contain a slash inside a bracket expression."
+					". Regex literals can contain a slash inside a bracket expression. "
+					<code> "BEGINFILE"
+					" and "
+					<code> "ENDFILE"
+					" run before and after each input file."
 				<li>
 					<code> "diff"
-					" supports side-by-side output, ifdef merges, function headings, custom labels and ignoring changes by regular expression."
+					" supports side-by-side, ifdef and RCS output, custom line and group formats, recursive exclusions, function headings, labels, and regex-based change filtering."
 				<li>
 					<code> "tail"
 					" uses Linux inotify to wake on file changes and rotation, with periodic checks as a fallback. "
@@ -576,22 +580,16 @@ export def body
 				<a href="https://github.com/Spaceghost/nebox#known-limits"> "repository’s full compatibility notes"
 				" for applet-specific differences and the tests that document them."
 			<ul>
-				<li> "Text processing uses C-locale byte semantics. Case folding is ASCII and the shell editor treats each character as one column."
+				<li> "Text applets use C-locale byte semantics and ASCII case folding. The interactive editor uses UTF-8 terminal widths."
 				<li>
 					"The shell still lacks "
 					<code> "fc"
 					" and vi editing mode. awk uses the first byte of a nonempty "
 					<code> "RS"
-					" and lacks "
-					<code> "BEGINFILE"
-					" and "
-					<code> "ENDFILE"
 					"."
 				<li>
 					<code> "sort"
-					" sorts in memory in one thread. "
-					<code> "diff"
-					" still lacks custom line and group formats, recursive exclusions and the RCS format."
+					" sorts in memory in one thread."
 				<li>
 					"User and group names come from Nelibc’s local "
 					<code> "/etc/passwd"

@@ -450,15 +450,86 @@ compiler checkout:</p>
 <pre><code class="language-sh">./nelua --cc clang --release examples/bend2/scalars.nelua
 </code></pre>
 <p>Use <code>NELUA_BEND</code> to select the Bend executable when it is outside your
-<code>PATH</code>. A block can export several functions by listing their signatures
-separated by commas. The C ABI passes <code>uint32</code>/<code>U32</code> and <code>float32</code>/<code>F32</code> by
-value. Bend checks the wrappers against their definitions and Nelua links the
-generated C into the executable. Bend is a build-time dependency.</p>
-<p>Each block reuses one CPU runtime, initialized on its first call. Calls into a
-block are serialized, so put a loop inside Bend when the call overhead matters.
-The bridge supports pure scalar exports. GPU execution, IO exports, compound
-values across the ABI, and imports relative to the Nelua file are outside its
-current scope. Include <code>import Base</code> in each block.</p>
+<code>PATH</code>. A block can list several export signatures. Bend checks each wrapper
+against its definition, and Nelua links the generated C into the executable.
+The Bend CLI is a build-time dependency. Include <code>import Base</code> in each block.</p>
+<h3 class="section" id="values-across-the-boundary">Values across the boundary</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Signature type</th>
+<th>Nelua value</th>
+<th>Bend type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>uint32</code></td>
+<td><code>uint32</code></td>
+<td><code>U32</code></td>
+</tr>
+<tr>
+<td><code>float32</code></td>
+<td><code>float32</code></td>
+<td><code>F32</code></td>
+</tr>
+<tr>
+<td><code>string</code></td>
+<td>UTF-8 <code>string</code></td>
+<td><code>String</code></td>
+</tr>
+<tr>
+<td><code>bytes</code></td>
+<td>Binary <code>string</code></td>
+<td><code>List&lt;&amp;2, U32&gt;</code> with elements from 0 to 255</td>
+</tr>
+<tr>
+<td><code>u32s</code></td>
+<td><code>vector(uint32)</code></td>
+<td><code>List&lt;&amp;2, U32&gt;</code></td>
+</tr>
+</tbody></table>
+</div>
+<p>Scalars pass by value. Text, bytes and vectors cross by copying. Text decodes
+invalid UTF-8 as replacement characters. Use <code>bytes</code> for arbitrary octets or
+<code>u32s</code> for full-width integers. Returned buffers use Nelua&#39;s default allocator,
+so they follow the standard string and vector lifetime rules. General records,
+tuples and Bend handles stay on the Bend side of the interface.</p>
+<h3 class="section" id="io-and-local-imports">IO and local imports</h3>
+<p>Write <code>io</code> before the result type to export an <code>IO(T)</code> action. A Nelua call runs
+the action synchronously and returns its result. Use <code>io void</code> for <code>IO(Unit)</code>.</p>
+<pre><code class="language-nelua">#syntax &#39;syntax.bend2&#39;
+
+bend2 (report(string): io void) [=[
+import Base
+
+def report(text: String) -&gt; IO(Unit):
+  IO.print(text)
+]=]
+
+report(&#39;Hello from Bend2&#39;)
+</code></pre>
+<p>The embedded event loop waits for spawned actions to finish before returning.
+Calls into the same block are serialized. Bend&#39;s <code>IO.exit</code> and <code>IO.die</code> exit
+the host process. Pass arguments explicitly to the export because <code>IO.args</code>
+does not receive the host command line.</p>
+<p>A top-level import such as <code>import ./helper.bend as Helper</code> resolves from the
+directory containing the Nelua file. Imports inside a Bend module resolve from
+that module&#39;s directory. Relative foreign effects such as
+<code>import &quot;./effect.c&quot;</code> follow the same rule. Base and BendHub imports still
+resolve through Bend. Run the combined example on Linux:</p>
+<pre><code class="language-sh">./nelua --cc clang examples/bend2/interop.nelua
+</code></pre>
+<h3 class="section" id="cuda-execution">CUDA execution</h3>
+<p>Use <code>bend2 gpu (...)</code> on Linux to run reachable Bend <code>!</code> calls on NVIDIA CUDA.
+Set <code>CUDA_HOME</code> to the toolkit if needed, and make its NVRTC library available
+to the dynamic loader. Build with Clang 19 or later.</p>
+<pre><code class="language-sh">./nelua --cc clang --release examples/bend2/cuda.nelua
+</code></pre>
+<p>Ordinary calls in that block can still run on the CPU. Each GPU block compiles
+its embedded kernel with NVRTC on first use and reuses the runtime and the
+kernel for later calls. It restores the calling thread&#39;s CUDA context on return.
+The GPU runtime defaults to a 1 GiB managed-memory allocation per block. Set
+<code>NELUA_BEND_GPU_MIB</code> to adjust that allocation for the application and device.</p>
 <h2 class="section" id="write-an-inline-extension">Write an inline extension</h2>
 <p>The following adds a contextual <code>check condition else message</code> statement:</p>
 <pre><code class="language-nelua">#syntax [[
@@ -561,6 +632,7 @@ node, not a Lua number, string, or plain list. Use <code>syntax.aster.Number{&#3
 <code>syntax.aster.String{&#39;text&#39;}</code>, or a template to create literal expressions.
 An expression builder cannot return a block of statements; wrap statements in
 a native <code>(do … in value end)</code> expression instead.</p>
+<p><code>syntax.filename()</code> returns the name of the file being parsed.</p>
 <p>Call registration methods and <code>syntax.use</code> while the module loads or inside an
 inline <code>#syntax</code> directive. Builders run after the source has been parsed; their
 job is to construct the replacement AST, rather than change the accepted grammar.</p>

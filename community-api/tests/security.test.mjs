@@ -108,6 +108,19 @@ test('only the site owner can create the read-only GitHub App',async()=>{
   assert.match(html,/contents&quot;:&quot;read/); assert.doesNotMatch(html,/&quot;write&quot;/);
   assert.match(response.headers.get('Content-Security-Policy'),/form-action https:\/\/github.com/);
 });
+test('opening the retry URL returns to project choices after App setup',async()=>{
+  const env=environment();
+  const anonymous=await go(env,'/app/retry');
+  assert.equal(anonymous.status,302);
+  assert.equal(anonymous.headers.get('Location'),ORIGIN+BASE+'/auth/start?setup=1');
+  const who=await user(env);
+  const pending=await go(env,'/app/retry',who);
+  assert.equal(pending.status,200);assert.match(await pending.text(),/Retry App connection/);
+  await app(env);
+  const complete=await go(env,'/app/retry');
+  assert.equal(complete.status,302);
+  assert.equal(complete.headers.get('Location'),ORIGIN+'/nelua/community/#private-projects');
+});
 test('a valid app installation for a different numeric GitHub owner is rejected',async()=>{
   const env=environment(); const who=await user(env); await app(env);
   const start=await go(env,'/installation/start',who);

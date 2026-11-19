@@ -244,6 +244,13 @@ export async function handle(request, env, options = {}) {
       }
       return redirect(HOME + '#private-projects', cookie(FLOW, '', 0));
     }
+    if (path === '/app/retry' && request.method === 'GET') {
+      if (await appOf(env)) return redirect(HOME + '#private-projects');
+      const user = await session(request, env, now, false);
+      if (!user) return redirect(ORIGIN + BASE + '/auth/start?setup=1');
+      need(user.id === env.OWNER_ID, 403, 'owner_required');
+      return appRecovery(user, '', 'pending_connection');
+    }
     if (path === '/app/retry' && request.method === 'POST') {
       const user = await session(request, env, now);
       need(user.id === env.OWNER_ID, 403, 'owner_required');

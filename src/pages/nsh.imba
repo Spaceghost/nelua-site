@@ -149,6 +149,15 @@ export def body
 					" and "
 					<code> "bg"
 					" continue it"
+			<h2 className="section"> "Resource limits"
+			<p className="lead">
+				"Run "
+				<code> "ulimit -Sn"
+				" to show the soft open-file limit, "
+				<code> "ulimit -Hn"
+				" to show the hard limit, or "
+				<code> "ulimit -a"
+				" to see all limits. Changes apply to the current shell and its children."
 			<h2 className="section"> "Install"
 			<pre>
 				<code> "git clone https://github.com/Spaceghost/nelibc\nmake -C nelibc lib-standalone-zig\ngit clone https://github.com/Spaceghost/nebox\nmake -C nebox NELIBC=../nelibc           # build/nebox, one static binary\nln -s \"$PWD/nebox/build/nebox\" ~/.local/bin/nsh\nnsh"

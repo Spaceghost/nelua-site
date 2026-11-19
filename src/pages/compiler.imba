@@ -185,6 +185,7 @@ export def body
 					<p> "Each extension remains file-scoped and keeps normal type, ownership and lifetime checks. The full guide covers every module, evaluation rules, precedence, templates, diagnostics and the builder API, with a runnable tour."
 					<p className="meta">
 						<a html:href="/nelua/compiler/syntax-extensions/"> "full guide "
+						<a html:href="/nelua/compiler/syntax-extensions/#embed-bend2"> "embed Bend2 "
 						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/syntax-extensions.md"> "compiler docs "
 						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/examples/syntax_tour.nelua"> "runnable tour "
 				<article className="card card-core" html:id="const">

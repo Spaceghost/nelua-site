@@ -12,6 +12,7 @@
 <li><a href="#vector-comprehensions">Vector comprehensions</a></li>
 <li><a href="#literal-notation">Literal notation</a></li>
 <li><a href="#alternative-operators-and-precedence">Alternative operators and precedence</a></li>
+<li><a href="#embed-bend2">Embed Bend2</a></li>
 <li><a href="#write-an-inline-extension">Write an inline extension</a></li>
 <li><a href="#builder-api-reference">Builder API reference</a></li>
 <li><a href="#templates-substitution-and-generated-names">Templates, substitution and generated names</a></li>
@@ -429,6 +430,35 @@ multiplication and power, as in the base grammar. Other added binary operators
 fold left at their level, including added operators at <code>concat</code>. Native <code>..</code>
 retains its own right-recursive operand rule. Use parentheses to make mixed
 operator intent clear; the API does not create arbitrary new precedence levels.</p>
+<h2 class="section" id="embed-bend2">Embed Bend2</h2>
+<p>Load <code>syntax.bend2</code> to write Bend2 definitions inline and call them as typed
+Nelua functions. This module is enabled separately from <code>syntax.all</code>.</p>
+<pre><code class="language-nelua">#syntax &#39;syntax.bend2&#39;
+
+bend2 (twice(uint32): uint32) [=[
+import Base
+
+def twice(x: U32) -&gt; U32:
+  (x * 2 : U32)
+]=]
+
+local value: uint32 = 21
+assert(twice(value) == 42)
+</code></pre>
+<p>On Linux, install Clang and Bend <strong>2.0.40</strong>, then run the example from the
+compiler checkout:</p>
+<pre><code class="language-sh">./nelua --cc clang --release examples/bend2/scalars.nelua
+</code></pre>
+<p>Use <code>NELUA_BEND</code> to select the Bend executable when it is outside your
+<code>PATH</code>. A block can export several functions by listing their signatures
+separated by commas. The C ABI passes <code>uint32</code>/<code>U32</code> and <code>float32</code>/<code>F32</code> by
+value. Bend checks the wrappers against their definitions and Nelua links the
+generated C into the executable. Bend is a build-time dependency.</p>
+<p>Each block reuses one CPU runtime, initialized on its first call. Calls into a
+block are serialized, so put a loop inside Bend when the call overhead matters.
+The bridge supports pure scalar exports. GPU execution, IO exports, compound
+values across the ABI, and imports relative to the Nelua file are outside its
+current scope. Include <code>import Base</code> in each block.</p>
 <h2 class="section" id="write-an-inline-extension">Write an inline extension</h2>
 <p>The following adds a contextual <code>check condition else message</code> statement:</p>
 <pre><code class="language-nelua">#syntax [[

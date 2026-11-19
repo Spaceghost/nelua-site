@@ -146,6 +146,12 @@ secret. Each person installs it on selected repositories, then explicitly
 chooses which owned private, non-fork projects may contribute aggregate totals.
 Private organizations are not included by this personal-account opt-in.
 
+Expired installation callbacks offer a same-origin, CSRF-protected confirmation
+to finish the existing GitHub installation. The App API verifies its numeric
+owner before linking it. Reopening a completed callback preserves saved choices
+and consent. GitHub requests use manual redirect handling: Workers does not
+support `redirect: "error"`, and redirects must not forward App credentials.
+
 Only the admitted default-branch Actions workflow can request private scan
 tasks, using a verified GitHub OIDC identity pinned to the repository ID, owner,
 workflow file, branch, event and self-hosted environment. Each task gets a

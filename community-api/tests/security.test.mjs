@@ -129,6 +129,55 @@ test('a valid app installation for a different numeric GitHub owner is rejected'
   assert.equal(response.status,403);
   assert.equal((await env.DB.prepare('SELECT installation_id FROM users WHERE id=?').bind(who.id).first()).installation_id,null);
 });
+test('a valid callback connects the owner without publishing and never follows GitHub redirects',async()=>{
+  const env=environment(); const who=await user(env); await app(env);
+  const start=await go(env,'/installation/start',who);
+  const value=new URL(start.headers.get('Location')).searchParams.get('state');
+  const fetch=async(url,init)=>{
+    assert.equal(url,'https://api.github.com/app/installations/44');
+    assert.equal(init.redirect,'manual','Workers rejects error mode before sending the request');
+    assert.match(init.headers.Authorization,/^Bearer /);
+    return Response.json({account:{id:251370},target_type:'User'});
+  };
+  const response=await go(env,'/installation/callback?installation_id=44&state='+value,{...who,cookie:who.cookie+'; __Secure-nelua_flow='+value},undefined,undefined,{fetch});
+  assert.equal(response.status,302);
+  const record=await env.DB.prepare('SELECT installation_id,consent,selection FROM users WHERE id=?').bind(who.id).first();
+  assert.deepEqual({...record},{installation_id:44,consent:0,selection:null});
+});
+test('expired callbacks recover through same-origin CSRF confirmation and verified installation ownership',async()=>{
+  const env=environment(); const who=await user(env); await app(env);
+  const page=await go(env,'/installation/callback?installation_id=44&state=expired',who);
+  assert.equal(page.status,200); assert.match(await page.text(),/Finish repository connection/);
+  assert.equal(page.headers.get('Referrer-Policy'),'strict-origin');
+  assert.match(page.headers.get('Content-Security-Policy'),/form-action 'self'/);
+  const body=new URLSearchParams({csrf:who.csrf,installation_id:'44'}).toString();
+  const headers={'Content-Type':'application/x-www-form-urlencoded'};
+  assert.equal((await go(env,'/installation/retry',null,body,headers)).status,401);
+  assert.equal((await go(env,'/installation/retry',who,body,{...headers,Origin:'https://attacker.example'})).status,403);
+  assert.equal((await go(env,'/installation/retry',who,new URLSearchParams({csrf:'forged',installation_id:'44'}).toString(),headers)).status,403);
+  const foreign=await go(env,'/installation/retry',who,body,headers,{fetch:async()=>Response.json({account:{id:999},target_type:'User'})});
+  assert.equal(foreign.status,403);
+  const success=await go(env,'/installation/retry',who,body,headers,{fetch:async()=>Response.json({account:{id:251370},target_type:'User'})});
+  assert.equal(success.status,302);
+  assert.equal((await env.DB.prepare('SELECT installation_id FROM users WHERE id=?').bind(who.id).first()).installation_id,44);
+});
+test('reopening a completed installation callback preserves saved consent and project choices',async()=>{
+  const env=environment(); const who=await user(env); await app(env);
+  const selection=await seal([555],env.ENCRYPTION_KEY,'selection:'+who.id);
+  await env.DB.prepare('UPDATE users SET installation_id=44,selection=?,consent=1,version=7 WHERE id=?').bind(selection,who.id).run();
+  const response=await go(env,'/installation/callback?installation_id=44&state=expired',who,undefined,undefined,{fetch:async()=>{throw new Error('No external request needed for a completed callback');}});
+  assert.equal(response.status,302); assert.equal(response.headers.get('Location'),ORIGIN+'/nelua/community/#private-projects');
+  const record=await env.DB.prepare('SELECT selection,consent,version FROM users WHERE id=?').bind(who.id).first();
+  assert.deepEqual({...record},{selection,consent:1,version:7});
+});
+test('a redirected GitHub response cannot forward credentials or connect an installation',async()=>{
+  const env=environment(); const who=await user(env); await app(env); let calls=0;
+  const start=await go(env,'/installation/start',who);const value=new URL(start.headers.get('Location')).searchParams.get('state');
+  const fetch=async(url,init)=>{calls++;assert.equal(new URL(url).hostname,'api.github.com');assert.equal(init.redirect,'manual');return new Response(null,{status:302,headers:{Location:'https://foreign.example/'}});};
+  const response=await go(env,'/installation/callback?installation_id=44&state='+value,{...who,cookie:who.cookie+'; __Secure-nelua_flow='+value},undefined,undefined,{fetch});
+  assert.equal(response.status,200);assert.match(await response.text(),/Finish repository connection/);assert.equal(calls,1);
+  assert.equal((await env.DB.prepare('SELECT installation_id FROM users WHERE id=?').bind(who.id).first()).installation_id,null);
+});
 async function manifestFixture() {
   const key=await signing;
   return {id:1,pem:'-----BEGIN PRIVATE KEY-----\n'+b64(await crypto.subtle.exportKey('pkcs8',key.privateKey))+'\n-----END PRIVATE KEY-----',webhook_secret:random(),owner:{id:251370},slug:'nelua-builders',permissions:{contents:'read',metadata:'read'}};

@@ -63,6 +63,18 @@ function appRecovery(user, code, reason) {
   return new Response(html, {headers: {'Content-Type':'text/html; charset=utf-8', 'Cache-Control':'private, no-store', 'Referrer-Policy':'strict-origin',
     'Content-Security-Policy':"default-src 'none'; style-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"}});
 }
+function installationRecovery(user, id) {
+  const html = '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Finish connecting your repositories</title><link rel="stylesheet" href="/nelua/community/styles.css"><main class="page-shell private-panel"><h1>Finish connecting your repositories</h1><p>Your GitHub installation can be connected here. Confirm to finish; you do not need to reinstall the App.</p><form method="post" action="' + BASE + '/installation/retry"><input type="hidden" name="csrf" value="' + escape(user.csrf) + '"><input type="hidden" name="installation_id" value="' + escape(id) + '"><button class="account-button" type="submit">Finish repository connection</button></form><p><a href="/nelua/community/#private-projects">Return to your project choices</a></p></main></html>';
+  return new Response(html, {headers: {'Content-Type':'text/html; charset=utf-8', 'Cache-Control':'private, no-store', 'Referrer-Policy':'strict-origin',
+    'Content-Security-Policy':"default-src 'none'; style-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"}});
+}
+async function connectInstallation(env, user, app, id, fetcher, now) {
+  need(/^\d+$/.test(id) && Number.isSafeInteger(Number(id)) && Number(id) > 0, 400, 'invalid_installation');
+  const info = await github('/app/installations/' + id, await appJwt(app, now), fetcher);
+  need(String(info.account?.id) === user.id && info.target_type === 'User' && !info.suspended_at, 403, 'installation_owner_mismatch');
+  if (String(user.installation_id) !== id)
+    await env.DB.prepare('UPDATE users SET installation_id=?,selection=NULL,consent=0,totals=NULL,counted_at=NULL,version=version+1 WHERE id=?').bind(Number(id), user.id).run();
+}
 async function finishApp(env, code, fetcher, now) {
   // A failed metadata request must not discard the one-time manifest credentials.
   const pending = await env.DB.prepare("SELECT payload FROM states WHERE hash='github-app-pending' AND purpose='app-recovery' AND expires>?").bind(now).first();
@@ -110,7 +122,9 @@ async function consume(request, env, url, purpose, now) {
 }
 async function github(path, token, fetcher, body) {
   const response = await fetcher('https://api.github.com' + path, {
-    method: body ? 'POST' : 'GET', redirect: 'error',
+    // Workers rejects redirect:"error" before sending the request. Manual
+    // mode keeps credentials on this origin and the status check rejects 3xx.
+    method: body ? 'POST' : 'GET', redirect: 'manual',
     headers: {'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28',
       'User-Agent': 'nelua-builders', ...(token ? {Authorization: 'Bearer ' + token} : {}),
       ...(body ? {'Content-Type': 'application/json'} : {})},
@@ -165,6 +179,7 @@ export async function handle(request, env, options = {}) {
   const fetcher = options.fetch ?? fetch;
   const url = new URL(request.url);
   const path = url.pathname.slice(BASE.length);
+  let operation = 'route';
   try {
     need(url.origin === ORIGIN && url.pathname.startsWith(BASE + '/'), 404, 'not_found');
     if (path === '/private-totals' && request.method === 'GET') {
@@ -274,15 +289,39 @@ export async function handle(request, env, options = {}) {
       return redirect('https://github.com/apps/' + encodeURIComponent(app.slug) + '/installations/new?state=' + value, cookie(FLOW, value, 600));
     }
     if (path === '/installation/callback' && request.method === 'GET') {
+      operation = 'installation_session';
       const user = await session(request, env, now); const app = await appOf(env);
       need(app, 409, 'private_app_not_configured');
-      const flow = await consume(request, env, url, 'installation', now);
-      need(flow.id === user.id, 403, 'installation_owner_mismatch');
       const id = url.searchParams.get('installation_id') || '';
-      need(/^\d+$/.test(id), 400, 'invalid_installation');
-      const info = await github('/app/installations/' + id, await appJwt(app, now), fetcher);
-      need(String(info.account?.id) === user.id && info.target_type === 'User' && !info.suspended_at, 403, 'installation_owner_mismatch');
-      await env.DB.prepare('UPDATE users SET installation_id=?,selection=NULL,consent=0,totals=NULL,counted_at=NULL,version=version+1 WHERE id=?').bind(Number(id), user.id).run();
+      need(/^\d+$/.test(id) && Number.isSafeInteger(Number(id)) && Number(id) > 0, 400, 'invalid_installation');
+      // Reopening a completed callback only returns to the existing choices.
+      if (String(user.installation_id) === id) return redirect(HOME + '#private-projects', cookie(FLOW, '', 0));
+      operation = 'installation_state';
+      let flow;
+      try { flow = await consume(request, env, url, 'installation', now); }
+      catch (error) {
+        if (error instanceof Failure && ['invalid_state','expired_state'].includes(error.message)) return installationRecovery(user, id);
+        throw error;
+      }
+      need(flow.id === user.id, 403, 'installation_owner_mismatch');
+      operation = 'installation_lookup';
+      try { await connectInstallation(env, user, app, id, fetcher, now); }
+      catch (error) {
+        if (error instanceof Failure && error.message === 'github_access_unavailable') return installationRecovery(user, id);
+        throw error;
+      }
+      return redirect(HOME + '#private-projects', cookie(FLOW, '', 0));
+    }
+    if (path === '/installation/retry' && request.method === 'POST') {
+      const user = await session(request, env, now);
+      need(request.headers.get('Origin') === ORIGIN, 403, 'same_origin_required');
+      need(request.headers.get('Content-Type')?.split(';')[0] === 'application/x-www-form-urlencoded', 415, 'form_required');
+      const form = new URLSearchParams(await limitedBody(request));
+      need(await equal(form.get('csrf') || '', user.csrf), 403, 'invalid_csrf');
+      const app = await appOf(env); need(app, 409, 'private_app_not_configured');
+      const id = form.get('installation_id') || '';
+      operation = 'installation_retry';
+      await connectInstallation(env, user, app, id, fetcher, now);
       return redirect(HOME + '#private-projects', cookie(FLOW, '', 0));
     }
     if (path === '/repositories' && request.method === 'GET') {
@@ -367,7 +406,7 @@ export async function handle(request, env, options = {}) {
     throw new Failure(404, 'not_found');
   } catch (error) {
     if (error instanceof Failure) return json({error: error.message}, error.status);
-    console.error(JSON.stringify({event: 'community_api_error', path, type: error?.name || 'Error'}));
+    console.error(JSON.stringify({event: 'community_api_error', path, operation, type: error?.name || 'Error'}));
     return json({error: 'temporarily_unavailable'}, 503);
   }
 }

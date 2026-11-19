@@ -27,6 +27,7 @@ def asset path
 
 def documentFor page
 	const active = page.active || page.path
+	const current = page.path == active ? 'page' : 'location'
 	const view = page.source
 	<html lang="en">
 		<head>
@@ -53,10 +54,7 @@ def documentFor page
 						<span> 'Nelua'
 					<nav aria-label="Sections">
 						for item in navigation
-							if active == item.path
-								<a href=item.path aria-current=(page.path == active ? 'page' : 'location')> item.label
-							else
-								<a href=item.path> item.label
+							<a href=item.path aria-current=(item.path == active ? current : null)> item.label
 						<a href="https://nelua.io/" rel="external"> 'nelua.io'
 				<main id="main" html:tabindex="-1">
 					page.body

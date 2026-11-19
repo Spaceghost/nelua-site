@@ -124,7 +124,8 @@ workflow checks for these requests every five minutes (`3-58/5 * * * *`). An
 empty queue skips Node setup, tests and collection; a pending request refreshes
 private totals against the existing public snapshot. It does not repeat the
 public census or deployment. Daily and manual runs still refresh both. The
-existing workflow concurrency group serializes all runs. GitHub scheduling and
+existing workflow concurrency group serializes all runs with `queue: max`, so
+polls do not replace a waiting daily or manual refresh. GitHub scheduling and
 runner availability can delay pickup; five minutes is the polling interval.
 The browser checks for completed totals every 30 seconds while the page is
 visible, then refreshes the ranking without replacing unsaved form choices.

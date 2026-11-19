@@ -12,6 +12,7 @@ permissions: {}
 concurrency:
   group: nelua-community-refresh
   cancel-in-progress: false
+  queue: max
 
 jobs:
   refresh:

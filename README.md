@@ -97,8 +97,8 @@ exclusions, exact deduplication, source totals and failed collection requests.
 
 The page and its profile thumbnails are same-origin static assets. It uses the
 site's system-font policy and existing strict CSP; no external browser fetches
-or inline styles/scripts are needed. Source attribution is to repository owners,
-not individual line authors. Refresh with a task-specific cache directory:
+or inline styles/scripts are needed. Public source attribution is to repository
+owners. Refresh with a task-specific cache directory:
 
 ```sh
 python3 scripts/community-update.py --candidates scripts/community-candidates.json --output public/nelua/community/data.json --cache-dir "$COMMUNITY_CACHE_DIR"
@@ -155,7 +155,27 @@ repository names, paths, source, tokens or blob IDs enter public snapshots,
 logs or artifacts. Source hashes, the public lexer, generated/vendor exclusions
 and exact deduplication apply. Public blobs count first; private copies are
 assigned in stable GitHub account-ID order and then repository creation order.
-This deterministic rule does not establish authorship or provenance.
+This deduplication rule does not establish provenance.
+
+Private totals count only current default-branch code lines attributed by
+GitHub blame to commits whose **author's immutable GitHub ID** matches the
+participating owner. Committers and pushers do not receive author credit.
+Other authors and unlinked identities are excluded. The lexer counts nonblank,
+non-comment `.nelua` lines at their physical Git line numbers; byte totals cover
+the owner's attributed physical source lines, including their comments. Blame
+uses the same pinned commit as the verified source and credits each line's
+most recent author, rather than proving its original creator. Missing or incomplete
+attribution fails the whole account's refresh. The API accepts and displays
+only `current-authored-nelua-v1` results, so older repository-size totals cannot
+appear as authored counts. This measures surviving code, not historical churn
+or every commit ever made.
+
+For an owner-requested personal check of all private, non-fork repositories,
+run `python3 scripts/community-private.py --audit-owned` with the owner's
+existing `gh` authentication. It scans repository trees regardless of their
+primary language, holds all private material in memory, and prints aggregate
+coverage and authored totals only. It neither publishes those results nor
+changes site consent or repository selections.
 
 The public API returns only opted-in owner identities and combined totals,
 which the page labels as private. The downloadable public audit stays separate.

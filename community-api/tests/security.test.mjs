@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {timingSafeEqual} from 'node:crypto';
 import {DatabaseSync} from 'node:sqlite';
 import {readFileSync} from 'node:fs';
-import {handle, BASE, ORIGIN} from '../src/index.mjs';
+import {handle, BASE, ORIGIN, PRIVATE_METRIC} from '../src/index.mjs';
 import {b64, bytes, hash, open, random, seal} from '../src/crypto.mjs';
 
 crypto.subtle.timingSafeEqual = (a,b) => timingSafeEqual(new Uint8Array(a),new Uint8Array(b));
@@ -90,7 +90,7 @@ test('settings require a signed-in owner, same origin and a matching CSRF token'
 });
 test('public totals contain aggregates only and opt-out removes them immediately',async()=>{
   const env=environment(); const who=await user(env);
-  await env.DB.prepare('UPDATE users SET consent=1,installation_id=789,selection=?,totals=?,counted_at=? WHERE id=?').bind(await seal([999],env.ENCRYPTION_KEY,'selection:'+who.id),JSON.stringify({lines:50,files:2,bytes:400,repositories:1}),now,who.id).run();
+  await env.DB.prepare('UPDATE users SET consent=1,installation_id=789,selection=?,totals=?,counted_at=? WHERE id=?').bind(await seal([999],env.ENCRYPTION_KEY,'selection:'+who.id),JSON.stringify({metric:PRIVATE_METRIC,lines:50,files:2,bytes:400,repositories:1}),now,who.id).run();
   const before=await (await go(env,'/private-totals')).json();
   assert.equal(before.people[0].lines,50);
   assert.equal(before.people[0].name,'builder-251370','shared account names stay private; public identity uses GitHub');
@@ -218,9 +218,33 @@ test('a result issued before opt-out cannot restore private totals',async()=>{
   await env.DB.prepare('UPDATE users SET consent=1 WHERE id=?').bind(who.id).run();
   await env.DB.prepare('INSERT INTO scan_tasks(hash,user_id,version,repository_count,run_id,expires) VALUES(?,?,?,?,?,?)').bind(await hash(task),who.id,0,1,'123',now+3600).run();
   await go(env,'/settings',who,{enabled:false}); const identity=await actions();
-  const response=await go(env,'/refresh/result',null,{task,lines:100,bytes:1000,files:2,repositories:1},identity.headers,{fetch:identity.fetch});
+  const response=await go(env,'/refresh/result',null,{task,metric:PRIVATE_METRIC,lines:100,bytes:1000,files:2,repositories:1},identity.headers,{fetch:identity.fetch});
   assert.deepEqual(await response.json(),{published:false});
   assert.deepEqual(await (await go(env,'/private-totals')).json(),{people:[]});
+});
+test('old repository-size totals are hidden and new scans must attest authored lines',async()=>{
+  const env=environment(); const who=await user(env);
+  await env.DB.prepare('UPDATE users SET consent=1,totals=?,counted_at=? WHERE id=?').bind(JSON.stringify({lines:999,bytes:999,files:1,repositories:1}),now,who.id).run();
+  assert.deepEqual(await (await go(env,'/private-totals')).json(),{people:[]});
+  const own=await (await go(env,'/me',who)).json();
+  assert.equal(own.totals,null); assert.equal(own.countedAt,null);
+  const identity=await actions();
+  const response=await go(env,'/refresh/result',null,{task:'old',lines:999,bytes:999,files:1,repositories:1},identity.headers,{fetch:identity.fetch});
+  assert.equal(response.status,400);
+  assert.deepEqual(await response.json(),{error:'authored_metric_required'});
+});
+test('an admitted authored result publishes only fresh consented aggregate totals',async()=>{
+  const env=environment(); const who=await user(env); const task=random();
+  await env.DB.prepare('UPDATE users SET consent=1 WHERE id=?').bind(who.id).run();
+  await env.DB.prepare('INSERT INTO scan_tasks(hash,user_id,version,repository_count,run_id,expires) VALUES(?,?,?,?,?,?)').bind(await hash(task),who.id,0,1,'123',now+3600).run();
+  const identity=await actions();
+  const response=await go(env,'/refresh/result',null,{task,metric:PRIVATE_METRIC,lines:100,bytes:1000,files:2,repositories:1},identity.headers,{fetch:identity.fetch});
+  assert.deepEqual(await response.json(),{published:true});
+  const result=await (await go(env,'/private-totals')).json();
+  assert.deepEqual(result.people,[{id:who.id,login:'builder-'+who.id,name:'builder-'+who.id,
+    metric:PRIVATE_METRIC,lines:100,bytes:1000,files:2,repositories:1,generatedAt:new Date(now*1000).toISOString()}]);
+  const replay=await go(env,'/refresh/result',null,{task,metric:PRIVATE_METRIC,lines:100,bytes:1000,files:2,repositories:1},identity.headers,{fetch:identity.fetch});
+  assert.equal(replay.status,403);
 });
 test('a signed uninstall webhook clears connection, consent and totals',async()=>{
   const env=environment(); const who=await user(env); const configured=await app(env);

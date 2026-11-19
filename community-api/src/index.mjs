@@ -2,6 +2,7 @@ import {appJwt, bytes, equal, hash, open, random, seal, verifyJwt} from './crypt
 
 export const ORIGIN = 'https://spacegho.st';
 export const BASE = '/nelua/community/api';
+export const PRIVATE_METRIC = 'current-authored-nelua-v1';
 const HOME = ORIGIN + '/nelua/community/';
 const CALLBACK = ORIGIN + BASE + '/auth/callback';
 const SESSION = '__Secure-nelua_session';
@@ -168,7 +169,7 @@ export async function handle(request, env, options = {}) {
     need(url.origin === ORIGIN && url.pathname.startsWith(BASE + '/'), 404, 'not_found');
     if (path === '/private-totals' && request.method === 'GET') {
       const result = await env.DB.prepare('SELECT id,login,name,totals,counted_at FROM users WHERE consent=1 AND totals IS NOT NULL AND counted_at>?').bind(now - 36 * 3600).all();
-      return json({people: result.results.map(row => ({id: row.id, login: row.login, name: row.login, ...JSON.parse(row.totals), generatedAt: new Date(row.counted_at * 1000).toISOString()}))});
+      return json({people: result.results.filter(row => JSON.parse(row.totals).metric === PRIVATE_METRIC).map(row => ({id: row.id, login: row.login, name: row.login, ...JSON.parse(row.totals), generatedAt: new Date(row.counted_at * 1000).toISOString()}))});
     }
     if (path === '/auth/start' && request.method === 'GET') {
       const verifier = random() + random(); const nonce = random();
@@ -206,10 +207,12 @@ export async function handle(request, env, options = {}) {
     if (path === '/me' && request.method === 'GET') {
       const user = await session(request, env, now, false); const app = await appOf(env);
       if (!user) return json({signedIn: false, privateAvailable: Boolean(app)});
+      const totals = user.totals ? JSON.parse(user.totals) : null;
+      const current = totals?.metric === PRIVATE_METRIC;
       return json({signedIn: true, csrf: user.csrf, profile: {id: user.id, login: user.login, name: user.name},
         owner: user.id === env.OWNER_ID, privateAvailable: Boolean(app), connected: Boolean(user.installation_id),
         enabled: Boolean(user.consent), selected: user.selection ? await open(user.selection, env.ENCRYPTION_KEY, 'selection:' + user.id) : [],
-        totals: user.totals ? JSON.parse(user.totals) : null, countedAt: user.counted_at ? new Date(user.counted_at * 1000).toISOString() : null,
+        totals: current ? totals : null, countedAt: current && user.counted_at ? new Date(user.counted_at * 1000).toISOString() : null,
         installUrl: app ? ORIGIN + BASE + '/installation/start' : null});
     }
     if (path === '/app/setup' && request.method === 'GET') {
@@ -348,9 +351,10 @@ export async function handle(request, env, options = {}) {
       }
       if (path === '/refresh/result' && request.method === 'POST') {
         const body = JSON.parse(await limitedBody(request));
+        need(body.metric === PRIVATE_METRIC, 400, 'authored_metric_required');
         const task = await env.DB.prepare('DELETE FROM scan_tasks WHERE hash=? RETURNING *').bind(await hash(String(body.task || ''))).first();
         need(task && task.expires > now && task.run_id === String(identity.run_id), 403, 'invalid_scan_task');
-        const totals = {};
+        const totals = {metric: PRIVATE_METRIC};
         for (const field of ['lines', 'bytes', 'files', 'repositories']) {
           need(Number.isSafeInteger(body[field]) && body[field] >= 0 && body[field] <= 2 ** 40, 400, 'invalid_totals'); totals[field] = body[field];
         }

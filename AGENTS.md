@@ -16,3 +16,6 @@
   Private names, paths, source, tokens and per-file identifiers must never enter
   public snapshots, logs or Actions artifacts. Private source is measured only
   by the admitted default-branch Actions workflow, with explicit per-user consent.
+  Owner-requested personal audits may also use the owner's existing GitHub
+  authentication in memory. They report aggregates only and do not publish
+  results or change anyone's repository selection or consent.

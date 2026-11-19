@@ -51,14 +51,13 @@ def api(endpoint):
         raise RuntimeError('GitHub API ' + (match.group(1) if match else 'request failed'))
 
 
-def sloc(source):
-    """Nonblank physical code lines, respecting Lua/Nelua strings and comments."""
-    total = 0
+def code_line_numbers(source):
+    """Yield 1-based physical code lines, respecting Lua/Nelua lexical state."""
     block_comment = None
     long_string = None
     quote = None
     escaped = False
-    for line in source.splitlines():
+    for line_number, line in enumerate(source.split('\n'), 1):
         code = False
         i = 0
         while i < len(line):
@@ -111,10 +110,15 @@ def sloc(source):
                     i = match.end()
                 else:
                     i += 1
-        total += int(code)
+        if code:
+            yield line_number
         # A backslash immediately before newline escapes that newline only.
         escaped = False
-    return total
+
+
+def sloc(source):
+    """Nonblank, non-comment physical source lines."""
+    return sum(1 for _ in code_line_numbers(source))
 
 
 def inspect_repo(name):

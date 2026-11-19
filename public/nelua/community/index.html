@@ -42,7 +42,7 @@
 
       <section class="private-panel" id="private-projects" aria-labelledby="private-title">
         <div><div class="eyebrow">YOUR NELUA COUNTS TOO</div><h2 id="private-title">Include your private projects.</h2>
-        <p>Sign in with GitHub, connect selected repositories, and choose which to count. Only your combined private source totals appear publicly. Repository names, file paths and code stay private.</p></div>
+        <p>Sign in with GitHub, connect selected repositories, and choose which to count. Only current Nelua code attributed to your commits counts. Your combined totals appear publicly; repository names, file paths and code stay private.</p></div>
         <div id="account-controls"><a class="account-button" href="api/auth/start">Sign in with GitHub</a></div>
         <p id="account-status" class="account-status" role="status" aria-live="polite"></p>
       </section>
@@ -56,14 +56,14 @@
         </div>
         <div class="table-wrap"><table><thead><tr><th class="rank-head" scope="col">#</th><th scope="col">BUILDER / REPOSITORY OWNER</th><th class="number" scope="col">ORIGINAL NELUA <span aria-hidden="true">↓</span></th><th class="number secondary-col" scope="col">FILES</th><th class="number projects-head" scope="col">PROJECTS</th></tr></thead><tbody id="builders"><tr><td colspan="5" class="empty">Reading the public source snapshot…</td></tr></tbody></table></div>
         <div class="table-footer"><span id="result-count" role="status" aria-live="polite">Loading the index</span><button id="show-more" class="more-button" hidden>Show more builders <span aria-hidden="true">↓</span></button><a href="data.json" download="nelua-builders.json">Download the data <span aria-hidden="true">↗</span></a></div>
-        <p class="ranking-note">Ranked by current original <code>.nelua</code> source on indexed public default branches, plus labeled private totals from owners who opt in. Open a builder to explore its public projects.</p>
+        <p class="ranking-note">Ranked by current original <code>.nelua</code> source on indexed public default branches, plus private lines attributed to participating owners' commits. Open a builder to explore its public projects.</p>
       </section>
 
       <p class="ranking-note" id="private-count-note" aria-live="polite">Private totals require explicit owner consent.</p>
 
       <section id="methodology" class="methodology" aria-labelledby="method-title">
         <div class="method-intro"><span class="method-icon" aria-hidden="true">{ }</span><div class="eyebrow">A NUMBER YOU CAN INSPECT</div><h2 id="method-title">Count the code.<br>Show the work.</h2><p>A useful community list starts with visible rules and links back to the source. Refreshed daily at 7:17 a.m. Pacific.</p><a href="data.json" download>Inspect the full snapshot ↗</a></div>
-        <div class="method-rules"><article><span>01</span><div><h3>A current footprint</h3><p>Original public Nelua source on each indexed repository's default branch, across all time. Blank and comment-only lines are excluded.</p></div></article><article><span>02</span><div><h3>One copy counts</h3><p>Forks, known vendored and generated files, and exact duplicate source are excluded. The snapshot records coverage and unavailable repositories.</p></div></article><article><span>03</span><div><h3>Projects belong to a community</h3><p>Numbers aggregate projects under their GitHub repository owner. Project links and pinned commit hashes make the calculation inspectable; individual line authorship is not inferred.</p></div></article><div class="coverage-note" id="coverage-note">Coverage details are included in the downloadable snapshot.</div></div>
+        <div class="method-rules"><article><span>01</span><div><h3>A current footprint</h3><p>Original public Nelua source on each indexed repository's default branch, across all time. Blank and comment-only lines are excluded.</p></div></article><article><span>02</span><div><h3>One copy counts</h3><p>Forks, known vendored and generated files, and exact duplicate source are excluded. The snapshot records coverage and unavailable repositories.</p></div></article><article><span>03</span><div><h3>Projects belong to a community</h3><p>Public projects aggregate under their GitHub repository owner, with project links and pinned commits. Private totals count only current code attributed to commits authored by the participating owner; other authors and unlinked identities are excluded.</p></div></article><div class="coverage-note" id="coverage-note">Coverage details are included in the downloadable snapshot.</div></div>
       </section>
       <section class="closing"><span aria-hidden="true">✳</span><p>Every little project<br>makes the language bigger.</p><a href="https://github.com/topics/nelua" target="_blank" rel="noopener noreferrer">Find your next Nelua project ↗</a></section>
     </main>

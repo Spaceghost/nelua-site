@@ -31,41 +31,103 @@ class PrivateCounting(unittest.TestCase):
             if path == 'repositories/1':
                 return {'owner': {'id': 7, 'type': 'User'}, 'private': True, 'fork': fork,
                         'full_name': 'fixture-private/hidden-name', 'default_branch': 'main', 'created_at': '2020-01-01'}
-            if '/branches/' in path: return {'commit': {'sha': 'a' * 40}}
+            if '/branches/' in path: return {'commit': {'sha': 'a' * 40, 'commit': {'tree': {'sha': 'c' * 40}}}}
             if '/git/trees/' in path: return {'tree': files, 'truncated': False}
             if '/git/blobs/' in path:
                 raw = blobs[path.rsplit('/', 1)[-1]]
                 return {'encoding': 'base64', 'size': len(raw), 'content': base64.b64encode(raw).decode()}
             raise AssertionError('unexpected fixture request')
-        return get, original, public, blobs
+        def blame(repo, entry):
+            self.assertEqual(repo['sha'], 'a' * 40, 'blame must use the measured commit')
+            raw = blobs[entry['sha']]
+            return [{'startingLine': 1, 'endingLine': raw.count(b'\n') + int(not raw.endswith(b'\n')),
+                     'commit': {'oid': 'b' * 40, 'author': {'user': {'databaseId': 7}}}}]
+        return get, original, public, blobs, blame
 
     def test_private_count_matches_public_exclusions_and_deduplicates(self):
-        get, original, public, blobs = self.fixtures()
-        totals, retained = private.count_private({'owner': '7', 'repositories': [1]}, {public}, get)
+        get, original, public, blobs, blame = self.fixtures()
+        totals, retained = private.count_private({'owner': '7', 'repositories': [1]}, {public}, get, blame)
         self.assertEqual(totals, {'lines': 2, 'bytes': len(blobs[original]), 'files': 1, 'repositories': 1})
         self.assertEqual(retained, {original})
 
     def test_forks_do_not_count(self):
-        get, *_ = self.fixtures(fork=True)
-        totals, retained = private.count_private({'owner': '7', 'repositories': [1]}, set(), get)
+        get, *_, blame = self.fixtures(fork=True)
+        totals, retained = private.count_private({'owner': '7', 'repositories': [1]}, set(), get, blame)
         self.assertEqual(totals['lines'], 0)
         self.assertFalse(retained)
 
     def test_owner_mismatch_aborts(self):
-        get, *_ = self.fixtures()
+        get, *_, blame = self.fixtures()
         with self.assertRaises(RuntimeError):
-            private.count_private({'owner': '8', 'repositories': [1]}, set(), get)
+            private.count_private({'owner': '8', 'repositories': [1]}, set(), get, blame)
 
     def test_invalid_blob_aborts_and_restores_the_public_reader(self):
-        get, *_ = self.fixtures()
+        get, *_, blame = self.fixtures()
         reader = private.counter.read_blob
         def corrupt(path):
             value = get(path)
             if '/git/blobs/' in path: value['content'] = base64.b64encode(b'corrupt').decode()
             return value
         with self.assertRaises(RuntimeError):
-            private.count_private({'owner': '7', 'repositories': [1]}, set(), corrupt)
+            private.count_private({'owner': '7', 'repositories': [1]}, set(), corrupt, blame)
         self.assertIs(private.counter.read_blob, reader)
+
+    def test_only_authored_lines_count_not_committer_or_unmapped_authors(self):
+        raw = b'\xef\xbb\xbf-- mine\r\nprint(1)\r\nprint(2)\r\nprint(3)\r\n-- theirs\r\nprint(4)'
+        def entry(first, last, author, oid):
+            return {'startingLine': first, 'endingLine': last, 'commit': {
+                'oid': oid, 'author': {'user': {'databaseId': author} if author else None},
+                'committer': {'user': {'databaseId': 7}}}}
+        ranges = [entry(1, 2, 7, 'mine1'), entry(3, 3, 8, 'theirs1'),
+                  entry(4, 4, None, 'unknown'), entry(5, 5, 8, 'theirs2'), entry(6, 6, 7, 'mine2')]
+        totals, commits = private.authored_source(raw, ranges, '7')
+        self.assertEqual(totals, {'lines': 2, 'bytes': len(b'\xef\xbb\xbf-- mine\r\nprint(1)\r\nprint(4)'), 'unmappedLines': 1})
+        self.assertEqual(commits, {'mine1', 'mine2'})
+
+    def test_missing_blame_coverage_aborts(self):
+        ranges = [{'startingLine': 1, 'endingLine': 1, 'commit': {'oid': 'mine', 'author': {'user': {'databaseId': 7}}}}]
+        with self.assertRaises(RuntimeError):
+            private.authored_source(b'print(1)\nprint(2)\n', ranges, '7')
+
+    def test_files_authored_entirely_by_others_do_not_count(self):
+        get, original, public, blobs, blame = self.fixtures()
+        def other_author(repo, entry):
+            result = blame(repo, entry)
+            result[0]['commit']['author']['user']['databaseId'] = 8
+            return result
+        totals, retained = private.count_private({'owner': '7', 'repositories': [1]}, {public}, get, other_author)
+        self.assertEqual(totals, {'lines': 0, 'bytes': 0, 'files': 0, 'repositories': 0})
+        self.assertFalse(retained)
+
+    def test_lexer_preserves_git_physical_line_numbers(self):
+        source = '-- header\r\nlocal text = [[first\nsecond\n]]\n--[[comment\nignored]]\nprint("a\u2028b") -- suffix\n'
+        self.assertEqual(list(private.counter.code_line_numbers(source)), [2, 3, 4, 7])
+
+    def test_empty_repository_has_no_source(self):
+        get, *_, blame = self.fixtures()
+        def empty(endpoint):
+            if '/branches/' in endpoint:
+                raise RuntimeError('private GitHub request failed (404)')
+            if '/branches?' in endpoint:
+                return []
+            meta = get(endpoint)
+            meta['size'] = 0
+            return meta
+        totals, retained = private.count_private({'owner': '7', 'repositories': [1]}, set(), empty, blame)
+        self.assertEqual(totals['lines'], 0)
+        self.assertFalse(retained)
+
+    def test_committed_empty_tree_does_not_request_an_unavailable_tree(self):
+        get, *_, blame = self.fixtures()
+        def empty_tree(endpoint):
+            if '/branches/' in endpoint:
+                return {'commit': {'sha': 'a' * 40, 'commit': {'tree': {'sha': hashlib.sha1(b'tree 0\0').hexdigest()}}}}
+            if '/git/trees/' in endpoint:
+                self.fail('the canonical empty Git tree requires no request')
+            return get(endpoint)
+        totals, retained = private.count_private({'owner': '7', 'repositories': [1]}, set(), empty_tree, blame)
+        self.assertEqual(totals['lines'], 0)
+        self.assertFalse(retained)
 
 
 if __name__ == '__main__':

@@ -174,13 +174,20 @@ export def body
 				" and "
 				<code> "~/.sh_history"
 				"."
-			<h2 className="section"> "Not there yet"
+			<h2 className="section"> "History and vi editing"
 			<ul>
 				<li>
-					<code> "fc"
-					", vi editing mode and "
-					<code> "set -o emacs/vi"
-					"."
+					<code> "fc -l"
+					" lists command history. "
+					<code> "fc -s"
+					" recalls a command by number or prefix, with optional text substitution. "
+					<code> "fc -e"
+					" opens selected commands in an editor and runs the edited text."
+				<li>
+					<code> "set -o vi"
+					" enables vi editing. Press Escape for command mode. Move, recall history, delete, change, yank, put or undo. "
+					<code> "set -o emacs"
+					" restores Emacs keys."
 			<div className="actions">
 				<a className="button" html:href="https://github.com/Spaceghost/nebox/tree/main/src/nebox/sh"> "Shell source"
 				" "

@@ -289,23 +289,11 @@ def audit_owned():
     print(json.dumps(audit, sort_keys=True))
 
 
-def admitted_actions():
+def main():
     if (os.environ.get('GITHUB_ACTIONS') != 'true'
             or os.environ.get('GITHUB_REPOSITORY') != 'Spaceghost/nelua-site'
             or os.environ.get('GITHUB_REF') != 'refs/heads/main'):
         raise RuntimeError('private counting requires the admitted Actions workflow')
-
-
-def check_pending():
-    admitted_actions()
-    pending = api('pending')['pending']
-    if not isinstance(pending, bool):
-        raise RuntimeError('invalid refresh queue status')
-    print('pending=' + str(pending).lower())
-
-
-def main():
-    admitted_actions()
     owners = api('owners')['owners']
     if not owners:
         print('No opted-in private accounts to refresh.')
@@ -336,8 +324,6 @@ if __name__ == '__main__':
     try:
         if sys.argv[1:] == ['--audit-owned']:
             audit_owned()
-        elif sys.argv[1:] == ['--check-pending']:
-            check_pending()
         elif sys.argv[1:]:
             raise RuntimeError('unsupported arguments')
         else:

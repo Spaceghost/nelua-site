@@ -4,7 +4,6 @@ on:
   schedule:
     - cron: '17 7 * * *'
       timezone: America/Los_Angeles
-    - cron: '3-58/5 * * * *'
   workflow_dispatch:
 
 permissions: {}
@@ -12,7 +11,6 @@ permissions: {}
 concurrency:
   group: nelua-community-refresh
   cancel-in-progress: false
-  queue: max
 
 jobs:
   refresh:
@@ -26,7 +24,6 @@ jobs:
       contents: write
       id-token: write
     env:
-      QUEUE_POLL: ${{ github.event_name == 'schedule' && github.event.schedule == '3-58/5 * * * *' }}
       GH_TOKEN: ${{ github.token }}
       CLOUDFLARE_ACCOUNT_ID: '4535c96bfc7d1d8864f2d207e97f3ff5'
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -41,24 +38,16 @@ jobs:
         with:
           ref: main
           persist-credentials: false
-      - name: Check for saved repository choices
-        id: request
-        if: env.QUEUE_POLL == 'true'
-        shell: bash
-        run: python3 scripts/community-private.py --check-pending >> "$GITHUB_OUTPUT"
       - name: Set up Node
-        if: env.QUEUE_POLL != 'true' || steps.request.outputs.pending == 'true'
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '24'
       - name: Check private counting and consent boundaries
-        if: env.QUEUE_POLL != 'true' || steps.request.outputs.pending == 'true'
         shell: bash
         run: |
           node --test community-api/tests/security.test.mjs
           python3 scripts/test-community-private.py
       - name: Refresh, validate and publish public source
-        if: env.QUEUE_POLL != 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -73,11 +62,10 @@ jobs:
             --cache-dir "$RUNNER_TEMP/nelua-community/cache" \
             --artifact-dir "$RUNNER_TEMP/nelua-community/artifacts"
       - name: Refresh consented private totals
-        if: env.QUEUE_POLL != 'true' || steps.request.outputs.pending == 'true'
         shell: bash
         run: python3 scripts/community-private.py
       - name: Retain the public collection report
-        if: always() && env.QUEUE_POLL != 'true'
+        if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: community-refresh-${{ github.run_id }}-${{ github.run_attempt }}

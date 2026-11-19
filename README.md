@@ -118,22 +118,11 @@ repository label, owner-only actor admission, no fork events, serialized runs,
 and no hosted fallback. The former Bak cron entry is removed during migration;
 its launcher remains available for attended public-only maintenance.
 
-Saving an enabled private-project selection queues a recount by clearing its
-previous totals and increasing its consent version. The same admitted Actions
-workflow checks for these requests every five minutes (`3-58/5 * * * *`). An
-empty queue skips Node setup, tests and collection; a pending request refreshes
-private totals against the existing public snapshot. It does not repeat the
-public census or deployment. Daily and manual runs still refresh both. The
-existing workflow concurrency group serializes all runs with `queue: max`, so
-polls do not replace a waiting daily or manual refresh. GitHub scheduling and
-runner availability can delay pickup; five minutes is the polling interval.
-The browser checks for completed totals every 30 seconds while the page is
-visible, then refreshes the ranking without replacing unsaved form choices.
-
-Queue checks use the same verified GitHub OIDC admission as source scans. No
-new dispatch credential, broader GitHub App permission or host cron is needed.
-Consent-version checks keep a repository change made during a scan pending
-until its own result succeeds; opt-out removes it from the queue immediately.
+Refreshes run once daily. A prominent notice above the repository choices
+states the 7:17 a.m. Pacific schedule; new projects and saved changes join the
+next daily scan. Saving choices does not start a separate refresh. The browser
+does not poll for pending totals. Consent changes and opt-out still take effect
+immediately.
 
 The workflow validates consent boundaries, collects current public default
 branches, checks coverage and deduplication, pushes the dated public snapshot

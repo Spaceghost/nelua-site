@@ -586,7 +586,9 @@ export def body
 					<code> "-T"
 					" selects temporary storage, and "
 					<code> "--parallel"
-					" caps workers."
+					" caps workers. "
+					<code> "--compress-program"
+					" compresses temporary runs."
 				<li>
 					"With UTF-8 enabled, "
 					<code> "wc"
@@ -596,7 +598,11 @@ export def body
 					<code> "sed"
 					" match Unicode text, and "
 					<code> "diff -i"
-					" folds Unicode case."
+					" folds Unicode case. "
+					<code> "cut -c"
+					" selects whole characters, and the shell accepts multibyte "
+					<code> "IFS"
+					" separators."
 				<li>
 					"With an nscd-enabled build of Nelibc, keyed user and group lookups use the system account service when available. Local files provide fallback."
 			<h2 className="section" id="known-limits"> "Known limits"
@@ -606,9 +612,6 @@ export def body
 				" for applet-specific differences and the tests that document them."
 			<ul>
 				<li> "Standalone locale data covers C, UTF-8 character handling, and German collation. Some applet operations still work byte by byte."
-				<li>
-					<code> "sort --compress-program"
-					" is accepted, and temporary runs are stored uncompressed."
 				<li> "Account enumeration reads the local databases."
 			<h2 className="section"> "Build"
 			<pre>

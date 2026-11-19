@@ -7,54 +7,58 @@ it, and the wider Nelua world.
 ## Layout
 
 ```
-public/nelua/            the site, served as-is (index, compiler/, nelibc/, nebox/, 404)
-public/nelua/assets/     site.css, icon.svg, explorer.js (built), nelibc-coverage.json (generated)
+src/site.imba            shared page layout and static HTML renderer
+src/pages/               Imba source for every public page
+src/content/             generated syntax-guide and benchmark fragments
+src/community/           community index and account controls in Imba
+src/explorer.imba        Nelibc coverage explorer
+src/*.css                shared and community styles
+public/nelua/            committed HTML, CSS, JavaScript and recorded data
 public/_headers          caching and security headers for the asset route
-src/explorer.imba        the nelibc coverage explorer (Imba), the coverage explorer script
-scripts/coverage.py      regenerates nelibc-coverage.json from a nelibc checkout
-scripts/place.mjs        copies the Imba bundle to its fixed public path
-legacy/                  the earlier field-notes site that lived under /langs/nelua
+legacy/                  earlier field-notes site, outside the served directory
 ```
 
-Everything is static. The Worker has no script: `wrangler.toml` declares only
-the assets directory and the two `spacegho.st/nelua*` routes, so page views are
-static-asset requests on the free tier.
+Cloudflare serves the committed files from `public/` as static assets. The
+separate community API is documented below.
 
 ## Work on it
 
 ```sh
-npm install
-npm run build          # src/explorer.imba -> public/nelua/assets/explorer.js
-npm run guide -- ../nelua-lang/docs/pages/syntax-extensions.md  # refresh the static syntax guide
+npm ci
+npm run build
 python3 -m http.server 8080 --directory public   # http://localhost:8080/nelua/
 ```
 
+Edit pages and browser behavior under `src/`. Run `npm run build` and commit
+the source and generated changes together. `npm run render` is enough for
+page, style and content-only edits once the browser bundles exist.
+
 ## Refresh the numbers
 
-- Coverage: `python3 scripts/coverage.py ../nelibc`, then update the three
-  summary counts in `public/nelua/nelibc/index.html` and the hero line in
-  `public/nelua/index.html`.
+- Coverage: `python3 scripts/coverage.py ../nelibc` refreshes the explorer data.
+  Update the pinned summary in `src/pages/nelibc.imba` if its source run changes.
 - nebox: applet list, case count and binary size come from the last recorded
   container run in the nebox repository's commit messages.
 - Compiler: the additions list mirrors "Fork additions" in the fork's README.
 
-The syntax guide at `public/nelua/compiler/syntax-extensions/` is generated from
-the compiler's `docs/pages/syntax-extensions.md` with `npm run guide`. The generated
-HTML is committed, so normal site builds need no compiler checkout. Refresh it
-when the canonical guide changes; the renderer adds the contents navigation and
-uses the shared static stylesheet.
+To refresh the syntax guide and its table of contents from the canonical
+compiler checkout, run the following commands and commit both sets of outputs:
+
+```sh
+npm run guide -- ../nelua-lang/docs/pages/syntax-extensions.md
+npm run render
+```
 
 ## Deploy
 
+Deploy from a checkout containing the committed static assets:
+
 ```sh
-npm run deploy         # wrangler deploy, needs a wrangler login
+npm run check
+npm run deploy
 ```
 
-## Design
-
-Same ink/gold family as the rest of spacegho.st (see the melodica minisite):
-system fonts only, nothing fetched from another origin, no inline styles, a
-light scheme under `prefers-color-scheme: light`.
+Wrangler uploads `public/` directly using the existing Cloudflare login.
 
 ## Refresh the matched libc comparison
 
@@ -71,8 +75,8 @@ npm run check
 npm run deploy
 ```
 
-The renderer updates completion, conformance and performance on both the
-landing page and the Nelibc page. Historical coverage and standalone gates
+The comparison script refreshes the evidence fragments in `src/content/`.
+The Imba build incorporates them into the overview and Nelibc pages. Historical coverage and standalone gates
 remain labelled with their original dates. `summary.json` is the per-case
 performance summary; `raw.csv` retains alternating pairs. `conformance.json`
 retains every planned test, including build/link failures, runtime failures,

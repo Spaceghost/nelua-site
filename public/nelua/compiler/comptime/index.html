@@ -1,39 +1,5 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Compile-time evaluation · Nelua · spacegho.st</title>
-<meta name="description" content="Use Nelua compile-time evaluation to turn reusable record and array configurations into static C data, with value semantics, caching, practical protocol examples, and clear sandbox limits.">
-<link rel="stylesheet" href="/nelua/assets/site.css">
-<link rel="icon" href="/nelua/assets/icon.svg" type="image/svg+xml">
-<link rel="canonical" href="https://spacegho.st/nelua/compiler/comptime/">
-</head>
-<body>
-<div class="wrap">
-<header class="top">
-  <a class="home" href="/nelua/">spacegho.st / nelua</a>
-  <nav aria-label="Sections">
-    <a href="/nelua/">Overview</a>
-    <a href="/nelua/compiler/" aria-current="page">Compiler</a>
-    <a href="/nelua/nelibc/">nelibc</a>
-    <a href="/nelua/nebox/">nebox</a>
-    <a href="https://nelua.io/" rel="external">nelua.io ↗</a>
-  </nav>
-</header>
-
-<section class="hero">
-  <p class="eyebrow">Compiler · language feature</p>
-  <h1>Compute configuration once</h1>
-  <p class="tagline">Use ordinary Nelua functions to transform typed configuration into data that is already present in the generated program.</p>
-  <p class="blurb">Compile-time evaluation (CTFE) is useful when a table, descriptor, protocol constant, or lookup structure follows from values known before the target runs. Keep the inputs as typed records, reuse them by name, and let the compiler emit the result as ordinary static C data.</p>
-  <p class="meta"><a href="/nelua/compiler/">← Compiler additions</a><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/comptime.md">Compiler guide ↗</a><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#compile-time-function-evaluation">Language overview ↗</a></p>
-</section>
-
-<main>
-<h2 class="section" id="two-ways">Two ways to ask for evaluation</h2>
-<p class="lead"><code>comptime(call)</code> marks one call for evaluation. Marking a function <code>&lt;comptime&gt;</code> makes its calls compile-time calls, so all arguments must be known at those call sites. The annotation guarantees that the function is never emitted to C. An ordinary function evaluated through <code>comptime</code> may still be emitted to C even when the program has no runtime calls to it.</p>
-<pre><code>local function add_bias(value: integer, bias: integer): integer
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><title>Compile-time evaluation · Nelua · spacegho.st</title><meta name="description" content="Use Nelua compile-time evaluation to turn reusable record and array configurations into static C data, with value semantics, caching, practical protocol examples, and clear sandbox limits."><link rel="canonical" href="https://spacegho.st/nelua/compiler/comptime/"><link rel="stylesheet" href="/nelua/assets/site.css?v=6519872b270d"><link rel="icon" href="/nelua/assets/icon.svg" type="image/svg+xml"><!--  --></head><body><a class="skip-link" href="#main">Skip to content</a><div class="wrap"><header class="top"><a class="home" href="/nelua/"><span class="monogram" aria-hidden="true">n</span><span>Nelua</span></a><nav aria-label="Sections"><a href="/nelua/">Overview</a><a href="/nelua/">Overview</a><a href="/nelua/compiler/" aria-current="location">Compiler</a><a href="/nelua/compiler/" aria-current="location">Compiler</a><a href="/nelua/nelibc/">nelibc</a><a href="/nelua/nelibc/">nelibc</a><a href="/nelua/nebox/">nebox</a><a href="/nelua/nebox/">nebox</a><a href="/nelua/community/">Community</a><a href="/nelua/community/">Community</a><!-- map --><a href="https://nelua.io/" rel="external">nelua.io</a></nav></header><main id="main" tabindex="-1"><div class="page-content"><section class="hero"><p class="eyebrow">Compiler · language feature</p><h1>Compute configuration once</h1><p class="tagline">Use ordinary Nelua functions to transform typed configuration into data that is already present in the generated program.</p><p class="blurb">Compile-time evaluation (CTFE) is useful when a table, descriptor, protocol constant, or lookup structure follows from values known before the target runs. Keep the inputs as typed records, reuse them by name, and let the compiler emit the result as ordinary static C data.</p><p class="meta"><a href="/nelua/compiler/">Compiler additions</a><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/comptime.md">Compiler guide </a><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#compile-time-function-evaluation">Language overview </a></p></section><div class="page-details"><h2 id="two-ways" class="section">Two ways to ask for evaluation</h2><p class="lead"><code>comptime(call)</code> marks one call for evaluation. Marking a function <code>&lt;comptime&gt;</code> makes its calls compile-time calls, so all arguments must be known at those call sites. The annotation guarantees that the function is never emitted to C. An ordinary function evaluated through <code>comptime</code> may still be emitted to C even when the program has no runtime calls to it.</p><pre><code>local function add_bias(value: integer, bias: integer): integer
   return value + bias
 end
 
@@ -43,13 +9,7 @@ local function scale(value: integer, factor: integer): integer &lt;comptime&gt;
   return value * factor
 end
 local GAIN = scale(6, 7)                 -- folded value: 42
-assert(OFFSET == 12 and GAIN == 42)</code></pre>
-<p class="small muted">The function annotation guarantees <code>scale</code> is absent from generated C. <code>add_bias</code> can still be emitted even though this example has no runtime call to it.</p>
-<p>Use explicit <code>comptime(...)</code> when only selected calls should be evaluated. Use the function annotation when compile-time execution is the function's contract and runtime arguments should be rejected.</p>
-
-<h2 class="section" id="named-config">Named record configs</h2>
-<p class="lead">A record constant gives a configuration a type and a stable name. It can be passed to multiple compile-time functions, and nested records and fixed arrays keep their types as data moves through the evaluator.</p>
-<pre><code>local Link = @record{baud: uint32, parity: uint8}
+assert(OFFSET == 12 and GAIN == 42)</code></pre><p class="small muted">The function annotation guarantees <code>scale</code> is absent from generated C. <code>add_bias</code> can still be emitted even though this example has no runtime call to it.</p><p>Use explicit <code>comptime(...)</code> when only selected calls should be evaluated. Use the function annotation when compile-time execution is the function's contract and runtime arguments should be rejected.</p><h2 id="named-config" class="section">Named record configs</h2><p class="lead">A record constant gives a configuration a type and a stable name. It can be passed to multiple compile-time functions, and nested records and fixed arrays keep their types as data moves through the evaluator.</p><pre><code>local Link = @record{baud: uint32, parity: uint8}
 local RadioConfig = @record{
   reference_hz: uint32,
   link: Link,
@@ -74,12 +34,7 @@ local RATES = comptime(make_rate_table(RADIO))
 print(RATES[0], RATES[1], RATES[2]) -- 3333 1666 833
 
 local DEFAULT_RADIO &lt;comptime&gt; = RadioConfig{}
--- Every field and array element omitted above is zero-initialized.</code></pre>
-<p>The compiler evaluates <code>make_rate_table</code> using the fields of <code>RADIO</code>. The generated program contains the resulting three integers as static data; it does not call the table builder or calculate the entries on the target. The numbers are a teaching example of integer division, not a hardware clock prescription.</p>
-
-<h2 class="section" id="nested-values">Nested values and mutation</h2>
-<p>Compile-time records and arrays behave as values. Assigning one copies it, including nested arrays and records. A function may update its local parameter copy while deriving an output, without changing the named input config or another caller's copy.</p>
-<pre><code>local Point = @record{x: integer, y: integer}
+-- Every field and array element omitted above is zero-initialized.</code></pre><p>The compiler evaluates <code>make_rate_table</code> using the fields of <code>RADIO</code>. The generated program contains the resulting three integers as static data; it does not call the table builder or calculate the entries on the target. The numbers are a teaching example of integer division, not a hardware clock prescription.</p><h2 id="nested-values" class="section">Nested values and mutation</h2><p>Compile-time records and arrays behave as values. Assigning one copies it, including nested arrays and records. A function may update its local parameter copy while deriving an output, without changing the named input config or another caller's copy.</p><pre><code>local Point = @record{x: integer, y: integer}
 local Board = @record{origin: Point, cells: [2]Point}
 local BOARD &lt;comptime&gt; = Board{
   origin = {2, 3},
@@ -92,17 +47,7 @@ local function summarize(board: Board): integer &lt;comptime&gt;
 end
 local SUMMARY = comptime(summarize(BOARD)) -- 305
 local AGAIN = comptime(summarize(BOARD))   -- also 305; BOARD is unchanged
-assert(SUMMARY == 305 and AGAIN == 305)</code></pre>
-<p>Omitted record fields and fixed-array elements receive the type's zero value. <code>Config{...}</code> supplies selected fields, while <code>Config()</code> creates a zero-initialized record. Positional and named fields follow normal record literal rules.</p>
-
-<h2 class="section" id="generated-c">What reaches C</h2>
-<p>A folded scalar is a constant expression. An array or record result is emitted as a C initializer, so it has no runtime table-building loop, allocator, or evaluator support code. The current backend represents this fixed array with a generated C wrapper; its initializer contains the folded values:</p>
-<pre><code>static nluint32_arr3 RATES = { .v = { 3333U, 1666U, 833U } };</code></pre>
-<p>The compiler's generated C is still compiled by your selected C compiler. CTFE removes the computation from the target program; it does not bypass the C compiler or turn a runtime input into a compile-time value.</p>
-
-<h2 class="section" id="embedded">A protocol-table pattern</h2>
-<p>Embedded code often repeats small transforms: deriving a packet mask from a field width, expanding a CRC polynomial into a lookup table, or calculating a set of candidate divisors from a declared clock and rate list. The same pattern applies to firmware, drivers, and protocol libraries: put the inputs in a typed config, write a deterministic Nelua function, then fold its result.</p>
-<pre><code>local PacketLayout = @record{
+assert(SUMMARY == 305 and AGAIN == 305)</code></pre><p>Omitted record fields and fixed-array elements receive the type's zero value. <code>Config{...}</code> supplies selected fields, while <code>Config()</code> creates a zero-initialized record. Positional and named fields follow normal record literal rules.</p><h2 id="generated-c" class="section">What reaches C</h2><p>A folded scalar is a constant expression. An array or record result is emitted as a C initializer, so it has no runtime table-building loop, allocator, or evaluator support code. The current backend represents this fixed array with a generated C wrapper; its initializer contains the folded values:</p><pre><code>static nluint32_arr3 RATES = { .v = { 3333U, 1666U, 833U } };</code></pre><p>The compiler's generated C is still compiled by your selected C compiler. CTFE removes the computation from the target program; it does not bypass the C compiler or turn a runtime input into a compile-time value.</p><h2 id="embedded" class="section">A protocol-table pattern</h2><p>Embedded code often repeats small transforms: deriving a packet mask from a field width, expanding a CRC polynomial into a lookup table, or calculating a set of candidate divisors from a declared clock and rate list. The same pattern applies to firmware, drivers, and protocol libraries: put the inputs in a typed config, write a deterministic Nelua function, then fold its result.</p><pre><code>local PacketLayout = @record{
   sequence_bits: uint8,
   type_bits: uint8,
   payload_bytes: uint16,
@@ -118,43 +63,4 @@ local SEQUENCE_MASK = make_packet_mask(LAYOUT) -- folded at compile time: 4095
 assert(SEQUENCE_MASK == 4095)
 
 -- Runtime code can now pack/unpack using SEQUENCE_MASK and LAYOUT.payload_bytes.
--- The field widths and protocol interpretation remain your responsibility.</code></pre>
-<p>This demonstrates calculation from protocol metadata only. It does not prescribe an on-wire layout, synchronization policy, peripheral register value, timing tolerance, or device-qualified formula; those must come from the relevant protocol or hardware documentation.</p>
-
-<h2 class="section" id="cache">Caching and repeatability</h2>
-<p>Within one compilation, evaluator results are cached by function and canonicalized argument values. Repeating a pure call with the same config can reuse the result. This makes compile-time work predictable and avoids repeating expensive table construction. Inputs and outputs retain value semantics: cache reuse does not make a callee's mutations visible in the caller's config.</p>
-<p>Keep CTFE functions deterministic. Compiler-side <code>print</code> output and errors belong to compilation, not the target program. The final folded values become part of generated C and therefore of the normal build artifacts.</p>
-
-<h2 class="section" id="limits">Limits and diagnostics</h2>
-<p>CTFE is a bounded evaluator for Nelua values, not a second machine that runs the target program. It mirrors important C-facing numeric behavior: fixed-width integer wrapping, unsigned division, Nelua shift behavior, and <code>float32</code> rounding. Floating-point transcendental functions may differ in the last digits from the target C library.</p>
-<ul>
-  <li>Each evaluation is limited by <code>pragmas.comptime_steps</code> (default 10 million Lua instructions) and <code>pragmas.comptime_stack</code> (default 10,000 nested calls).</li>
-  <li>Supported values include scalars, booleans, strings, enums, fixed arrays, and records composed of supported values. Nested records and arrays are supported.</li>
-  <li>Pointers can be used as references while evaluating supported record/array values; CTFE does not dereference target addresses or execute against target memory. Records containing pointer fields are rejected.</li>
-  <li>Optionals, variants, closures, <code>defer</code>, <code>for in</code> iterators, spans, dynamic containers, allocators, garbage collection, C imports, operating-system calls, and I/O are outside the current evaluator subset. Diagnostics identify unsupported operations when the function is evaluated.</li>
-  <li>Values read from outside the function must themselves be compile-time values. Arguments and results must use the supported value shapes; runtime data cannot be smuggled into a compile-time call.</li>
-</ul>
-<p class="note">A compile-time failure is a build failure. Keep generated tables small enough for the configured step and stack budgets, and test important numeric boundaries on the intended target toolchain as well.</p>
-
-<h2 class="section" id="try-it">Try it in a project</h2>
-<p>Put the code in a <code>.nelua</code> file, then compile and run it with the fork:</p>
-<pre><code>nelua radio_config.nelua</code></pre>
-<p>To inspect the generated C, run <code>nelua --print-code radio_config.nelua &gt; radio_config.c</code> and search the output for the folded array. Check the fork's current <a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/comptime.md">CTFE reference</a> for supported syntax and diagnostics.</p>
-
-<h2 class="section" id="related">Related pages</h2>
-<ul>
-  <li><a href="/nelua/compiler/">Compiler fork feature list and install notes</a></li>
-  <li><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/comptime.md">Compiler CTFE reference</a></li>
-  <li><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#compile-time-function-evaluation">Nelua overview: compile-time function evaluation</a></li>
-  <li><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md#compile-time-evaluation">Fork additions guide</a></li>
-</ul>
-</main>
-
-<footer>
-  <span>spacegho.st / nelua / compiler / comptime</span>
-  <a href="https://github.com/Spaceghost/nelua-lang">Spaceghost/nelua-lang</a>
-  <a href="/nelua/">ecosystem overview</a>
-</footer>
-</div>
-</body>
-</html>
+-- The field widths and protocol interpretation remain your responsibility.</code></pre><p>This demonstrates calculation from protocol metadata only. It does not prescribe an on-wire layout, synchronization policy, peripheral register value, timing tolerance, or device-qualified formula; those must come from the relevant protocol or hardware documentation.</p><h2 id="cache" class="section">Caching and repeatability</h2><p>Within one compilation, evaluator results are cached by function and canonicalized argument values. Repeating a pure call with the same config can reuse the result. This makes compile-time work predictable and avoids repeating expensive table construction. Inputs and outputs retain value semantics: cache reuse does not make a callee's mutations visible in the caller's config.</p><p>Keep CTFE functions deterministic. Compiler-side <code>print</code> output and errors belong to compilation, not the target program. The final folded values become part of generated C and therefore of the normal build artifacts.</p><h2 id="limits" class="section">Limits and diagnostics</h2><p>CTFE is a bounded evaluator for Nelua values, not a second machine that runs the target program. It mirrors important C-facing numeric behavior: fixed-width integer wrapping, unsigned division, Nelua shift behavior, and <code>float32</code> rounding. Floating-point transcendental functions may differ in the last digits from the target C library.</p><ul><li>Each evaluation is limited by <code>pragmas.comptime_steps</code> (default 10 million Lua instructions) and <code>pragmas.comptime_stack</code> (default 10,000 nested calls).</li><li>Supported values include scalars, booleans, strings, enums, fixed arrays, and records composed of supported values. Nested records and arrays are supported.</li><li>Pointers can be used as references while evaluating supported record/array values; CTFE does not dereference target addresses or execute against target memory. Records containing pointer fields are rejected.</li><li>Optionals, variants, closures, <code>defer</code>, <code>for in</code> iterators, spans, dynamic containers, allocators, garbage collection, C imports, operating-system calls, and I/O are outside the current evaluator subset. Diagnostics identify unsupported operations when the function is evaluated.</li><li>Values read from outside the function must themselves be compile-time values. Arguments and results must use the supported value shapes; runtime data cannot be smuggled into a compile-time call.</li></ul><p class="note">A compile-time failure is a build failure. Keep generated tables small enough for the configured step and stack budgets, and test important numeric boundaries on the intended target toolchain as well.</p><h2 id="try-it" class="section">Try it in a project</h2><p>Put the code in a <code>.nelua</code> file, then compile and run it with the fork:</p><pre><code>nelua radio_config.nelua</code></pre><p>To inspect the generated C, run <code>nelua --print-code radio_config.nelua &gt; radio_config.c</code> and search the output for the folded array. Check the fork's current <a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/comptime.md">CTFE reference</a> for supported syntax and diagnostics.</p><h2 id="related" class="section">Related pages</h2><ul><li><a href="/nelua/compiler/">Compiler fork feature list and install notes</a></li><li><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/comptime.md">Compiler CTFE reference</a></li><li><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#compile-time-function-evaluation">Nelua overview: compile-time function evaluation</a></li><li><a href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md#compile-time-evaluation">Fork additions guide</a></li></ul></div></div></main><footer><a class="footer-home" href="/nelua/">Nelua at spacegho.st</a><div class="footer-links"><a href="https://github.com/Spaceghost/nelua-lang">Spaceghost/nelua-lang</a><a href="/nelua/">ecosystem overview</a></div></footer></div></body></html>

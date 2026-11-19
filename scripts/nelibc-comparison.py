@@ -36,8 +36,7 @@ if gate:
 completion=[]
 for profile in labels:
  c=coverage[profile];completion.append([labels[profile],f'{c["baseline_runtime_exports"]:,} / {c["inventory_total"]:,}',f'{c["combined_runtime_exports"]:,} / {c["inventory_total"]:,}',f'{c["nelibc_exports"]:,} ({100*c["nelibc_exports"]/c["inventory_total"]:.1f}%)'])
-block=f'''<!-- nelibc-comparison:start -->
-<h2 class="section" id="completion">Completion: whose implementation is it?</h2>
+block=f'''<h2 class="section" id="completion">Completion: whose implementation is it?</h2>
 <p class="lead">Fresh archive-symbol census, {date}. The denominator is the same pinned musl 1.2.5 inventory for every profile. Runtime-alone and combined columns count defined names in the libc and its math/runtime companion archives: glibc libc/libm, musl plus Zig libzigc/compiler_rt, and Cosmopolitan libcosmo. Owned counts name the implementations Nelibc exports. This is symbol presence, not a test of every individual link or standards conformance. A name absent from Nelibc may still be supplied by the fallback libc.</p>
 '''+table('Symbol census against the same 1,471-name inventory', ['Profile','Runtime alone','Runtime + Nelibc','Owned by Nelibc'],completion)+f'''
 <p class="note">Cosmopolitan is the default hybrid build in the captured source snapshot and intentionally owns more of its runtime. The snapshot includes the new profile; it is not a claim that these changes have landed on upstream main. Its narrower Nelibc count does not mean the executable cannot call the delegated APIs. The combined count is a union, so replacing an existing function does not add another API name. These are per-profile counts; the older coverage explorer below is a separate historical inventory snapshot.</p>
@@ -123,25 +122,14 @@ block+='<div class="actions">'+''.join(f'<a class="button button-ghost" href="{u
 size_rows=[]
 for profile in labels:
  size_rows.append([labels[profile],f'{meta["binary_bytes"][profile]["baseline"]:,}',f'{meta["binary_bytes"][profile]["nelibc"]:,}','Dynamic system libc' if profile=='glibc' else 'Static'])
-block+='<details><summary>Built consumer file sizes</summary>'+table('Unnormalized executable file bytes, as built',['Profile','Alone bytes','+Nelibc bytes','Link mode'],size_rows)+'<p>These are not normalized release sizes. The dynamic glibc executable excludes its shared libraries; symbols, debug information, archive granularity and static runtimes affect these files. No footprint winner is claimed.</p></details>\n<!-- nelibc-comparison:end -->\n'
+block+='<details><summary>Built consumer file sizes</summary>'+table('Unnormalized executable file bytes, as built',['Profile','Alone bytes','+Nelibc bytes','Link mode'],size_rows)+'<p>These are not normalized release sizes. The dynamic glibc executable excludes its shared libraries; symbols, debug information, archive granularity and static runtimes affect these files. No footprint winner is claimed.</p></details>\n'
 if gate:block=block.replace('The snapshot includes the new profile; it is not a claim that these changes have landed on upstream main.', 'The new profile and measured optimizations are now integrated on main; the dated source archive below preserves the exact comparison snapshot.')
-page=ROOT/'public/nelua/nelibc/index.html';s=page.read_text()
-start='<!-- nelibc-comparison:start -->';end='<!-- nelibc-comparison:end -->'
-if start in s:s=s[:s.index(start)]+block.rstrip()+'\n\n'+s[s.index(end)+len(end):].lstrip('\n')
-else:s=s.replace('<h2 class="section">What works today</h2>',block+'\n<h2 class="section">What works today</h2>',1)
-a=s.index('  <p class="stats">');b=s.index('</p>',a)+4
-s=s[:a]+'  <p class="stats">'+''.join(f'<span><strong>{coverage[p]["nelibc_exports"]:,} / {coverage[p]["inventory_total"]:,}</strong> exports · {labels[p]}</span>' for p in labels)+f'<span>comparison {date}</span></p>'+s[b:]
-s=s.replace('<h2 class="section">Build and gate</h2>','<h2 class="section">Build and historical gates</h2>')
-s=s.replace('31 (gcc) and 35 (zig) on main now','31 (gcc) and 35 (zig) in the recorded 2026-11-07 run')
-s=s.replace('<dt>Requirements</dt><dd>Nelua, Zig (<code>zig cc</code>).', '<dt>Requirements</dt><dd>Nelua and the Cosmopolitan compiler wrapper for the default hybrid build; Zig (<code>zig cc</code>) for the older profiles.')
-s=s.replace('<dt>First build</dt><dd><code>make dogfood-zig</code>', '<dt>Captured-source build</dt><dd>Download the exact source snapshot above and extract it into a new directory. In that snapshot, <code>make smoke-cosmo</code> uses <code>x86_64-unknown-cosmo-cc</code> from Cosmopolitan 4.0.2, checks the full archive link and rejects a glibc dependency. Supply <code>COSMOCC=/path/to/cosmocc/bin/x86_64-unknown-cosmo-cc</code>. Compile consumers with Cosmopolitan headers, without <code>-Iinclude</code>.</dd>\n  <dt>Older hybrid example</dt><dd><code>make dogfood-zig</code>')
-s=s.replace('Coverage data 2026-11-05; gate and conformance 2026-11-07.',f'Export census and matched comparison {date}; historical explorer 2026-11-05 and gates 2026-11-07.')
-s=s.replace('All 1,471 function symbols musl 1.2.5 declares, with Nelibc\'s status in the pinned hybrid comparison.', 'Historical reference: 1,471 function symbols musl 1.2.5 declares, with Nelibc\'s status in the 2026-11-05 hybrid inventory. The fresh per-profile export census is above.')
-page.write_text(s)
-page=ROOT/'public/nelua/index.html';s=page.read_text();start='<!-- nelibc-overview:start -->';end='<!-- nelibc-overview:end -->'
+content = ROOT / 'src/content'
+(content / 'nelibc-comparison.html').write_text(block.rstrip() + '\n')
+stats = ''.join(f'<span><strong>{coverage[p]["nelibc_exports"]:,} / {coverage[p]["inventory_total"]:,}</strong> exports · {labels[p]}</span>' for p in labels)
+(content / 'nelibc-stats.html').write_text(stats + f'<span>comparison {date}</span>\n')
 parser='; '.join(labels[p]+f' {find(p,"parse-record")["speedup"]:.2f}×' for p in labels)
-overview=f'''<!-- nelibc-overview:start -->
-<h2 class="section" id="libc-comparison">How much is ours, how correct is it, and how fast?</h2>
+overview=f'''<h2 class="section" id="libc-comparison">Nelibc benchmarks</h2>
 <p class="lead">The goal is the fastest correct implementation of the libc operations programs use most. The current evidence compares glibc, musl and Cosmopolitan, each alone and with Nelibc, on the same host and consumer.</p>
 <div class="grid grid-3">
 <article class="card card-core"><h3>Completion</h3><p>{'; '.join(labels[p]+': <strong>'+str(coverage[p]['nelibc_exports'])+'</strong>' for p in labels)} of {next(iter(coverage.values()))['inventory_total']:,} tracked names exported by Nelibc. These count owned implementations, not standards compliance. Cosmopolitan deliberately delegates more stateful services.</p></article>
@@ -150,16 +138,10 @@ overview=f'''<!-- nelibc-overview:start -->
 </div>
 <p class="small muted">Measured {date} over {meta['pairs']} comparison rounds. Consumer correctness checks passed before timing.</p>
 <div class="actions"><a class="button" href="/nelua/nelibc/#performance">Inspect the matched results</a><a class="button button-ghost" href="/nelua/nelibc/#profiles">See the five runtime arrangements</a></div>
-<!-- nelibc-overview:end -->
 '''
 if any('previous_ns' in r for r in rows):
  gains='; '.join(case+(('('+str(size)+')') if size else '')+' '+f'{find("glibc",case,size)["speedup_vs_previous"]:.2f}×' for case,size in followup.get('overview_cases',[('memcpy',1024),('memset',1024),('strlen',1024)]))
  overview=overview.replace('<div class="actions">','<p><strong>Optimization follow-up:</strong> '+gains+' faster than the previous candidate in the concurrent GCC/glibc comparison. Slower cases and alignment results are included on the <a href="/nelua/nelibc/#gap-reduction">detailed page</a>.</p><div class="actions">',1)
 if gate:overview=overview.replace('<div class="actions">',gate_note+'<div class="actions">',1)
-if start in s:s=s[:s.index(start)]+overview.rstrip()+'\n\n'+s[s.index(end)+len(end):].lstrip('\n')
-else:s=s.replace('<h2 class="section">Three rings</h2>',overview+'\n<h2 class="section">Three rings</h2>',1)
-s=re.sub(r'<span><strong>[0-9,]+ / [0-9,]+</strong> (?:musl symbols in nelibc|tracked exports · glibc hybrid \([^<]*\))</span>', '<span><strong>'+str(coverage['glibc']['nelibc_exports'])+' / '+f"{coverage['glibc']['inventory_total']:,}"+'</strong> tracked exports · glibc hybrid ('+date+')</span>', s)
-s=s.replace('<span>updated 2026-11-07</span>','<span>compiler reference 2026-11-07; nebox reference 2026-11-08</span>')
-s=s.replace('<strong>97 applets</strong>','<strong>104 applets</strong>').replace('97 applets including','104 applets including').replace('about 1.5 MB','3,013,304 bytes (recorded 2026-11-08)')
-page.write_text(s)
-print('Updated both pages from',data)
+(content / 'nelibc-overview.html').write_text(overview.rstrip() + '\n')
+print('Refreshed Nelibc comparison fragments from', data)

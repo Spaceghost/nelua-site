@@ -12,4 +12,4 @@ json.dump({'source': 'Spaceghost/nelibc docs/musl-1.2.5-api-coverage.csv',
           open('public/nelua/assets/nelibc-coverage.json', 'w'), separators=(',', ':'))
 counts = collections.Counter(r[2] for r in out)
 print(len(out), dict(counts))
-print('update the summary numbers in public/nelua/nelibc/index.html and index.html if they changed')
+print('update the summary numbers in src/pages/nelibc.imba if they changed')

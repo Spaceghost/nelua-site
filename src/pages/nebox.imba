@@ -605,6 +605,11 @@ export def body
 					" separators."
 				<li>
 					"With an nscd-enabled build of Nelibc, keyed user and group lookups use the system account service when available. Local files provide fallback."
+				<li>
+					<code> "hostname"
+					" retries truncated DNS replies over TCP. "
+					<code> "grep -P"
+					" is available in builds linked with static PCRE2."
 			<h2 className="section" id="known-limits"> "Known limits"
 			<p className="lead">
 				"See the "
@@ -623,7 +628,7 @@ export def body
 			<div className="actions">
 				<a className="button" html:href="https://github.com/Spaceghost/nebox"> "Repository"
 				" "
-				<a className="button button-ghost" html:href="https://github.com/Spaceghost/nebox/blob/main/tests/run.sh"> "Conformance suite"
+				<a className="button button-ghost" html:href="https://github.com/Spaceghost/nebox/blob/master/tests/run.sh"> "Conformance suite"
 
 export def footerLinks
 	<div className="footer-links">

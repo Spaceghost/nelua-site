@@ -189,9 +189,9 @@ export def body
 					<code> "set -o emacs"
 					" restores Emacs keys."
 			<div className="actions">
-				<a className="button" html:href="https://github.com/Spaceghost/nebox/tree/main/src/nebox/sh"> "Shell source"
+				<a className="button" html:href="https://github.com/Spaceghost/nebox/tree/master/src/nebox/sh"> "Shell source"
 				" "
-				<a className="button button-ghost" html:href="https://github.com/Spaceghost/nebox/blob/main/tests/sh_interactive.py"> "Terminal tests"
+				<a className="button button-ghost" html:href="https://github.com/Spaceghost/nebox/blob/master/tests/sh_interactive.py"> "Terminal tests"
 
 export def footerLinks
 	<div className="footer-links">

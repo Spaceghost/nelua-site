@@ -610,6 +610,9 @@ export def body
 					" retries truncated DNS replies over TCP. "
 					<code> "grep -P"
 					" is available in builds linked with static PCRE2."
+			<p>
+				<a href="/nelua/init/"> "Theseus init"
+				" provides the optional Nebox initramfs entry point."
 			<h2 className="section" id="known-limits"> "Known limits"
 			<p className="lead">
 				"See the "

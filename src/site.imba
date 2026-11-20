@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto'
-import { copyFileSync, readFileSync, writeFileSync } from 'node:fs'
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import * as overview from './pages/overview.imba'
 import * as compiler from './pages/compiler.imba'
 import * as comptime from './pages/comptime.imba'
@@ -7,6 +7,7 @@ import * as syntaxGuide from './pages/syntax-guide.imba'
 import * as nelibc from './pages/nelibc.imba'
 import * as nebox from './pages/nebox.imba'
 import * as nsh from './pages/nsh.imba'
+import * as init from './pages/init.imba'
 import * as community from './pages/community.imba'
 import * as notFound from './pages/not-found.imba'
 
@@ -15,6 +16,7 @@ const navigation = [
 	{ label: 'Compiler', path: '/nelua/compiler/' }
 	{ label: 'nelibc', path: '/nelua/nelibc/' }
 	{ label: 'nebox', path: '/nelua/nebox/' }
+	{ label: 'Init', path: '/nelua/init/' }
 	{ label: 'Community', path: '/nelua/community/' }
 ]
 
@@ -75,6 +77,7 @@ const pages = [
 	{ source: nelibc, path: '/nelua/nelibc/', body: nelibc.body(content('nelibc-comparison'), content('nelibc-stats')), scripts: ['/nelua/assets/explorer.js'] }
 	{ source: nebox, path: '/nelua/nebox/', body: nebox.body() }
 	{ source: nsh, path: '/nelua/nebox/nsh/', active: '/nelua/nebox/', body: nsh.body() }
+	{ source: init, path: '/nelua/init/', body: init.body() }
 	{ source: community, path: '/nelua/community/', body: community.body(), scripts: ['/nelua/community/app.js', '/nelua/community/account.js'] }
 	{ source: notFound, path: '/nelua/404.html', body: notFound.body() }
 ]
@@ -84,6 +87,8 @@ copyFileSync('src/community.css', 'public/nelua/community/styles.css')
 
 for page in pages
 	const output = 'public' + page.path + (page.path.endsWith('/') ? 'index.html' : '')
+	if page.path.endsWith('/')
+		mkdirSync('public' + page.path, { recursive: true })
 	const html = documentFor(page).outerHTML.replace(/^<!DOCTYPE html>/, '<!doctype html>\n')
 	writeFileSync(output, html + '\n')
 

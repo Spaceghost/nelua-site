@@ -9,6 +9,7 @@ const core = [
 
 const workshop = [
 	{ title: 'necc', path: '/nelua/necc/', description: 'Compile C and Nelua against standalone Nelibc or run Lua from the staged SDK.' }
+	{ title: 'nelinker', path: '/nelua/nelinker/', description: 'Link x86-64 Linux executables directly from ELF objects and static archives.' }
 	{ title: 'nebuild', path: '/nelua/nebuild/', description: 'Run incremental, parallel builds from a build.ne dependency graph.' }
 	{ title: 'Drift', path: 'https://github.com/Spaceghost/drift', description: 'Portable Virtio, xHCI, NVMe, Ethernet and AHCI drivers written in Nelua.' }
 	{ title: 'Atlas firmware', path: 'https://github.com/Spaceghost/atlas-firmware', description: 'ESP32-S3 LoRa field controllers using Nelua alongside Lua and ESP-IDF.' }

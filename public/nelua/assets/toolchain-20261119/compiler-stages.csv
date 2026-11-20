@@ -1,0 +1,11 @@
+case,phase,n,median_ms
+tiny,preprocess,25,0.5857
+tiny,frontend,25,0.3421
+tiny,assemble,25,0.5469
+tiny,necc-full,25,1.6174
+tiny,TinyCC-full,25,0.8043
+128-functions,preprocess,25,4.8923
+128-functions,frontend,25,1.8792
+128-functions,assemble,25,1.8503
+128-functions,necc-full,25,8.7811
+128-functions,TinyCC-full,25,1.5263

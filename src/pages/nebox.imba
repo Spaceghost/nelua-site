@@ -643,6 +643,11 @@ export def body
 				<li> "Standalone locale data covers C, UTF-8 character handling, and German collation. Some applet operations still work byte by byte."
 				<li> "Account enumeration reads the local databases."
 			<h2 className="section"> "Build"
+			<p>
+				<a href="/nelua/nebuild/"> 'nebuild'
+				' runs the distro build graph, and '
+				<a href="/nelua/necc/"> 'necc'
+				' compiles the userland.'
 			<pre>
 				<code> "git clone https://github.com/Spaceghost/nelibc\nmake -C nelibc lib-standalone-zig\ngit clone https://github.com/Spaceghost/nebox\nmake -C nebox NELIBC=../nelibc        # build/nebox\nmake -C nebox NELIBC=../nelibc test   # the conformance suite"
 			<p className="note">

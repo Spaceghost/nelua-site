@@ -8,6 +8,8 @@ import * as nelibc from './pages/nelibc.imba'
 import * as nebox from './pages/nebox.imba'
 import * as nsh from './pages/nsh.imba'
 import * as init from './pages/init.imba'
+import * as necc from './pages/necc.imba'
+import * as nebuild from './pages/nebuild.imba'
 import * as community from './pages/community.imba'
 import * as notFound from './pages/not-found.imba'
 
@@ -78,6 +80,8 @@ const pages = [
 	{ source: nebox, path: '/nelua/nebox/', body: nebox.body() }
 	{ source: nsh, path: '/nelua/nebox/nsh/', active: '/nelua/nebox/', body: nsh.body() }
 	{ source: init, path: '/nelua/init/', body: init.body() }
+	{ source: necc, path: '/nelua/necc/', active: '/nelua/compiler/', body: necc.body() }
+	{ source: nebuild, path: '/nelua/nebuild/', active: '/nelua/nebox/', body: nebuild.body() }
 	{ source: community, path: '/nelua/community/', body: community.body(), scripts: ['/nelua/community/app.js', '/nelua/community/account.js'] }
 	{ source: notFound, path: '/nelua/404.html', body: notFound.body() }
 ]

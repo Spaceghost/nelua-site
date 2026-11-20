@@ -4,10 +4,12 @@ export const description = 'Explore the Spaceghost Nelua compiler fork, nelibc a
 const core = [
 	{ title: 'Compiler', path: '/nelua/compiler/', kind: 'Language', description: 'A Nelua compiler fork with exhaustive matching, ownership, compile-time evaluation and file-local syntax extensions.' }
 	{ title: 'nelibc', path: '/nelua/nelibc/', kind: 'C library', description: 'A C library written in Nelua, with hybrid builds over glibc, musl and Cosmopolitan and a standalone Linux runtime.' }
-	{ title: 'nebox', path: '/nelua/nebox/', kind: 'Userland', description: 'An interactive POSIX shell and 104 Unix applets in a single static executable linked against standalone nelibc.' }
+	{ title: 'nebox', path: '/nelua/nebox/', kind: 'Userland', description: 'Unix applets and an interactive POSIX shell in a single static executable linked against standalone nelibc.' }
 ]
 
 const workshop = [
+	{ title: 'necc', path: '/nelua/necc/', description: 'Compile C and Nelua against standalone Nelibc or run Lua from the staged SDK.' }
+	{ title: 'nebuild', path: '/nelua/nebuild/', description: 'Run incremental, parallel builds from a build.ne dependency graph.' }
 	{ title: 'Drift', path: 'https://github.com/Spaceghost/drift', description: 'Portable Virtio, xHCI, NVMe, Ethernet and AHCI drivers written in Nelua.' }
 	{ title: 'Atlas firmware', path: 'https://github.com/Spaceghost/atlas-firmware', description: 'ESP32-S3 LoRa field controllers using Nelua alongside Lua and ESP-IDF.' }
 	{ title: 'melodica.h', path: 'https://spacegho.st/melodica/', description: 'Five implementations of the Pandora protocol behind one C ABI, including Nelua.' }

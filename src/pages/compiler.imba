@@ -34,6 +34,9 @@ export def body
 					" green on master "
 					<code> "f745ca8"
 				<span> "updated 2026-11-07"
+			<p>
+				<a href="/nelua/necc/"> 'necc'
+				' packages this frontend with a standalone Linux toolchain.'
 		<div className="page-details">
 			<h2 className="section"> "What the fork adds"
 			<p className="lead">

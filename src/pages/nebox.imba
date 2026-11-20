@@ -1,12 +1,12 @@
 export const title = "nebox · a toybox-style userland in Nelua on nelibc · spacegho.st/nelua"
-export const description = "nebox is a toybox/busybox-style multicall binary written in Nelua and linked against nelibc's standalone profile: 120 applets, including an interactive POSIX shell, in one static x86-64 executable with no host libc, checked against GNU coreutils, gawk and dash by more than 1,500 conformance cases."
+export const description = "nebox is a toybox/busybox-style multicall binary written in Nelua and linked against nelibc's standalone profile: 122 applets, including an interactive POSIX shell, in one static x86-64 executable with no host libc, checked against GNU coreutils, gawk and dash by more than 1,500 conformance cases."
 
 export def body
 	<div className="page-content">
 		<section className="hero">
 			<p className="eyebrow"> "Core"
 			<h1> "nebox"
-			<p className="tagline"> "A toybox-style userland: 120 applets including a POSIX shell, one static binary, no host libc."
+			<p className="tagline"> "A toybox-style userland: 122 applets including a POSIX shell, one static binary, no host libc."
 			<p className="blurb">
 				<a html:href="https://github.com/Spaceghost/nebox"> "Spaceghost/nebox"
 				" is a multicall binary written in Nelua and linked against "
@@ -16,7 +16,7 @@ export def body
 				" (a hard or symbolic link named after the applet) or from the first operand. It carries its own POSIX shell, regex engine, awk, stream editor, sort, find, diff and checksum implementations, all in Nelua."
 			<p className="stats">
 				<span>
-					<strong> "120 applets"
+					<strong> "122 applets"
 				<span>
 					<strong> "1,500+"
 					" conformance cases, 0 failing"
@@ -188,6 +188,7 @@ export def body
 				<li> "mkfifo"
 				<li> "mknod"
 				<li> "mktemp"
+				<li> "mount"
 				<li> "mv"
 				<li> "nice"
 				<li> "nisdomainname"
@@ -235,8 +236,9 @@ export def body
 				<li> "truncate"
 				<li> "tsort"
 				<li> "tty"
-				<li> "unexpand"
+				<li> "umount"
 				<li> "uname"
+				<li> "unexpand"
 				<li> "uniq"
 				<li> "unlink"
 				<li> "uptime"

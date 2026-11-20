@@ -23,3 +23,16 @@ export def body
 			'The '
 			<a href="/nelua/nebox/"> 'Theseus-enabled Nebox build'
 			' also provides an initramfs entry point. It mounts procfs and sysfs, starts an interactive shell on the boot console, and restarts the shell when it exits.'
+
+		<h2 className="section"> 'Working with mounts'
+		<p> 'In the Nebox guest, use mount to attach filesystems and umount to detach them. The following example creates a temporary filesystem at the existing /mnt directory in the boot image.'
+		<pre>
+			<code> "mount -o size=16m,mode=0755 tmpfs /mnt\nmount -t tmpfs\numount /mnt"
+		<p>
+			'Use '
+			<code> 'mount TARGET'
+			' to look up a configured target in '
+			<code> '/etc/fstab'
+			'. '
+			<code> 'mount -T FILE TARGET'
+			' selects another table.'

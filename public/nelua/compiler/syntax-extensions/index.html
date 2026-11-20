@@ -519,6 +519,43 @@ that module&#39;s directory. Relative foreign effects such as
 resolve through Bend. Run the combined example on Linux:</p>
 <pre><code class="language-sh">./nelua --cc clang examples/bend2/interop.nelua
 </code></pre>
+<h3 class="section" id="write-nelua-and-run-it-through-bend2">Write Nelua and run it through Bend2</h3>
+<p>Use <code>bend2 nelua</code> to keep the function body in Nelua. The compiler derives
+the export signature, checks the supported subset, lowers the body to Bend,
+and links the result into the same executable. Call the export like any other
+local Nelua function.</p>
+<pre><code class="language-nelua">#syntax &#39;syntax.bend2&#39;
+
+bend2 nelua (sum_squares gpu_at(1, 4096)) do
+  local function sum_squares(count: uint32): uint32
+    local total: uint32 = 0
+    for i: uint32 = 0, &lt; count do
+      total = total + (i * i)
+    end
+    return total
+  end
+end
+
+assert(sum_squares(4) == 14)
+</code></pre>
+<p>The reduction loop becomes a balanced tree of Bend tasks. Its <code>uint32</code> sum
+wraps as it would in Nelua. A <code>gpu_at</code> cutoff generates the Bend offload marker
+automatically. Without a cutoff, the function still runs through the Bend
+backend on the CPU. Choose the cutoff for your workload. This example uses an
+illustrative cutoff of 4096 elements.</p>
+<p>The current subset accepts pure local functions with explicit <code>uint32</code>
+parameters and one <code>uint32</code> result. It supports typed locals, addition,
+subtraction, multiplication, calls to earlier helpers in the block, and
+returning <code>if</code> branches with unsigned comparisons. Use decimal literals
+and add <code>_u32</code> to literals used in arithmetic or comparisons. Loops must
+have a zero start, an exclusive upper bound, and one assignment of the form
+<code>total = total + value</code>, where <code>value</code> is independent of <code>total</code>.
+Unsupported operations raise an error at the source location. General Nelua
+programs, IO, and arbitrary mutation require ordinary Nelua or a handwritten
+Bend block.</p>
+<p>Run the comparison against a normal Nelua implementation on the same inputs:</p>
+<pre><code class="language-sh">./nelua --cc clang examples/bend2/nelua.nelua
+</code></pre>
 <h3 class="section" id="automatic-cpu-and-gpu-dispatch">Automatic CPU and GPU dispatch</h3>
 <p>Use <code>bend2 auto</code> and give an eligible pure export a cutoff. Both devices use
 the same Bend implementation and the same Nelua call. Mark the compute entry

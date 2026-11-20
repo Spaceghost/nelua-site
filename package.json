@@ -5,15 +5,18 @@
   "description": "spacegho.st/nelua: the Nelua core ecosystem (compiler fork, nelibc, nebox), served as static assets from a Cloudflare Worker.",
   "scripts": {
     "guide": "node scripts/syntax-guide.mjs",
-    "build": "imba build src/explorer.imba --web --production --bundle --minify --no-sourcemap --outdir build/explorer && imba build src/community/app.imba --web --production --bundle --minify --no-sourcemap --outdir build/community-app && imba build src/community/account.imba --web --production --bundle --minify --no-sourcemap --outdir build/community-account && node scripts/place.mjs && npm run render",
+    "build": "imba build src/explorer.imba --web --production --bundle --minify --no-sourcemap --outdir build/explorer && imba build src/community/app.imba --web --production --bundle --minify --no-sourcemap --outdir build/community-app && imba build src/community/account.imba --web --production --bundle --minify --no-sourcemap --outdir build/community-account && imba build src/theseus-demo.imba --web --production --bundle --minify --no-sourcemap --outdir build/theseus-demo && node scripts/place.mjs && npm run render",
     "coverage": "python3 scripts/coverage.py",
     "check": "wrangler deploy --dry-run",
     "deploy": "wrangler deploy --strict --keep-vars",
     "render": "imba src/site.imba"
   },
   "devDependencies": {
+    "@xterm/addon-fit": "0.10.0",
+    "@xterm/xterm": "5.5.0",
     "imba": "2.0.0-alpha.253",
     "marked": "15.0.12",
-    "wrangler": "^4.135.0"
+    "wrangler": "^4.135.0",
+    "xterm-pty": "0.12.0"
   }
 }

@@ -5,6 +5,7 @@ import { join } from 'node:path';
 for (const [build, name, destination] of [
   ['explorer', 'explorer', 'public/nelua/assets/explorer.js'],
   ['community-app', 'app', 'public/nelua/community/app.js'],
+  ['theseus-demo', 'theseus-demo', 'public/nelua/init/vm/demo.js'],
   ['community-account', 'account', 'public/nelua/community/account.js'],
 ]) {
   const directory = join('build', build);
@@ -14,7 +15,7 @@ for (const [build, name, destination] of [
   if (build === 'explorer') {
     copyFileSync(entry, destination);
   } else {
-    // These classic scripts share a page. Keep minified identifiers local.
+    // Keep minified identifiers local to each classic script.
     writeFileSync(destination, '(() => {\n' + readFileSync(entry, 'utf8') + '\n})();\n');
   }
 }

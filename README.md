@@ -49,6 +49,20 @@ npm run guide -- ../nelua-lang/docs/pages/syntax-extensions.md
 npm run render
 ```
 
+## Theseus browser demo
+
+Use `npx wrangler dev` to preview `/nelua/init/`. QEMU's WebAssembly
+threads require the cross-origin isolation headers in `public/_headers`.
+The emulator, firmware, kernel and initramfs load when the visitor starts
+the VM. The guest has no network device.
+
+The demo controller is in `src/theseus-demo.imba`. The boot assets under
+`public/nelua/init/vm/` are served directly, with source and license
+references in `NOTICES.txt`. To refresh the guest, build Nebox with Theseus
+enabled, package the binary alone with `write_initramfs` from Nebox's
+`tests/theseus_boot.py`, then compress the archive with `gzip -n`. Test the
+new image by running the mount example from the browser console.
+
 ## Deploy
 
 Deploy from a checkout containing the committed static assets:

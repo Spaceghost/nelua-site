@@ -1,0 +1,57 @@
+Theseus browser demo
+
+QEMU Wasm 8.2.0 and the PC firmware package are from this upstream build:
+https://github.com/ktock/qemu-wasm-demo-images/tree/b7c549b5e6f4c376f76483a03e983214421434ad/alpine-x86_64
+
+Source at the revision recorded by the upstream build:
+https://github.com/ktock/qemu-wasm/tree/8604ed49a3cde392890b014a8d5a959c8a2fe72a
+https://github.com/ktock/qemu-wasm/tree/8604ed49a3cde392890b014a8d5a959c8a2fe72a/roms
+https://github.com/ktock/qemu-wasm-demo/blob/0208c86ea45253c26c0ea6907f6db2dec89eb7b2/create-images.sh
+
+QEMU and its firmware contain GPL and LGPL components as described in their
+source trees. License texts are in COPYING-GPL-2.txt and COPYING-LGPL-2.1.txt.
+The WebAssembly binary is wrapped in gzip for delivery, without changes to
+the executable or its Emscripten loader and worker.
+
+The Linux kernel is Alpine linux-lts 6.18.54-r0 for x86_64 (GPL-2.0-only).
+The recipe, patches, configuration, and upstream source URL are here:
+https://gitlab.alpinelinux.org/alpine/aports/-/tree/a4209606081414a674f0c0985ea9d362f1261720/main/linux-lts
+
+The initramfs contains the Theseus-enabled Nebox build and minimal boot paths.
+https://github.com/Spaceghost/nebox/commit/4dd2757a0faf6141f2981c99b4cbbe1d59643a2f
+
+The terminal bundle uses xterm.js and its fit addon:
+https://github.com/xtermjs/xterm.js
+
+Copyright (c) 2017-2019, The xterm.js authors (https://github.com/xtermjs/xterm.js)
+Copyright (c) 2014-2016, SourceLair Private Company (https://www.sourcelair.com)
+Copyright (c) 2012-2013, Christopher Jeffrey (https://github.com/chjj/)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+The pseudo-terminal uses xterm-pty:
+https://github.com/mame/xterm-pty
+
+Copyright 2022 Yusuke Endoh
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

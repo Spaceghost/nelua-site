@@ -45,8 +45,8 @@ def documentFor page
 				<link rel="canonical" href=('https://spacegho.st' + page.path)>
 			<link rel="stylesheet" href=asset('/nelua/assets/site.css')>
 			<link rel="icon" href="/nelua/assets/icon.svg" type="image/svg+xml">
-			if page.path == '/nelua/community/'
-				<link rel="stylesheet" href=asset('/nelua/community/styles.css')>
+			if page.stylesheet
+				<link rel="stylesheet" href=asset(page.stylesheet)>
 			for script in page.scripts || []
 				<script src=asset(script) html:defer="">
 		<body>
@@ -79,15 +79,17 @@ const pages = [
 	{ source: nelibc, path: '/nelua/nelibc/', body: nelibc.body(content('nelibc-comparison'), content('nelibc-stats')), scripts: ['/nelua/assets/explorer.js'] }
 	{ source: nebox, path: '/nelua/nebox/', body: nebox.body() }
 	{ source: nsh, path: '/nelua/nebox/nsh/', active: '/nelua/nebox/', body: nsh.body() }
-	{ source: init, path: '/nelua/init/', body: init.body() }
+	{ source: init, path: '/nelua/init/', body: init.body(), stylesheet: '/nelua/init/vm/demo.css', scripts: ['/nelua/init/vm/demo.js'] }
 	{ source: necc, path: '/nelua/necc/', active: '/nelua/compiler/', body: necc.body() }
 	{ source: nebuild, path: '/nelua/nebuild/', active: '/nelua/nebox/', body: nebuild.body() }
-	{ source: community, path: '/nelua/community/', body: community.body(), scripts: ['/nelua/community/app.js', '/nelua/community/account.js'] }
+	{ source: community, path: '/nelua/community/', body: community.body(), stylesheet: '/nelua/community/styles.css', scripts: ['/nelua/community/app.js', '/nelua/community/account.js'] }
 	{ source: notFound, path: '/nelua/404.html', body: notFound.body() }
 ]
 
 copyFileSync('src/site.css', 'public/nelua/assets/site.css')
 copyFileSync('src/community.css', 'public/nelua/community/styles.css')
+const terminalCss = readFileSync('node_modules/@xterm/xterm/css/xterm.css', 'utf8')
+writeFileSync('public/nelua/init/vm/demo.css', terminalCss + '\n' + readFileSync('src/theseus-demo.css', 'utf8'))
 
 for page in pages
 	const output = 'public' + page.path + (page.path.endsWith('/') ? 'index.html' : '')

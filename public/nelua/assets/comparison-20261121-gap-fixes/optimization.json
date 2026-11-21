@@ -1,0 +1,63 @@
+{
+  "headline_case": "first-sparse-then-dense",
+  "frequency_repeat": "strstr-repeat-20261121-gap-fixes",
+  "cases": [
+    [
+      "parse-record",
+      0
+    ],
+    [
+      "strtod-decimal",
+      0
+    ],
+    [
+      "memcmp-equal",
+      4096
+    ],
+    [
+      "strlen",
+      128
+    ],
+    [
+      "strlen",
+      4096
+    ],
+    [
+      "strstr-tail",
+      128
+    ],
+    [
+      "strstr-tail",
+      65536
+    ]
+  ],
+  "overview_cases": [
+    [
+      "parse-record",
+      0
+    ],
+    [
+      "strtod-decimal",
+      0
+    ],
+    [
+      "memcmp-equal",
+      4096
+    ],
+    [
+      "strlen",
+      128
+    ],
+    [
+      "strlen",
+      4096
+    ],
+    [
+      "strstr-tail",
+      65536
+    ]
+  ],
+  "tradeoffs": [],
+  "changes": "Substring search retries a byte that rejected the preceding candidates when letter frequencies change. Short binary64 decimals use bounded integer division. On x86-64, the AVX2 paths scan short, page-contained strings directly, scan longer strings in 256-byte blocks, and use fixed displacements for successive memory comparisons.",
+  "overview_scope": "The record parser is a synthetic workload. The 64 KiB substring controls have their own input shapes and timing loops."
+}

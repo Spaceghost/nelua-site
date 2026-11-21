@@ -1,0 +1,260 @@
+{
+  "started_utc": "2026-11-21T17:45:47Z",
+  "cpu": 3,
+  "cpu_model": "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+  "host_kernel": "6.18.54-0-lts",
+  "glibc": "glibc 2.36",
+  "gcc": "12.2.0",
+  "load_start": [
+    7.58935546875,
+    7.31982421875,
+    6.03369140625
+  ],
+  "method": "Each unmodified --anchor-controls process checks random and guarded inputs before timing, and reports the median of seven 256-call timed loops. All six variant orderings run once and then in reverse order. Only the 64 KiB rows are in the compact CSV.",
+  "source_commit": {
+    "previous": "f9ae990711f50a3e2b5cec670cd56d1867969ef7",
+    "candidate": "70bcd89457f2b1433916747df715ea8546e54ffb"
+  },
+  "source_sha256": "74c13a9744bd123776b8fcb0ccc27dc55036c3c88aef6ad5be975fe47bbbc2ba",
+  "driver_sha256": "191023524b46952822c054b4b870b7120045403d7929983c9c9457f4f2a45b64",
+  "binary_sha256": {
+    "baseline": "db6506f8aecd6e6609fc58d2eb8522176834463dffdce78b3daf3ed93a0adfbf",
+    "previous": "4e89629ff9b15f6088301d636fdd1a59278dba04dc449ad997f68b49cbf50173",
+    "candidate": "b0ad3a758a5e4caa206434ea269eec58c8fd998fbd57a1a4f056722aee2651a2"
+  },
+  "archive_sha256": {
+    "previous": "c53aa3ff327bf6ffdddc5926b87b65505cd401262f8acfda26be2af9e2ccde5d",
+    "candidate": "464e7e4228ff98d792230a5c67b3fc600cdbc238ffb7ea4b3c149fa13f19b324"
+  },
+  "rounds": 12,
+  "observed_affinities": [
+    {
+      "round": 1,
+      "position": 1,
+      "implementation": "baseline",
+      "cpu": 3
+    },
+    {
+      "round": 1,
+      "position": 2,
+      "implementation": "previous",
+      "cpu": 3
+    },
+    {
+      "round": 1,
+      "position": 3,
+      "implementation": "candidate",
+      "cpu": 3
+    },
+    {
+      "round": 2,
+      "position": 1,
+      "implementation": "baseline",
+      "cpu": 3
+    },
+    {
+      "round": 2,
+      "position": 2,
+      "implementation": "candidate",
+      "cpu": 3
+    },
+    {
+      "round": 2,
+      "position": 3,
+      "implementation": "previous",
+      "cpu": 3
+    },
+    {
+      "round": 3,
+      "position": 1,
+      "implementation": "previous",
+      "cpu": 3
+    },
+    {
+      "round": 3,
+      "position": 2,
+      "implementation": "baseline",
+      "cpu": 3
+    },
+    {
+      "round": 3,
+      "position": 3,
+      "implementation": "candidate",
+      "cpu": 3
+    },
+    {
+      "round": 4,
+      "position": 1,
+      "implementation": "previous",
+      "cpu": 3
+    },
+    {
+      "round": 4,
+      "position": 2,
+      "implementation": "candidate",
+      "cpu": 3
+    },
+    {
+      "round": 4,
+      "position": 3,
+      "implementation": "baseline",
+      "cpu": 3
+    },
+    {
+      "round": 5,
+      "position": 1,
+      "implementation": "candidate",
+      "cpu": 3
+    },
+    {
+      "round": 5,
+      "position": 2,
+      "implementation": "baseline",
+      "cpu": 3
+    },
+    {
+      "round": 5,
+      "position": 3,
+      "implementation": "previous",
+      "cpu": 3
+    },
+    {
+      "round": 6,
+      "position": 1,
+      "implementation": "candidate",
+      "cpu": 3
+    },
+    {
+      "round": 6,
+      "position": 2,
+      "implementation": "previous",
+      "cpu": 3
+    },
+    {
+      "round": 6,
+      "position": 3,
+      "implementation": "baseline",
+      "cpu": 3
+    },
+    {
+      "round": 7,
+      "position": 1,
+      "implementation": "candidate",
+      "cpu": 3
+    },
+    {
+      "round": 7,
+      "position": 2,
+      "implementation": "previous",
+      "cpu": 3
+    },
+    {
+      "round": 7,
+      "position": 3,
+      "implementation": "baseline",
+      "cpu": 3
+    },
+    {
+      "round": 8,
+      "position": 1,
+      "implementation": "candidate",
+      "cpu": 3
+    },
+    {
+      "round": 8,
+      "position": 2,
+      "implementation": "baseline",
+      "cpu": 3
+    },
+    {
+      "round": 8,
+      "position": 3,
+      "implementation": "previous",
+      "cpu": 3
+    },
+    {
+      "round": 9,
+      "position": 1,
+      "implementation": "previous",
+      "cpu": 3
+    },
+    {
+      "round": 9,
+      "position": 2,
+      "implementation": "candidate",
+      "cpu": 3
+    },
+    {
+      "round": 9,
+      "position": 3,
+      "implementation": "baseline",
+      "cpu": 3
+    },
+    {
+      "round": 10,
+      "position": 1,
+      "implementation": "previous",
+      "cpu": 3
+    },
+    {
+      "round": 10,
+      "position": 2,
+      "implementation": "baseline",
+      "cpu": 3
+    },
+    {
+      "round": 10,
+      "position": 3,
+      "implementation": "candidate",
+      "cpu": 3
+    },
+    {
+      "round": 11,
+      "position": 1,
+      "implementation": "baseline",
+      "cpu": 3
+    },
+    {
+      "round": 11,
+      "position": 2,
+      "implementation": "candidate",
+      "cpu": 3
+    },
+    {
+      "round": 11,
+      "position": 3,
+      "implementation": "previous",
+      "cpu": 3
+    },
+    {
+      "round": 12,
+      "position": 1,
+      "implementation": "baseline",
+      "cpu": 3
+    },
+    {
+      "round": 12,
+      "position": 2,
+      "implementation": "previous",
+      "cpu": 3
+    },
+    {
+      "round": 12,
+      "position": 3,
+      "implementation": "candidate",
+      "cpu": 3
+    }
+  ],
+  "all_sizes_bytes": [
+    64,
+    4096,
+    65536
+  ],
+  "needle": "abaa",
+  "finished_utc": "2026-11-21T17:45:55Z",
+  "load_end": [
+    7.3818359375,
+    7.28125,
+    6.02783203125
+  ]
+}

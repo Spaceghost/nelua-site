@@ -1,0 +1,49 @@
+{
+  "platform": "Fedora Linux 44 (x86-64)",
+  "scope": "Host-profile CI; all benchmark timings were recorded separately in the canonical Debian guest.",
+  "measured_revision": "70bcd89457f2b1433916747df715ea8546e54ffb",
+  "tested_revision": "70bcd89457f2b1433916747df715ea8546e54ffb",
+  "run_id": 44932971641,
+  "attempt": 1,
+  "started_utc": "2026-11-21T17:58:59Z",
+  "completed_utc": "2026-11-21T18:00:33Z",
+  "conclusion": "success",
+  "checks": [
+    {
+      "name": "Fedora runner and toolchains",
+      "started_at": "2026-11-21T17:59:07Z",
+      "completed_at": "2026-11-21T17:59:07Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "platform-operation vocabulary in sync",
+      "started_at": "2026-11-21T17:59:07Z",
+      "completed_at": "2026-11-21T17:59:07Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "host archives, link checks, hosted smoke",
+      "started_at": "2026-11-21T17:59:07Z",
+      "completed_at": "2026-11-21T17:59:36Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Bend 2 IO.print through the host profile",
+      "started_at": "2026-11-21T17:59:36Z",
+      "completed_at": "2026-11-21T17:59:54Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "standalone and freestanding smokes",
+      "started_at": "2026-11-21T17:59:54Z",
+      "completed_at": "2026-11-21T18:00:02Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "generated-C snapshot rebuilt with zig cc and gcc",
+      "started_at": "2026-11-21T18:00:02Z",
+      "completed_at": "2026-11-21T18:00:27Z",
+      "conclusion": "success"
+    }
+  ]
+}

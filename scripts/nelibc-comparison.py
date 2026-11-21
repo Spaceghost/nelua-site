@@ -105,17 +105,29 @@ if current_gate:
   block+=(f'<p>On {esc(ci["completed_utc"][:10])}, CI on {esc(ci["platform"])} passed the host, Bend, standalone, '
           f'freestanding and generated-C checks at <code>{esc(ci["tested_revision"][:8])}</code>. '
           f'The library source matches the benchmark revision. <a href="{url}/host-ci.json">Fedora check results</a>.</p>')
-block+=f'<div class="performance-summary"><h2 class="section" id="performance">Performance</h2><p class="eyebrow">{date} · Linux x86-64</p>'
-block+=phase_headline(data, rows)
-block+=f'<p>Each profile compares the same consumer with and without Nelibc. Speedups above 1× favor Nelibc. <a href="#all-results">Browse {len(rows)} results across {len(labels)} profiles.</a></p></div>'
-block+=render_results(rows, labels, url)
-if repeat_name := followup.get('frequency_repeat'):
- assert re.fullmatch(r'strstr-repeat-[0-9]{8}', repeat_name)
+repeat_name=followup.get('frequency_repeat')
+if repeat_name:
+ assert re.fullmatch(r'strstr-repeat-[0-9]{8}(?:-[a-z0-9-]+)?', repeat_name)
  repeat_url=url.rsplit('/',1)[0]+'/'+repeat_name
  repeat_dir=data.parent/repeat_name
  manifest=json.loads((repeat_dir/'strstr-repeat-manifest.json').read_text())
  assert manifest['source_commit']=={'previous':meta['previous_commit'],'candidate':source_commit}
  repeat_summary=json.loads((repeat_dir/'strstr-repeat-summary.json').read_text())
+block+=f'<div class="performance-summary"><h2 class="section" id="performance">Performance</h2><p class="eyebrow">{date} · Linux x86-64</p>'
+if followup.get('headline_case')=='first-sparse-then-dense':
+ measured=repeat_summary['first-sparse-then-dense']
+ times=measured['median_ns']
+ gain=measured['previous_over_candidate']['median']
+ block+=(f'<p class="lead">On the 64 KiB substring search that previously favored glibc, Nelibc fell from '
+         f'<strong>{times["previous"]/1000:.2f} to {times["candidate"]/1000:.2f} µs</strong> per call. '
+         f'Native glibc took {times["baseline"]/1000:.2f} µs. The median paired speedup over the previous Nelibc was {gain:.1f}×.</p>'
+         '<p>The input starts with 16 <code>b</code> bytes followed by <code>a</code> bytes and contains no <code>abaa</code>. '
+         '<a href="#substring-repeat">Compare all three 64 KiB inputs.</a></p>')
+else:
+ block+=phase_headline(data, rows)
+block+=f'<p>Each profile compares the same consumer with and without Nelibc. Speedups above 1× favor Nelibc. <a href="#all-results">Browse {len(rows)} results across {len(labels)} profiles.</a></p></div>'
+block+=render_results(rows, labels, url)
+if repeat_name:
  distro_inputs={'first-dense-then-sparse':'16 a bytes, then b bytes', 'first-sparse-then-dense':'16 b bytes, then a bytes','equal-frequency':'Alternating a and b bytes'}
  repeat_rows=[]
  for case,description in distro_inputs.items():
@@ -151,7 +163,7 @@ if any('previous_ns' in r for r in rows):
   r=next(r for r in load('strcmp-distribution.json') if r['bytes']==65536 and r['left_offset']==r['right_offset']==0 and r['case']=='equal')
   ns=r['median_ns']
   block+=f'<p class="small muted">The separate alignment consumer measured equal 64 KiB strcmp at offsets (0,0): previous {ns["previous"]:.2f}, new {ns["candidate"]:.2f}, glibc {ns["baseline"]:.2f} ns. Long-string results differ between consumers; the headline gains do not mean every case improved.</p>'
- evidence_links=[('optimization-notes.md','Optimization notes and verification'),('strcmp-distribution.json','String alignment/mismatch results'),('memory-distribution.json','Memory alignment results'),('scan-distribution.json','Length/search alignment and match positions'),('previous-source.tar.gz','Previous candidate source'),('strstr-distribution.csv','Substring input distributions'),('strstr-phase-controls.csv','Changing-byte-frequency controls'),('before-summary.csv','Pre-change run on the build host'),('before-raw.csv','Pre-change raw pairs'),('before-manifest.json','Pre-change build manifest'),('reproduce.md','Reproduce this comparison'),('preliminary-conformance.json','Earlier candidate under I/O load')]
+ evidence_links=[('validation.json','Independent numerical and guard-page checks'),('optimization-notes.md','Optimization notes and verification'),('strcmp-distribution.json','String alignment/mismatch results'),('memory-distribution.json','Memory alignment results'),('scan-distribution.json','Length/search alignment and match positions'),('previous-source.tar.gz','Previous candidate source'),('strstr-distribution.csv','Substring input distributions'),('strstr-phase-controls.csv','Changing-byte-frequency controls'),('before-summary.csv','Pre-change run on the build host'),('before-raw.csv','Pre-change raw pairs'),('before-manifest.json','Pre-change build manifest'),('reproduce.md','Reproduce this comparison'),('preliminary-conformance.json','Earlier candidate under I/O load')]
  block+='<p>'+' · '.join(f'<a href="{url}/{file}">{label}</a>' for file,label in evidence_links if (data/file).exists())+'</p>'
  if source_commit:
   block+=f'<p>Measured revisions: <code>{esc(meta["previous_commit"][:12])}</code> before the change and <code>{esc(source_commit[:12])}</code> after it. The manifest identifies each linked archive by SHA-256.</p>'

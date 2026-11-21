@@ -1,0 +1,53 @@
+{
+  "first-dense-then-sparse": {
+    "median_ns": {
+      "baseline": 2476.44,
+      "previous": 1394.365,
+      "candidate": 1374.405
+    },
+    "baseline_over_candidate": {
+      "median": 1.8160789705326015,
+      "min": 1.702105662198022,
+      "max": 1.9183612177327198
+    },
+    "previous_over_candidate": {
+      "median": 1.0183755044536484,
+      "min": 0.9489256996037221,
+      "max": 1.166822936505611
+    }
+  },
+  "first-sparse-then-dense": {
+    "median_ns": {
+      "baseline": 2511.3450000000003,
+      "previous": 102502.94,
+      "candidate": 1394.695
+    },
+    "baseline_over_candidate": {
+      "median": 1.7951267456785962,
+      "min": 1.7151643660567595,
+      "max": 2.133521977538633
+    },
+    "previous_over_candidate": {
+      "median": 73.41991256474236,
+      "min": 70.71238623582907,
+      "max": 76.31967572793872
+    }
+  },
+  "equal-frequency": {
+    "median_ns": {
+      "baseline": 58609.675,
+      "previous": 39927.72,
+      "candidate": 40022.255000000005
+    },
+    "baseline_over_candidate": {
+      "median": 1.462727650802948,
+      "min": 1.4502844463165272,
+      "max": 1.4851655641888317
+    },
+    "previous_over_candidate": {
+      "median": 0.9976898961754119,
+      "min": 0.9845947080891503,
+      "max": 1.0288012203321633
+    }
+  }
+}

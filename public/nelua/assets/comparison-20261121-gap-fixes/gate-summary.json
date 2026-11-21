@@ -1,0 +1,76 @@
+{
+  "date_utc": "2026-11-21",
+  "source_commit": "70bcd89457f2b1433916747df715ea8546e54ffb",
+  "results": [
+    {
+      "target": "sys-ops-check",
+      "exit": 0,
+      "seconds": 5
+    },
+    {
+      "target": "purity-check",
+      "exit": 0,
+      "seconds": 1
+    },
+    {
+      "target": "smoke-cosmo",
+      "exit": 0,
+      "seconds": 103
+    },
+    {
+      "target": "host-matrix",
+      "exit": 0,
+      "seconds": 70
+    },
+    {
+      "target": "host-bend-hello-zig",
+      "exit": 0,
+      "seconds": 33
+    },
+    {
+      "target": "host-bend-parallel-zig",
+      "exit": 0,
+      "seconds": 7
+    },
+    {
+      "target": "host-snapshot-matrix",
+      "exit": 0,
+      "seconds": 15
+    },
+    {
+      "target": "dogfood-matrix",
+      "exit": 0,
+      "seconds": 123
+    },
+    {
+      "target": "smoke-matrix",
+      "exit": 0,
+      "seconds": 181
+    },
+    {
+      "target": "libc-test-gcc",
+      "exit": 0,
+      "seconds": 32
+    },
+    {
+      "target": "libc-test-zig",
+      "exit": 0,
+      "seconds": 85
+    },
+    {
+      "target": "libc-test-standalone-gcc",
+      "exit": 0,
+      "seconds": 29
+    },
+    {
+      "target": "libc-test-standalone-zig",
+      "exit": 0,
+      "seconds": 21
+    },
+    {
+      "target": "shootout-matrix",
+      "exit": 0,
+      "seconds": 737
+    }
+  ]
+}

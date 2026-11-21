@@ -1,0 +1,120 @@
+{
+  "source_commit": "70bcd89457f2b1433916747df715ea8546e54ffb",
+  "previous_commit": "f9ae990711f50a3e2b5cec670cd56d1867969ef7",
+  "corpus_commit": "63e36e934e8f2bedf645303a90b64098e2af6c8f",
+  "archive_sha256": {
+    "glibc": "464e7e4228ff98d792230a5c67b3fc600cdbc238ffb7ea4b3c149fa13f19b324",
+    "musl": "59b84f037734986d9d3c874e54278e08ec78b77249af5b3b63aa573a81e24f11",
+    "cosmopolitan": "52ff083468f1ed9c09247c6f4296ad5fbce4510a30239346b0557251e5e79dcc"
+  },
+  "previous_archive_sha256": {
+    "glibc": "c53aa3ff327bf6ffdddc5926b87b65505cd401262f8acfda26be2af9e2ccde5d",
+    "musl": "10d23b0f814423eed2afdc8ea2437e842e9f000ad9766c759ec3a9c6e56996ac",
+    "cosmopolitan": "52fd435ff8ae1e0744ae7a49aeff522b63f5f8ed5229b66c3429fe9a26152624"
+  },
+  "driver_sha256": "7564501c5899e9b642332886e21c1c7bd35aa996c2d483fec1bd9e77b85be240",
+  "ape_sha256": "cc31af13515fcf091768bfbf12da899286b35ff1bf1302f304936db4b03d512e",
+  "started_utc": "2026-11-21T17:45:47Z",
+  "compiler_cpus": [
+    4,
+    5
+  ],
+  "finished_utc": "2026-11-21T17:49:27Z",
+  "case_count": 343,
+  "case_set_sha256": "d8564bb1b75a611d70f6072363bc015e7caf6dc28d71e18dd9e54c5b5d7fdf0b",
+  "supervisor_sha256": "ed6f3ac16c298c60a539c390b6731bfe7de76ea55f4dbe2606283226fec6bef7",
+  "raw_results_sha256": "47b4efe168dd31441aeafe0e6e75146ae02dd469a14a1d8032e772b3531628f1",
+  "method": "Six clean upstream extractions, fresh compilation and linking for both halves of all three pairs. Every executable and failure record was checked against its compiler or linker invocation and corresponding case result.",
+  "profiles": {
+    "glibc-baseline": {
+      "statuses": {
+        "pass": 301,
+        "build_failure": 4,
+        "link_failure": 0,
+        "runtime_failure": 37,
+        "timeout": 1,
+        "not_run": 0
+      },
+      "executables": 339,
+      "executable_set_sha256": "5634b43675760adabfe6efd3761e04cd03059303d3944287ff91db4b50fabf51",
+      "diagnostic_set_sha256": "49df961e689289bf284a94e23df6f1f7a4f8ad86d41d572ec67db83526af0efc",
+      "build_log_sha256": "3f7a7652780bcf31c1fe4607d5f30f224fb9dd5c5c1e66255d6e097e5475088e",
+      "config_sha256": "7efaa3de992f292e3c4a54e229e117888f9f5da842d0fdcb2acc50f6458acba9"
+    },
+    "glibc-nelibc": {
+      "statuses": {
+        "pass": 325,
+        "build_failure": 4,
+        "link_failure": 0,
+        "runtime_failure": 13,
+        "timeout": 1,
+        "not_run": 0
+      },
+      "executables": 339,
+      "executable_set_sha256": "d6db3860dc3017c9ad68a20b7bfbef8a7002d9a7eb02ea78ae14ba8a59b28480",
+      "diagnostic_set_sha256": "02d7c6406506399c60d90a9cbb206b3f9472b47edd9c3a7821793d67848f9cfc",
+      "build_log_sha256": "5232ae3c6e7ad6e9b300952c901c6b3f50514ba021d6cb66c22e5f268398e164",
+      "config_sha256": "208b982afcb1a1b748034aa7130e74f58541f458ff115f0886fed97be91ccc41"
+    },
+    "musl-baseline": {
+      "statuses": {
+        "pass": 327,
+        "build_failure": 0,
+        "link_failure": 1,
+        "runtime_failure": 15,
+        "timeout": 0,
+        "not_run": 0
+      },
+      "executables": 342,
+      "executable_set_sha256": "753a686481c5945ba3178492e6bf9f8dc2a770191b13a7af75057643cf6d159b",
+      "diagnostic_set_sha256": "f7be0cc0ef0c214a3c2aa73e7e5f5588f6d38129de4b4fd719af9913514c10f6",
+      "build_log_sha256": "59094ebf1aee488f44eac452e3697bc38a091d2a0e5642321d784f3c239664fa",
+      "config_sha256": "8aca6965d958ae69a6c0f989cc72b21b23d0eb80c4f4b124dd536ba385a6ae4f"
+    },
+    "musl-nelibc": {
+      "statuses": {
+        "pass": 333,
+        "build_failure": 0,
+        "link_failure": 1,
+        "runtime_failure": 9,
+        "timeout": 0,
+        "not_run": 0
+      },
+      "executables": 342,
+      "executable_set_sha256": "afb9f24cd008daf8fb8474eb254e1e10ed6edb03a78804d9c5b864c1f4cbee7e",
+      "diagnostic_set_sha256": "d00de96180d87cb5daa0f7a418770c9d20f3150b90af319733cbf3e3f744f049",
+      "build_log_sha256": "ee38e1dfe27f628ad330c8d6f3eb6c1a2f6f652a05da0204abb300c11b4e6aa3",
+      "config_sha256": "a3e474971d7a3a6ed17507c7954048b78d9101ecd91f7063e7d9b9010f63dfd1"
+    },
+    "cosmopolitan-baseline": {
+      "statuses": {
+        "pass": 279,
+        "build_failure": 11,
+        "link_failure": 10,
+        "runtime_failure": 43,
+        "timeout": 0,
+        "not_run": 0
+      },
+      "executables": 322,
+      "executable_set_sha256": "887e1eb28e8d1873e54199bb32e6b607a7950a943677f4cab297c1b8a16a7255",
+      "diagnostic_set_sha256": "f54c442b6d28c46985ccf490914149e6b09dda81b22314cecb1a1c036bc7a3b4",
+      "build_log_sha256": "bdddafe0be2e7e3f819f744effde98a72ae3ecc15884bbd8235032e34a0a6d53",
+      "config_sha256": "11bb3a778c35d5747330f1d85c84f4a67a12914003a1d39d6ef4db329194e302"
+    },
+    "cosmopolitan-nelibc": {
+      "statuses": {
+        "pass": 301,
+        "build_failure": 11,
+        "link_failure": 4,
+        "runtime_failure": 26,
+        "timeout": 1,
+        "not_run": 0
+      },
+      "executables": 328,
+      "executable_set_sha256": "9d4433de575603447403afc53c55b8def7784d177f6a518d1594f44bc3528325",
+      "diagnostic_set_sha256": "a33f2b87df3054af7a8516b5d96a2117871f4b4cbd8018918ae1a06142ec0bbf",
+      "build_log_sha256": "910e0bfb804b92d4408f5acaa9e4a2d0ab0f997d9edeea73f606b28d9855f322",
+      "config_sha256": "090d21d1b6612bb68a9a6588b500081c4f69303805b85189fbd883039e4dac9c"
+    }
+  }
+}

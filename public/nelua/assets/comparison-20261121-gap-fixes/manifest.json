@@ -1,0 +1,629 @@
+{
+  "date_utc": "2026-11-21T17:45:55Z",
+  "platform": "Linux-6.18.54-0-lts-x86_64-with-glibc2.36",
+  "cpu_model": "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+  "allowed_cpus": [
+    3
+  ],
+  "cpu": 3,
+  "load_start": [
+    7.3818359375,
+    7.28125,
+    6.02783203125
+  ],
+  "load_end": [
+    8.92041015625,
+    7.73095703125,
+    6.29150390625
+  ],
+  "pairs": 7,
+  "profiles": {
+    "glibc": {
+      "cc": [
+        "gcc"
+      ],
+      "flags": [],
+      "archive": "build/libnelibc-gcc.a",
+      "link": [],
+      "version": "glibc 2.36"
+    },
+    "musl": {
+      "cc": [
+        "$ZIG",
+        "cc",
+        "-mcpu=x86_64",
+        "-target",
+        "x86_64-linux-musl"
+      ],
+      "flags": [
+        "-static"
+      ],
+      "archive": "build/libnelibc-zig-musl.a",
+      "link": [
+        "-Wl,-u,nelibc_hybrid_free",
+        "-Wl,--wrap=fread",
+        "-Wl,--wrap=fwrite",
+        "-Wl,--wrap=fflush",
+        "-Wl,--wrap=fileno",
+        "-Wl,--wrap=feof",
+        "-Wl,--wrap=ferror",
+        "-Wl,--wrap=clearerr",
+        "-Wl,--wrap=ungetc",
+        "-Wl,--wrap=freopen",
+        "-Wl,--wrap=fgetpos",
+        "-Wl,--wrap=fsetpos",
+        "-Wl,--wrap=fseek",
+        "-Wl,--wrap=ftell",
+        "-Wl,--wrap=fseeko",
+        "-Wl,--wrap=ftello",
+        "-Wl,--wrap=setvbuf",
+        "-Wl,--wrap=flockfile",
+        "-Wl,--wrap=ftrylockfile",
+        "-Wl,--wrap=funlockfile",
+        "-Wl,--wrap=fclose",
+        "-Wl,--wrap=localeconv",
+        "-Wl,--wrap=setlocale",
+        "-Wl,--wrap=atexit",
+        "-Wl,--wrap=exit",
+        "-Wl,--wrap=free",
+        "-Wl,--wrap=realloc"
+      ],
+      "version": "Zig 0.17.0 bundled musl; see source/toolchain manifest"
+    },
+    "cosmopolitan": {
+      "cc": [
+        "$COSMO/bin/x86_64-unknown-cosmo-cc"
+      ],
+      "flags": [],
+      "archive": "build/libnelibc-cosmo.a",
+      "link": [],
+      "version": "4.0.2"
+    }
+  },
+  "commands": [
+    [
+      "gcc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "-Wl,-Map,$RUN/final/glibc-baseline.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/glibc-baseline"
+    ],
+    [
+      "gcc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "$RUN/previous/libnelibc-gcc.a",
+      "-Wl,-Map,$RUN/final/glibc-previous.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/glibc-previous"
+    ],
+    [
+      "gcc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "$NELIBC/build/libnelibc-gcc.a",
+      "-Wl,-Map,$RUN/final/glibc-nelibc.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/glibc-nelibc"
+    ],
+    [
+      "$ZIG",
+      "cc",
+      "-mcpu=x86_64",
+      "-target",
+      "x86_64-linux-musl",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "-static",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/musl-baseline"
+    ],
+    [
+      "$ZIG",
+      "cc",
+      "-mcpu=x86_64",
+      "-target",
+      "x86_64-linux-musl",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "-static",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "-Wl,-u,nelibc_hybrid_free",
+      "-Wl,--wrap=fread",
+      "-Wl,--wrap=fwrite",
+      "-Wl,--wrap=fflush",
+      "-Wl,--wrap=fileno",
+      "-Wl,--wrap=feof",
+      "-Wl,--wrap=ferror",
+      "-Wl,--wrap=clearerr",
+      "-Wl,--wrap=ungetc",
+      "-Wl,--wrap=freopen",
+      "-Wl,--wrap=fgetpos",
+      "-Wl,--wrap=fsetpos",
+      "-Wl,--wrap=fseek",
+      "-Wl,--wrap=ftell",
+      "-Wl,--wrap=fseeko",
+      "-Wl,--wrap=ftello",
+      "-Wl,--wrap=setvbuf",
+      "-Wl,--wrap=flockfile",
+      "-Wl,--wrap=ftrylockfile",
+      "-Wl,--wrap=funlockfile",
+      "-Wl,--wrap=fclose",
+      "-Wl,--wrap=localeconv",
+      "-Wl,--wrap=setlocale",
+      "-Wl,--wrap=atexit",
+      "-Wl,--wrap=exit",
+      "-Wl,--wrap=free",
+      "-Wl,--wrap=realloc",
+      "$RUN/previous/libnelibc-zig-musl.a",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/musl-previous"
+    ],
+    [
+      "$ZIG",
+      "cc",
+      "-mcpu=x86_64",
+      "-target",
+      "x86_64-linux-musl",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "-static",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "-Wl,-u,nelibc_hybrid_free",
+      "-Wl,--wrap=fread",
+      "-Wl,--wrap=fwrite",
+      "-Wl,--wrap=fflush",
+      "-Wl,--wrap=fileno",
+      "-Wl,--wrap=feof",
+      "-Wl,--wrap=ferror",
+      "-Wl,--wrap=clearerr",
+      "-Wl,--wrap=ungetc",
+      "-Wl,--wrap=freopen",
+      "-Wl,--wrap=fgetpos",
+      "-Wl,--wrap=fsetpos",
+      "-Wl,--wrap=fseek",
+      "-Wl,--wrap=ftell",
+      "-Wl,--wrap=fseeko",
+      "-Wl,--wrap=ftello",
+      "-Wl,--wrap=setvbuf",
+      "-Wl,--wrap=flockfile",
+      "-Wl,--wrap=ftrylockfile",
+      "-Wl,--wrap=funlockfile",
+      "-Wl,--wrap=fclose",
+      "-Wl,--wrap=localeconv",
+      "-Wl,--wrap=setlocale",
+      "-Wl,--wrap=atexit",
+      "-Wl,--wrap=exit",
+      "-Wl,--wrap=free",
+      "-Wl,--wrap=realloc",
+      "$NELIBC/build/libnelibc-zig-musl.a",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/musl-nelibc"
+    ],
+    [
+      "$COSMO/bin/x86_64-unknown-cosmo-cc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "-Wl,-Map,$RUN/final/cosmopolitan-baseline.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/cosmopolitan-baseline"
+    ],
+    [
+      "$COSMO/bin/x86_64-unknown-cosmo-cc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "$RUN/previous/libnelibc-cosmo.a",
+      "-Wl,-Map,$RUN/final/cosmopolitan-previous.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/cosmopolitan-previous"
+    ],
+    [
+      "$COSMO/bin/x86_64-unknown-cosmo-cc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "$NELIBC/build/libnelibc-cosmo.a",
+      "-Wl,-Map,$RUN/final/cosmopolitan-nelibc.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/cosmopolitan-nelibc"
+    ]
+  ],
+  "source_base": "70bcd89457f2b1433916747df715ea8546e54ffb",
+  "source_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "benchmark_sha256": "b5a81a2b8d7fc1d78ad79211eadac13c4745ef45fa1109c7418ad151279faac7",
+  "compiler_versions": {
+    "glibc": "gcc (Debian 12.2.0-14+deb12u1) 12.2.0",
+    "musl": "clang version 22.1.8",
+    "cosmopolitan": "x86_64-unknown-cosmo-cc (GCC) 14.1.0"
+  },
+  "archive_sha256": {
+    "glibc": "464e7e4228ff98d792230a5c67b3fc600cdbc238ffb7ea4b3c149fa13f19b324",
+    "musl": "59b84f037734986d9d3c874e54278e08ec78b77249af5b3b63aa573a81e24f11",
+    "cosmopolitan": "52ff083468f1ed9c09247c6f4296ad5fbce4510a30239346b0557251e5e79dcc"
+  },
+  "previous_archive_sha256": {
+    "glibc": "c53aa3ff327bf6ffdddc5926b87b65505cd401262f8acfda26be2af9e2ccde5d",
+    "musl": "10d23b0f814423eed2afdc8ea2437e842e9f000ad9766c759ec3a9c6e56996ac",
+    "cosmopolitan": "52fd435ff8ae1e0744ae7a49aeff522b63f5f8ed5229b66c3429fe9a26152624"
+  },
+  "binary_bytes": {
+    "glibc": {
+      "baseline": 22544,
+      "previous": 681864,
+      "nelibc": 682016
+    },
+    "musl": {
+      "baseline": 1471112,
+      "previous": 3516976,
+      "nelibc": 3524616
+    },
+    "cosmopolitan": {
+      "baseline": 1682126,
+      "previous": 1726478,
+      "nelibc": 1726606
+    }
+  },
+  "runtime_census_libraries": {
+    "$ZIG_GLOBAL_CACHE_DIR/o/6e2ba3cf8618c64e9b1aa88ad8a08e41/libc.a": {
+      "sha256": "72ad7b2c78ce2a3291dda6effee05bc3e25a5e8f5be4ff4a486068de39174a33",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/6e2ba3cf8618c64e9b1aa88ad8a08e41/libc.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/ef3eeddeb3da35abcd12411a832b4c4c/libc.a": {
+      "sha256": "e00dfecad985c252716619a485b9e4cd7082e2c39f890b8ab56ec6c0258c24fe",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/ef3eeddeb3da35abcd12411a832b4c4c/libc.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/01d1c593bdd65f41c47c80b3218c604c/libzigc.a": {
+      "sha256": "fad8a8d650acc50f031e1e08e520b505468e09ea61901899d4027646abeefd01",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/01d1c593bdd65f41c47c80b3218c604c/libzigc.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/38bb4669a59f96c747e8f55553705f89/libzigc.a": {
+      "sha256": "a735f4144991e723029474abc0062ec1870dfacbbba15bf3019f1627b59ccc72",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/38bb4669a59f96c747e8f55553705f89/libzigc.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/a7ef71a4242a74b3163249a976fcaecd/libcompiler_rt.a": {
+      "sha256": "4e704ce2a545b23a558977a410e3149f682adabac05ddecdb3dc52a5a821d551",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/a7ef71a4242a74b3163249a976fcaecd/libcompiler_rt.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/394094132e1aa8cef2267718730a77ba/libcompiler_rt.a": {
+      "sha256": "852b15991ff942878304536552fe0be168f7598ffecc1654ee20da314c7748eb",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/394094132e1aa8cef2267718730a77ba/libcompiler_rt.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/6f29148d5a15fdba78819c9e65c1bffb/libcompiler_rt.a": {
+      "sha256": "6948df22d954367a7869ca43cd382d10bd17713aa423958ca8df8c10ea805ca6",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/6f29148d5a15fdba78819c9e65c1bffb/libcompiler_rt.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/92de8e09e02229332f4b5aa4f0b18417/libcompiler_rt.a": {
+      "sha256": "86b38e7b712dc534446e0e46213b58a5b565f9d977763f7bb355345481a2a233",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/92de8e09e02229332f4b5aa4f0b18417/libcompiler_rt.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/6a0eabfc40cbf2a18235ac40295b67a4/libcompiler_rt.a": {
+      "sha256": "a34d589ac49a13dd0d5e12698a8e692602a5a609822597c9afc20cc38d8a8324",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/6a0eabfc40cbf2a18235ac40295b67a4/libcompiler_rt.a"
+      ]
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.a": {
+      "sha256": "8e5252c4b87e3d588e2d15e624502277c5d3bfb382fec7a5199ae752080b372c",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "/usr/lib/x86_64-linux-gnu/libc.a"
+      ]
+    },
+    "/usr/lib/x86_64-linux-gnu/libm-2.36.a": {
+      "sha256": "c6382c1c6d14aa90d002f3ca1911f1b7477bf0b5b685c30de278076bbab95100",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "/usr/lib/x86_64-linux-gnu/libm-2.36.a"
+      ]
+    },
+    "/usr/lib/x86_64-linux-gnu/libmvec.a": {
+      "sha256": "8ae76fe83cc08f346773d1bc334f8fe4fa80f934236ae63c87468e3e17733fde",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "/usr/lib/x86_64-linux-gnu/libmvec.a"
+      ]
+    },
+    "$COSMO/x86_64-linux-cosmo/lib/libcosmo.a": {
+      "sha256": "d24abcb2cbdf7aa9cdde0fb09a62964527370070c21d8741413bb7c530d31f31",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$COSMO/x86_64-linux-cosmo/lib/libcosmo.a"
+      ]
+    }
+  },
+  "runtime_census_script_sha256": "6d731e8736b8704e45bdc1c5be3b2ed8f34623824ac233e16fc8d843a66a9c3e",
+  "source_commit": "70bcd89457f2b1433916747df715ea8546e54ffb",
+  "previous_commit": "f9ae990711f50a3e2b5cec670cd56d1867969ef7",
+  "affinity_observations": [
+    {
+      "at": "2026-11-21T17:45:55Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.3818359375
+    },
+    {
+      "at": "2026-11-21T17:45:58Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.19091796875
+    },
+    {
+      "at": "2026-11-21T17:46:01Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.19091796875
+    },
+    {
+      "at": "2026-11-21T17:46:04Z",
+      "affinity": [
+        3
+      ],
+      "load1": 6.93505859375
+    },
+    {
+      "at": "2026-11-21T17:46:07Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.3408203125
+    },
+    {
+      "at": "2026-11-21T17:46:10Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.3408203125
+    },
+    {
+      "at": "2026-11-21T17:46:13Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.55419921875
+    },
+    {
+      "at": "2026-11-21T17:46:16Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.55419921875
+    },
+    {
+      "at": "2026-11-21T17:46:19Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.59033203125
+    },
+    {
+      "at": "2026-11-21T17:46:22Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.462890625
+    },
+    {
+      "at": "2026-11-21T17:46:25Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.462890625
+    },
+    {
+      "at": "2026-11-21T17:46:28Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.90673828125
+    },
+    {
+      "at": "2026-11-21T17:46:31Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.90673828125
+    },
+    {
+      "at": "2026-11-21T17:46:34Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.75390625
+    },
+    {
+      "at": "2026-11-21T17:46:37Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.61328125
+    },
+    {
+      "at": "2026-11-21T17:46:40Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.61328125
+    },
+    {
+      "at": "2026-11-21T17:46:43Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.724609375
+    },
+    {
+      "at": "2026-11-21T17:46:46Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.724609375
+    },
+    {
+      "at": "2026-11-21T17:46:49Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.66650390625
+    },
+    {
+      "at": "2026-11-21T17:46:52Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.7734375
+    },
+    {
+      "at": "2026-11-21T17:46:55Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.7734375
+    },
+    {
+      "at": "2026-11-21T17:46:58Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.9521484375
+    },
+    {
+      "at": "2026-11-21T17:47:01Z",
+      "affinity": [
+        3
+      ],
+      "load1": 7.9521484375
+    },
+    {
+      "at": "2026-11-21T17:47:04Z",
+      "affinity": [
+        3
+      ],
+      "load1": 9.3173828125
+    },
+    {
+      "at": "2026-11-21T17:47:07Z",
+      "affinity": [
+        3
+      ],
+      "load1": 9.3720703125
+    },
+    {
+      "at": "2026-11-21T17:47:10Z",
+      "affinity": [
+        3
+      ],
+      "load1": 9.3720703125
+    },
+    {
+      "at": "2026-11-21T17:47:13Z",
+      "affinity": [
+        3
+      ],
+      "load1": 9.26171875
+    },
+    {
+      "at": "2026-11-21T17:47:16Z",
+      "affinity": [
+        3
+      ],
+      "load1": 9.26171875
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "source_commit": "70bcd89457f2b1433916747df715ea8546e54ffb",
+  "previous_source_commit": "f9ae990711f50a3e2b5cec670cd56d1867969ef7",
+  "architecture": "x86_64",
+  "outcome": "passed",
+  "archive_sha256": {
+    "gcc_glibc": "464e7e4228ff98d792230a5c67b3fc600cdbc238ffb7ea4b3c149fa13f19b324",
+    "zig_musl": "59b84f037734986d9d3c874e54278e08ec78b77249af5b3b63aa573a81e24f11",
+    "cosmopolitan": "52ff083468f1ed9c09247c6f4296ad5fbce4510a30239346b0557251e5e79dcc"
+  },
+  "guarded_strstr": {
+    "profile": "gcc_glibc",
+    "oracles": [
+      "scalar first-match search",
+      "native glibc strstr"
+    ],
+    "comparison": "First matching byte offset or no match, with input buffers adjacent to inaccessible pages.",
+    "cases": {
+      "total": 128000,
+      "structured": 98000,
+      "random": 30000,
+      "matches": 75148,
+      "misses": 52852,
+      "high_byte_cases": 122189,
+      "embedded_nul_cases": 37249,
+      "explicit_first_or_tail": 42000,
+      "page_bytes": 4096
+    },
+    "test_source_sha256": "f3710beee5e41f6247bab56a8898fbb6b79ed3cfbef4bf35cc05e618f956401b"
+  },
+  "numeric_conversion": {
+    "profile": "gcc_glibc",
+    "previous_archive_sha256": "c53aa3ff327bf6ffdddc5926b87b65505cd401262f8acfda26be2af9e2ccde5d",
+    "before_after_comparison": "Representation of the converted value, end-pointer offset, errno and floating-point exception flags.",
+    "rounding_modes": [
+      "nearest",
+      "downward",
+      "upward",
+      "toward_zero"
+    ],
+    "native_glibc_comparison": "Rounded value, end-pointer offset and errno in round-to-nearest mode.",
+    "decimal": {
+      "functions": [
+        "strtod"
+      ],
+      "inputs": 30399,
+      "before_after_matches": 121596,
+      "native_glibc_nearest_matches": {
+        "strtod": 30399
+      },
+      "preexisting_divide_by_zero_flag_retained": true,
+      "input_sha256": "4aa31da794ada1846ff1ee3c3574f39414ccd6fc347e61d19b8e13f5300228be",
+      "output_sha256": "5a6402be544d856006f283732f02521cb982b9df9e488787d23ed17f0a907000"
+    },
+    "precision": {
+      "functions": [
+        "strtof",
+        "strtold"
+      ],
+      "inputs": 2782,
+      "before_after_matches": 22256,
+      "native_glibc_nearest_matches": {
+        "strtof": 2782,
+        "strtold": 2782
+      },
+      "preexisting_divide_by_zero_flag_retained": true,
+      "input_sha256": "e602ce4e8e9aeb5024a189a07890a1f22ee42cf170aed91144984ff68975a21e",
+      "output_sha256": "65298a3fe9658275e8eb89ab04939e6a7f3b1ff7887d653276ea7070e31808cd"
+    },
+    "test_source_sha256": {
+      "decimal-check.c": "11e6076621b3959fa51e3c6cea8d76b280b126d1ffa275485e8d9971e85329d6",
+      "precision-check.c": "80c1035b292cfffe46f73f266416c02e450af10338da6fabbbc98c0d0610e0cd"
+    }
+  },
+  "native_strlen": {
+    "profile_checks_passed": {
+      "gcc_glibc": 10752,
+      "zig_musl": 10752,
+      "cosmopolitan": 10752
+    },
+    "scope": "High bytes, pointer alignment, length boundaries and guard pages.",
+    "test_source_sha256": "16ed8c697fdce5ba2118eeb061d6f49f8c806fce46bbb57a8d4ddc6ba8db84e7"
+  },
+  "cpu_dispatch": {
+    "profile": "gcc_glibc",
+    "emulator": "QEMU user-mode 7.2.22",
+    "configurations": [
+      {
+        "model": "Nehalem",
+        "avx": false,
+        "osxsave": false,
+        "avx2": false,
+        "xcr0": null,
+        "outcome": "passed"
+      },
+      {
+        "model": "SandyBridge",
+        "avx": true,
+        "osxsave": true,
+        "avx2": false,
+        "xcr0": 7,
+        "outcome": "passed"
+      },
+      {
+        "model": "Haswell,-xsave",
+        "avx": true,
+        "osxsave": false,
+        "avx2": true,
+        "xcr0": null,
+        "outcome": "passed"
+      },
+      {
+        "model": "Haswell",
+        "avx": true,
+        "osxsave": true,
+        "avx2": true,
+        "xcr0": 7,
+        "outcome": "passed"
+      }
+    ],
+    "xcr0_note": "XCR0 is recorded only when OSXSAVE is enabled.",
+    "checks_passed_per_configuration": {
+      "protected_strlen_and_memcmp": 289384,
+      "production_consumer": 1995,
+      "strlen_guard": 10752
+    },
+    "scope": "strlen at all 4096 page offsets, including the 160-byte prefix and 256-byte loop boundaries. memcmp on independently page-bounded buffers with equal contents and ordered mismatches. The production comparison executable and the repository strlen guard also ran on each emulated CPU.",
+    "sha256": {
+      "production_consumer_executable": "6dbd11429c9074e6a4c12c29785a0101f278648818599fb94b2a41e9fac5cc6f",
+      "production_consumer_source": "b5a81a2b8d7fc1d78ad79211eadac13c4745ef45fa1109c7418ad151279faac7",
+      "combined_guard_executable": "81587166c5552ba15c7adcf46ee8c5214d626113bb47aad3ec6640dc6e82848d",
+      "combined_guard_source": "4b63a9b8802dc4b6ef502919d8699cd99492ed007b8f7e362350ff5058a9ff75",
+      "strlen_guard_executable": "e1b6847a88d2257a0578fbe745b2a4cc1a245f8ab478eae71b419894d5a6f6a4"
+    }
+  }
+}

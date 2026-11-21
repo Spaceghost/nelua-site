@@ -1,0 +1,56 @@
+necc generated code and compiler field, 21 November 2026
+Previous compiler  b4d0ead81489a0e814110806e0fb482318784667
+Current compiler   2ebbb9d95777071d1209e65c50e6178b40ada980
+Intel Core i7-11700F, Linux x86-64, Debian 12, CPU 5.
+Both necc executables were built by the same Nelua frontend, GCC 12.2 at -O3 and nelinker.
+Both compilers use the same staged SDK and TinyCC preprocessor with the unlocked output fix.
+The compiler and executable SHA-256 digests and fixture hashes are in checks.json.
+
+Arithmetic workload
+One externally called function takes a run-time count and seed. Starting with x=19,
+the executable computes x=(33*x+i+17)&1048575 for i from 0 to 5,999,999.
+The startup assembly writes its 64-bit result. Each admitted executable must emit
+exactly d3 86 0f 00 00 00 00 00 and exit successfully. The timer includes process
+launch and exit. Compilation and linking happen outside the runtime measurement.
+Zig cc 0.17.0 uses -O2 -mcpu=x86_64 -g0 -fno-sanitize=all. Its executable and the
+previous necc executable match the SHA-256 of the binaries from the earlier
+same-day SDK comparison that exposed the runtime gap.
+
+Full comparison
+23 interleaved rounds plus an untimed round, shuffled with seed 60491. The same
+six compile cases and two runtime cases ran against 13 external configurations.
+The compiler/SDK input and output digests are recorded in checks.json.
+Five compile cases and the Lua VM probe produced byte-identical necc objects before and after.
+The arithmetic kernel produced different machine code and the same runtime result.
+summary.csv records median milliseconds, quartiles and sizes. samples.csv records
+all 2,760 wall times in nanoseconds. A compile is measured through the CLI producing
+its object. Each compile round has a unique inert macro to defeat object caching.
+All 120 configurations/workloads in the timing table qualified. Compile probes and
+the full eight-case fixture set use the same controls as the earlier SDK comparison.
+The Lua VM probe is separate from the timed field. It failed for cproc/QBE (volatile
+store unsupported) and PCC -O (20 s qualification timeout).
+Full-field arithmetic medians: previous 9.318 ms, current 1.626 ms,
+Zig -O2 2.979 ms. The necc kernel's machine code changed from 69 to 154 bytes.
+
+Focused control
+A separate 31-round repeat randomized all three executables in each round and
+checked all 93 returns. Median times: previous 9.990 ms,
+current 1.760 ms, Zig -O2 3.155 ms.
+focused-samples.csv records every sample. No timings were discarded.
+
+Independent validation
+26,299 inputs across 57 separately compiled loop shapes matched a scalar Python model
+and GCC with undefined-behavior sanitization. 23 of those routines changed machine
+code. The full Lua 5.4.6 string implementation produced an identical object, and its
+hash routine matched 263,688 expected results. A balanced 42-round repeat measured
+9.959 ms for the previous necc, 1.722 ms for the new necc, and 3.207 ms for Zig.
+The new executable finished ahead of the frozen Zig executable in all 42 rounds.
+A separate Lua string-hash control measured 42.302 ms before and 42.487 ms after.
+independent-checks.tar.gz includes the drivers, raw samples and per-case checks.
+Archive SHA-256: 5b3f1aebc7a43bebf23f1b1303c8294ea429ecfe7918ba2e67d949fd4fff6b23
+
+Repeat the runtime test using Python 3.11 or newer, x86-64 Linux binutils, the
+two necc builds above, their shared SDK and the pinned Zig compiler:
+  NECC_SYSROOT=/path/to/sdk python3 runtime-replay.py --before /path/to/old/necc --after /path/to/new/necc --zig /path/to/zig --cpu 5 --rounds 31 > samples.csv
+Select a CPU available on the host. The script includes the exact synthetic C kernel,
+the common assembly entry point and an independent scalar check of the result.

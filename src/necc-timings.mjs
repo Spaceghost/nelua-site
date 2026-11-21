@@ -1,8 +1,8 @@
 // Render both compiler tables from the published medians.
 import { readFileSync } from 'node:fs';
 
-function readResults(name) {
-  const csv = readFileSync('public/nelua/assets/necc-20261121/' + name, 'utf8');
+function readResults(name, directory = 'necc-20261121') {
+  const csv = readFileSync('public/nelua/assets/' + directory + '/' + name, 'utf8');
   const [header, ...lines] = csv.trim().split(/\r?\n/);
   const columns = header.split(',');
   return lines.map(line => {
@@ -11,7 +11,7 @@ function readResults(name) {
   });
 }
 
-const records = readResults('summary.csv');
+const records = readResults('summary.csv', 'necc-codegen-20261121');
 const workloads = [
   ['compile', 'tiny', 'Compile tiny C input', 'Tiny C'],
   ['compile', '128-functions', 'Compile 128 functions', '128 functions'],
@@ -25,7 +25,7 @@ const workloads = [
 
 function toolLabel(name) {
   if (name === 'necc-base') return 'necc before';
-  if (name === 'necc-next') return 'necc updated SDK';
+  if (name === 'necc-next') return 'necc updated code generator';
   return name.replace('Zig-cc', 'Zig cc').replace('Clang14', 'Clang 14').replace('cproc-QBE', 'cproc/QBE').replace(/-O(\d)?$/, ' -O$1');
 }
 

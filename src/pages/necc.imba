@@ -67,8 +67,9 @@ export def body
 			<a href="/nelua/nelinker/#archive"> 'direct archive example'
 			'.'
 		<h2 className="section" id="benchmarks"> 'Compiler timings'
-		<p>
-			'On 21 November 2026, rebuilding the SDK’s single-threaded TinyCC preprocessor with Nelibc’s unlocked string output reduced median compile time for 128 functions from 9.370 to 5.425 ms. Compiling the Lua opcode table took 53% less time. Both builds used the same necc executable, and produced byte-identical objects for all six compile workloads and the Lua VM probe.'
+		<h3 id="arithmetic"> 'Generated arithmetic'
+		<p> 'On 21 November 2026 the six-million-iteration kernel took 1.626 ms with necc, 9.318 ms with the previous necc and 2.979 ms with Zig cc -O2. The two reference executables are byte-for-byte identical to those in the earlier comparison.'
+		<p> 'When a register-only integer loop has a unit-stride counter and a state update that is linear in the state and counter, necc can combine 16 iterations. It uses the scalar loop for the remainder. The compiler derives the coefficients and any low-bit mask from the program. Calls, volatile accesses and other observable effects keep the original loop. The generated kernel grew from 69 to 154 bytes.'
 		<p>
 			'Each time below is a median in milliseconds over 23 warm, interleaved rounds on one Intel Core i7-11700F core. The external field contains 13 compiler configurations. Text size is the number of bytes of machine code in necc’s object. The two Lua tables contain data.'
 		<div className="table-wrap" html:role="region" aria-label="Updated compiler medians and object sizes" html:tabindex="0">
@@ -78,7 +79,7 @@ export def body
 					<tr>
 						<th scope="col"> 'Workload'
 						<th className="num" scope="col"> 'necc before (ms)'
-						<th className="num" scope="col"> 'Updated SDK (ms)'
+						<th className="num" scope="col"> 'Updated necc (ms)'
 						<th scope="col"> 'Fastest external (ms)'
 						<th className="num" scope="col"> 'necc text (B)'
 				<tbody>
@@ -89,8 +90,7 @@ export def body
 							<td className="num"> row.after
 							<td> "{row.best} · {row.external}"
 							<td className="num"> row.bytes
-		<p>
-			'The arithmetic executable took 9.729 ms with the updated SDK and 3.071 ms with Zig cc -O2. The SDK change reduces preprocessing time. Both necc builds emit the same 69 bytes of arithmetic code. Zig cc combines four iterations into one scalar multiply, add and mask, while necc performs those operations on each iteration.'
+		<p> 'The optimized executable finished ahead of Zig in all 42 rounds of an independent repeat. Across 57 loop shapes, both necc versions matched the reference on 26,299 inputs. Lua’s string-hash routine kept identical machine code and passed 263,688 output checks.'
 		<details>
 			<summary> 'Compare every compiler configuration'
 			<div className="table-wrap" html:role="region" aria-label="Complete compiler field in milliseconds" html:tabindex="0">
@@ -108,10 +108,19 @@ export def body
 								for median in tool.medians
 									<td className="num"> median
 		<p className="upstream-links">
-			<a href="/nelua/assets/necc-20261121/arithmetic-control.csv"> 'Arithmetic loop control (CSV)'
-			<a href="/nelua/assets/necc-20261121/summary.csv"> 'Timings, quartiles and object sizes (CSV)'
-			<a href="/nelua/assets/necc-20261121/samples.csv"> 'All 2,760 samples (CSV)'
-			<a href="/nelua/assets/necc-20261121/method.txt"> 'Method and correctness checks'
+			<a href="/nelua/assets/necc-codegen-20261121/summary.csv"> 'Timings, quartiles and object sizes (CSV)'
+			<a href="/nelua/assets/necc-codegen-20261121/samples.csv"> 'All 2,760 samples (CSV)'
+			<a href="/nelua/assets/necc-codegen-20261121/focused-samples.csv"> 'Three-way arithmetic repeat (CSV)'
+			<a href="/nelua/assets/necc-codegen-20261121/method.txt"> 'Method and checks'
+			<a href="/nelua/assets/necc-codegen-20261121/runtime-replay.py"> 'Replay the runtime comparison'
+			<a href="/nelua/assets/necc-codegen-20261121/independent-checks.tar.gz"> 'Independent loop and Lua checks'
+		<h3> 'Earlier SDK comparison'
+		<p> 'Earlier on 21 November, changing the SDK preprocessor cut the 128-function compile from 9.370 to 5.425 ms. Both SDKs used the same necc executable and emitted byte-identical objects. The old arithmetic executable took 9.729 ms against Zig’s 3.071 ms. Zig combined four recurrence steps per group, while that necc build executed one step at a time.'
+		<p className="upstream-links">
+			<a href="/nelua/assets/necc-20261121/summary.csv"> 'SDK comparison (CSV)'
+			<a href="/nelua/assets/necc-20261121/samples.csv"> 'Individual SDK timings (CSV)'
+			<a href="/nelua/assets/necc-20261121/arithmetic-control.csv"> 'Zig loop-unrolling control (CSV)'
+			<a href="/nelua/assets/necc-20261121/method.txt"> 'SDK comparison method'
 		<h3 id="compiler-phases"> 'Compiler phase timings'
 		<p>
 			'Preprocessing the 128-function input fell from 5.586 to 1.999 ms in a separate 25-round comparison. The updated necc frontend took 2.774 ms on that preprocessed C, and the SDK assembler took 2.684 ms on its output. TinyCC compiled the original C directly in 2.437 ms. Each figure includes a separate process launch.'

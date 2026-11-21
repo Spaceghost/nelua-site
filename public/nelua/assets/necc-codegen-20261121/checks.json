@@ -1,0 +1,166 @@
+{
+  "date": "2026-11-21",
+  "architecture": "x86-64 Linux",
+  "host_cpu": "Intel Core i7-11700F",
+  "cpu_affinity": [
+    5
+  ],
+  "userland": "Debian 12",
+  "previous_necc": "b4d0ead81489a0e814110806e0fb482318784667",
+  "current_necc": "2ebbb9d95777071d1209e65c50e6178b40ada980",
+  "rounds": 23,
+  "order_seed": 60491,
+  "load_start": [
+    2.1748046875,
+    2.50146484375,
+    6.2109375
+  ],
+  "load_end": [
+    2.896484375,
+    2.60400390625,
+    5.9169921875
+  ],
+  "compiler_sha256": {
+    "previous": "0ed839b499bddc148ef2ed2b266a7a530a27cbbc2a53a84ec49a78544870bdeb",
+    "current": "be28e4808459d8cde318bc88453eeafbdfb94cf53b2cbe35d796a3e075ff17ab"
+  },
+  "runtime_elf_sha256": {
+    "previous": "95dfeb2f8658260dc35ac8d031784ba47ef7dcfa6f3762ddb55d0da43bfc4500",
+    "current": "174265d444a93a65200c08c9cd5c367f786606fed2dad9deedb02923c884dde9",
+    "zig": "f72abe2893b6b6e64bc52a9abe06ab0f34d34c8b801e86dd814b616092f487e9"
+  },
+  "expected_runtime_output_hex": "d3860f0000000000",
+  "inputs": {
+    "tiny": {
+      "tiny.c": "27202e8ffc5f61a1a373e6011a93265102768f85f4ded93290d02a8a39a375f3"
+    },
+    "128-functions": {
+      "128-functions.c": "933b97dcbd8b6a86f56710aaca58130a3ba4ff0c7f343a15440250578044bb46"
+    },
+    "arithmetic": {
+      "arithmetic.c": "fca0b29a799d875172f4eac993f3e72b3e09455646576e566c4561638a828e8d"
+    },
+    "lua-lctype": {
+      "lctype.c": "3e21ae6a8faab3ed470ae0de19360da6b4e21a0a0f8572f502f7e13d590186f8",
+      "expected-bytes-hex": "0000000000000000000008080808080000000000000000000000000000000000000c04040404040404040404040404040416161616161616161616040404040404041515151515150505050505050505050505050505050505050505040404040504151515151515050505050505050505050505050505050505050504040404000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "lua-lopcodes": {
+      "lopcodes.c": "bdc9d39fd8bf1a350c0249f726c5f61bef64b122b93a0fbc172b0328dc01f594",
+      "expected-bytes-hex": "080a0a0909080808080800080808080000000008080808080808080808080808080808080808080808080808080880808008080808080000041010101010101010101018686820000009090100092009482803"
+    },
+    "selfhost": {
+      "stage3.c": "fb20d11167d3ef9fd9892f35744a2f861b8c714895b79687a0a65244f710af61",
+      "runtime.o": "b906ae4465557537ab5597304561b2b84618a6dde53704f8f867a98bb6ae6971",
+      "compiler.nelua": "2ca95c99eeb79de83ab1950a80bd96774db7b244dc444dc434f456e5b6b54a55",
+      "libnelibc.a": "ee83d55a02a33755bb5131977f17d8eae5a1c176c045318125496d0d2186635f",
+      "libtcc1.a": "e52d70d00ca3c1b05d6c2a84d8c54c5baff7ee1b5e1b2c7a12409011df1f5692"
+    },
+    "lua-vm": {
+      "lvm.c": "4a9267ba75167f67eea3287abb05ac8154ea2c3e6c9159c6409fcd29a086c7d4"
+    },
+    "C-result-driver": {
+      "driver.o": "d27c5cc3df7db44006760cc112ab91f9de3838be8040b2d345e879de36f43127"
+    }
+  },
+  "external_compiler_sha256": {
+    "TinyCC": "9b1ff67ab808384fe12e03b15183ff2110c4e555cc87e6a1fe6b0013c85d8795",
+    "GCC-O0": "75e997ec62297a6484f491bae28ab0ccb489daba23e398fd10fe68e9e6f0def8",
+    "GCC-O2": "75e997ec62297a6484f491bae28ab0ccb489daba23e398fd10fe68e9e6f0def8",
+    "Clang14-O0": "71b0de1b06b1ffe3a68f1b15f3bfff1f80ba3351ac679be346fb515327494157",
+    "Clang14-O2": "71b0de1b06b1ffe3a68f1b15f3bfff1f80ba3351ac679be346fb515327494157",
+    "Zig-cc-O0": "7c61539af19fa4082c94848f1c2b57b89e76dc6cfd5bd4c57764c3caf8f82272",
+    "Zig-cc-O2": "7c61539af19fa4082c94848f1c2b57b89e76dc6cfd5bd4c57764c3caf8f82272",
+    "chibicc": "ad8b7ea99918253efb0fe7b03ddef9c161ba90acd7a3cda0e1073885d97955a9",
+    "lacc": "1e159992d2f4572ab8e8bb849f17e00083d976ceb1661c346cf83253a7a023e7",
+    "lacc-O2": "1e159992d2f4572ab8e8bb849f17e00083d976ceb1661c346cf83253a7a023e7",
+    "cproc-QBE": "52b70c84e52ecf0b5e6476f3f19771a582ed9b4e32cc2749a80a07bdcfd18de3",
+    "PCC": "94f4d2e9b0bc4d5da00c7ff26269fdeeccb64ae8c3c43b12f02c607d63f5a3f9",
+    "PCC-O": "94f4d2e9b0bc4d5da00c7ff26269fdeeccb64ae8c3c43b12f02c607d63f5a3f9"
+  },
+  "necc_objects": {
+    "tiny": {
+      "previous": {
+        "bytes": 991,
+        "text_bytes": 16,
+        "sha256": "4d2a537150bfb2c850591c6d845f71a65f89c6b738829c25d7326f4237d1cfe5"
+      },
+      "current": {
+        "bytes": 991,
+        "text_bytes": 16,
+        "sha256": "4d2a537150bfb2c850591c6d845f71a65f89c6b738829c25d7326f4237d1cfe5"
+      }
+    },
+    "128-functions": {
+      "previous": {
+        "bytes": 15391,
+        "text_bytes": 6422,
+        "sha256": "a3da442f7142886ec52d08e1df2cd8da4f9b15e43e365ed5c7f978edb74b36ef"
+      },
+      "current": {
+        "bytes": 15391,
+        "text_bytes": 6422,
+        "sha256": "a3da442f7142886ec52d08e1df2cd8da4f9b15e43e365ed5c7f978edb74b36ef"
+      }
+    },
+    "arithmetic": {
+      "previous": {
+        "bytes": 1226,
+        "text_bytes": 69,
+        "sha256": "6261edbf7346dbdf28ac38a21b6672667e0114c65cc41e6b2e054c88bc1638c8"
+      },
+      "current": {
+        "bytes": 1434,
+        "text_bytes": 154,
+        "sha256": "3b94f54406b4ab1188281294c1536109ae4b384b3e6fc9ba622462256ba2e157"
+      }
+    },
+    "lua-lctype": {
+      "previous": {
+        "bytes": 1287,
+        "text_bytes": 0,
+        "sha256": "acec14d4c5abf74692a71125f601356929e1da2fd85c5c7bdeabe6e5e81f4640"
+      },
+      "current": {
+        "bytes": 1287,
+        "text_bytes": 0,
+        "sha256": "acec14d4c5abf74692a71125f601356929e1da2fd85c5c7bdeabe6e5e81f4640"
+      }
+    },
+    "lua-lopcodes": {
+      "previous": {
+        "bytes": 1111,
+        "text_bytes": 0,
+        "sha256": "c851c8bf6bc9224ee3b28814de0b747972ecbf64cffd0e564f5ad6c52d813be8"
+      },
+      "current": {
+        "bytes": 1111,
+        "text_bytes": 0,
+        "sha256": "c851c8bf6bc9224ee3b28814de0b747972ecbf64cffd0e564f5ad6c52d813be8"
+      }
+    },
+    "selfhost": {
+      "previous": {
+        "bytes": 36157,
+        "text_bytes": 7833,
+        "sha256": "55666d82fb77b6a6d034d8c83d6d2260c00929b4754c3e27bf938a55619cb880"
+      },
+      "current": {
+        "bytes": 36157,
+        "text_bytes": 7833,
+        "sha256": "55666d82fb77b6a6d034d8c83d6d2260c00929b4754c3e27bf938a55619cb880"
+      }
+    },
+    "lua-vm": {
+      "previous": {
+        "bytes": 152370,
+        "text_bytes": 79660,
+        "sha256": "c93812e4968c7ac3405d65d9230d056f3b0085e8fdf5826ebf5db774e560031b"
+      },
+      "current": {
+        "bytes": 152370,
+        "text_bytes": 79660,
+        "sha256": "c93812e4968c7ac3405d65d9230d056f3b0085e8fdf5826ebf5db774e560031b"
+      }
+    }
+  }
+}

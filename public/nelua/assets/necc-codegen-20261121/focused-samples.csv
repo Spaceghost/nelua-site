@@ -1,0 +1,94 @@
+round,program,elapsed_ns
+1,necc-before,9963405
+1,Zig -O2,3214564
+1,necc-after,1730266
+2,Zig -O2,2990613
+2,necc-after,1570435
+2,necc-before,9706970
+3,necc-before,10287365
+3,necc-after,1765299
+3,Zig -O2,3137841
+4,necc-after,2178244
+4,Zig -O2,3326907
+4,necc-before,10058586
+5,necc-after,1823056
+5,necc-before,9753415
+5,Zig -O2,3394161
+6,necc-before,10088954
+6,necc-after,2672490
+6,Zig -O2,3324455
+7,necc-after,1870669
+7,Zig -O2,3654073
+7,necc-before,10424609
+8,necc-before,10162943
+8,necc-after,1805573
+8,Zig -O2,3086318
+9,Zig -O2,3082769
+9,necc-before,10956235
+9,necc-after,1703365
+10,Zig -O2,4740693
+10,necc-before,10817864
+10,necc-after,1913582
+11,necc-after,1734118
+11,necc-before,9990464
+11,Zig -O2,3370044
+12,necc-after,1708790
+12,necc-before,10105758
+12,Zig -O2,3195406
+13,Zig -O2,3096961
+13,necc-after,1671149
+13,necc-before,10050428
+14,necc-after,1749798
+14,Zig -O2,3154894
+14,necc-before,9988334
+15,necc-after,1760060
+15,necc-before,10175425
+15,Zig -O2,3150320
+16,necc-before,10166074
+16,Zig -O2,3540844
+16,necc-after,2105305
+17,necc-after,3793742
+17,Zig -O2,3529323
+17,necc-before,10343176
+18,Zig -O2,3296790
+18,necc-before,9934241
+18,necc-after,1892709
+19,Zig -O2,3258074
+19,necc-after,1789672
+19,necc-before,9305593
+20,necc-before,9581775
+20,necc-after,1691593
+20,Zig -O2,2829862
+21,necc-before,9918414
+21,Zig -O2,3011544
+21,necc-after,1573849
+22,necc-after,1576035
+22,necc-before,9343895
+22,Zig -O2,3056612
+23,necc-after,1573449
+23,necc-before,9272925
+23,Zig -O2,3064789
+24,necc-after,1632702
+24,Zig -O2,2984050
+24,necc-before,9695984
+25,necc-after,1843826
+25,Zig -O2,3183517
+25,necc-before,9226599
+26,Zig -O2,3262365
+26,necc-after,1846641
+26,necc-before,9572338
+27,Zig -O2,2936094
+27,necc-before,10092266
+27,necc-after,1660670
+28,Zig -O2,2994823
+28,necc-after,1579250
+28,necc-before,9993919
+29,Zig -O2,3107813
+29,necc-after,1629992
+29,necc-before,9970312
+30,Zig -O2,3073549
+30,necc-before,9874997
+30,necc-after,1910312
+31,necc-after,1815178
+31,Zig -O2,3510391
+31,necc-before,10158379

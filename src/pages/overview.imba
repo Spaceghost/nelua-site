@@ -9,8 +9,8 @@ export const core = [
 	{ title: 'necc', path: '/nelua/necc/', kind: 'Compiler driver', description: 'Compile C and Nelua against standalone Nelibc or run Lua from the staged SDK.' }
 	{ title: 'nelinker', path: '/nelua/nelinker/', kind: 'Linker', description: 'Link x86-64 Linux executables directly from ELF objects and static archives.' }
 	{ title: 'nebuild', path: '/nelua/nebuild/', kind: 'Build runner', description: 'Run incremental, parallel builds from a build.ne dependency graph.' }
-	{ title: 'Theseus Init', path: '/nelua/init/', kind: 'Init and supervisor', description: 'Boot Linux and supervise services with native CUE definitions and an adapter for OpenRC services.' }
-	{ title: 'Nelua site', path: 'https://github.com/Spaceghost/nelua-site', kind: 'Documentation', description: 'Source for this site’s project guides, compatibility data, and browser demos.' }
+	{ title: 'Theseus Init', path: '/nelua/init/', inMenu: false, kind: 'Init and supervisor', description: 'Boot Linux and supervise services with native CUE definitions and an adapter for OpenRC services.' }
+	{ title: 'Nelua site', path: 'https://github.com/Spaceghost/nelua-site', inMenu: false, kind: 'Documentation', description: 'Source for this site’s project guides, compatibility data, and browser demos.' }
 ]
 
 const workshop = [

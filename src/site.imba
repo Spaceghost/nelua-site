@@ -16,8 +16,7 @@ import * as notFound from './pages/not-found.imba'
 
 const navigation = [
 	{ title: 'Overview', path: '/nelua/' }
-	...overview.core
-	{ title: 'Cascadia', path: '/nelua/#cascadia-core' }
+	...overview.core.filter(do(project) project.inMenu !== false)
 	{ title: 'Community', path: '/nelua/community/' }
 	{ title: 'nelua.io', path: 'https://nelua.io/' }
 ]

@@ -7,12 +7,13 @@ export const core = [
 	{ title: 'nebox', path: '/nelua/nebox/', kind: 'Userland', description: 'Unix applets in a single static executable linked against standalone nelibc.' }
 	{ title: 'nsh', path: '/nelua/nebox/nsh/', kind: 'Shell', description: 'The interactive POSIX shell included in nebox, with command completion, searchable history and job control.' }
 	{ title: 'necc', path: '/nelua/necc/', kind: 'Compiler driver', description: 'Compile C and Nelua against standalone Nelibc or run Lua from the staged SDK.' }
-	{ title: 'nelinker', path: '/nelua/nelinker/', kind: 'Linker', description: 'Link x86-64 Linux executables directly from ELF objects and static archives.' }
+	{ title: 'nelinker', path: '/nelua/nelinker/', kind: 'Linker', description: 'Link x86-64 ELF objects into Linux executables or PE32+ EFI applications.' }
 	{ title: 'nebuild', path: '/nelua/nebuild/', kind: 'Build runner', description: 'Run incremental, parallel builds from a build.ne dependency graph.' }
 	{ title: 'Nelua site', path: 'https://github.com/Spaceghost/nelua-site', inMenu: false, kind: 'Documentation', description: 'Source for this site’s project guides, compatibility data, and browser demos.' }
 ]
 
 const workshop = [
+	{ title: 'neboot', path: '/nelua/neboot/', description: 'A UEFI boot menu written in Nelua. Start Cascadia with Theseus Init or OpenRC recovery, or chainload another EFI application.' }
 	{ title: 'Theseus Init', path: '/nelua/init/', description: 'Boot Linux and supervise services with native CUE definitions and an adapter for OpenRC services.' }
 	{ title: 'Drift', path: 'https://github.com/Spaceghost/drift', description: 'Portable Virtio, xHCI, NVMe, Ethernet and AHCI drivers written in Nelua.' }
 	{ title: 'Atlas firmware', path: 'https://github.com/Spaceghost/atlas-firmware', description: 'ESP32-S3 LoRa field controllers using Nelua alongside Lua and ESP-IDF.' }

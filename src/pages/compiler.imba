@@ -215,7 +215,14 @@ export def body
 						", traps on abort, and rejects heap, process, stdio and "
 						<code> "main"
 						" symbols at compile time. nelibc's host profile and Drift's kernel drivers build on it; the guarantee is in the emitted C and the linked symbols, not in a convention."
+					<p>
+						"The neboot loader uses this profile to export "
+						<code> "efi_main"
+						" and describe firmware tables as Nelua records. It marks the entry point and the protocol function pointer types with "
+						<code> "ms_abi"
+						" so the generated C preserves the x86-64 UEFI calling convention."
 					<p className="meta">
+						<a html:href="/nelua/neboot/"> "neboot walkthrough "
 						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/runtime-free.md"> "runtime-free guide "
 				<article className="card card-core" html:id="target">
 					<h3>

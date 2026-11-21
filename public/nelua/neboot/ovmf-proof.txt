@@ -1,0 +1,30 @@
+neboot / x86-64 UEFI verification / 2026-11-21
+QEMU with OVMF, KVM acceleration, Secure Boot disabled
+
+Loader (SHA-256)
+15051681eca98e0569ad4561656913880d34411919489b0bbd7f809f4b4f0477  EFI/BOOT/BOOTX64.EFI
+
+PE header and relocation table (objdump excerpts)
+ImageBase		0000000100000000
+	reloc    0 offset   30 [9030] DIR64
+
+Serial excerpts / child application present
+neboot loaded 0x000000003e2fb000
+Cascadia EFI menu
+Starting \EFI\TOOLS\second.efi
+neboot child EFI application ran
+Cascadia EFI menu
+Starting \boot\vmlinuz
+
+Serial excerpts / child application absent
+Cannot open \EFI\TOOLS\second.efi (EFI status 0x800000000000000e)
+Cascadia EFI menu
+Starting \boot\vmlinuz
+
+Guest checks
+PASS guest HTTPS example.com status 200
+PASS theseus-chainload: 0x100000000 -> 0x3e2fb000, PID 1 theseus-init
+PASS openrc-missing: 0x100000000 -> 0x3e2fb000, PID 1 openrc-init
+
+Separate host ABI test / GCC firmware shim
+PASS GCC firmware -> necc-built Nelua efi_main -> protocol.write -> return 42

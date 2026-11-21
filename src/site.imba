@@ -8,6 +8,7 @@ import * as nelibc from './pages/nelibc.imba'
 import * as nebox from './pages/nebox.imba'
 import * as nsh from './pages/nsh.imba'
 import * as init from './pages/init.imba'
+import * as neboot from './pages/neboot.imba'
 import * as necc from './pages/necc.imba'
 import * as nelinker from './pages/nelinker.imba'
 import * as nebuild from './pages/nebuild.imba'
@@ -77,6 +78,7 @@ const pages = [
 	{ source: nelibc, path: '/nelua/nelibc/', body: nelibc.body(content('nelibc-comparison'), content('nelibc-stats')), scripts: ['/nelua/assets/explorer.js'] }
 	{ source: nebox, path: '/nelua/nebox/', body: nebox.body() }
 	{ source: nsh, path: '/nelua/nebox/nsh/', body: nsh.body() }
+	{ source: neboot, path: '/nelua/neboot/', body: neboot.body() }
 	{ source: init, path: '/nelua/init/', body: init.body(), stylesheet: '/nelua/init/vm/demo.css', scripts: ['/nelua/init/vm/demo.js'] }
 	{ source: necc, path: '/nelua/necc/', body: necc.body() }
 	{ source: nelinker, path: '/nelua/nelinker/', body: nelinker.body() }

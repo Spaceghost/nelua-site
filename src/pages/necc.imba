@@ -1,5 +1,5 @@
 export const title = 'necc · Native compiler driver · Nelua at spacegho.st'
-export const description = 'Build C and Nelua programs for x86-64 Linux against standalone Nelibc, or run Lua with the necc compiler driver.'
+export const description = 'Build C and Nelua programs for x86-64 Linux, run Lua, and compile freestanding code that calls UEFI firmware.'
 
 const timings = [
 	['Compile 128 functions', '16.038', '8.727', '1.506', 'TinyCC']
@@ -11,7 +11,7 @@ export def body
 		<section className="hero">
 			<p className="eyebrow"> 'Core · the compiler driver'
 			<h1> 'necc'
-			<p className="lead"> 'A compiler driver for x86-64 Linux. Use it to build C and Nelua programs against standalone Nelibc or run Lua from the same toolchain.'
+			<p className="lead"> 'Build C and Nelua programs for x86-64 Linux against standalone Nelibc, run Lua, or compile an object for UEFI firmware.'
 			<p><a href="https://github.com/Spaceghost/necc"> 'necc source on GitHub'
 			<div className="actions">
 				<a className="button" href="#compile"> 'Compile a program'
@@ -35,7 +35,20 @@ export def body
 			<li>
 				<code> 'necc --direct program.nelua'
 				' selects the self-hosted Nelua subset frontend and the native C backend.'
-		<p> 'The C frontend is written in Nelua and emits assembly for the x86-64 System V ABI.'
+		<p> 'The C frontend is written in Nelua. Its native backend uses the x86-64 System V calling convention by default.'
+		<h2 className="section" id="uefi"> 'Call x86-64 UEFI firmware'
+		<p>
+			'When the '
+			<a href="/nelua/compiler/#freestanding"> 'Nelua frontend'
+			' emits C for an EFI entry point or protocol function pointer, necc honors its '
+			<code> 'ms_abi'
+			' attribute. Firmware can call the entry point, and the application can call firmware through a pointer stored in a protocol table.'
+		<p>
+			'The '
+			<a href="/nelua/neboot/#ovmf"> 'neboot verification'
+			' exercises both directions. The compiler emits an ELF object for '
+			<a href="/nelua/nelinker/#uefi"> 'nelinker’s EFI output mode'
+			'.'
 		<h2 className="section" id="linker"> 'Link with nelinker'
 		<p>
 			'The 19 November 2026 toolchain build accepts an absolute linker path in '

@@ -1,5 +1,5 @@
 export const title = 'nelinker · Static x86-64 linker · Nelua at spacegho.st'
-export const description = 'Link x86-64 ELF objects and static archives with nelinker. Try a freestanding Linux executable and compare measured link times.'
+export const description = 'Link x86-64 ELF objects and static archives into a Linux executable or a relocatable PE32+ UEFI application.'
 
 const timings = [
 	['One member from a 256-member archive', '0.348', '0.392', '0.410', 'TinyCC']
@@ -12,7 +12,7 @@ export def body
 		<section className="hero">
 			<p className="eyebrow"> 'Core · the linker'
 			<h1> 'nelinker'
-			<p className="tagline"> 'A static ELF linker written in Nelua for x86-64 Linux.'
+			<p className="tagline"> 'A static linker written in Nelua for x86-64 Linux executables and UEFI applications.'
 			<p className="blurb"> 'Give it object files and Unix archives. It resolves symbols, applies relocations and writes an executable. The same linker performs the final link of both itself and the necc compiler driver.'
 			<p><a href="https://github.com/Spaceghost/nelinker"> 'nelinker source on GitHub'
 			<div className="actions">
@@ -38,13 +38,30 @@ export def body
 			<code> '--end-group'
 			' around archives that depend on one another.'
 		<h2 className="section" id="inputs"> 'Supported inputs'
-		<p> 'nelinker produces fixed-address static executables from x86-64 ELF objects. It reads regular GNU/SysV and BSD archives, resolves strong and weak symbols, and supports static GOT entries and local-exec TLS. PIE, shared libraries, thin archives, LTO and custom linker scripts are outside the current scope.'
+		<p> 'In Linux mode, nelinker produces fixed-address static executables from x86-64 ELF objects. It reads regular GNU/SysV and BSD archives, resolves strong and weak symbols, and supports static GOT entries and local-exec TLS. PIE, shared libraries, thin archives, LTO and custom linker scripts are outside the current scope.'
 		<p>
 			'For C or Nelua programs using '
 			<a href="/nelua/nelibc/"> 'nelibc'
 			', let '
 			<a href="/nelua/necc/#linker"> 'necc invoke nelinker'
 			'. The driver supplies the SDK libraries and their relocation conventions.'
+		<h2 className="section" id="uefi"> 'Link a PE32+ EFI application'
+		<p>
+			'With '
+			<code> '--efi-app'
+			', nelinker reads freestanding x86-64 ELF objects and static archives and writes a PE32+ EFI application. The entry symbol defaults to '
+			<code> 'efi_main'
+			'. This command links the neboot menu with a preferred load address of 4 GiB.'
+		<pre>
+			<code> 'nelinker --efi-app --image-base 0x100000000 -e efi_main -o BOOTX64.EFI menu.o'
+		<p>
+			'The linker records 64-bit absolute image pointers as '
+			<code> 'DIR64'
+			' entries in '
+			<code> '.reloc'
+			' so firmware can adjust them if it loads the image at another address. The '
+			<a href="/nelua/neboot/#ovmf"> 'neboot OVMF run'
+			' shows the address firmware used.'
 		<h2 className="section" id="benchmarks"> 'Link times'
 		<p>
 			'In the '

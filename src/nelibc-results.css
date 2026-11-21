@@ -1,0 +1,12 @@
+.page-details p code { overflow-wrap: anywhere; }
+.performance-summary, #benchmark-results > p { max-width: 76ch; }
+.performance-summary .eyebrow { margin-block: .6rem 1rem; }
+#benchmark-filters { align-items: end; gap: .75rem 1rem; margin: 1.25rem 0; }
+#benchmark-filters label { display: grid; gap: .25rem; font-size: .875rem; }
+#benchmark-filters input, #benchmark-filters select { width: 100%; min-height: 2.75rem; font-size: 1rem; }
+#benchmark-filters input { flex: none; }
+#benchmark-results td:nth-child(n + 2):nth-child(-n + 6) { white-space: nowrap; font-variant-numeric: tabular-nums; }
+@media (max-width: 40rem) {
+  #benchmark-filters { display: grid; grid-template-columns: minmax(0, 1fr); }
+  #benchmark-clear { justify-self: start; }
+}

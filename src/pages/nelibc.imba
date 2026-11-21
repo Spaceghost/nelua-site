@@ -210,7 +210,7 @@ export def body comparison, stats
 					", "
 					<code> "make host-bend-hello-zig"
 					"."
-				<dt> "Last recorded gate"
+				<dt> "7 November 2026 gate"
 				<dd>
 					"2026-11-07 on main "
 					<code> "1c7240a"

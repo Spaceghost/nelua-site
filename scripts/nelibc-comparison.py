@@ -8,10 +8,12 @@ this generator never substitutes old results for a missing measurement.
 """
 import html, json, re, sys
 from pathlib import Path
+from nelibc_results import phase_headline, render_results, verify_timings
 ROOT=Path(__file__).resolve().parents[1]
 data=Path(sys.argv[1]).resolve()
 def load(name):return json.loads((data/name).read_text())
 meta=load('manifest.json');rows=load('summary.json');coverage=load('coverage.json');checks=load('checks.json');conf=load('conformance.json');deltas=load('deltas.json')
+verify_timings(data, rows)
 url='/'+str(data.relative_to(ROOT/'public')).replace('\\','/')
 followup=load('optimization.json') if (data/'optimization.json').exists() else {}
 source_commit=meta.get('source_commit')
@@ -96,11 +98,10 @@ if current_gate:
  block+='<h3 id="integration-gate">Build and integration checks</h3>'
  block+=f'<p>On {esc(current_gate["date_utc"][:10])} the measured revision passed {pass_count} of {len(results)} Makefile targets as an unprivileged user in the x86-64 Linux build guest. Four libc-test targets compare failures with the project’s existing expected-failure lists. The independent corpus above counts each test result directly. <a href="{url}/gate-summary.json">Download the per-target results</a>.</p>'
  block+=table('Build and integration checks',['Target','Exit','Seconds'],[[esc(r['target']),str(r['exit']),str(r['seconds'])] for r in results])
-block+=f'''
-<h2 class="section" id="performance">Performance: each libc against itself</h2>
-<p class="lead">Goal: make the most important libc operations faster while preserving their behavior. These are measurements toward that goal. The same C consumer is compiled with and without each production Nelibc archive; each ratio compares only the two builds in that profile.</p>
-<p><strong>Speedup = baseline time ÷ Nelibc time.</strong> Above 1.00× means the Nelibc-linked build was faster; below 1.00× means it was slower. Delegated rows measure the surrounding linked program and are not credited as Nelibc implementation wins.</p>
-'''
+block+=f'<div class="performance-summary"><h2 class="section" id="performance">Performance</h2><p class="eyebrow">{date} · Linux x86-64</p>'
+block+=phase_headline(data, rows)
+block+=f'<p>Each profile compares the same consumer with and without Nelibc. Speedups above 1× favor Nelibc. <a href="#all-results">Browse {len(rows)} results across {len(labels)} profiles.</a></p></div>'
+block+=render_results(rows, labels, url)
 selected=[('memcpy',4096),('memmove-overlap',128),('memset',4096),('memcmp-equal',128),('memchr-absent',128),('strlen',128),('strcmp-equal',128),('strstr-tail',128),('strtol-decimal',0),('strtod-decimal',0),('sin',0),('sqrt',0),('malloc-free',64),('snprintf-mixed',0),('qsort-128-integers',0),('parse-record',0)]
 performance=[]
 for case,size in selected:
@@ -128,15 +129,7 @@ if any('previous_ns' in r for r in rows):
   block+='<p><a href="/nelua/assets/comparison-20261117/manifest.json">Original comparison manifest</a>. '+('The dated comparison snapshots remain the exact sources measured; the integrated tree also includes the build, test and benchmark fixes recorded in the full gate above.' if gate else 'The new source is still an unmerged candidate; the repository’s full integration gate remains separate from these focused checks and the independent corpus.')+'</p>'
 block+=table('Representative cases, median of seven paired speedups', ['Case','glibc → +Nelibc','musl/Zig → +Nelibc','Cosmopolitan → +Nelibc'],performance)
 block+=f'''<p class="small muted">{meta['pairs']} comparison rounds ({'rotating triplets with the previous candidate' if 'previous_archive_sha256' in meta else 'alternating pairs'}), rotating profile order. Each timed loop runs for at least 5 ms after calibration. Consumer flags include <code>-O2 -fno-builtin</code>; volatile pointers to noinline direct-call wrappers stop pure-function calls being hoisted out of the loop. The same wrappers are used in every profile. Taking the address of Cosmopolitan 4.0.2’s strstr IFUNC failed in this toolchain; direct calls passed, so this measures the direct-call path and does not establish function-pointer ABI conformance. Loop, pointer-call and checksum overhead is included equally, not subtracted. Buffers are hot and aligned; this is not a DRAM bandwidth, cold-cache, multicore or application throughput result. The record parser is a synthetic combined workload; qsort includes initializing its input, and malloc/free includes writing the first and last byte.</p>
-<details><summary>All sizes, absolute times and observed pair ranges</summary>
-<p>Times are median nanoseconds per operation. Ranges are the minimum and maximum paired speedup observed, not confidence intervals. Cross-profile absolute rankings mix different compilers and runtimes.</p>'''
-for profile in labels:
- body=[]
- for r in rows:
-  if r['profile']!=profile:continue
-  body.append([esc(r['case']),str(r['bytes']),f'{r["baseline_ns"]:.2f}',f'{r["nelibc_ns"]:.2f}',ratio(r),f'{speed(r["ratio_min"])}–{speed(r["ratio_max"])}×',esc(r['ownership'])])
- block+='<h3>'+labels[profile]+'</h3>'+table(labels[profile]+' complete measured cases',['Case','Bytes','Alone ns/op','+Nelibc ns/op','Speedup','Observed range','Owner'],body)
-block+='</details>'
+'''
 # Rank implemented losses on the broadly used operations before choosing new
 # optimization work. Keep all results above, including gains and regressions.
 priorities=[]

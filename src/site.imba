@@ -76,7 +76,7 @@ const pages = [
 	{ source: compiler, path: '/nelua/compiler/', body: compiler.body() }
 	{ source: comptime, path: '/nelua/compiler/comptime/', active: '/nelua/compiler/', body: comptime.body() }
 	{ source: syntaxGuide, path: '/nelua/compiler/syntax-extensions/', active: '/nelua/compiler/', body: syntaxGuide.body(content('syntax-guide'), content('syntax-toc')) }
-	{ source: nelibc, path: '/nelua/nelibc/', body: nelibc.body(content('nelibc-comparison'), content('nelibc-stats')), scripts: ['/nelua/assets/explorer.js'] }
+	{ source: nelibc, path: '/nelua/nelibc/', body: nelibc.body(content('nelibc-comparison'), content('nelibc-stats')), stylesheet: '/nelua/nelibc/results.css', scripts: ['/nelua/assets/explorer.js', '/nelua/nelibc/results.js'] }
 	{ source: nebox, path: '/nelua/nebox/', body: nebox.body(), stylesheet: '/nelua/nebox/guide.css' }
 	{ source: nsh, path: '/nelua/nebox/nsh/', body: nsh.body() }
 	{ source: neboxCoverage, path: '/nelua/nebox/applet-coverage/', active: '/nelua/nebox/', body: neboxCoverage.body(readFileSync('public/nelua/nebox/applet-coverage.txt', 'utf8')), stylesheet: '/nelua/nebox/applet-coverage.css', scripts: ['/nelua/nebox/applet-coverage.js'] }
@@ -90,6 +90,8 @@ const pages = [
 ]
 
 copyFileSync('src/site.css', 'public/nelua/assets/site.css')
+copyFileSync('src/nelibc-results.css', 'public/nelua/nelibc/results.css')
+copyFileSync('src/nelibc-results.js', 'public/nelua/nelibc/results.js')
 copyFileSync('src/nebox.css', 'public/nelua/nebox/guide.css')
 copyFileSync('src/community.css', 'public/nelua/community/styles.css')
 copyFileSync('src/applet-coverage.css', 'public/nelua/nebox/applet-coverage.css')

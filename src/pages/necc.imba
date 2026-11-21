@@ -90,7 +90,7 @@ export def body
 							<td> "{row.best} · {row.external}"
 							<td className="num"> row.bytes
 		<p>
-			'The arithmetic executable took 9.729 ms with the updated SDK and 3.071 ms with Zig cc -O2. The SDK change reduces preprocessing time. Both necc builds emit the same 69 bytes of arithmetic code.'
+			'The arithmetic executable took 9.729 ms with the updated SDK and 3.071 ms with Zig cc -O2. The SDK change reduces preprocessing time. Both necc builds emit the same 69 bytes of arithmetic code. Zig cc combines four iterations into one scalar multiply, add and mask, while necc performs those operations on each iteration.'
 		<details>
 			<summary> 'Compare every compiler configuration'
 			<div className="table-wrap" html:role="region" aria-label="Complete compiler field in milliseconds" html:tabindex="0">

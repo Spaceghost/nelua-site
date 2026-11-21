@@ -11,9 +11,20 @@ export def body
 				<a className="button" href="#run"> 'Boot in QEMU'
 				<a className="text-link" href="#ovmf"> 'See the OVMF results'
 		<h2 className="section" id="run"> 'Boot in QEMU'
-		<p> 'From the neboot checkout, stage Cascadia’s x86-64 EFI-stub kernel and its matching initramfs. Replace the two example paths with your local files. The build uses the Nelua fork, necc with its staged SDK, and nelinker.'
-		<pre><code> 'make stage KERNEL=/path/to/vmlinuz INITRD=/path/to/initramfs\npython3 tests/smoke-ovmf.py --esp build/esp --interactive'
-		<p> 'The Python script uses sfdisk and mtools to prepare a temporary EFI disk, then boots it in QEMU with x86-64 OVMF. Choose a key at the serial menu.'
+		<p>
+			'In the '
+			<a href="https://github.com/Spaceghost/neboot"> 'neboot checkout'
+			' (repository access required), put the Nelua fork, necc and nelinker on your PATH. If you installed the necc SDK outside its default location, set '
+			<code> 'NECC_SYSROOT'
+			' to the SDK directory.'
+		<p> 'Stage an x86-64 EFI-stub kernel and its matching Cascadia initramfs. Replace the example paths with your local files.'
+		<pre><code> 'make stage KERNEL=/path/to/vmlinuz INITRD=/path/to/initramfs'
+		<details>
+			<summary> 'Starting from a Cascadia ISO'
+			<p> 'With xorriso installed, this command extracts both boot files from the same verified local ISO and stages them in build/esp.'
+			<pre><code> 'make stage-iso ISO=/path/to/cascadia-native-x86_64.iso'
+		<p> 'Open the serial menu. The script uses Python 3, sfdisk and mtools to prepare a temporary disk, then boots it with QEMU and x86-64 OVMF.'
+		<pre><code> 'python3 tests/smoke-ovmf.py --esp build/esp --interactive'
 		<ul>
 			<li>
 				<kbd> '1'
@@ -29,7 +40,34 @@ export def body
 			<li>
 				<kbd> 'Q'
 				' returns to firmware.'
-		<p><a href="https://github.com/Spaceghost/neboot"> 'Source and setup instructions on GitHub (repository access required)'
+		<p>
+			'To exit QEMU from the menu or a running guest, press '
+			<kbd> 'Ctrl+A'
+			', then '
+			<kbd> 'X'
+			'.'
+		<details>
+			<summary> 'Select a firmware pair or use software emulation'
+			<p>
+				'If the script cannot find your firmware, set '
+				<code> 'OVMF_CODE'
+				' and '
+				<code> 'OVMF_VARS'
+				' to a matching x86-64 OVMF pair with Secure Boot disabled. The test copies the variables file for each boot. QEMU uses KVM when your account can access /dev/kvm and software emulation otherwise. Set '
+				<code> 'QEMU_ACCEL=tcg'
+				' to select software emulation explicitly.'
+		<h2 className="section" id="verify"> 'Repeat the two-boot test'
+		<p> 'With the boot files staged, run the automated check from the same checkout. It tests the child application, repeats with the child missing, and checks PID 1 after each Linux boot. The Theseus guest also makes an HTTPS request to example.com.'
+		<pre><code> 'python3 tests/smoke-ovmf.py --esp build/esp --logs build/logs --check-internet'
+		<p>
+			'Compare the PASS lines with the '
+			<a href="#ovmf"> 'recorded OVMF results'
+			'. The serial transcripts are saved in '
+			<code> 'build/logs/theseus-chainload.log'
+			' and '
+			<code> 'build/logs/openrc-missing.log'
+			'.'
+		<p> 'If HTTPS fails, the test reports the guest’s curl exit code, HTTP status and serial log path.'
 		<h2 className="section" id="build"> 'From Nelua to BOOTX64.EFI'
 		<ol>
 			<li>
@@ -61,9 +99,11 @@ export def body
 			<time html:datetime="2026-11-21"> '21 November 2026'
 			', x86-64 QEMU with KVM and OVMF booted the image with Secure Boot disabled. The loader requested base '
 			<code> '0x100000000'
-			'. Firmware placed it at '
+			'. On the first host, firmware placed it at '
 			<code> '0x3e2fb000'
-			' in both runs.'
+			' for both menu entries. A fresh build on a second host produced the same EFI binary. There, OVMF placed it at '
+			<code> '0x3e10c000'
+			'. The test compares the observed address to the preferred base on each boot.'
 		<ul>
 			<li>
 				'With the child application present, it printed a message and returned to the menu. Selecting Theseus then booted Linux with '

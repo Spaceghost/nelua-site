@@ -36,7 +36,7 @@ page, style and content-only edits once the browser bundles exist.
 
 ## Refresh the numbers
 
-- Coverage: `python3 scripts/coverage.py ../nelibc` refreshes the explorer data.
+- The coverage explorer reads `public/nelua/assets/nelibc-coverage-profiles.json`. After running the runtime census on the build host, run `python3 scripts/coverage.py /path/to/nelibc --comparison /path/to/raw/run --public-census /nelua/assets/comparison-DATE/coverage.json --out /path/to/nelibc-coverage-profiles.json` and copy the result to the assets directory. Use the raw manifest with accessible archive paths. The generator verifies archive hashes and reconciles all three musl-reference counts with the recorded census. The original CSV-based view remains downloadable as `nelibc-coverage.json`.
   Update the pinned summary in `src/pages/nelibc.imba` if its source run changes.
 - nebox: applet list, case count and binary size come from the last recorded
   container run in the nebox repository's commit messages.

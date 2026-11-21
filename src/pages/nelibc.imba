@@ -1,5 +1,5 @@
 export const title = "nelibc · a C library written in Nelua · spacegho.st/nelua"
-export const description = "nelibc replaces C library functions with Nelua implementations: hybrid archives over glibc, musl or Cosmopolitan, a standalone Linux x86-64 runtime, and a host profile for kernels. Explore coverage of all 1,471 musl 1.2.5 function symbols."
+export const description = "nelibc replaces C library functions with Nelua implementations: hybrid archives over glibc, musl or Cosmopolitan, a standalone Linux x86-64 runtime, and a host profile for kernels. Compare symbol coverage for glibc, musl and Cosmopolitan."
 
 export def body comparison, stats
 	<div className="page-content">
@@ -140,34 +140,23 @@ export def body comparison, stats
 				" for the methodology and the "
 				<a html:href="https://github.com/Spaceghost/nelibc/blob/main/docs/core-roadmap.md"> "roadmap"
 				" for the priority order."
-			<h2 className="section" html:id="coverage"> "musl 1.2.5 coverage explorer"
+			<h2 className="section" html:id="coverage"> "Coverage explorer"
 			<p className="lead">
-				"Historical reference: 1,471 function symbols musl 1.2.5 declares, with Nelibc's status in the 2026-11-05 hybrid inventory. The fresh per-profile export census is above. Filter by name, header or status. The data is "
-				<a html:href="/nelua/assets/nelibc-coverage.json"> "one JSON file"
-				" generated from "
-				<code> "docs/musl-1.2.5-api-coverage.csv"
-				" in the repository."
-			<div className="bars" html:aria-label="Coverage summary">
-				<span className="st-implemented"> "Implemented"
-				<span className="bar">
-					<i className="fill-implemented w-impl">
-				<span className="n"> "813 · 55%"
-				" "
-				<span className="st-host-delegated"> "Host-delegated"
-				<span className="bar">
-					<i className="fill-host-delegated w-host">
-				<span className="n"> "223 · 15%"
-				" "
-				<span className="st-not-declared"> "Not declared"
-				<span className="bar">
-					<i className="fill-not-declared w-nd">
-				<span className="n"> "435 · 30%"
+				"Choose a header or archive inventory and a runtime to see which symbols Nelibc supplies."
+			<p className="muted">
+				"Download the "
+				<a html:href="/nelua/assets/nelibc-coverage-profiles.json"> "current inventory and profile data"
+				" or open the "
+				<a html:href="/nelua/assets/nelibc-coverage.json"> "historical musl coverage snapshot"
+				"."
 			<div html:id="explorer" className="explorer">
-				<noscript>
-					<p className="muted">
-						"The explorer needs JavaScript. The same data is in "
-						<a html:href="https://github.com/Spaceghost/nelibc/blob/main/docs/musl-1.2.5-api-coverage.csv"> "the CSV on GitHub"
-						"."
+			<noscript>
+				<p className="muted">
+					"The interactive explorer needs JavaScript. Download the complete "
+					<a html:href="/nelua/assets/nelibc-coverage-profiles.json"> "inventory and runtime profile data"
+					" as JSON. The older "
+					<a html:href="/nelua/assets/nelibc-coverage.json"> "musl coverage snapshot"
+					" remains available."
 			<h2 className="section"> "Build and historical gates"
 			<dl className="kv">
 				<dt> "Requirements"

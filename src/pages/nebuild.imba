@@ -4,6 +4,7 @@ export const description = 'Run incremental and parallel builds from a build.ne 
 export def body
 	<div className="page-content">
 		<section className="hero">
+			<p className="eyebrow"> 'Core · the build runner'
 			<h1> 'nebuild'
 			<p className="lead"> 'A small dependency runner written in Nelua. It builds the requested outputs from a build.ne file and skips recipes whose inputs and previous outputs still match.'
 		<h2 className="section"> 'Write a build.ne file'

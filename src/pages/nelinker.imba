@@ -10,6 +10,7 @@ const timings = [
 export def body
 	<div className="page-content">
 		<section className="hero">
+			<p className="eyebrow"> 'Core · the linker'
 			<h1> 'nelinker'
 			<p className="tagline"> 'A static ELF linker written in Nelua for x86-64 Linux.'
 			<p className="blurb"> 'Give it object files and Unix archives. It resolves symbols, applies relocations and writes an executable. The same linker performs the final link of both itself and the necc compiler driver.'

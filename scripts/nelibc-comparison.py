@@ -170,7 +170,10 @@ if any('previous_ns' in r for r in rows):
   r=find(focus_profile,case,size)
   improvements.append([esc(case)+(f' · {size} B' if size else ''),f'{r["previous_ns"]:.2f}',f'{r["nelibc_ns"]:.2f}',f'{r["baseline_ns"]:.2f}',f'{r["speedup_vs_previous"]:.2f}×'])
  block+=table(f'{labels[focus_profile]}, rotating process triplets; nanoseconds per operation',['Case','Previous Nelibc','New Nelibc',labels[focus_profile]+' alone','Gain vs previous'],improvements)
- block+='<p>'+esc(followup.get('changes','Changes: bounded head/tail copies and fills, runtime AVX2 paths for mid-size buffers and long strings, word-sized tiny comparisons, and fewer page checks on short strings. Read-only queries carry C purity metadata; operations that write memory or errno retain their effects.'))+' The timed wrappers keep calls observable, so these gains measure the implementations. Slower cases and all raw samples remain below.</p>'
+ default_changes=('The short-memchr follow-up measures the fixed tiny miss alongside controls that vary length, alignment and hit position; '
+                  'the run manifest identifies the exact source and archives measured.' if followup.get('headline_case')=='memchr-absent-8' else
+                  'Changes: bounded head/tail copies and fills, runtime AVX2 paths for mid-size buffers and long strings, word-sized tiny comparisons, and fewer page checks on short strings. Read-only queries carry C purity metadata; operations that write memory or errno retain their effects.')
+ block+='<p>'+esc(followup.get('changes',default_changes))+' The timed wrappers keep calls observable, so these gains measure the implementations. Slower cases and all raw samples remain below.</p>'
  for case,size in followup.get('tradeoffs', [('memset',8),('memchr-absent',8)]):
   r=find(focus_profile,case,size)
   block+=f'<p class="small muted">Tradeoff: {esc(case)}({size}) measured {r["previous_ns"]:.2f} → {r["nelibc_ns"]:.2f} ns; {labels[focus_profile]} alone {r["baseline_ns"]:.2f} ns.</p>'
@@ -181,6 +184,7 @@ if any('previous_ns' in r for r in rows):
  evidence_links=[('validation.json','Independent numerical and guard-page checks'),('optimization-notes.md','Optimization notes and verification'),('strcmp-distribution.json','String alignment/mismatch results'),('memory-distribution.json','Memory alignment results'),('scan-distribution.json','Length/search alignment and match positions'),('previous-source.tar.gz','Previous candidate source'),('strstr-distribution.csv','Substring input distributions'),('strstr-phase-controls.csv','Changing-byte-frequency controls'),('before-summary.csv','Pre-change run on the build host'),('before-raw.csv','Pre-change raw pairs'),('before-manifest.json','Pre-change build manifest'),('reproduce.md','Reproduce this comparison'),('preliminary-conformance.json','Earlier candidate under I/O load')]
  if (data/'memchr-controls.csv').is_file(): evidence_links.append(('memchr-controls.csv','Memchr length, alignment and hit-position controls'))
  if (data/'memchr-controls-raw.csv.gz').is_file(): evidence_links.append(('memchr-controls-raw.csv.gz','Raw memchr control samples'))
+ if (data/'memchr-controls-manifest.json').is_file(): evidence_links.append(('memchr-controls-manifest.json','Memchr control run manifests'))
  block+='<p>'+' · '.join(f'<a href="{url}/{file}">{label}</a>' for file,label in evidence_links if (data/file).exists())+'</p>'
  if source_commit:
   block+=f'<p>Measured revisions: <code>{esc(meta["previous_commit"][:12])}</code> before the change and <code>{esc(source_commit[:12])}</code> after it. The manifest identifies each linked archive by SHA-256.</p>'

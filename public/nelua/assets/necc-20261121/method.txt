@@ -25,3 +25,12 @@ On the same source, a separate syscall trace of the previous SDK's preprocessor 
 
 Repeat policy
 An initial four-configuration run on Bak (Intel Core i5-10400, CPU 4) encountered memory and I/O pressure. Some GCC qualification commands timed out. Both necc variants completed every timed workload. We retained its medians in bak-four-tool-summary.csv. We repeated the same four configurations on the i7-11700F in alienware-four-tool-summary.csv before rerunning that host with the entire field. The page uses the complete field; the two narrower runs are independent measurements.
+
+Compiler phases
+A separate 25-round trial on i7-11700F CPU 5 repeated the original phase commands for both SDKs. Each round shuffled all 24 case, command and SDK combinations with seed 747. The original frontend row invokes necc --cc1 on preprocessed C. The additional public-S rows invoke necc -S on the same preprocessed C file. TinyCC assembly reads assembly on standard input. The two complete compile rows each start from the original C input. Each row includes a separate process launch. The independent phase times therefore do not add up to the full driver time. The one-minute system load average moved from 19.86 to 19.95 during this separate comparison.
+
+For each fixture, the two SDKs emitted identical preprocessed C, assembly, native object and TinyCC object bytes. The public -S and --cc1 assembly outputs were also identical, and the separately assembled object matched the full necc compile. The objects linked with the original test driver and returned the expected eight result bytes. Each timed output, including each warm-up, was hashed and compared after the timer stopped.
+
+phase-summary.csv gives all 24 medians and quartiles, phase-samples.csv contains all 600 durations, and phase-outputs.csv gives hashes of the output bytes common to both SDKs. Download phase-replay.py alongside these files to repeat the check with the pinned fixture directory. Supply an available logical CPU.
+
+python3 phase-replay.py /absolute/path/to/necc previous-sdk updated-sdk fixtures output --cpu 5 --rounds 25

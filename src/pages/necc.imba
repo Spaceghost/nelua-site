@@ -1,4 +1,4 @@
-import { comparisons, field } from '../necc-timings.mjs'
+import { comparisons, field, phaseComparison } from '../necc-timings.mjs'
 
 export const title = 'necc · Native compiler driver · Nelua at spacegho.st'
 export const description = 'Build C and Nelua programs for x86-64 Linux, run Lua, and compile freestanding code that calls UEFI firmware.'
@@ -111,6 +111,29 @@ export def body
 			<a href="/nelua/assets/necc-20261121/summary.csv"> 'Timings, quartiles and object sizes (CSV)'
 			<a href="/nelua/assets/necc-20261121/samples.csv"> 'All 2,760 samples (CSV)'
 			<a href="/nelua/assets/necc-20261121/method.txt"> 'Method and correctness checks'
+		<h3 id="compiler-phases"> 'Compiler phase timings'
+		<p>
+			'Preprocessing the 128-function input fell from 5.586 to 1.999 ms in a separate 25-round comparison. The updated necc frontend took 2.774 ms on that preprocessed C, and the SDK assembler took 2.684 ms on its output. TinyCC compiled the original C directly in 2.437 ms. Each figure includes a separate process launch.'
+		<div className="table-wrap" html:role="region" aria-label="Individual compilation phases in milliseconds" html:tabindex="0">
+			<table>
+				<caption> 'Median milliseconds for each SDK · 21 November 2026'
+				<thead>
+					<tr>
+						<th scope="col"> 'Phase'
+						<th className="num" scope="col"> 'Tiny C, before'
+						<th className="num" scope="col"> 'Tiny C, updated'
+						<th className="num" scope="col"> '128 functions, before'
+						<th className="num" scope="col"> '128 functions, updated'
+				<tbody>
+					for row in phaseComparison
+						<tr>
+							<th scope="row"> row.label
+							for median in row.medians
+								<td className="num"> median
+		<p className="upstream-links">
+			<a href="/nelua/assets/necc-20261121/phase-summary.csv"> 'Phase medians and quartiles (CSV)'
+			<a href="/nelua/assets/necc-20261121/phase-samples.csv"> 'All 600 phase samples (CSV)'
+			<a href="/nelua/assets/necc-20261121/phase-outputs.csv"> 'Verified output hashes (CSV)'
 		<h3> '19 November 2026 toolchain comparison'
 		<p>
 			'In the '

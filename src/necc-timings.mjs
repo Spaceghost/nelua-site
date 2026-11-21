@@ -1,13 +1,17 @@
 // Render both compiler tables from the published medians.
 import { readFileSync } from 'node:fs';
 
-const csv = readFileSync('public/nelua/assets/necc-20261121/summary.csv', 'utf8');
-const [header, ...lines] = csv.trim().split(/\r?\n/);
-const columns = header.split(',');
-const records = lines.map(line => {
-  const cells = line.split(',');
-  return Object.fromEntries(columns.map((name, i) => [name, cells[i]]));
-});
+function readResults(name) {
+  const csv = readFileSync('public/nelua/assets/necc-20261121/' + name, 'utf8');
+  const [header, ...lines] = csv.trim().split(/\r?\n/);
+  const columns = header.split(',');
+  return lines.map(line => {
+    const cells = line.split(',');
+    return Object.fromEntries(columns.map((key, i) => [key, cells[i]]));
+  });
+}
+
+const records = readResults('summary.csv');
 const workloads = [
   ['compile', 'tiny', 'Compile tiny C input', 'Tiny C'],
   ['compile', '128-functions', 'Compile 128 functions', '128 functions'],
@@ -45,3 +49,25 @@ export const field = names.map(name => ({
     return row ? Number(row.median_ms).toFixed(3) : '—';
   }),
 }));
+
+const phaseResults = readResults('phase-summary.csv');
+const stages = [
+  ['preprocess', 'TinyCC preprocessing'],
+  ['frontend', 'necc frontend (--cc1)'],
+  ['public-S', 'necc -S on preprocessed C'],
+  ['assemble', 'TinyCC assembly'],
+  ['necc-full', 'Complete necc compile'],
+  ['TinyCC-full', 'Complete TinyCC compile'],
+];
+
+export const phaseComparison = stages.map(([phase, label]) => {
+  const medians = [];
+  for (const input of ['tiny', '128-functions']) {
+    for (const sdk of ['previous', 'updated']) {
+      const row = phaseResults.find(r => r.phase === phase && r.case === input && r.sdk === sdk);
+      if (!row) throw new Error('Missing compiler phase ' + phase + ' for ' + input + ', ' + sdk);
+      medians.push(Number(row.median_ms).toFixed(3));
+    }
+  }
+  return { label, medians };
+});

@@ -1,3 +1,5 @@
+import { comparisons, field } from '../necc-timings.mjs'
+
 export const title = 'necc · Native compiler driver · Nelua at spacegho.st'
 export const description = 'Build C and Nelua programs for x86-64 Linux, run Lua, and compile freestanding code that calls UEFI firmware.'
 
@@ -65,6 +67,51 @@ export def body
 			<a href="/nelua/nelinker/#archive"> 'direct archive example'
 			'.'
 		<h2 className="section" id="benchmarks"> 'Compiler timings'
+		<p>
+			'On 21 November 2026, rebuilding the SDK’s single-threaded TinyCC preprocessor with Nelibc’s unlocked string output reduced median compile time for 128 functions from 9.370 to 5.425 ms. Compiling the Lua opcode table took 53% less time. Both builds used the same necc executable, and produced byte-identical objects for all six compile workloads and the Lua VM probe.'
+		<p>
+			'Each time below is a median in milliseconds over 23 warm, interleaved rounds on one Intel Core i7-11700F core. The external field contains 13 compiler configurations. Text size is the number of bytes of machine code in necc’s object. The two Lua tables contain data.'
+		<div className="table-wrap" html:role="region" aria-label="Updated compiler medians and object sizes" html:tabindex="0">
+			<table>
+				<caption> 'Static x86-64 Linux · 21 November 2026'
+				<thead>
+					<tr>
+						<th scope="col"> 'Workload'
+						<th className="num" scope="col"> 'necc before (ms)'
+						<th className="num" scope="col"> 'Updated SDK (ms)'
+						<th scope="col"> 'Fastest external (ms)'
+						<th className="num" scope="col"> 'necc text (B)'
+				<tbody>
+					for row in comparisons
+						<tr>
+							<th scope="row"> row.label
+							<td className="num"> row.before
+							<td className="num"> row.after
+							<td> "{row.best} · {row.external}"
+							<td className="num"> row.bytes
+		<p>
+			'The arithmetic executable took 9.729 ms with the updated SDK and 3.071 ms with Zig cc -O2. The SDK change reduces preprocessing time. Both necc builds emit the same 69 bytes of arithmetic code.'
+		<details>
+			<summary> 'Compare every compiler configuration'
+			<div className="table-wrap" html:role="region" aria-label="Complete compiler field in milliseconds" html:tabindex="0">
+				<table>
+					<caption> 'Median milliseconds by workload'
+					<thead>
+						<tr>
+							<th scope="col"> 'Compiler'
+							for work in comparisons
+								<th className="num" scope="col"> work.short
+					<tbody>
+						for tool in field
+							<tr>
+								<th scope="row"> tool.label
+								for median in tool.medians
+									<td className="num"> median
+		<p className="upstream-links">
+			<a href="/nelua/assets/necc-20261121/summary.csv"> 'Timings, quartiles and object sizes (CSV)'
+			<a href="/nelua/assets/necc-20261121/samples.csv"> 'All 2,760 samples (CSV)'
+			<a href="/nelua/assets/necc-20261121/method.txt"> 'Method and correctness checks'
+		<h3> '19 November 2026 toolchain comparison'
 		<p>
 			'In the '
 			<time html:datetime="2026-11-19"> '19 November 2026'

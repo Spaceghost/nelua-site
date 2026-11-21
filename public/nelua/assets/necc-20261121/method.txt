@@ -1,0 +1,27 @@
+necc compiler measurements · 21 November 2026
+
+The compiler was built from necc b786f2bc576048ab0e4a0a4843244296ed0f6e29. Its native frontend and backend were identical in both arms. The comparison applies to the default C compiler, including its SDK preprocessor and assembler. The published SDK build change is necc fa1a144725ab5405fc5dd69262b1272a551613ae.
+https://github.com/Spaceghost/necc/commit/fa1a144725ab5405fc5dd69262b1272a551613ae
+
+Both SDK executables were rebuilt with the same TinyCC seed, configured source, x87 fix and standalone Nelibc archive. TinyCC mob 32d1c0a5614b9979768b3711726db3d601750ed3 was the upstream source. The updated build substitutes fputs_unlocked only while compiling TinyCC's single-threaded command-line executable. C programs built by necc still reference the locking fputs symbol.
+
+SHA-256
+  3cbc4f540bde29660b43afc5194fbff4f749f0c64b471d0d3071f247bbfa60ae  necc executable, used in both arms
+  47d56168275721d017cf1dcb6ede3386053e239a7f4ae4e527dd956c042d9070  TinyCC rebuilt with previous SDK recipe
+  eed8f3bfc9211ca6e47dc5cc63f1f5eede512560c3927edb2044fdcbeb735121  TinyCC rebuilt with updated SDK recipe
+  a40cf80936b5154391e37bbab27dc17e486ebd8fde15edec59e59d119a7838c5  archived 19 November toolchain and workload bundle
+
+Primary field
+An Intel Core i7-11700F ran Debian 12 userspace in a disconnected, disposable container. All benchmark processes inherited affinity to logical CPU 5, physical core 5. Its SMT sibling is CPU 13. The one-minute system load average moved from 2.50 to 3.73. The GCC toolchain was Debian 12.2.0, Clang 14.0.6 and Zig 0.17.0 (Clang 22.1.8). TinyCC, chibicc, lacc, cproc/QBE and PCC used the configurations from the original 19 November field. The external TinyCC row uses the benchmark's archived reference binary.
+
+The original compiler harness ran its six C translation units and two generated-program workloads. Qualification checked outputs, followed by one untimed randomized warm-up and 23 rounds. A fixed random seed of 60491 shuffled every qualifying case and configuration within each round. Compile times cover driver launch through writing the object. Each compile received a new unused macro value to avoid object-cache reuse. Execution times cover process launch and execution. Checks of results were outside the timed interval. Quartiles use inclusive interpolation.
+
+summary.csv records all 120 medians, quartiles, object sizes and text sizes. samples.csv records the elapsed nanoseconds for each of the 2,760 measured operations. necc-base means the prior SDK and necc-next the rebuilt SDK. In both cases necc is the same executable. GCC -O0/-O2, Clang 14 -O0/-O2, Zig cc -O0/-O2, TinyCC, chibicc, lacc/lacc -O2, cproc/QBE and PCC/PCC -O all qualified for each timed workload.
+
+Correctness
+verified-objects.csv gives the object checksums. Both necc SDKs produced byte-identical objects for every timed compile and the separate Lua VM compile probe. The Lua character and opcode tables matched 257 and 83 bytes from GCC. Arithmetic returned the expected eight bytes, and the bootstrap executable reproduced all 11,661 input bytes. The Lua VM probe required compilation and the exported luaV_execute symbol. cproc/QBE rejected a volatile store in that probe. PCC -O exceeded its 20-second qualification timeout. Neither failure affects a timed workload. The updated SDK passed standalone ABI, SysV, MS x64, runtime and public-driver checks, including the ordinary fputs target reference. Rebuilding TinyCC a second time reproduced its executable byte for byte. The Zig-built seed and both rebuilt preprocessors emitted identical text for the 128-function input.
+
+On the same source, a separate syscall trace of the previous SDK's preprocessor counted 17,518 gettid calls and 8,748 futex calls. The updated SDK made 42 and 10 respectively. Both made three write calls.
+
+Repeat policy
+An initial four-configuration run on Bak (Intel Core i5-10400, CPU 4) encountered memory and I/O pressure. Some GCC qualification commands timed out. Both necc variants completed every timed workload. We retained its medians in bak-four-tool-summary.csv. We repeated the same four configurations on the i7-11700F in alienware-four-tool-summary.csv before rerunning that host with the entire field. The page uses the complete field; the two narrower runs are independent measurements.

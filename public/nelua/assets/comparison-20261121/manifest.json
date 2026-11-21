@@ -1,0 +1,1672 @@
+{
+  "date_utc": "2026-11-21T16:16:24Z",
+  "platform": "Linux-6.18.54-0-lts-x86_64-with-glibc2.36",
+  "cpu_model": "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+  "allowed_cpus": [
+    3
+  ],
+  "cpu": 3,
+  "load_start": [
+    11.61962890625,
+    28.375,
+    38.8193359375
+  ],
+  "load_end": [
+    34.3798828125,
+    219.076171875,
+    172.4716796875
+  ],
+  "pairs": 7,
+  "profiles": {
+    "glibc": {
+      "cc": [
+        "gcc"
+      ],
+      "flags": [],
+      "archive": "build/libnelibc-gcc.a",
+      "link": [],
+      "version": "glibc 2.36"
+    },
+    "musl": {
+      "cc": [
+        "$ZIG",
+        "cc",
+        "-mcpu=x86_64",
+        "-target",
+        "x86_64-linux-musl"
+      ],
+      "flags": [
+        "-static"
+      ],
+      "archive": "build/libnelibc-zig-musl.a",
+      "link": [
+        "-Wl,-u,nelibc_hybrid_free",
+        "-Wl,--wrap=fread",
+        "-Wl,--wrap=fwrite",
+        "-Wl,--wrap=fflush",
+        "-Wl,--wrap=fileno",
+        "-Wl,--wrap=feof",
+        "-Wl,--wrap=ferror",
+        "-Wl,--wrap=clearerr",
+        "-Wl,--wrap=ungetc",
+        "-Wl,--wrap=freopen",
+        "-Wl,--wrap=fgetpos",
+        "-Wl,--wrap=fsetpos",
+        "-Wl,--wrap=fseek",
+        "-Wl,--wrap=ftell",
+        "-Wl,--wrap=fseeko",
+        "-Wl,--wrap=ftello",
+        "-Wl,--wrap=setvbuf",
+        "-Wl,--wrap=flockfile",
+        "-Wl,--wrap=ftrylockfile",
+        "-Wl,--wrap=funlockfile",
+        "-Wl,--wrap=fclose",
+        "-Wl,--wrap=localeconv",
+        "-Wl,--wrap=setlocale",
+        "-Wl,--wrap=atexit",
+        "-Wl,--wrap=exit",
+        "-Wl,--wrap=free",
+        "-Wl,--wrap=realloc"
+      ],
+      "version": "Zig 0.17.0 bundled musl; see source/toolchain manifest"
+    },
+    "cosmopolitan": {
+      "cc": [
+        "$COSMO/bin/x86_64-unknown-cosmo-cc"
+      ],
+      "flags": [],
+      "archive": "build/libnelibc-cosmo.a",
+      "link": [],
+      "version": "4.0.2"
+    }
+  },
+  "commands": [
+    [
+      "gcc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "-Wl,-Map,$RUN/final/glibc-baseline.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/glibc-baseline"
+    ],
+    [
+      "gcc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "$RUN/previous/libnelibc-gcc.a",
+      "-Wl,-Map,$RUN/final/glibc-previous.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/glibc-previous"
+    ],
+    [
+      "gcc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "$NELIBC/build/libnelibc-gcc.a",
+      "-Wl,-Map,$RUN/final/glibc-nelibc.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/glibc-nelibc"
+    ],
+    [
+      "$ZIG",
+      "cc",
+      "-mcpu=x86_64",
+      "-target",
+      "x86_64-linux-musl",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "-static",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/musl-baseline"
+    ],
+    [
+      "$ZIG",
+      "cc",
+      "-mcpu=x86_64",
+      "-target",
+      "x86_64-linux-musl",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "-static",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "-Wl,-u,nelibc_hybrid_free",
+      "-Wl,--wrap=fread",
+      "-Wl,--wrap=fwrite",
+      "-Wl,--wrap=fflush",
+      "-Wl,--wrap=fileno",
+      "-Wl,--wrap=feof",
+      "-Wl,--wrap=ferror",
+      "-Wl,--wrap=clearerr",
+      "-Wl,--wrap=ungetc",
+      "-Wl,--wrap=freopen",
+      "-Wl,--wrap=fgetpos",
+      "-Wl,--wrap=fsetpos",
+      "-Wl,--wrap=fseek",
+      "-Wl,--wrap=ftell",
+      "-Wl,--wrap=fseeko",
+      "-Wl,--wrap=ftello",
+      "-Wl,--wrap=setvbuf",
+      "-Wl,--wrap=flockfile",
+      "-Wl,--wrap=ftrylockfile",
+      "-Wl,--wrap=funlockfile",
+      "-Wl,--wrap=fclose",
+      "-Wl,--wrap=localeconv",
+      "-Wl,--wrap=setlocale",
+      "-Wl,--wrap=atexit",
+      "-Wl,--wrap=exit",
+      "-Wl,--wrap=free",
+      "-Wl,--wrap=realloc",
+      "$RUN/previous/libnelibc-zig-musl.a",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/musl-previous"
+    ],
+    [
+      "$ZIG",
+      "cc",
+      "-mcpu=x86_64",
+      "-target",
+      "x86_64-linux-musl",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "-static",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "-Wl,-u,nelibc_hybrid_free",
+      "-Wl,--wrap=fread",
+      "-Wl,--wrap=fwrite",
+      "-Wl,--wrap=fflush",
+      "-Wl,--wrap=fileno",
+      "-Wl,--wrap=feof",
+      "-Wl,--wrap=ferror",
+      "-Wl,--wrap=clearerr",
+      "-Wl,--wrap=ungetc",
+      "-Wl,--wrap=freopen",
+      "-Wl,--wrap=fgetpos",
+      "-Wl,--wrap=fsetpos",
+      "-Wl,--wrap=fseek",
+      "-Wl,--wrap=ftell",
+      "-Wl,--wrap=fseeko",
+      "-Wl,--wrap=ftello",
+      "-Wl,--wrap=setvbuf",
+      "-Wl,--wrap=flockfile",
+      "-Wl,--wrap=ftrylockfile",
+      "-Wl,--wrap=funlockfile",
+      "-Wl,--wrap=fclose",
+      "-Wl,--wrap=localeconv",
+      "-Wl,--wrap=setlocale",
+      "-Wl,--wrap=atexit",
+      "-Wl,--wrap=exit",
+      "-Wl,--wrap=free",
+      "-Wl,--wrap=realloc",
+      "$NELIBC/build/libnelibc-zig-musl.a",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/musl-nelibc"
+    ],
+    [
+      "$COSMO/bin/x86_64-unknown-cosmo-cc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "-Wl,-Map,$RUN/final/cosmopolitan-baseline.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/cosmopolitan-baseline"
+    ],
+    [
+      "$COSMO/bin/x86_64-unknown-cosmo-cc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "$RUN/previous/libnelibc-cosmo.a",
+      "-Wl,-Map,$RUN/final/cosmopolitan-previous.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/cosmopolitan-previous"
+    ],
+    [
+      "$COSMO/bin/x86_64-unknown-cosmo-cc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "$NELIBC/build/libnelibc-cosmo.a",
+      "-Wl,-Map,$RUN/final/cosmopolitan-nelibc.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/cosmopolitan-nelibc"
+    ]
+  ],
+  "source_base": "190ad4e2c6ac8abcd19ae1ce7d0f3335dc62708f",
+  "source_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "benchmark_sha256": "b5a81a2b8d7fc1d78ad79211eadac13c4745ef45fa1109c7418ad151279faac7",
+  "compiler_versions": {
+    "glibc": "gcc (Debian 12.2.0-14+deb12u1) 12.2.0",
+    "musl": "clang version 22.1.8",
+    "cosmopolitan": "x86_64-unknown-cosmo-cc (GCC) 14.1.0"
+  },
+  "archive_sha256": {
+    "glibc": "c53aa3ff327bf6ffdddc5926b87b65505cd401262f8acfda26be2af9e2ccde5d",
+    "musl": "10d23b0f814423eed2afdc8ea2437e842e9f000ad9766c759ec3a9c6e56996ac",
+    "cosmopolitan": "52fd435ff8ae1e0744ae7a49aeff522b63f5f8ed5229b66c3429fe9a26152624"
+  },
+  "previous_archive_sha256": {
+    "glibc": "6d1f21452483ef05abcef81ecfa595d9855aac7c725ef9ca1ba9be3235184be7",
+    "musl": "59526fc6acd667cf5d998bb9405e8fcac15d96b0f688642a6fb25eb9d9b37247",
+    "cosmopolitan": "957d7f1487d80cc133326349a50420d82640b06dae0241f7d78e490bfe76ea7b"
+  },
+  "binary_bytes": {
+    "glibc": {
+      "baseline": 22544,
+      "previous": 677768,
+      "nelibc": 681864
+    },
+    "musl": {
+      "baseline": 1471112,
+      "previous": 3515104,
+      "nelibc": 3516944
+    },
+    "cosmopolitan": {
+      "baseline": 1682126,
+      "previous": 1726478,
+      "nelibc": 1726478
+    }
+  },
+  "runtime_census_libraries": {
+    "$ZIG_GLOBAL_CACHE_DIR/o/6e2ba3cf8618c64e9b1aa88ad8a08e41/libc.a": {
+      "sha256": "72ad7b2c78ce2a3291dda6effee05bc3e25a5e8f5be4ff4a486068de39174a33",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/6e2ba3cf8618c64e9b1aa88ad8a08e41/libc.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/ef3eeddeb3da35abcd12411a832b4c4c/libc.a": {
+      "sha256": "e00dfecad985c252716619a485b9e4cd7082e2c39f890b8ab56ec6c0258c24fe",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/ef3eeddeb3da35abcd12411a832b4c4c/libc.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/01d1c593bdd65f41c47c80b3218c604c/libzigc.a": {
+      "sha256": "fad8a8d650acc50f031e1e08e520b505468e09ea61901899d4027646abeefd01",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/01d1c593bdd65f41c47c80b3218c604c/libzigc.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/38bb4669a59f96c747e8f55553705f89/libzigc.a": {
+      "sha256": "a735f4144991e723029474abc0062ec1870dfacbbba15bf3019f1627b59ccc72",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/38bb4669a59f96c747e8f55553705f89/libzigc.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/a7ef71a4242a74b3163249a976fcaecd/libcompiler_rt.a": {
+      "sha256": "4e704ce2a545b23a558977a410e3149f682adabac05ddecdb3dc52a5a821d551",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/a7ef71a4242a74b3163249a976fcaecd/libcompiler_rt.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/394094132e1aa8cef2267718730a77ba/libcompiler_rt.a": {
+      "sha256": "852b15991ff942878304536552fe0be168f7598ffecc1654ee20da314c7748eb",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/394094132e1aa8cef2267718730a77ba/libcompiler_rt.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/6f29148d5a15fdba78819c9e65c1bffb/libcompiler_rt.a": {
+      "sha256": "6948df22d954367a7869ca43cd382d10bd17713aa423958ca8df8c10ea805ca6",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/6f29148d5a15fdba78819c9e65c1bffb/libcompiler_rt.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/92de8e09e02229332f4b5aa4f0b18417/libcompiler_rt.a": {
+      "sha256": "86b38e7b712dc534446e0e46213b58a5b565f9d977763f7bb355345481a2a233",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/92de8e09e02229332f4b5aa4f0b18417/libcompiler_rt.a"
+      ]
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/6a0eabfc40cbf2a18235ac40295b67a4/libcompiler_rt.a": {
+      "sha256": "a34d589ac49a13dd0d5e12698a8e692602a5a609822597c9afc20cc38d8a8324",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/6a0eabfc40cbf2a18235ac40295b67a4/libcompiler_rt.a"
+      ]
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.a": {
+      "sha256": "8e5252c4b87e3d588e2d15e624502277c5d3bfb382fec7a5199ae752080b372c",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "/usr/lib/x86_64-linux-gnu/libc.a"
+      ]
+    },
+    "/usr/lib/x86_64-linux-gnu/libm-2.36.a": {
+      "sha256": "c6382c1c6d14aa90d002f3ca1911f1b7477bf0b5b685c30de278076bbab95100",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "/usr/lib/x86_64-linux-gnu/libm-2.36.a"
+      ]
+    },
+    "/usr/lib/x86_64-linux-gnu/libmvec.a": {
+      "sha256": "8ae76fe83cc08f346773d1bc334f8fe4fa80f934236ae63c87468e3e17733fde",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "/usr/lib/x86_64-linux-gnu/libmvec.a"
+      ]
+    },
+    "$COSMO/x86_64-linux-cosmo/lib/libcosmo.a": {
+      "sha256": "d24abcb2cbdf7aa9cdde0fb09a62964527370070c21d8741413bb7c530d31f31",
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$COSMO/x86_64-linux-cosmo/lib/libcosmo.a"
+      ]
+    }
+  },
+  "runtime_census_script_sha256": "6d731e8736b8704e45bdc1c5be3b2ed8f34623824ac233e16fc8d843a66a9c3e",
+  "source_commit": "190ad4e2c6ac8abcd19ae1ce7d0f3335dc62708f",
+  "previous_commit": "e98cae6a8d998cfc91c14a0d268c1f510fcf1461",
+  "affinity_observations": [
+    {
+      "at": "2026-11-21T16:16:22Z",
+      "affinity": [
+        3
+      ],
+      "load1": 11.61962890625
+    },
+    {
+      "at": "2026-11-21T16:16:24Z",
+      "affinity": [
+        3
+      ],
+      "load1": 11.61962890625
+    },
+    {
+      "at": "2026-11-21T16:16:26Z",
+      "affinity": [
+        3
+      ],
+      "load1": 11.24951171875
+    },
+    {
+      "at": "2026-11-21T16:16:28Z",
+      "affinity": [
+        3
+      ],
+      "load1": 11.24951171875
+    },
+    {
+      "at": "2026-11-21T16:16:30Z",
+      "affinity": [
+        3
+      ],
+      "load1": 10.6689453125
+    },
+    {
+      "at": "2026-11-21T16:16:32Z",
+      "affinity": [
+        3
+      ],
+      "load1": 10.6689453125
+    },
+    {
+      "at": "2026-11-21T16:16:34Z",
+      "affinity": [
+        3
+      ],
+      "load1": 10.6689453125
+    },
+    {
+      "at": "2026-11-21T16:16:36Z",
+      "affinity": [
+        3
+      ],
+      "load1": 10.134765625
+    },
+    {
+      "at": "2026-11-21T16:16:38Z",
+      "affinity": [
+        3
+      ],
+      "load1": 10.134765625
+    },
+    {
+      "at": "2026-11-21T16:16:40Z",
+      "affinity": [
+        3
+      ],
+      "load1": 9.64306640625
+    },
+    {
+      "at": "2026-11-21T16:16:42Z",
+      "affinity": [
+        3
+      ],
+      "load1": 9.64306640625
+    },
+    {
+      "at": "2026-11-21T16:16:44Z",
+      "affinity": [
+        3
+      ],
+      "load1": 9.64306640625
+    },
+    {
+      "at": "2026-11-21T16:16:46Z",
+      "affinity": [
+        3
+      ],
+      "load1": 9.27099609375
+    },
+    {
+      "at": "2026-11-21T16:16:48Z",
+      "affinity": [
+        3
+      ],
+      "load1": 9.27099609375
+    },
+    {
+      "at": "2026-11-21T16:16:50Z",
+      "affinity": [
+        3
+      ],
+      "load1": 9.0087890625
+    },
+    {
+      "at": "2026-11-21T16:16:52Z",
+      "affinity": [
+        3
+      ],
+      "load1": 9.0087890625
+    },
+    {
+      "at": "2026-11-21T16:16:54Z",
+      "affinity": [
+        3
+      ],
+      "load1": 9.0087890625
+    },
+    {
+      "at": "2026-11-21T16:16:56Z",
+      "affinity": [
+        3
+      ],
+      "load1": 8.767578125
+    },
+    {
+      "at": "2026-11-21T16:16:58Z",
+      "affinity": [
+        3
+      ],
+      "load1": 8.767578125
+    },
+    {
+      "at": "2026-11-21T16:17:02Z",
+      "affinity": [
+        3
+      ],
+      "load1": 8.94677734375
+    },
+    {
+      "at": "2026-11-21T16:17:04Z",
+      "affinity": [
+        3
+      ],
+      "load1": 8.94677734375
+    },
+    {
+      "at": "2026-11-21T16:17:06Z",
+      "affinity": [
+        3
+      ],
+      "load1": 11.353515625
+    },
+    {
+      "at": "2026-11-21T16:17:08Z",
+      "affinity": [
+        3
+      ],
+      "load1": 11.353515625
+    },
+    {
+      "at": "2026-11-21T16:17:10Z",
+      "affinity": [
+        3
+      ],
+      "load1": 14.28857421875
+    },
+    {
+      "at": "2026-11-21T16:17:12Z",
+      "affinity": [
+        3
+      ],
+      "load1": 14.28857421875
+    },
+    {
+      "at": "2026-11-21T16:17:14Z",
+      "affinity": [
+        3
+      ],
+      "load1": 14.28857421875
+    },
+    {
+      "at": "2026-11-21T16:17:16Z",
+      "affinity": [
+        3
+      ],
+      "load1": 16.02734375
+    },
+    {
+      "at": "2026-11-21T16:17:18Z",
+      "affinity": [
+        3
+      ],
+      "load1": 16.02734375
+    },
+    {
+      "at": "2026-11-21T16:17:20Z",
+      "affinity": [
+        3
+      ],
+      "load1": 17.70703125
+    },
+    {
+      "at": "2026-11-21T16:17:22Z",
+      "affinity": [
+        3
+      ],
+      "load1": 17.70703125
+    },
+    {
+      "at": "2026-11-21T16:17:24Z",
+      "affinity": [
+        3
+      ],
+      "load1": 17.70703125
+    },
+    {
+      "at": "2026-11-21T16:17:26Z",
+      "affinity": [
+        3
+      ],
+      "load1": 18.85205078125
+    },
+    {
+      "at": "2026-11-21T16:17:28Z",
+      "affinity": [
+        3
+      ],
+      "load1": 18.85205078125
+    },
+    {
+      "at": "2026-11-21T16:17:30Z",
+      "affinity": [
+        3
+      ],
+      "load1": 21.1865234375
+    },
+    {
+      "at": "2026-11-21T16:17:32Z",
+      "affinity": [
+        3
+      ],
+      "load1": 21.1865234375
+    },
+    {
+      "at": "2026-11-21T16:17:34Z",
+      "affinity": [
+        3
+      ],
+      "load1": 21.1865234375
+    },
+    {
+      "at": "2026-11-21T16:17:36Z",
+      "affinity": [
+        3
+      ],
+      "load1": 22.052734375
+    },
+    {
+      "at": "2026-11-21T16:17:38Z",
+      "affinity": [
+        3
+      ],
+      "load1": 22.052734375
+    },
+    {
+      "at": "2026-11-21T16:17:40Z",
+      "affinity": [
+        3
+      ],
+      "load1": 21.08740234375
+    },
+    {
+      "at": "2026-11-21T16:17:42Z",
+      "affinity": [
+        3
+      ],
+      "load1": 21.08740234375
+    },
+    {
+      "at": "2026-11-21T16:17:44Z",
+      "affinity": [
+        3
+      ],
+      "load1": 21.08740234375
+    },
+    {
+      "at": "2026-11-21T16:17:46Z",
+      "affinity": [
+        3
+      ],
+      "load1": 20.83984375
+    },
+    {
+      "at": "2026-11-21T16:17:48Z",
+      "affinity": [
+        3
+      ],
+      "load1": 20.83984375
+    },
+    {
+      "at": "2026-11-21T16:17:50Z",
+      "affinity": [
+        3
+      ],
+      "load1": 20.1318359375
+    },
+    {
+      "at": "2026-11-21T16:17:52Z",
+      "affinity": [
+        3
+      ],
+      "load1": 20.1318359375
+    },
+    {
+      "at": "2026-11-21T16:17:54Z",
+      "affinity": [
+        3
+      ],
+      "load1": 20.1318359375
+    },
+    {
+      "at": "2026-11-21T16:17:56Z",
+      "affinity": [
+        3
+      ],
+      "load1": 19.080078125
+    },
+    {
+      "at": "2026-11-21T16:17:58Z",
+      "affinity": [
+        3
+      ],
+      "load1": 19.080078125
+    },
+    {
+      "at": "2026-11-21T16:18:00Z",
+      "affinity": [
+        3
+      ],
+      "load1": 18.9931640625
+    },
+    {
+      "at": "2026-11-21T16:18:02Z",
+      "affinity": [
+        3
+      ],
+      "load1": 18.9931640625
+    },
+    {
+      "at": "2026-11-21T16:18:04Z",
+      "affinity": [
+        3
+      ],
+      "load1": 18.9931640625
+    },
+    {
+      "at": "2026-11-21T16:18:06Z",
+      "affinity": [
+        3
+      ],
+      "load1": 18.83349609375
+    },
+    {
+      "at": "2026-11-21T16:18:08Z",
+      "affinity": [
+        3
+      ],
+      "load1": 18.83349609375
+    },
+    {
+      "at": "2026-11-21T16:18:10Z",
+      "affinity": [
+        3
+      ],
+      "load1": 18.2861328125
+    },
+    {
+      "at": "2026-11-21T16:18:12Z",
+      "affinity": [
+        3
+      ],
+      "load1": 18.2861328125
+    },
+    {
+      "at": "2026-11-21T16:18:14Z",
+      "affinity": [
+        3
+      ],
+      "load1": 18.2861328125
+    },
+    {
+      "at": "2026-11-21T16:18:16Z",
+      "affinity": [
+        3
+      ],
+      "load1": 17.70263671875
+    },
+    {
+      "at": "2026-11-21T16:18:18Z",
+      "affinity": [
+        3
+      ],
+      "load1": 17.70263671875
+    },
+    {
+      "at": "2026-11-21T16:18:20Z",
+      "affinity": [
+        3
+      ],
+      "load1": 18.6875
+    },
+    {
+      "at": "2026-11-21T16:18:22Z",
+      "affinity": [
+        3
+      ],
+      "load1": 18.6875
+    },
+    {
+      "at": "2026-11-21T16:18:24Z",
+      "affinity": [
+        3
+      ],
+      "load1": 18.6875
+    },
+    {
+      "at": "2026-11-21T16:18:26Z",
+      "affinity": [
+        3
+      ],
+      "load1": 19.994140625
+    },
+    {
+      "at": "2026-11-21T16:18:28Z",
+      "affinity": [
+        3
+      ],
+      "load1": 19.994140625
+    },
+    {
+      "at": "2026-11-21T16:18:30Z",
+      "affinity": [
+        3
+      ],
+      "load1": 21.11572265625
+    },
+    {
+      "at": "2026-11-21T16:18:32Z",
+      "affinity": [
+        3
+      ],
+      "load1": 21.11572265625
+    },
+    {
+      "at": "2026-11-21T16:18:34Z",
+      "affinity": [
+        3
+      ],
+      "load1": 21.11572265625
+    },
+    {
+      "at": "2026-11-21T16:18:36Z",
+      "affinity": [
+        3
+      ],
+      "load1": 21.66748046875
+    },
+    {
+      "at": "2026-11-21T16:18:38Z",
+      "affinity": [
+        3
+      ],
+      "load1": 21.66748046875
+    },
+    {
+      "at": "2026-11-21T16:18:40Z",
+      "affinity": [
+        3
+      ],
+      "load1": 22.0947265625
+    },
+    {
+      "at": "2026-11-21T16:18:42Z",
+      "affinity": [
+        3
+      ],
+      "load1": 22.0947265625
+    },
+    {
+      "at": "2026-11-21T16:18:44Z",
+      "affinity": [
+        3
+      ],
+      "load1": 22.0947265625
+    },
+    {
+      "at": "2026-11-21T16:18:46Z",
+      "affinity": [
+        3
+      ],
+      "load1": 23.52880859375
+    },
+    {
+      "at": "2026-11-21T16:18:48Z",
+      "affinity": [
+        3
+      ],
+      "load1": 23.52880859375
+    },
+    {
+      "at": "2026-11-21T16:18:50Z",
+      "affinity": [
+        3
+      ],
+      "load1": 26.12939453125
+    },
+    {
+      "at": "2026-11-21T16:18:52Z",
+      "affinity": [
+        3
+      ],
+      "load1": 26.12939453125
+    },
+    {
+      "at": "2026-11-21T16:18:54Z",
+      "affinity": [
+        3
+      ],
+      "load1": 26.12939453125
+    },
+    {
+      "at": "2026-11-21T16:21:40Z",
+      "affinity": [
+        3
+      ],
+      "load1": 531.4365234375
+    },
+    {
+      "at": "2026-11-21T16:25:46Z",
+      "affinity": [
+        3
+      ],
+      "load1": 515.0986328125
+    },
+    {
+      "at": "2026-11-21T16:25:49Z",
+      "affinity": [
+        3
+      ],
+      "load1": 515.0986328125
+    },
+    {
+      "at": "2026-11-21T16:25:51Z",
+      "affinity": [
+        3
+      ],
+      "load1": 490.34619140625
+    },
+    {
+      "at": "2026-11-21T16:25:53Z",
+      "affinity": [
+        3
+      ],
+      "load1": 490.34619140625
+    },
+    {
+      "at": "2026-11-21T16:25:55Z",
+      "affinity": [
+        3
+      ],
+      "load1": 466.134765625
+    },
+    {
+      "at": "2026-11-21T16:25:57Z",
+      "affinity": [
+        3
+      ],
+      "load1": 466.134765625
+    },
+    {
+      "at": "2026-11-21T16:25:59Z",
+      "affinity": [
+        3
+      ],
+      "load1": 466.134765625
+    },
+    {
+      "at": "2026-11-21T16:26:01Z",
+      "affinity": [
+        3
+      ],
+      "load1": 442.90087890625
+    },
+    {
+      "at": "2026-11-21T16:26:03Z",
+      "affinity": [
+        3
+      ],
+      "load1": 442.90087890625
+    },
+    {
+      "at": "2026-11-21T16:26:05Z",
+      "affinity": [
+        3
+      ],
+      "load1": 419.44580078125
+    },
+    {
+      "at": "2026-11-21T16:26:07Z",
+      "affinity": [
+        3
+      ],
+      "load1": 419.44580078125
+    },
+    {
+      "at": "2026-11-21T16:26:09Z",
+      "affinity": [
+        3
+      ],
+      "load1": 419.44580078125
+    },
+    {
+      "at": "2026-11-21T16:26:11Z",
+      "affinity": [
+        3
+      ],
+      "load1": 394.50537109375
+    },
+    {
+      "at": "2026-11-21T16:26:13Z",
+      "affinity": [
+        3
+      ],
+      "load1": 394.50537109375
+    },
+    {
+      "at": "2026-11-21T16:26:15Z",
+      "affinity": [
+        3
+      ],
+      "load1": 365.31640625
+    },
+    {
+      "at": "2026-11-21T16:26:17Z",
+      "affinity": [
+        3
+      ],
+      "load1": 365.31640625
+    },
+    {
+      "at": "2026-11-21T16:26:19Z",
+      "affinity": [
+        3
+      ],
+      "load1": 365.31640625
+    },
+    {
+      "at": "2026-11-21T16:26:21Z",
+      "affinity": [
+        3
+      ],
+      "load1": 339.185546875
+    },
+    {
+      "at": "2026-11-21T16:26:23Z",
+      "affinity": [
+        3
+      ],
+      "load1": 339.185546875
+    },
+    {
+      "at": "2026-11-21T16:26:25Z",
+      "affinity": [
+        3
+      ],
+      "load1": 314.26611328125
+    },
+    {
+      "at": "2026-11-21T16:26:27Z",
+      "affinity": [
+        3
+      ],
+      "load1": 314.26611328125
+    },
+    {
+      "at": "2026-11-21T16:26:29Z",
+      "affinity": [
+        3
+      ],
+      "load1": 314.26611328125
+    },
+    {
+      "at": "2026-11-21T16:26:31Z",
+      "affinity": [
+        3
+      ],
+      "load1": 291.42236328125
+    },
+    {
+      "at": "2026-11-21T16:26:33Z",
+      "affinity": [
+        3
+      ],
+      "load1": 291.42236328125
+    },
+    {
+      "at": "2026-11-21T16:26:35Z",
+      "affinity": [
+        3
+      ],
+      "load1": 270.96826171875
+    },
+    {
+      "at": "2026-11-21T16:26:37Z",
+      "affinity": [
+        3
+      ],
+      "load1": 270.96826171875
+    },
+    {
+      "at": "2026-11-21T16:26:39Z",
+      "affinity": [
+        3
+      ],
+      "load1": 270.96826171875
+    },
+    {
+      "at": "2026-11-21T16:26:41Z",
+      "affinity": [
+        3
+      ],
+      "load1": 252.072265625
+    },
+    {
+      "at": "2026-11-21T16:26:43Z",
+      "affinity": [
+        3
+      ],
+      "load1": 252.072265625
+    },
+    {
+      "at": "2026-11-21T16:26:45Z",
+      "affinity": [
+        3
+      ],
+      "load1": 234.609375
+    },
+    {
+      "at": "2026-11-21T16:26:47Z",
+      "affinity": [
+        3
+      ],
+      "load1": 234.609375
+    },
+    {
+      "at": "2026-11-21T16:26:49Z",
+      "affinity": [
+        3
+      ],
+      "load1": 234.609375
+    },
+    {
+      "at": "2026-11-21T16:26:51Z",
+      "affinity": [
+        3
+      ],
+      "load1": 217.984375
+    },
+    {
+      "at": "2026-11-21T16:26:53Z",
+      "affinity": [
+        3
+      ],
+      "load1": 217.984375
+    },
+    {
+      "at": "2026-11-21T16:26:55Z",
+      "affinity": [
+        3
+      ],
+      "load1": 202.3701171875
+    },
+    {
+      "at": "2026-11-21T16:26:57Z",
+      "affinity": [
+        3
+      ],
+      "load1": 202.3701171875
+    },
+    {
+      "at": "2026-11-21T16:26:59Z",
+      "affinity": [
+        3
+      ],
+      "load1": 202.3701171875
+    },
+    {
+      "at": "2026-11-21T16:27:01Z",
+      "affinity": [
+        3
+      ],
+      "load1": 187.92626953125
+    },
+    {
+      "at": "2026-11-21T16:27:03Z",
+      "affinity": [
+        3
+      ],
+      "load1": 187.92626953125
+    },
+    {
+      "at": "2026-11-21T16:27:05Z",
+      "affinity": [
+        3
+      ],
+      "load1": 174.23876953125
+    },
+    {
+      "at": "2026-11-21T16:27:07Z",
+      "affinity": [
+        3
+      ],
+      "load1": 174.23876953125
+    },
+    {
+      "at": "2026-11-21T16:27:09Z",
+      "affinity": [
+        3
+      ],
+      "load1": 174.23876953125
+    },
+    {
+      "at": "2026-11-21T16:27:11Z",
+      "affinity": [
+        3
+      ],
+      "load1": 161.24658203125
+    },
+    {
+      "at": "2026-11-21T16:27:13Z",
+      "affinity": [
+        3
+      ],
+      "load1": 161.24658203125
+    },
+    {
+      "at": "2026-11-21T16:27:15Z",
+      "affinity": [
+        3
+      ],
+      "load1": 149.294921875
+    },
+    {
+      "at": "2026-11-21T16:27:17Z",
+      "affinity": [
+        3
+      ],
+      "load1": 149.294921875
+    },
+    {
+      "at": "2026-11-21T16:27:19Z",
+      "affinity": [
+        3
+      ],
+      "load1": 149.294921875
+    },
+    {
+      "at": "2026-11-21T16:27:21Z",
+      "affinity": [
+        3
+      ],
+      "load1": 138.94091796875
+    },
+    {
+      "at": "2026-11-21T16:27:23Z",
+      "affinity": [
+        3
+      ],
+      "load1": 138.94091796875
+    },
+    {
+      "at": "2026-11-21T16:27:25Z",
+      "affinity": [
+        3
+      ],
+      "load1": 128.935546875
+    },
+    {
+      "at": "2026-11-21T16:27:27Z",
+      "affinity": [
+        3
+      ],
+      "load1": 128.935546875
+    },
+    {
+      "at": "2026-11-21T16:27:29Z",
+      "affinity": [
+        3
+      ],
+      "load1": 128.935546875
+    },
+    {
+      "at": "2026-11-21T16:27:31Z",
+      "affinity": [
+        3
+      ],
+      "load1": 119.7314453125
+    },
+    {
+      "at": "2026-11-21T16:27:33Z",
+      "affinity": [
+        3
+      ],
+      "load1": 119.7314453125
+    },
+    {
+      "at": "2026-11-21T16:27:35Z",
+      "affinity": [
+        3
+      ],
+      "load1": 111.1845703125
+    },
+    {
+      "at": "2026-11-21T16:27:37Z",
+      "affinity": [
+        3
+      ],
+      "load1": 111.1845703125
+    },
+    {
+      "at": "2026-11-21T16:27:39Z",
+      "affinity": [
+        3
+      ],
+      "load1": 111.1845703125
+    },
+    {
+      "at": "2026-11-21T16:27:41Z",
+      "affinity": [
+        3
+      ],
+      "load1": 103.16162109375
+    },
+    {
+      "at": "2026-11-21T16:27:43Z",
+      "affinity": [
+        3
+      ],
+      "load1": 103.16162109375
+    },
+    {
+      "at": "2026-11-21T16:27:45Z",
+      "affinity": [
+        3
+      ],
+      "load1": 95.94140625
+    },
+    {
+      "at": "2026-11-21T16:27:47Z",
+      "affinity": [
+        3
+      ],
+      "load1": 95.94140625
+    },
+    {
+      "at": "2026-11-21T16:27:49Z",
+      "affinity": [
+        3
+      ],
+      "load1": 95.94140625
+    },
+    {
+      "at": "2026-11-21T16:27:51Z",
+      "affinity": [
+        3
+      ],
+      "load1": 89.21923828125
+    },
+    {
+      "at": "2026-11-21T16:27:53Z",
+      "affinity": [
+        3
+      ],
+      "load1": 89.21923828125
+    },
+    {
+      "at": "2026-11-21T16:27:55Z",
+      "affinity": [
+        3
+      ],
+      "load1": 82.87548828125
+    },
+    {
+      "at": "2026-11-21T16:27:57Z",
+      "affinity": [
+        3
+      ],
+      "load1": 82.87548828125
+    },
+    {
+      "at": "2026-11-21T16:27:59Z",
+      "affinity": [
+        3
+      ],
+      "load1": 82.87548828125
+    },
+    {
+      "at": "2026-11-21T16:28:01Z",
+      "affinity": [
+        3
+      ],
+      "load1": 78.24072265625
+    },
+    {
+      "at": "2026-11-21T16:28:03Z",
+      "affinity": [
+        3
+      ],
+      "load1": 78.24072265625
+    },
+    {
+      "at": "2026-11-21T16:28:05Z",
+      "affinity": [
+        3
+      ],
+      "load1": 72.85595703125
+    },
+    {
+      "at": "2026-11-21T16:28:07Z",
+      "affinity": [
+        3
+      ],
+      "load1": 72.85595703125
+    },
+    {
+      "at": "2026-11-21T16:28:09Z",
+      "affinity": [
+        3
+      ],
+      "load1": 72.85595703125
+    },
+    {
+      "at": "2026-11-21T16:28:11Z",
+      "affinity": [
+        3
+      ],
+      "load1": 67.501953125
+    },
+    {
+      "at": "2026-11-21T16:28:13Z",
+      "affinity": [
+        3
+      ],
+      "load1": 67.501953125
+    },
+    {
+      "at": "2026-11-21T16:28:15Z",
+      "affinity": [
+        3
+      ],
+      "load1": 62.57666015625
+    },
+    {
+      "at": "2026-11-21T16:28:17Z",
+      "affinity": [
+        3
+      ],
+      "load1": 62.57666015625
+    },
+    {
+      "at": "2026-11-21T16:28:19Z",
+      "affinity": [
+        3
+      ],
+      "load1": 62.57666015625
+    },
+    {
+      "at": "2026-11-21T16:28:21Z",
+      "affinity": [
+        3
+      ],
+      "load1": 58.0458984375
+    },
+    {
+      "at": "2026-11-21T16:28:23Z",
+      "affinity": [
+        3
+      ],
+      "load1": 58.0458984375
+    },
+    {
+      "at": "2026-11-21T16:28:25Z",
+      "affinity": [
+        3
+      ],
+      "load1": 53.8779296875
+    },
+    {
+      "at": "2026-11-21T16:28:27Z",
+      "affinity": [
+        3
+      ],
+      "load1": 53.8779296875
+    },
+    {
+      "at": "2026-11-21T16:28:29Z",
+      "affinity": [
+        3
+      ],
+      "load1": 53.8779296875
+    },
+    {
+      "at": "2026-11-21T16:28:31Z",
+      "affinity": [
+        3
+      ],
+      "load1": 50.1240234375
+    },
+    {
+      "at": "2026-11-21T16:28:33Z",
+      "affinity": [
+        3
+      ],
+      "load1": 50.1240234375
+    },
+    {
+      "at": "2026-11-21T16:28:35Z",
+      "affinity": [
+        3
+      ],
+      "load1": 46.43017578125
+    },
+    {
+      "at": "2026-11-21T16:28:37Z",
+      "affinity": [
+        3
+      ],
+      "load1": 46.43017578125
+    },
+    {
+      "at": "2026-11-21T16:28:39Z",
+      "affinity": [
+        3
+      ],
+      "load1": 46.43017578125
+    },
+    {
+      "at": "2026-11-21T16:28:41Z",
+      "affinity": [
+        3
+      ],
+      "load1": 43.2724609375
+    },
+    {
+      "at": "2026-11-21T16:28:43Z",
+      "affinity": [
+        3
+      ],
+      "load1": 43.2724609375
+    },
+    {
+      "at": "2026-11-21T16:28:45Z",
+      "affinity": [
+        3
+      ],
+      "load1": 40.28759765625
+    },
+    {
+      "at": "2026-11-21T16:28:47Z",
+      "affinity": [
+        3
+      ],
+      "load1": 40.28759765625
+    },
+    {
+      "at": "2026-11-21T16:28:49Z",
+      "affinity": [
+        3
+      ],
+      "load1": 40.28759765625
+    },
+    {
+      "at": "2026-11-21T16:28:51Z",
+      "affinity": [
+        3
+      ],
+      "load1": 37.54150390625
+    },
+    {
+      "at": "2026-11-21T16:28:53Z",
+      "affinity": [
+        3
+      ],
+      "load1": 37.54150390625
+    },
+    {
+      "at": "2026-11-21T16:28:55Z",
+      "affinity": [
+        3
+      ],
+      "load1": 34.935546875
+    },
+    {
+      "at": "2026-11-21T16:28:57Z",
+      "affinity": [
+        3
+      ],
+      "load1": 34.935546875
+    },
+    {
+      "at": "2026-11-21T16:28:59Z",
+      "affinity": [
+        3
+      ],
+      "load1": 34.935546875
+    },
+    {
+      "at": "2026-11-21T16:29:01Z",
+      "affinity": [
+        3
+      ],
+      "load1": 34.3798828125
+    },
+    {
+      "at": "2026-11-21T16:29:03Z",
+      "affinity": [
+        3
+      ],
+      "load1": 34.3798828125
+    },
+    {
+      "at": "2026-11-21T16:29:05Z",
+      "affinity": [
+        3
+      ],
+      "load1": 32.02685546875
+    }
+  ]
+}

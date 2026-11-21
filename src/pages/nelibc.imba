@@ -175,9 +175,9 @@ export def body comparison, stats
 					"Nelua and the Cosmopolitan compiler wrapper for the default hybrid build; Zig ("
 					<code> "zig cc"
 					") for the older profiles. GCC for the GCC profile; TinyCC mob branch for the TinyCC profile."
-				<dt> "Captured-source build"
+				<dt> "Build the measured revision"
 				<dd>
-					"Download the exact source snapshot above and extract it into a new directory. In that snapshot, "
+					"Use the Nelibc revision and toolchain versions recorded with the comparison. The target "
 					<code> "make smoke-cosmo"
 					" uses "
 					<code> "x86_64-unknown-cosmo-cc"

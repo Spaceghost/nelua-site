@@ -1,0 +1,54 @@
+{
+  "source_commit": "add53bf69303415c75fb099ad822bf046a1d6b45",
+  "profiles": {
+    "glibc-baseline": {
+      "pass": 301,
+      "build_failure": 4,
+      "link_failure": 0,
+      "runtime_failure": 37,
+      "timeout": 1,
+      "not_run": 0
+    },
+    "glibc-nelibc": {
+      "pass": 325,
+      "build_failure": 4,
+      "link_failure": 0,
+      "runtime_failure": 13,
+      "timeout": 1,
+      "not_run": 0
+    },
+    "musl-baseline": {
+      "pass": 327,
+      "build_failure": 0,
+      "link_failure": 1,
+      "runtime_failure": 15,
+      "timeout": 0,
+      "not_run": 0
+    },
+    "musl-nelibc": {
+      "pass": 333,
+      "build_failure": 0,
+      "link_failure": 1,
+      "runtime_failure": 9,
+      "timeout": 0,
+      "not_run": 0
+    },
+    "cosmopolitan-baseline": {
+      "pass": 228,
+      "build_failure": 11,
+      "link_failure": 10,
+      "runtime_failure": 38,
+      "timeout": 56,
+      "not_run": 0
+    },
+    "cosmopolitan-nelibc": {
+      "pass": 302,
+      "build_failure": 11,
+      "link_failure": 4,
+      "runtime_failure": 26,
+      "timeout": 0,
+      "not_run": 0
+    }
+  },
+  "conditions": "First run of the earlier candidate; includes startup timeouts under I/O load. The final revision was run separately."
+}

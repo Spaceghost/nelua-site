@@ -1,0 +1,130 @@
+{
+  "source_commit": "190ad4e2c6ac8abcd19ae1ce7d0f3335dc62708f",
+  "previous_commit": "e98cae6a8d998cfc91c14a0d268c1f510fcf1461",
+  "corpus_commit": "63e36e934e8f2bedf645303a90b64098e2af6c8f",
+  "archive_sha256": {
+    "glibc": "c53aa3ff327bf6ffdddc5926b87b65505cd401262f8acfda26be2af9e2ccde5d",
+    "musl": "10d23b0f814423eed2afdc8ea2437e842e9f000ad9766c759ec3a9c6e56996ac",
+    "cosmopolitan": "52fd435ff8ae1e0744ae7a49aeff522b63f5f8ed5229b66c3429fe9a26152624"
+  },
+  "previous_archive_sha256": {
+    "glibc": "6d1f21452483ef05abcef81ecfa595d9855aac7c725ef9ca1ba9be3235184be7",
+    "musl": "59526fc6acd667cf5d998bb9405e8fcac15d96b0f688642a6fb25eb9d9b37247",
+    "cosmopolitan": "957d7f1487d80cc133326349a50420d82640b06dae0241f7d78e490bfe76ea7b"
+  },
+  "conformance_driver_sha256": "7564501c5899e9b642332886e21c1c7bd35aa996c2d483fec1bd9e77b85be240",
+  "case_count": 343,
+  "case_set_sha256": "d8564bb1b75a611d70f6072363bc015e7caf6dc28d71e18dd9e54c5b5d7fdf0b",
+  "results_sha256": "2eca85d2d072f9fff010e8c166df9a9faf7af2f1242b1191fe0f7aacaaf8a0d0",
+  "supervisor_sha256": "46586ac820d4d1d5e457d63819495059a1b9c6d20e1500a722621708dc3c7e29",
+  "profiles": {
+    "glibc-baseline": {
+      "statuses": {
+        "pass": 301,
+        "build_failure": 4,
+        "link_failure": 0,
+        "runtime_failure": 37,
+        "timeout": 1,
+        "not_run": 0
+      },
+      "executables": 339,
+      "executable_set_sha256": "5634b43675760adabfe6efd3761e04cd03059303d3944287ff91db4b50fabf51",
+      "diagnostics": 343,
+      "diagnostic_set_sha256": "fa94af11785044e50f48e05e40a5944f2fab8dfbfa3ccdbf1fb65a70ef8ad077",
+      "build_log_sha256": "cfffd72b98156db2f9eebac4872da32b9473c470fcf210caa57c1513aa131090",
+      "retained_objects": 349,
+      "retained_objects_sha256": "df98b096a11db5c74dbfd598b331be6b1632b46ca198e221a0889b8e552f61a8",
+      "config_sha256": "4dde229285dc76c25f97b86b6ea992535699112b74d03404d211170c17dba751"
+    },
+    "glibc-nelibc": {
+      "statuses": {
+        "pass": 325,
+        "build_failure": 4,
+        "link_failure": 0,
+        "runtime_failure": 13,
+        "timeout": 1,
+        "not_run": 0
+      },
+      "executables": 339,
+      "executable_set_sha256": "a056cc576a21c7230ab52d481c6421e6f09bdcbe382a667d656956f18e8f5801",
+      "diagnostics": 343,
+      "diagnostic_set_sha256": "9ff10e1df80a1bdc2a906dd3e79f53053ce059cfb25fda2a5dbbbe8e2ab12223",
+      "build_log_sha256": "7fddd67f222421a0842c8574c6cbb025184914f90939c96344feb2a5ee113cf6",
+      "retained_objects": 349,
+      "retained_objects_sha256": "df98b096a11db5c74dbfd598b331be6b1632b46ca198e221a0889b8e552f61a8",
+      "config_sha256": "a94925cc0964254f9a5f6d34beac4e323d955417823c6cc006f8f3d91a652137"
+    },
+    "musl-baseline": {
+      "statuses": {
+        "pass": 327,
+        "build_failure": 0,
+        "link_failure": 1,
+        "runtime_failure": 15,
+        "timeout": 0,
+        "not_run": 0
+      },
+      "executables": 342,
+      "executable_set_sha256": "753a686481c5945ba3178492e6bf9f8dc2a770191b13a7af75057643cf6d159b",
+      "diagnostics": 343,
+      "diagnostic_set_sha256": "f7be0cc0ef0c214a3c2aa73e7e5f5588f6d38129de4b4fd719af9913514c10f6",
+      "build_log_sha256": "690d061f58f0ae88112ed36903e1dffe1ab2ebca095b650287cc1e07727e8609",
+      "retained_objects": 353,
+      "retained_objects_sha256": "2933fb480f42be1a6eb6bb556a524276a38362986ce3dac78e837b5881caca20",
+      "config_sha256": "71d99fef1ec76ecae583a8bdcf3a1e86e642f0af749e67d91dbaa61d88972d25"
+    },
+    "musl-nelibc": {
+      "statuses": {
+        "pass": 333,
+        "build_failure": 0,
+        "link_failure": 1,
+        "runtime_failure": 9,
+        "timeout": 0,
+        "not_run": 0
+      },
+      "executables": 342,
+      "executable_set_sha256": "7b1b932178a663ef5d2a7799ca4b5aedefcb2c64d855064ba3dacbee954cc4b1",
+      "diagnostics": 343,
+      "diagnostic_set_sha256": "d00de96180d87cb5daa0f7a418770c9d20f3150b90af319733cbf3e3f744f049",
+      "build_log_sha256": "96d3c8d201f8042c865444ebc81ced1df61672d429169f554fc29946b365e6f0",
+      "retained_objects": 353,
+      "retained_objects_sha256": "8bf19a2aef2b52b8329c430360230617b92524fc7644146e5842a34746be41af",
+      "config_sha256": "c002244ee400c68b919730aeef1c63dbdc7b6232dce485158052221284b0a92d"
+    },
+    "cosmopolitan-baseline": {
+      "statuses": {
+        "pass": 278,
+        "build_failure": 11,
+        "link_failure": 10,
+        "runtime_failure": 44,
+        "timeout": 0,
+        "not_run": 0
+      },
+      "executables": 322,
+      "executable_set_sha256": "887e1eb28e8d1873e54199bb32e6b607a7950a943677f4cab297c1b8a16a7255",
+      "diagnostics": 343,
+      "diagnostic_set_sha256": "662731d58aabdd77893d5be96ed057eb641620b4d94243f1cd6405ebbc7975f2",
+      "build_log_sha256": "9b9699c8fc381ee1cebea4342a3ee9aec2b3a9fc6d042bae0e98c98d9baa7858",
+      "retained_objects": 342,
+      "retained_objects_sha256": "d154a089559c56b1b7041f9ba0f9a8e7f6888e692c2d7b63b9c39d2baada5ad9",
+      "config_sha256": "70025d91a1f7b74dae9922dc1e678bbe66e7f6290531563ed78c085f94932240"
+    },
+    "cosmopolitan-nelibc": {
+      "statuses": {
+        "pass": 302,
+        "build_failure": 11,
+        "link_failure": 4,
+        "runtime_failure": 26,
+        "timeout": 0,
+        "not_run": 0
+      },
+      "executables": 328,
+      "executable_set_sha256": "1ca7133d8f14a4346e7bfeab4f499b84e7bd63201f57669c75a1e0de000e4cfc",
+      "diagnostics": 343,
+      "diagnostic_set_sha256": "62c773d17d2ec5fb80d6ed5c9263b8f06236467358aaddb99d14b2f92350bb4b",
+      "build_log_sha256": "eb1d12be1968f9935ea8c1e6b73102f283c7f44dd92235847cd3fbb1ee7f58f2",
+      "retained_objects": 342,
+      "retained_objects_sha256": "d154a089559c56b1b7041f9ba0f9a8e7f6888e692c2d7b63b9c39d2baada5ad9",
+      "config_sha256": "ce28134a19a4b78fd54fda5dde1c5778688b1cf394df7922a7f3be2366f58611"
+    }
+  }
+}

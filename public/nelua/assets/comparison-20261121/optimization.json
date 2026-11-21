@@ -1,0 +1,45 @@
+{
+  "cases": [
+    [
+      "strstr-tail",
+      8
+    ],
+    [
+      "strstr-tail",
+      32
+    ],
+    [
+      "strstr-tail",
+      128
+    ],
+    [
+      "strstr-tail",
+      1024
+    ],
+    [
+      "strstr-tail",
+      4096
+    ],
+    [
+      "strstr-tail",
+      65536
+    ]
+  ],
+  "overview_cases": [
+    [
+      "strstr-tail",
+      8
+    ],
+    [
+      "strstr-tail",
+      128
+    ],
+    [
+      "strstr-tail",
+      65536
+    ]
+  ],
+  "tradeoffs": [],
+  "overview_scope": "These samples search for \u201caaaaz\u201d in a run of \u201ca\u201d bytes ending in one \u201cz\u201d.",
+  "changes": "In the timed rows, the needle is \u201caaaaz\u201d and the haystack contains only \u201ca\u201d up to the final \u201cz\u201d. Nelibc verifies up to 16 candidate starts directly. With more starts and a two-to-seven-byte needle, it can search for a less common byte near the end of the needle. Four nearby false matches trigger a return to the first-byte search, with direct verification when that byte also becomes common."
+}

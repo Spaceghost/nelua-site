@@ -1,0 +1,65 @@
+{
+  "glibc-baseline": {
+    "exit": 0,
+    "result": {
+      "checks": 1995,
+      "failures": 0
+    }
+  },
+  "glibc-previous": {
+    "exit": 0,
+    "result": {
+      "checks": 1995,
+      "failures": 0
+    }
+  },
+  "glibc-nelibc": {
+    "exit": 0,
+    "result": {
+      "checks": 1995,
+      "failures": 0
+    }
+  },
+  "musl-baseline": {
+    "exit": 0,
+    "result": {
+      "checks": 1995,
+      "failures": 0
+    }
+  },
+  "musl-previous": {
+    "exit": 0,
+    "result": {
+      "checks": 1995,
+      "failures": 0
+    }
+  },
+  "musl-nelibc": {
+    "exit": 0,
+    "result": {
+      "checks": 1995,
+      "failures": 0
+    }
+  },
+  "cosmopolitan-baseline": {
+    "exit": 0,
+    "result": {
+      "checks": 1995,
+      "failures": 0
+    }
+  },
+  "cosmopolitan-previous": {
+    "exit": 0,
+    "result": {
+      "checks": 1995,
+      "failures": 0
+    }
+  },
+  "cosmopolitan-nelibc": {
+    "exit": 0,
+    "result": {
+      "checks": 1995,
+      "failures": 0
+    }
+  }
+}

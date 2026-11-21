@@ -81,7 +81,7 @@ Build and run `benchmarks/comparison/run.py` and `conformance.py` from Nelibc
 on its prescribed Bak container. Preserve each libc-only baseline alongside
 its Nelibc-linked consumer; do not convert expected failures into passes.
 Copy the recorded results into a new dated `public/nelua/assets/comparison-*`
-directory, with the exact source snapshot and commands, then run:
+directory with the exact source revisions, archive hashes and reproduction commands. Use the recorded revision and the public harness for commit-based runs. The dated snapshot directories preserve earlier comparisons. Then run:
 
 ```sh
 python3 scripts/nelibc-comparison.py public/nelua/assets/comparison-YYYYMMDD

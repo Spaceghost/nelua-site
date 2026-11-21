@@ -4,7 +4,8 @@ export const description = 'Explore the Nelua compiler, C library, userland, nat
 const core = [
 	{ title: 'Compiler', path: '/nelua/compiler/', kind: 'Language', description: 'A Nelua compiler fork with exhaustive matching, ownership, compile-time evaluation and file-local syntax extensions.' }
 	{ title: 'nelibc', path: '/nelua/nelibc/', kind: 'C library', description: 'A C library written in Nelua, with hybrid builds over glibc, musl and Cosmopolitan and a standalone Linux runtime.' }
-	{ title: 'nebox', path: '/nelua/nebox/', kind: 'Userland', description: 'Unix applets and an interactive POSIX shell in a single static executable linked against standalone nelibc.' }
+	{ title: 'nebox', path: '/nelua/nebox/', kind: 'Userland', description: 'Unix applets in a single static executable linked against standalone nelibc.' }
+	{ title: 'nsh', path: '/nelua/nebox/nsh/', kind: 'Shell', description: 'The interactive POSIX shell included in nebox, with command completion, searchable history and job control.' }
 	{ title: 'necc', path: '/nelua/necc/', kind: 'Compiler driver', description: 'Compile C and Nelua against standalone Nelibc or run Lua from the staged SDK.' }
 	{ title: 'nelinker', path: '/nelua/nelinker/', kind: 'Linker', description: 'Link x86-64 Linux executables directly from ELF objects and static archives.' }
 	{ title: 'nebuild', path: '/nelua/nebuild/', kind: 'Build runner', description: 'Run incremental, parallel builds from a build.ne dependency graph.' }
@@ -58,7 +59,6 @@ export def body comparison
 			<div className="core-guides">
 				<a href="/nelua/compiler/syntax-extensions/"> 'Syntax extensions guide'
 				<a href="/nelua/compiler/comptime/"> 'Compile-time record configs'
-				<a href="/nelua/nebox/nsh/"> 'The nsh shell'
 		<section className="overview-section" aria-labelledby="libc-comparison">
 			<div innerHTML=comparison>
 		<section className="overview-section" aria-labelledby="build">

@@ -25,6 +25,7 @@ export def body
 		<p> 'nebuild records the recipe, declared inputs and their metadata, and the last successful build of each generated input. An output rebuilds when it is missing or when one of those records changes. Declare headers, compiler binaries and configuration files as inputs when they affect the output.'
 		<p> 'Recipes run through /bin/sh. Independent jobs can run in parallel. A lock serializes invocations that share the working directory.'
 		<h2 className="section"> 'Build the runner from Nebox'
+		<p><a href="https://github.com/Spaceghost/nebox/blob/master/tools/nebuild.nelua"> 'nebuild source in Nebox'
 		<p> 'From a Nebox checkout with Nelua, Zig and the standalone Nelibc archive available, build and test the runner with the same toolchain used for Nebox.'
 		<pre>
 			<code> "make NELIBC=/path/to/nelibc nebuild\nmake NELIBC=/path/to/nelibc test-nebuild"

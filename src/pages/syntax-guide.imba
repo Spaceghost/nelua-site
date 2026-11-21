@@ -21,5 +21,5 @@ export def body guide, toc
 export def footerLinks
 	<div className="footer-links">
 		<a html:href="/nelua/compiler/"> "Compiler"
-		<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/syntax-extensions.md"> "Guide source "
-		<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/examples/syntax_tour.nelua"> "Runnable tour "
+		<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/syntax-extensions.md"> "Guide source "
+		<a html:href="https://github.com/Spaceghost/nelua/blob/master/examples/syntax_tour.nelua"> "Runnable tour "

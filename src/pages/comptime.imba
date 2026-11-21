@@ -10,8 +10,8 @@ export def body
 			<p className="blurb"> "Compile-time evaluation (CTFE) is useful when a table, descriptor, protocol constant, or lookup structure follows from values known before the target runs. Keep the inputs as typed records, reuse them by name, and let the compiler emit the result as ordinary static C data."
 			<p className="meta">
 				<a html:href="/nelua/compiler/"> "Compiler additions"
-				<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/comptime.md"> "Compiler guide "
-				<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#compile-time-function-evaluation"> "Language overview "
+				<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/comptime.md"> "Compiler guide "
+				<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/overview.md#compile-time-function-evaluation"> "Language overview "
 		<div className="page-details">
 			<h2 className="section" html:id="two-ways"> "Two ways to ask for evaluation"
 			<p className="lead">
@@ -102,20 +102,20 @@ export def body
 				"To inspect the generated C, run "
 				<code> "nelua --print-code radio_config.nelua > radio_config.c"
 				" and search the output for the folded array. Check the fork's current "
-				<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/comptime.md"> "CTFE reference"
+				<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/comptime.md"> "CTFE reference"
 				" for supported syntax and diagnostics."
 			<h2 className="section" html:id="related"> "Related pages"
 			<ul>
 				<li>
 					<a html:href="/nelua/compiler/"> "Compiler fork feature list and install notes"
 				<li>
-					<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/comptime.md"> "Compiler CTFE reference"
+					<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/comptime.md"> "Compiler CTFE reference"
 				<li>
-					<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#compile-time-function-evaluation"> "Nelua overview: compile-time function evaluation"
+					<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/overview.md#compile-time-function-evaluation"> "Nelua overview: compile-time function evaluation"
 				<li>
-					<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md#compile-time-evaluation"> "Fork additions guide"
+					<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/fork.md#compile-time-evaluation"> "Fork additions guide"
 
 export def footerLinks
 	<div className="footer-links">
-		<a html:href="https://github.com/Spaceghost/nelua-lang"> "Spaceghost/nelua-lang"
+		<a html:href="https://github.com/Spaceghost/nelua"> "Spaceghost/nelua"
 		<a html:href="/nelua/"> "ecosystem overview"

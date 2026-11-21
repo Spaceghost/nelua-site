@@ -11,6 +11,7 @@ export def body
 		<section className="hero">
 			<h1> 'necc'
 			<p className="lead"> 'A compiler driver for x86-64 Linux. Use it to build C and Nelua programs against standalone Nelibc or run Lua from the same toolchain.'
+			<p><a href="https://github.com/Spaceghost/necc"> 'necc source on GitHub'
 			<div className="actions">
 				<a className="button" href="#compile"> 'Compile a program'
 				<a className="text-link" href="#benchmarks"> 'Compare compiler timings'

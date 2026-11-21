@@ -13,6 +13,7 @@ export def body
 			<h1> 'nelinker'
 			<p className="tagline"> 'A static ELF linker written in Nelua for x86-64 Linux.'
 			<p className="blurb"> 'Give it object files and Unix archives. It resolves symbols, applies relocations and writes an executable. The same linker performs the final link of both itself and the necc compiler driver.'
+			<p><a href="https://github.com/Spaceghost/nelinker"> 'nelinker source on GitHub'
 			<div className="actions">
 				<a className="button" href="#archive"> 'Link an archive'
 				<a className="text-link" href="#benchmarks"> 'Compare link times'

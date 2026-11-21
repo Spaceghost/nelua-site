@@ -1,5 +1,5 @@
 export const title = "Nelua compiler fork · spacegho.st/nelua"
-export const description = "Spaceghost/nelua-lang: upstream Nelua plus variants, optionals, an exhaustive match statement, owned records with move, closures, structured compile-time evaluation, const pointers, a compiler-enforced freestanding pragma, cross-compilation with --target and nelua-bindgen."
+export const description = "Spaceghost/nelua: upstream Nelua plus variants, optionals, an exhaustive match statement, owned records with move, closures, structured compile-time evaluation, const pointers, a compiler-enforced freestanding pragma, cross-compilation with --target and nelua-bindgen."
 
 export def body
 	<div className="page-content">
@@ -8,7 +8,7 @@ export def body
 			<h1> "The compiler"
 			<p className="tagline"> "Upstream Nelua, tracked closely, plus the pieces a self-hosted libc and freestanding targets asked for."
 			<p className="blurb">
-				<a html:href="https://github.com/Spaceghost/nelua-lang"> "Spaceghost/nelua-lang"
+				<a html:href="https://github.com/Spaceghost/nelua"> "Spaceghost/nelua"
 				" is a fork of "
 				<a html:href="https://github.com/edubart/nelua-lang"> "edubart/nelua-lang"
 				" at commit "
@@ -20,7 +20,7 @@ export def body
 				", generated string and container operations use normal allocator rules; "
 				<code> "pragmas.freestanding"
 				" continues to reject heap-dependent operations. The guide "
-				<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md"> "What this fork adds"
+				<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/fork.md"> "What this fork adds"
 				" walks through each one with examples."
 			<p className="stats">
 				<span>
@@ -59,8 +59,8 @@ export def body
 					<pre>
 						<code> "require 'variant'\nlocal Token = @variant(integer, string, boolean)\nlocal t: Token = 42\nprint(t == 42, t:is(integer))   -- true  true\nt = 'end'\nprint(t:get(string))            -- end"
 					<p className="meta">
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md#variants"> "guide "
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#variant"> "overview "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/fork.md#variants"> "guide "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/overview.md#variant"> "overview "
 				<article className="card card-core" html:id="optionals">
 					<h3> "Optionals"
 					<p>
@@ -84,8 +84,8 @@ export def body
 					<pre>
 						<code> "require 'optional'\nrequire 'io'\nlocal function find(k: integer): integer?\n  if k == 1 then return 10 end\n  return nil\nend\nlocal a = find(1) orelse 0          -- 10\nif local x = find(2) then print(x) end\nlocal function open_all(p: string): integer?\n  local f = io.open(p)?             -- returns empty on failure\n  return 1\nend"
 					<p className="meta">
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md#optionals"> "guide "
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#optional"> "overview "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/fork.md#optionals"> "guide "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/overview.md#optional"> "overview "
 				<article className="card card-core" html:id="match">
 					<h3>
 						<code> "match"
@@ -106,8 +106,8 @@ export def body
 					<pre>
 						<code> "local Shape = @variant(integer, string)\nlocal shapes: [2]Shape = \{7, 'square'}\nmatch shapes[0] do\ncase local r: *integer then $r = $r * 2   -- writes into shapes[0]\ncase local name: string then print(name)\ncase nil then print('empty')\nend"
 					<p className="meta">
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md#match"> "guide "
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#variant"> "overview "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/fork.md#match"> "guide "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/overview.md#variant"> "overview "
 				<article className="card card-core" html:id="ownership">
 					<h3>
 						"Owned records and "
@@ -139,8 +139,8 @@ export def body
 					<pre>
 						<code> "local Buf <owned> = @record\{data: pointer, size: usize}\nlocal a = Buf.create(16)\nlocal c = move(a)   -- `a` is zeroed; reading it now is an error\na = Buf.create(8)   -- live again\ninspect(&amp;a)         -- lending a pointer is not a move"
 					<p className="meta">
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md#ownership-and-move"> "guide "
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#ownership"> "overview "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/fork.md#ownership-and-move"> "guide "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/overview.md#ownership"> "overview "
 				<article className="card card-core" html:id="closures">
 					<h3> "Closures"
 					<p>
@@ -154,8 +154,8 @@ export def body
 					<pre>
 						<code> "local function make_adder(n: integer)\n  return function(x: integer): integer return x + n end\nend\nprint(make_adder(2)(1))   -- 3\n\nlocal total = 0\nlocal function add(v: integer) <byref> total = total + v end\nadd(4) add(6)             -- total == 10"
 					<p className="meta">
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md#closures"> "guide "
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#closures"> "overview "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/fork.md#closures"> "guide "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/overview.md#closures"> "overview "
 				<article className="card card-core" html:id="comptime">
 					<h3> "Compile-time evaluation"
 					<p>
@@ -171,8 +171,8 @@ export def body
 						<code> "local function crc32_table(): [256]uint32\n  local t: [256]uint32\n  for i: uint32 = 0, 255 do\n    local c: uint32 = i\n    for _ = 1, 8 do\n      if c &amp; 1 == 1 then c = 0xEDB88320 ~ (c >> 1) else c = c >> 1 end\n    end\n    t[i] = c\n  end\n  return t\nend\nlocal CRC = comptime(crc32_table())   -- a static table in the C output\nprint(CRC[1])                         -- 1996959894"
 					<p className="meta">
 						<a html:href="/nelua/compiler/comptime/"> "full guide "
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/comptime.md"> "compiler docs "
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/overview.md#compile-time-function-evaluation"> "overview "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/comptime.md"> "compiler docs "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/overview.md#compile-time-function-evaluation"> "overview "
 				<article className="card card-core" html:id="syntax">
 					<h3> "Syntax extensions"
 					<p>
@@ -189,8 +189,8 @@ export def body
 					<p className="meta">
 						<a html:href="/nelua/compiler/syntax-extensions/"> "full guide "
 						<a html:href="/nelua/compiler/syntax-extensions/#embed-bend2"> "embed Bend2 "
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/syntax-extensions.md"> "compiler docs "
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/examples/syntax_tour.nelua"> "runnable tour "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/syntax-extensions.md"> "compiler docs "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/examples/syntax_tour.nelua"> "runnable tour "
 				<article className="card card-core" html:id="const">
 					<h3> "Const pointers"
 					<p>
@@ -203,7 +203,7 @@ export def body
 						<code> "const"
 						" needs an explicit cast. It is what most C APIs take, so nelibc and generated bindings can state their intent and have the compiler check it."
 					<p className="meta">
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md#const-pointers"> "guide "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/fork.md#const-pointers"> "guide "
 				<article className="card card-core" html:id="freestanding">
 					<h3>
 						<code> "pragmas.freestanding"
@@ -216,7 +216,7 @@ export def body
 						<code> "main"
 						" symbols at compile time. nelibc's host profile and Drift's kernel drivers build on it; the guarantee is in the emitted C and the linked symbols, not in a convention."
 					<p className="meta">
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/runtime-free.md"> "runtime-free guide "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/runtime-free.md"> "runtime-free guide "
 				<article className="card card-core" html:id="target">
 					<h3>
 						<code> "--target <triple>"
@@ -250,7 +250,7 @@ export def body
 						<code> "--config"
 						" prepends or appends hand-written text."
 					<p className="meta">
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/tools/nelua-bindgen/README.md"> "tool README "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/tools/nelua-bindgen/README.md"> "tool README "
 				<article className="card card-core" html:id="libraries">
 					<h3> "Libraries from nelua-batteries"
 					<p>
@@ -271,7 +271,7 @@ export def body
 						<code> "*const"
 						" where nothing is written."
 					<p className="meta">
-						<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/libraries.md#algorithm"> "library reference "
+						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/libraries.md#algorithm"> "library reference "
 				<article className="card">
 					<h3> "Toolchain and editor support"
 					<p>
@@ -297,7 +297,7 @@ export def body
 			<h2 className="section"> "Install"
 			<p className="lead"> "Nelua needs Git, a C compiler and make. The fork builds the same way upstream does."
 			<pre>
-				<code> "git clone https://github.com/Spaceghost/nelua-lang\ncd nelua-lang\nmake\nsudo make install   # or: make install PREFIX=$HOME/.local\nnelua --version"
+				<code> "git clone https://github.com/Spaceghost/nelua\ncd nelua\nmake\nsudo make install   # or: make install PREFIX=$HOME/.local\nnelua --version"
 			<p className="note">
 				"Pinning: the nelibc gate and nebox's container builds run the fork at "
 				<code> "dabbd9ef"
@@ -321,6 +321,6 @@ export def body
 
 export def footerLinks
 	<div className="footer-links">
-		<a html:href="https://github.com/Spaceghost/nelua-lang"> "Spaceghost/nelua-lang"
-		<a html:href="https://github.com/Spaceghost/nelua-lang/blob/master/docs/pages/fork.md"> "fork guide "
+		<a html:href="https://github.com/Spaceghost/nelua"> "Spaceghost/nelua"
+		<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/fork.md"> "fork guide "
 		<a html:href="https://nelua.io/overview/"> "language overview "

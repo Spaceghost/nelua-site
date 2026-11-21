@@ -45,7 +45,7 @@ export def body comparison
 				<p> 'A compiler, C library and Unix userland in one systems programming ecosystem. Nelua brings Lua syntax and compile-time metaprogramming to native programs that compile through C.'
 				<div className="actions">
 					<a className="button" href="#core"> 'Explore the stack'
-					<a className="text-link" href="https://github.com/Spaceghost/nelua-lang"> 'Compiler on GitHub'
+					<a className="text-link" href="https://github.com/Spaceghost/nelua"> 'Compiler on GitHub'
 		<section className="overview-section" aria-labelledby="core">
 			<h2 id="core"> 'Core'
 			<div className="core-grid">
@@ -68,7 +68,7 @@ export def body comparison
 					<p> 'Build the compiler fork, the standalone Nelibc archive and nebox on Linux x86-64 with Git, Make and Zig installed.'
 					<a href="/nelua/compiler/#freestanding"> 'About freestanding builds'
 				<pre>
-					<code> 'git clone https://github.com/Spaceghost/nelua-lang\nmake -C nelua-lang\ngit clone https://github.com/Spaceghost/nelibc\nmake -C nelibc lib-standalone-zig\ngit clone https://github.com/Spaceghost/nebox\nmake -C nebox NELIBC=../nelibc test'
+					<code> 'git clone https://github.com/Spaceghost/nelua\nmake -C nelua\ngit clone https://github.com/Spaceghost/nelibc\nmake -C nelibc lib-standalone-zig\ngit clone https://github.com/Spaceghost/nebox\nmake -C nebox NELIBC=../nelibc test'
 		<div className="overview-section outer-rings">
 			<section aria-labelledby="workshop">
 				<h2 id="workshop"> 'Workshop'

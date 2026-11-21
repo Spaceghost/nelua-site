@@ -1,0 +1,50 @@
+{
+  "buffers": "a is the copy source, b is the copy and move destination, text is the strlen input.",
+  "candidate_sha256": "a386c1f3c3b4511df1c5d03c117dedbf383aed7e09c45415a33373a7c47daeb7",
+  "checks": {
+    "nelibc-baseline": {
+      "checks": 1995,
+      "failures": 0
+    },
+    "nelibc-nelibc": {
+      "checks": 1995,
+      "failures": 0
+    },
+    "nelibc-previous": {
+      "checks": 1995,
+      "failures": 0
+    },
+    "previous-baseline": {
+      "checks": 1995,
+      "failures": 0
+    },
+    "previous-nelibc": {
+      "checks": 1995,
+      "failures": 0
+    },
+    "previous-previous": {
+      "checks": 1995,
+      "failures": 0
+    }
+  },
+  "cpu": 3,
+  "driver_sha256": "83f8e26e6bb9875c00708eb46d84c73bcd42cf5753b6b20dc704f59befafaf6a",
+  "pairs": 7,
+  "previous_sha256": "b3d2188ba2eaca56b32925494657fa6bf5649bacfa559122f87a89bd91df8f4e",
+  "reference_offsets": {
+    "nelibc": {
+      "a": 4048,
+      "b": 4064,
+      "out": 0,
+      "text": 4080
+    },
+    "previous": {
+      "a": 3792,
+      "b": 3808,
+      "out": 3840,
+      "text": 3824
+    }
+  },
+  "source_sha256": "b5a81a2b8d7fc1d78ad79211eadac13c4745ef45fa1109c7418ad151279faac7",
+  "started_utc": "2026-11-21T19:16:58Z"
+}

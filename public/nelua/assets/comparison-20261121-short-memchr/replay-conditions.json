@@ -1,0 +1,19 @@
+{
+  "ape_sha256": "cc31af13515fcf091768bfbf12da899286b35ff1bf1302f304936db4b03d512e",
+  "cpu": 4,
+  "date_utc": "2026-11-21T19:22:04Z",
+  "executable_set_hash_recipe": "SHA-256 of sorted name NUL digest LF records",
+  "executable_set_sha256": "2161259ea8ad4ed88a962c82e6d317e89be3abc2e74ebc4327da44d813e3047f",
+  "executables_checked": 650,
+  "load_end": [
+    1.76806640625,
+    3.17138671875,
+    3.87060546875
+  ],
+  "load_start": [
+    1.76806640625,
+    3.17138671875,
+    3.87060546875
+  ],
+  "supervisor_sha256": "8be27ac706a26e55013ef0156747529e09e38b342997c7bf7eddfb8e720579c7"
+}

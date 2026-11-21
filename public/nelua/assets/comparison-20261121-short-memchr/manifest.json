@@ -1,0 +1,382 @@
+{
+  "allowed_cpus": [
+    3
+  ],
+  "archive_sha256": {
+    "cosmopolitan": "b98b05efd5260850be9165d340a90b2b895c34b7bd35b5004eda03d7b89cc7d9",
+    "glibc": "6252f736b4aefcf8ea145590168863a63da61f0ff632f1bbd9b641968889cbad",
+    "musl": "a386c1f3c3b4511df1c5d03c117dedbf383aed7e09c45415a33373a7c47daeb7"
+  },
+  "benchmark_sha256": "b5a81a2b8d7fc1d78ad79211eadac13c4745ef45fa1109c7418ad151279faac7",
+  "binary_bytes": {
+    "cosmopolitan": {
+      "baseline": 1682126,
+      "nelibc": 1726670,
+      "previous": 1726670
+    },
+    "glibc": {
+      "baseline": 22544,
+      "nelibc": 682128,
+      "previous": 682128
+    },
+    "musl": {
+      "baseline": 1471104,
+      "nelibc": 3530936,
+      "previous": 3528296
+    }
+  },
+  "commands": [
+    [
+      "gcc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "-Wl,-Map,$RUN/final/glibc-baseline.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/glibc-baseline"
+    ],
+    [
+      "gcc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "$PREVIOUS/libnelibc-gcc.a",
+      "-Wl,-Map,$RUN/final/glibc-previous.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/glibc-previous"
+    ],
+    [
+      "gcc",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "$NELIBC/build/libnelibc-gcc.a",
+      "-Wl,-Map,$RUN/final/glibc-nelibc.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/glibc-nelibc"
+    ],
+    [
+      "$ZIG",
+      "cc",
+      "-mcpu=x86_64",
+      "-target",
+      "x86_64-linux-musl",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "-static",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/musl-baseline"
+    ],
+    [
+      "$ZIG",
+      "cc",
+      "-mcpu=x86_64",
+      "-target",
+      "x86_64-linux-musl",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "-static",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "-Wl,-u,nelibc_hybrid_free",
+      "-Wl,--wrap=fread",
+      "-Wl,--wrap=fwrite",
+      "-Wl,--wrap=fflush",
+      "-Wl,--wrap=fileno",
+      "-Wl,--wrap=feof",
+      "-Wl,--wrap=ferror",
+      "-Wl,--wrap=clearerr",
+      "-Wl,--wrap=ungetc",
+      "-Wl,--wrap=freopen",
+      "-Wl,--wrap=fgetpos",
+      "-Wl,--wrap=fsetpos",
+      "-Wl,--wrap=fseek",
+      "-Wl,--wrap=ftell",
+      "-Wl,--wrap=fseeko",
+      "-Wl,--wrap=ftello",
+      "-Wl,--wrap=setvbuf",
+      "-Wl,--wrap=flockfile",
+      "-Wl,--wrap=ftrylockfile",
+      "-Wl,--wrap=funlockfile",
+      "-Wl,--wrap=fclose",
+      "-Wl,--wrap=localeconv",
+      "-Wl,--wrap=setlocale",
+      "-Wl,--wrap=atexit",
+      "-Wl,--wrap=exit",
+      "-Wl,--wrap=free",
+      "-Wl,--wrap=realloc",
+      "$PREVIOUS/libnelibc-zig-musl.a",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/musl-previous"
+    ],
+    [
+      "$ZIG",
+      "cc",
+      "-mcpu=x86_64",
+      "-target",
+      "x86_64-linux-musl",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "-static",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "-Wl,-u,nelibc_hybrid_free",
+      "-Wl,--wrap=fread",
+      "-Wl,--wrap=fwrite",
+      "-Wl,--wrap=fflush",
+      "-Wl,--wrap=fileno",
+      "-Wl,--wrap=feof",
+      "-Wl,--wrap=ferror",
+      "-Wl,--wrap=clearerr",
+      "-Wl,--wrap=ungetc",
+      "-Wl,--wrap=freopen",
+      "-Wl,--wrap=fgetpos",
+      "-Wl,--wrap=fsetpos",
+      "-Wl,--wrap=fseek",
+      "-Wl,--wrap=ftell",
+      "-Wl,--wrap=fseeko",
+      "-Wl,--wrap=ftello",
+      "-Wl,--wrap=setvbuf",
+      "-Wl,--wrap=flockfile",
+      "-Wl,--wrap=ftrylockfile",
+      "-Wl,--wrap=funlockfile",
+      "-Wl,--wrap=fclose",
+      "-Wl,--wrap=localeconv",
+      "-Wl,--wrap=setlocale",
+      "-Wl,--wrap=atexit",
+      "-Wl,--wrap=exit",
+      "-Wl,--wrap=free",
+      "-Wl,--wrap=realloc",
+      "$NELIBC/build/libnelibc-zig-musl.a",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/musl-nelibc"
+    ],
+    [
+      "$COSMOCC",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "-Wl,-Map,$RUN/final/cosmopolitan-baseline.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/cosmopolitan-baseline"
+    ],
+    [
+      "$COSMOCC",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "$PREVIOUS/libnelibc-cosmo.a",
+      "-Wl,-Map,$RUN/final/cosmopolitan-previous.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/cosmopolitan-previous"
+    ],
+    [
+      "$COSMOCC",
+      "-O2",
+      "-fno-builtin",
+      "-fno-stack-protector",
+      "-fno-sanitize=all",
+      "$NELIBC/benchmarks/comparison/consumer.c",
+      "$NELIBC/build/libnelibc-cosmo.a",
+      "-Wl,-Map,$RUN/final/cosmopolitan-nelibc.map",
+      "-lm",
+      "-pthread",
+      "-o",
+      "$RUN/final/cosmopolitan-nelibc"
+    ]
+  ],
+  "compiler_versions": {
+    "cosmopolitan": "x86_64-unknown-cosmo-cc (GCC) 14.1.0",
+    "glibc": "gcc (Debian 12.2.0-14+deb12u1) 12.2.0",
+    "musl": "clang version 22.1.8"
+  },
+  "cpu": 3,
+  "cpu_model": "Intel(R) Core(TM) i5-10400 CPU @ 2.90GHz",
+  "date_utc": "2026-11-21T19:11:32Z",
+  "load_end": [
+    2.35400390625,
+    3.9208984375,
+    4.50830078125
+  ],
+  "load_start": [
+    4.6943359375,
+    4.64794921875,
+    4.77685546875
+  ],
+  "memchr_controls": {
+    "manifest": "memchr-controls-manifest.json",
+    "raw": "memchr-controls-raw.csv.gz",
+    "summary": "memchr-controls.csv"
+  },
+  "pairs": 7,
+  "platform": "Linux-6.18.54-0-lts-x86_64-with-glibc2.36",
+  "previous_archive_sha256": {
+    "cosmopolitan": "ce7d2dcbce5cbc0791932c755ee4de41cedde62625c996492166492ea1e9ad87",
+    "glibc": "896aa9bfbda55e54605bf5b5102bf034e5b26802d96bf3c79d006224684a682e",
+    "musl": "b3d2188ba2eaca56b32925494657fa6bf5649bacfa559122f87a89bd91df8f4e"
+  },
+  "previous_commit": "84267ab9185f25c88eca4cd10366207a5028ecc7",
+  "profiles": {
+    "cosmopolitan": {
+      "archive": "build/libnelibc-cosmo.a",
+      "cc": [
+        "$COSMOCC"
+      ],
+      "flags": [],
+      "link": [],
+      "version": "4.0.2"
+    },
+    "glibc": {
+      "archive": "build/libnelibc-gcc.a",
+      "cc": [
+        "gcc"
+      ],
+      "flags": [],
+      "link": [],
+      "version": "glibc 2.36"
+    },
+    "musl": {
+      "archive": "build/libnelibc-zig-musl.a",
+      "cc": [
+        "$ZIG",
+        "cc",
+        "-mcpu=x86_64",
+        "-target",
+        "x86_64-linux-musl"
+      ],
+      "flags": [
+        "-static"
+      ],
+      "link": [
+        "-Wl,-u,nelibc_hybrid_free",
+        "-Wl,--wrap=fread",
+        "-Wl,--wrap=fwrite",
+        "-Wl,--wrap=fflush",
+        "-Wl,--wrap=fileno",
+        "-Wl,--wrap=feof",
+        "-Wl,--wrap=ferror",
+        "-Wl,--wrap=clearerr",
+        "-Wl,--wrap=ungetc",
+        "-Wl,--wrap=freopen",
+        "-Wl,--wrap=fgetpos",
+        "-Wl,--wrap=fsetpos",
+        "-Wl,--wrap=fseek",
+        "-Wl,--wrap=ftell",
+        "-Wl,--wrap=fseeko",
+        "-Wl,--wrap=ftello",
+        "-Wl,--wrap=setvbuf",
+        "-Wl,--wrap=flockfile",
+        "-Wl,--wrap=ftrylockfile",
+        "-Wl,--wrap=funlockfile",
+        "-Wl,--wrap=fclose",
+        "-Wl,--wrap=localeconv",
+        "-Wl,--wrap=setlocale",
+        "-Wl,--wrap=atexit",
+        "-Wl,--wrap=exit",
+        "-Wl,--wrap=free",
+        "-Wl,--wrap=realloc"
+      ],
+      "version": "Zig 0.17.0 bundled musl; see source/toolchain manifest"
+    }
+  },
+  "runtime_census_libraries": {
+    "$COSMO_LIBRARY": {
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$COSMO_LIBRARY"
+      ],
+      "sha256": "d24abcb2cbdf7aa9cdde0fb09a62964527370070c21d8741413bb7c530d31f31"
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/38bb4669a59f96c747e8f55553705f89/libzigc.a": {
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/38bb4669a59f96c747e8f55553705f89/libzigc.a"
+      ],
+      "sha256": "a735f4144991e723029474abc0062ec1870dfacbbba15bf3019f1627b59ccc72"
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/6f29148d5a15fdba78819c9e65c1bffb/libcompiler_rt.a": {
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/6f29148d5a15fdba78819c9e65c1bffb/libcompiler_rt.a"
+      ],
+      "sha256": "6948df22d954367a7869ca43cd382d10bd17713aa423958ca8df8c10ea805ca6"
+    },
+    "$ZIG_GLOBAL_CACHE_DIR/o/ef3eeddeb3da35abcd12411a832b4c4c/libc.a": {
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "$ZIG_GLOBAL_CACHE_DIR/o/ef3eeddeb3da35abcd12411a832b4c4c/libc.a"
+      ],
+      "sha256": "e00dfecad985c252716619a485b9e4cd7082e2c39f890b8ab56ec6c0258c24fe"
+    },
+    "/usr/lib/x86_64-linux-gnu/libc.a": {
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "/usr/lib/x86_64-linux-gnu/libc.a"
+      ],
+      "sha256": "8e5252c4b87e3d588e2d15e624502277c5d3bfb382fec7a5199ae752080b372c"
+    },
+    "/usr/lib/x86_64-linux-gnu/libm-2.36.a": {
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "/usr/lib/x86_64-linux-gnu/libm-2.36.a"
+      ],
+      "sha256": "c6382c1c6d14aa90d002f3ca1911f1b7477bf0b5b685c30de278076bbab95100"
+    },
+    "/usr/lib/x86_64-linux-gnu/libmvec.a": {
+      "command": [
+        "nm",
+        "-g",
+        "--defined-only",
+        "/usr/lib/x86_64-linux-gnu/libmvec.a"
+      ],
+      "sha256": "8ae76fe83cc08f346773d1bc334f8fe4fa80f934236ae63c87468e3e17733fde"
+    }
+  },
+  "runtime_census_script_sha256": "80bbe9055926ab1cc2a339485ecb06c8db416e62e39bbcacc0db9456319e3030",
+  "source_base": "eef2cefc548e6e25760c653ef31154f460bf7690",
+  "source_commit": "eef2cefc548e6e25760c653ef31154f460bf7690",
+  "source_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

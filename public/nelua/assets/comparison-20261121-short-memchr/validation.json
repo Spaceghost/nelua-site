@@ -1,0 +1,242 @@
+{
+  "allocated_elf_section_comparison": {
+    "cosmo": {
+      "archive_members": 10,
+      "changed_sections": [
+        ".eh_frame",
+        ".text"
+      ],
+      "members_with_changes": 1
+    },
+    "gcc": {
+      "archive_members": 49,
+      "changed_sections": [],
+      "members_with_changes": 0
+    },
+    "zig-musl": {
+      "archive_members": 45,
+      "changed_sections": [
+        ".eh_frame",
+        ".text"
+      ],
+      "members_with_changes": 1
+    }
+  },
+  "cosmopolitan_popen_followup": {
+    "additional_under_load": {
+      "current": {
+        "failed_pair": 118,
+        "nonpass": 1,
+        "pass": 342,
+        "status": "Child exited on SIGPIPE (signal 13)."
+      },
+      "date_utc": "2026-11-21T19:32:12Z",
+      "pairs": 343,
+      "previous": {
+        "nonpass": 0,
+        "pass": 343
+      }
+    },
+    "ape_sha256": "cc31af13515fcf091768bfbf12da899286b35ff1bf1302f304936db4b03d512e",
+    "date_utc": "2026-11-21T19:26:30Z",
+    "libtest_sha256": "7699f8f24d44960482a9dc5837b5ef2834fa5acb2ba045fda4e0be2da470bf02",
+    "method": "Twenty alternating pairs using the original libc-test supervisor, APE loader and corpus working directory.",
+    "repeat_during_integration_shootout": {
+      "date_utc": "2026-11-21T19:28:02Z",
+      "passed_pairs": {
+        "current": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30
+        ],
+        "previous": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30
+        ]
+      }
+    },
+    "results": {
+      "current": {
+        "archive_sha256": "b98b05efd5260850be9165d340a90b2b895c34b7bd35b5004eda03d7b89cc7d9",
+        "attempted": 20,
+        "consumer_sha256": "565bc15f47ea5a600a9e70d3406f8ddc27ef98083e62efa6fe915e875af309ee",
+        "passed_pairs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ]
+      },
+      "previous": {
+        "archive_sha256": "ce7d2dcbce5cbc0791932c755ee4de41cedde62625c996492166492ea1e9ad87",
+        "attempted": 20,
+        "consumer_sha256": "f2dac56d06a15c538095110ccc1102b9a95b4af060aaf0ed4d5ff3454591490f",
+        "passed_pairs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20
+        ]
+      }
+    },
+    "rotating_native_previous_current": {
+      "date_utc": "2026-11-21T19:32:58Z",
+      "method": "2,000 rotated native, previous and current triplets during the integration shootout.",
+      "results": {
+        "current": {
+          "attempted": 2000,
+          "consumer_sha256": "565bc15f47ea5a600a9e70d3406f8ddc27ef98083e62efa6fe915e875af309ee",
+          "passed": 1996,
+          "sigpipe_trials": [
+            691,
+            861,
+            1161,
+            1980
+          ]
+        },
+        "native": {
+          "attempted": 2000,
+          "consumer_sha256": "bff2e40698c4db25c19837be0dcf228ff36726f54468e877fa054a4580813387",
+          "passed": 1998,
+          "sigpipe_trials": [
+            181,
+            1143
+          ]
+        },
+        "previous": {
+          "attempted": 2000,
+          "consumer_sha256": "f2dac56d06a15c538095110ccc1102b9a95b4af060aaf0ed4d5ff3454591490f",
+          "passed": 1999,
+          "sigpipe_trials": [
+            497
+          ]
+        }
+      }
+    },
+    "supervisor_sha256": "8be27ac706a26e55013ef0156747529e09e38b342997c7bf7eddfb8e720579c7",
+    "test": "functional/popen",
+    "test_object_sha256": "a9b6e9d46fad1fbdd7fda0f0e1631c1b2a219980398376292725da4512d74dcc",
+    "test_source_sha256": "cd11975f2612f44f51e7c86fa0f086416e46ebddf0609d96c64fc0711fdc08a3"
+  },
+  "final_memory_diff": {
+    "cosmopolitan": {
+      "archive_sha256": "b98b05efd5260850be9165d340a90b2b895c34b7bd35b5004eda03d7b89cc7d9",
+      "consumer_sha256": "2cb3c8b2e5a2c321f2d4c68404ba7ec83718703b14da4c2812945b71d9983380",
+      "exit": 0,
+      "result": "Nelua memory API matches bytewise references, explicit_bzero bounds and guard pages, guarded overlap memmove, long memory operations, and 256 randomized memmem cases"
+    },
+    "glibc": {
+      "archive_sha256": "6252f736b4aefcf8ea145590168863a63da61f0ff632f1bbd9b641968889cbad",
+      "consumer_sha256": "68bc29034b63b61ad1d8807d62d84f33eaf647882757924329f0f48eff4d6858",
+      "exit": 0,
+      "result": "Nelua memory API matches bytewise references, explicit_bzero bounds and guard pages, guarded overlap memmove, long memory operations, and 256 randomized memmem cases"
+    },
+    "musl": {
+      "archive_sha256": "a386c1f3c3b4511df1c5d03c117dedbf383aed7e09c45415a33373a7c47daeb7",
+      "consumer_sha256": "cc9658866efeab1eb0a6371d86ff85037de26f03a3c94c6670d6a8d94d0b4a12",
+      "exit": 0,
+      "result": "Nelua memory API matches bytewise references, explicit_bzero bounds and guard pages, guarded overlap memmove, long memory operations, and 256 randomized memmem cases"
+    }
+  },
+  "guard_cases": [
+    "n=8..15 exact readable slices ending at PROT_NONE",
+    "n=8..15 extending into PROT_NONE with a match at the final readable byte (readable lengths 1..7)",
+    "repeated matches and int-to-unsigned-byte narrowing (0x5A, 0x15A, -166)",
+    "zero-length memchr with pointer into PROT_NONE"
+  ],
+  "previous_musl_archive": "b3d2188ba2eaca56b32925494657fa6bf5649bacfa559122f87a89bd91df8f4e",
+  "previous_musl_consumer_sha256": "ed1aa3e1122f1e64796ae32ab5be905861a8b22051d3f08129e1724a10c5148d",
+  "previous_musl_exit": -11,
+  "previous_musl_result": "The previous musl archive terminated with SIGSEGV when linked to the new short-search guard fixture.",
+  "previous_source_commit": "84267ab9185f25c88eca4cd10366207a5028ecc7",
+  "short_guard_assertions": 201,
+  "source_commit": "eef2cefc548e6e25760c653ef31154f460bf7690",
+  "test_source_sha256": "96926e3bbcd6df7d24f790105dd51030483c94525db7e5d2c8fb441f84012630"
+}

@@ -27,7 +27,9 @@ def measured_data(root, comparison, public_census, reference):
         raise ValueError('The Nelibc checkout and comparison use different revisions')
     source = 'docs/musl-1.2.5-api-coverage.csv'
     expected = manifest.get('source_files', {}).get(source)
-    if expected and hashlib.sha256((root / source).read_bytes()).hexdigest() != expected:
+    if not expected:
+        raise ValueError('The raw comparison manifest must identify the musl reference CSV')
+    if hashlib.sha256((root / source).read_bytes()).hexdigest() != expected:
         raise ValueError('The musl reference CSV differs from the measured source')
     if not re.fullmatch(r'/nelua/assets/comparison-[\w-]+/coverage\.json', public_census):
         raise ValueError('Expected a same-site comparison coverage.json URL')

@@ -1,0 +1,98 @@
+{
+  "ape_sha256": "cc31af13515fcf091768bfbf12da899286b35ff1bf1302f304936db4b03d512e",
+  "archive_sha256": {
+    "cosmopolitan": "b98b05efd5260850be9165d340a90b2b895c34b7bd35b5004eda03d7b89cc7d9",
+    "glibc": "6252f736b4aefcf8ea145590168863a63da61f0ff632f1bbd9b641968889cbad",
+    "musl": "a386c1f3c3b4511df1c5d03c117dedbf383aed7e09c45415a33373a7c47daeb7"
+  },
+  "case_count": 343,
+  "case_set_sha256": "d8564bb1b75a611d70f6072363bc015e7caf6dc28d71e18dd9e54c5b5d7fdf0b",
+  "corpus_commit": "63e36e934e8f2bedf645303a90b64098e2af6c8f",
+  "driver_sha256": "7564501c5899e9b642332886e21c1c7bd35aa996c2d483fec1bd9e77b85be240",
+  "finished_utc": "2026-11-21T19:20:59Z",
+  "method": "Six clean upstream extractions, fresh compilation and linking for both halves of all three pairs. Every executable and failure record was checked against its compiler or linker invocation and corresponding case result.",
+  "previous_archive_sha256": {
+    "cosmopolitan": "ce7d2dcbce5cbc0791932c755ee4de41cedde62625c996492166492ea1e9ad87",
+    "glibc": "896aa9bfbda55e54605bf5b5102bf034e5b26802d96bf3c79d006224684a682e",
+    "musl": "b3d2188ba2eaca56b32925494657fa6bf5649bacfa559122f87a89bd91df8f4e"
+  },
+  "previous_commit": "84267ab9185f25c88eca4cd10366207a5028ecc7",
+  "profiles": {
+    "cosmopolitan-baseline": {
+      "executable_set_sha256": "887e1eb28e8d1873e54199bb32e6b607a7950a943677f4cab297c1b8a16a7255",
+      "executables": 322,
+      "statuses": {
+        "build_failure": 11,
+        "link_failure": 10,
+        "not_run": 0,
+        "pass": 279,
+        "runtime_failure": 43,
+        "timeout": 0
+      }
+    },
+    "cosmopolitan-nelibc": {
+      "executable_set_sha256": "a03c0ed1d3760cdd3ece278fe1948345963fa91de02ac5ba80eaeb6468a4e297",
+      "executables": 328,
+      "statuses": {
+        "build_failure": 11,
+        "link_failure": 4,
+        "not_run": 0,
+        "pass": 301,
+        "runtime_failure": 27,
+        "timeout": 0
+      }
+    },
+    "glibc-baseline": {
+      "executable_set_sha256": "5634b43675760adabfe6efd3761e04cd03059303d3944287ff91db4b50fabf51",
+      "executables": 339,
+      "statuses": {
+        "build_failure": 4,
+        "link_failure": 0,
+        "not_run": 0,
+        "pass": 301,
+        "runtime_failure": 37,
+        "timeout": 1
+      }
+    },
+    "glibc-nelibc": {
+      "executable_set_sha256": "2cbad6bd739015a4de1f39a59dc638a67caa7d9885c249c7c9c9527b8c216a98",
+      "executables": 339,
+      "statuses": {
+        "build_failure": 4,
+        "link_failure": 0,
+        "not_run": 0,
+        "pass": 325,
+        "runtime_failure": 13,
+        "timeout": 1
+      }
+    },
+    "musl-baseline": {
+      "executable_set_sha256": "753a686481c5945ba3178492e6bf9f8dc2a770191b13a7af75057643cf6d159b",
+      "executables": 342,
+      "statuses": {
+        "build_failure": 0,
+        "link_failure": 1,
+        "not_run": 0,
+        "pass": 327,
+        "runtime_failure": 15,
+        "timeout": 0
+      }
+    },
+    "musl-nelibc": {
+      "executable_set_sha256": "44a6f924e00d33d281d0a6d96096e04f18eb9b2360dd525996ca203a70bfd549",
+      "executables": 342,
+      "statuses": {
+        "build_failure": 0,
+        "link_failure": 1,
+        "not_run": 0,
+        "pass": 333,
+        "runtime_failure": 9,
+        "timeout": 0
+      }
+    }
+  },
+  "raw_results_sha256": "b7a280b76aae365ae022c2e12974dc214909acab065819206750e7bb58dd5aae",
+  "source_commit": "eef2cefc548e6e25760c653ef31154f460bf7690",
+  "started_utc": "2026-11-21T19:17:56Z",
+  "supervisor_sha256": "8be27ac706a26e55013ef0156747529e09e38b342997c7bf7eddfb8e720579c7"
+}

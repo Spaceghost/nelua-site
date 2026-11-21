@@ -1,0 +1,128 @@
+{
+  "cosmopolitan": {
+    "archive_sha256": {
+      "candidate": "b98b05efd5260850be9165d340a90b2b895c34b7bd35b5004eda03d7b89cc7d9",
+      "previous": "ce7d2dcbce5cbc0791932c755ee4de41cedde62625c996492166492ea1e9ad87"
+    },
+    "commands": {
+      "baseline": [
+        "$COSMOCC",
+        "-O2",
+        "-fno-builtin",
+        "-fno-stack-protector",
+        "$NELIBC/tools/scan_bench.c",
+        "-lm",
+        "-pthread",
+        "-o",
+        "$RUN/scan-cosmopolitan/baseline"
+      ],
+      "candidate": [
+        "$COSMOCC",
+        "-O2",
+        "-fno-builtin",
+        "-fno-stack-protector",
+        "$NELIBC/tools/scan_bench.c",
+        "$NELIBC/build/libnelibc-cosmo.a",
+        "-lm",
+        "-pthread",
+        "-o",
+        "$RUN/scan-cosmopolitan/candidate"
+      ],
+      "previous": [
+        "$COSMOCC",
+        "-O2",
+        "-fno-builtin",
+        "-fno-stack-protector",
+        "$NELIBC/tools/scan_bench.c",
+        "$PREVIOUS/libnelibc-cosmo.a",
+        "-lm",
+        "-pthread",
+        "-o",
+        "$RUN/scan-cosmopolitan/previous"
+      ]
+    },
+    "compiler": "x86_64-unknown-cosmo-cc (GCC) 14.1.0",
+    "cpu": 3,
+    "date_utc": "2026-11-21T19:12:58Z",
+    "finished_utc": "2026-11-21T19:14:40Z",
+    "load_end": [
+      2.19677734375,
+      3.44873046875,
+      4.2783203125
+    ],
+    "load_start": [
+      2.35400390625,
+      3.9208984375,
+      4.50830078125
+    ],
+    "pairs": 7,
+    "previous_commit": "84267ab9185f25c88eca4cd10366207a5028ecc7",
+    "profile": "cosmopolitan",
+    "source": "$NELIBC/tools/scan_bench.c",
+    "source_commit": "eef2cefc548e6e25760c653ef31154f460bf7690",
+    "source_sha256": "f4fd3d441df4d7a4a92d4189b52988d01da1f0e7b8bf427f9b0c00b02c861bc0"
+  },
+  "glibc": {
+    "archive_sha256": {
+      "candidate": "6252f736b4aefcf8ea145590168863a63da61f0ff632f1bbd9b641968889cbad",
+      "previous": "896aa9bfbda55e54605bf5b5102bf034e5b26802d96bf3c79d006224684a682e"
+    },
+    "commands": {
+      "baseline": [
+        "gcc",
+        "-O2",
+        "-fno-builtin",
+        "-fno-stack-protector",
+        "$NELIBC/tools/scan_bench.c",
+        "-lm",
+        "-pthread",
+        "-o",
+        "$RUN/scan-glibc/baseline"
+      ],
+      "candidate": [
+        "gcc",
+        "-O2",
+        "-fno-builtin",
+        "-fno-stack-protector",
+        "$NELIBC/tools/scan_bench.c",
+        "$NELIBC/build/libnelibc-gcc.a",
+        "-lm",
+        "-pthread",
+        "-o",
+        "$RUN/scan-glibc/candidate"
+      ],
+      "previous": [
+        "gcc",
+        "-O2",
+        "-fno-builtin",
+        "-fno-stack-protector",
+        "$NELIBC/tools/scan_bench.c",
+        "$PREVIOUS/libnelibc-gcc.a",
+        "-lm",
+        "-pthread",
+        "-o",
+        "$RUN/scan-glibc/previous"
+      ]
+    },
+    "compiler": "gcc (Debian 12.2.0-14+deb12u1) 12.2.0",
+    "cpu": 3,
+    "date_utc": "2026-11-21T19:14:40Z",
+    "finished_utc": "2026-11-21T19:16:20Z",
+    "load_end": [
+      1.404296875,
+      2.82958984375,
+      3.96875
+    ],
+    "load_start": [
+      2.19677734375,
+      3.44873046875,
+      4.2783203125
+    ],
+    "pairs": 7,
+    "previous_commit": "84267ab9185f25c88eca4cd10366207a5028ecc7",
+    "profile": "glibc",
+    "source": "$NELIBC/tools/scan_bench.c",
+    "source_commit": "eef2cefc548e6e25760c653ef31154f460bf7690",
+    "source_sha256": "f4fd3d441df4d7a4a92d4189b52988d01da1f0e7b8bf427f9b0c00b02c861bc0"
+  }
+}

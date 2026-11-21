@@ -1,0 +1,47 @@
+{
+  "archives": {
+    "84267ab9185f25c88eca4cd10366207a5028ecc7": "896aa9bfbda55e54605bf5b5102bf034e5b26802d96bf3c79d006224684a682e",
+    "eef2cefc548e6e25760c653ef31154f460bf7690": "6252f736b4aefcf8ea145590168863a63da61f0ff632f1bbd9b641968889cbad"
+  },
+  "cases": 13,
+  "compile_flags": [
+    "-O2",
+    "-std=c11",
+    "-Wall",
+    "-Wextra",
+    "-fno-builtin"
+  ],
+  "compiler": "gcc (Debian 12.2.0-14+deb12u1) 12.2.0",
+  "correctness": {
+    "checks_per_profile": 65,
+    "status": "pass"
+  },
+  "cpu": 3,
+  "driver_sha256": "f051e67e7e6684e02937737d37bc05ce512890a5283ba6a9145bfd16d49ed56a",
+  "offsets": [
+    0,
+    1,
+    7,
+    15,
+    31
+  ],
+  "outputs": {
+    "raw_csv_gzip_sha256": "f1b4c25f0a88b2dbbe550b7d63360eadadc9a8d9ffe9ef14623883bd9aed1509",
+    "summary_csv_sha256": "fd106731a54344fea4ee15dce4e7bd37736d875062265db7a711503ed57ddc25"
+  },
+  "process_triplets": 7,
+  "raw_rows": 1365,
+  "revisions": {
+    "final": "eef2cefc548e6e25760c653ef31154f460bf7690",
+    "previous": "84267ab9185f25c88eca4cd10366207a5028ecc7"
+  },
+  "schema": "nelibc.strtod.controls.v1",
+  "source_sha256": "1c4cc6590c9d80710b21e1992206788ac4bab206ae1d835400950204eb402929",
+  "status": "complete",
+  "strtod_ownership": {
+    "84267ab9185f25c88eca4cd10366207a5028ecc7": "libnelibc-gcc.a(stdlib-float-gcc.o)",
+    "eef2cefc548e6e25760c653ef31154f460bf7690": "libnelibc-gcc.a(stdlib-float-gcc.o)",
+    "glibc-gcc": "dynamic glibc strtod"
+  },
+  "target_ms_per_case_offset": 3
+}

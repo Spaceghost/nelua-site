@@ -6,12 +6,15 @@ The input directory must contain manifest/checks/coverage/summary.json,
 conformance.json and deltas.json. Run the Nelibc comparison harness first;
 this generator never substitutes old results for a missing measurement.
 """
-import html, json, re, sys
+import csv, html, json, re, sys
 from pathlib import Path
 from nelibc_results import phase_headline, render_results, verify_timings
 ROOT=Path(__file__).resolve().parents[1]
 data=Path(sys.argv[1]).resolve()
 def load(name):return json.loads((data/name).read_text())
+def load_csv(name):
+ with (data/name).open(newline='') as stream:
+  return list(csv.DictReader(stream))
 meta=load('manifest.json');rows=load('summary.json');coverage=load('coverage.json');checks=load('checks.json');conf=load('conformance.json');deltas=load('deltas.json')
 verify_timings(data, rows)
 url='/'+str(data.relative_to(ROOT/'public')).replace('\\','/')
@@ -82,6 +85,17 @@ if (data/'initial-conformance.json').is_file():
     changes.append(f'{label} changed from {esc(first)} to {esc(later)} on <code>{esc(test)}</code>')
  if changes:
   block+='<p>'+'. '.join(changes)+'.</p>'
+if (data/'validation.json').is_file():
+ replay=load('validation.json').get('cosmopolitan_popen_followup',{}).get('rotating_native_previous_current')
+ if replay:
+  observed=replay['results']
+  trials=observed['native']['attempted']
+  assert all(o['attempted']==trials for o in observed.values())
+  counts=[len(observed[variant]['sigpipe_trials']) for variant in ('native','previous','current')]
+  block+=(f'<p>The Cosmopolitan <code>functional/popen</code> test also ran {trials:,} times each on '
+          f'native Cosmopolitan, previous Nelibc and current Nelibc. The child exited on SIGPIPE in '
+          f'{counts[0]}, {counts[1]} and {counts[2]} trials respectively. The table retains the full-corpus outcomes. '
+          f'<a href="{url}/validation.json">Test executable identities and individual failed trials</a>.</p>')
 check_counts=sorted(set(v['result']['checks'] for v in checks.values()))
 assert all(v['exit']==0 and v['result']['failures']==0 for v in checks.values())
 block+=f'''<p class="note">All {len(checks)} benchmark consumers also passed {", ".join(str(n) for n in check_counts)} targeted assertions each before timing. Those assertions cover the benchmarked operations and are separate from libc-test. The independent corpus uses libc-test's native supervisor, a 100 KiB stack limit and five-second per-test timeout. Cosmopolitan executables use its native APE loader in both halves of the pair. The corpus includes musl-specific, platform and extension expectations; a non-pass is not by itself proof of a standards violation. This is measured test coverage, not certification of all C or POSIX behavior. Historical Nelibc-header and standalone gates are listed separately below.</p>
@@ -132,10 +146,34 @@ elif followup.get('headline_case')=='memchr-absent-8':
          f'({measured["previous_ratio_min"]:.2f}–{measured["previous_ratio_max"]:.2f}× observed) and '
          f'{measured["speedup"]:.2f}× native/current '
          f'({measured["ratio_min"]:.2f}–{measured["ratio_max"]:.2f}× observed).</p>'
-         '<p>This is the fixed 8-byte absent-match case from the paired benchmark; it does not measure other '
-         'lengths, match positions, alignments, or page-boundary behavior. '
-         '<a href="/nelua/assets/comparison-20261121-gap-fixes/reproduce.md">Reproduce the previous immutable comparison</a> · '
-         '<a href="/nelua/assets/comparison-20261121-gap-fixes/summary.csv">See its summary</a>.</p>')
+         '<p>The table tracks the three operations that prompted this work. Its last column gives the median '
+         'of seven paired native-to-current ratios. The separate controls below vary the inputs and alignments.</p>')
+ controls=[]
+ for profile,case,size in [('glibc','strlen',128), ('cosmopolitan','memchr-absent',8), ('glibc','strtod-decimal',0)]:
+  item=find(profile,case,size)
+  controls.append([labels[profile],esc(case)+(f' · {size} B' if size else ''),
+                   *[f'{item[key]:.2f}' for key in ('baseline_ns','previous_ns','nelibc_ns')],
+                   f'{item["speedup"]:.2f}×'])
+ block+=table('Original priority cases · median nanoseconds per call',
+              ['Runtime','Operation','Native','Previous Nelibc','Current Nelibc','Native ÷ current'],controls)
+ block+=f'<p><a href="{url}/memchr-controls.csv">Length, alignment and match-position controls for strlen and memchr</a>'
+ if (data/'strtod-controls.csv').is_file():
+  block+=f' · <a href="{url}/strtod-controls.csv">Decimal length, alignment and rounding controls for strtod</a>'
+ block+='.</p>'
+ if (data/'memchr-controls.csv').is_file():
+  first=next(r for r in load_csv('memchr-controls.csv') if r['profile']=='cosmopolitan' and
+             r['case']=='memchr-first' and r['bytes']=='8' and r['left_offset']=='0')
+  block+=(f'<p>Match position matters. In the aligned eight-byte control, finding the first byte took '
+          f'{float(first["previous_ns"]):.2f} ns with previous Nelibc, {float(first["candidate_ns"]):.2f} ns '
+          f'with current Nelibc and {float(first["baseline_ns"]):.2f} ns with native Cosmopolitan.</p>')
+ if (data/'musl-placement.csv').is_file():
+  moves={r['layout']:r for r in load_csv('musl-placement.csv') if r['case']=='memcpy' and r['bytes']=='128'}
+  before,near=moves['previous'],moves['nelibc']
+  block+=(f'<p>The musl executables placed their buffers at different offsets within a page. At identical '
+          f'offsets, 128-byte copies took {float(before["previous_ns"]):.2f} and {float(before["nelibc_ns"]):.2f} ns '
+          f'with previous and current Nelibc. Near the page end, the same pair took '
+          f'{float(near["previous_ns"]):.2f} and {float(near["nelibc_ns"]):.2f} ns. '
+          f'<a href="{url}/musl-placement.csv">Compare both placements for copy, move, search and length.</a></p>')
 else:
  block+=phase_headline(data, rows)
 block+=f'<p>Each profile compares the same consumer with and without Nelibc. Speedups above 1× favor Nelibc. <a href="#all-results">Browse {len(rows)} results across {len(labels)} profiles.</a></p></div>'
@@ -185,6 +223,17 @@ if any('previous_ns' in r for r in rows):
  if (data/'memchr-controls.csv').is_file(): evidence_links.append(('memchr-controls.csv','Memchr length, alignment and hit-position controls'))
  if (data/'memchr-controls-raw.csv.gz').is_file(): evidence_links.append(('memchr-controls-raw.csv.gz','Raw memchr control samples'))
  if (data/'memchr-controls-manifest.json').is_file(): evidence_links.append(('memchr-controls-manifest.json','Memchr control run manifests'))
+ if (data/'strtod-controls.csv').is_file():
+  evidence_links.extend([('strtod-controls.csv','Decimal controls by input and byte offset'),
+                         ('strtod-controls-raw.csv.gz','Raw decimal control samples'),
+                         ('strtod-controls-manifest.json','Decimal control run manifest'),
+                         ('strtod-controls.c','Decimal control inputs and checks'),
+                         ('strtod-controls-run.sh','Decimal control driver')])
+ if (data/'musl-placement.csv').is_file():
+  evidence_links.extend([('musl-placement.csv','Musl page-placement controls'),
+                         ('musl-placement-raw.csv','Raw placement samples'),
+                         ('musl-placement-manifest.json','Observed page offsets and archive hashes'),
+                         ('musl-placement.py','Musl placement driver')])
  block+='<p>'+' · '.join(f'<a href="{url}/{file}">{label}</a>' for file,label in evidence_links if (data/file).exists())+'</p>'
  if source_commit:
   block+=f'<p>Measured revisions: <code>{esc(meta["previous_commit"][:12])}</code> before the change and <code>{esc(source_commit[:12])}</code> after it. The manifest identifies each linked archive by SHA-256.</p>'
@@ -215,6 +264,15 @@ block+='<h2 class="section" id="priorities">What to optimize next</h2><p>Start w
 for r in priorities[:3]:
  block+=f'<li><strong>{esc(r["case"])}</strong>: {labels[r["profile"]]} + Nelibc measured {r["speedup"]:.2f}× baseline speed'+(f' at {r["bytes"]:,} bytes' if r['bytes'] else '')+'. Keep this case in the comparison while testing short, long, aligned and unaligned inputs.</li>'
 block+='</ol>'
+if (data/'strtod-controls.csv').is_file() and source_commit:
+ decimals={r['case']:r for r in load_csv('strtod-controls.csv') if r['offset']=='0'}
+ overflow,underflow=decimals['overflow_errno'],decimals['underflow_errno']
+ current_ns='final_'+source_commit+'_median_ns'
+ block+=(f'<p><strong>Decimal range handling.</strong> In the separate aligned controls, current Nelibc '
+         f'parsed <code>1e9999</code> in {float(overflow[current_ns])/1000:.2f} µs and <code>1e-9999</code> '
+         f'in {float(underflow[current_ns])/1000:.2f} µs. Native glibc took {float(overflow["glibc_median_ns"]):.2f} '
+         f'and {float(underflow["glibc_median_ns"]):.2f} ns respectively. Both produced the expected binary64 '
+         f'result, end pointer and <code>ERANGE</code>. <a href="{url}/strtod-controls.csv">Compare decimal inputs at all five offsets.</a></p>')
 regressions=[labels[p]+': '+', '.join(deltas[p]['regressions']) for p in labels if deltas[p]['regressions']]
 if regressions:block+='<p class="note"><strong>Correctness first:</strong> investigate or document the newly failing corpus cases before promoting optimizations: '+esc('; '.join(regressions))+'.</p>'
 block+='<p>Next evidence: application profiles to weight the cases; more CPUs and working-set sizes; allocator contention and I/O workloads. A single-host microbenchmark cannot establish a globally fastest libc.</p>'
@@ -247,7 +305,13 @@ overview=f'''<h2 class="section" id="libc-comparison">Nelibc benchmarks</h2>
 <p class="small muted">Measured {date} over {meta['pairs']} comparison rounds. Consumer correctness checks passed before timing.</p>
 <div class="actions"><a class="button" href="/nelua/nelibc/#performance">Inspect the matched results</a><a class="button button-ghost" href="/nelua/nelibc/#profiles">See the five runtime arrangements</a></div>
 '''
-if any('previous_ns' in r for r in rows):
+if followup.get('headline_case')=='memchr-absent-8':
+ measured=find('cosmopolitan','memchr-absent',8)
+ overview=overview.replace('<div class="actions">',
+   f'<p>On an eight-byte search with no match, Cosmopolitan with Nelibc took {measured["nelibc_ns"]:.2f} ns, '
+   f'compared with {measured["previous_ns"]:.2f} ns for previous Nelibc and {measured["baseline_ns"]:.2f} ns '
+   'for the native runtime. <a href="/nelua/nelibc/#performance">See the timing and correctness controls</a>.</p><div class="actions">',1)
+elif any('previous_ns' in r for r in rows):
  gains='; '.join(case+(('('+str(size)+')') if size else '')+' '+f'{find("glibc",case,size)["speedup_vs_previous"]:.2f}×' for case,size in followup.get('overview_cases',[('memcpy',1024),('memset',1024),('strlen',1024)]))
  overview=overview.replace('<div class="actions">','<p><strong>Optimization follow-up:</strong> '+gains+' compared with the previous Nelibc build in the paired GCC/glibc run. The complete results and input distributions are on the <a href="/nelua/nelibc/#gap-reduction">detailed page</a>.</p><div class="actions">',1)
 if followup.get('overview_scope'):

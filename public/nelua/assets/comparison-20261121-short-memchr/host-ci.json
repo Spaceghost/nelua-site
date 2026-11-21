@@ -1,0 +1,43 @@
+{
+  "platform": "Fedora Linux (x86-64)",
+  "scope": "Host profile CI. The performance measurements were recorded separately in the Debian build guest.",
+  "measured_revision": "eef2cefc548e6e25760c653ef31154f460bf7690",
+  "tested_revision": "eef2cefc548e6e25760c653ef31154f460bf7690",
+  "run_id": 44941980342,
+  "attempt": 1,
+  "started_utc": "2026-11-21T19:38:09Z",
+  "completed_utc": "2026-11-21T19:39:32Z",
+  "conclusion": "success",
+  "checks": [
+    {
+      "name": "platform-operation vocabulary in sync",
+      "started_at": "2026-11-21T19:38:19Z",
+      "completed_at": "2026-11-21T19:38:22Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "host archives, link checks, hosted smoke",
+      "started_at": "2026-11-21T19:38:22Z",
+      "completed_at": "2026-11-21T19:38:40Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "Bend 2 IO.print through the host profile",
+      "started_at": "2026-11-21T19:38:40Z",
+      "completed_at": "2026-11-21T19:39:03Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "standalone and freestanding smokes",
+      "started_at": "2026-11-21T19:39:03Z",
+      "completed_at": "2026-11-21T19:39:09Z",
+      "conclusion": "success"
+    },
+    {
+      "name": "generated-C snapshot rebuilt with zig cc and gcc",
+      "started_at": "2026-11-21T19:39:09Z",
+      "completed_at": "2026-11-21T19:39:26Z",
+      "conclusion": "success"
+    }
+  ]
+}

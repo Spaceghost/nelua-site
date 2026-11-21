@@ -1,0 +1,75 @@
+{
+  "cosmopolitan": {
+    "improvements": [
+      "functional/inet_pton",
+      "functional/strtold",
+      "math/coshl",
+      "math/dremf",
+      "math/erfcf",
+      "math/exp10l",
+      "math/fma",
+      "math/fmaf",
+      "math/fmal",
+      "math/j1f",
+      "math/llrintl",
+      "math/llround",
+      "math/llroundf",
+      "math/llroundl",
+      "math/log1p",
+      "math/log1pf",
+      "math/lrintl",
+      "math/pow10l",
+      "math/powf",
+      "math/powl",
+      "math/sinhf",
+      "math/sinhl",
+      "regression/inet_ntop-v4mapped"
+    ],
+    "regressions": [
+      "functional/popen"
+    ]
+  },
+  "glibc": {
+    "improvements": [
+      "functional/clocale_mbfuncs",
+      "functional/fnmatch",
+      "functional/strftime",
+      "functional/strtol",
+      "functional/wcstol",
+      "math/exp2l",
+      "math/fma",
+      "math/fmaf",
+      "math/fmax",
+      "math/fmaxf",
+      "math/fmaxl",
+      "math/fmin",
+      "math/fminf",
+      "math/fminl",
+      "math/j1",
+      "math/j1f",
+      "math/jn",
+      "math/jnf",
+      "math/powf",
+      "math/tgammaf",
+      "math/y0",
+      "math/yn",
+      "math/ynf",
+      "regression/fpclassify-invalid-ld80"
+    ],
+    "regressions": []
+  },
+  "musl": {
+    "improvements": [
+      "functional/strptime",
+      "math/expl",
+      "math/fma",
+      "math/fmaf",
+      "math/fmal",
+      "math/powf",
+      "math/powl"
+    ],
+    "regressions": [
+      "regression/sigprocmask-internal"
+    ]
+  }
+}

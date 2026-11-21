@@ -1,0 +1,7 @@
+{
+  "headline_case": "memchr-absent-8",
+  "focus_profile": "cosmopolitan",
+  "cases": [["memchr-absent", 8], ["memchr-absent", 32], ["memchr-absent", 128], ["memchr-absent", 65536]],
+  "tradeoffs": [],
+  "changes": "On x86-64, the Cosmopolitan build scans a single eight-byte group before its tail. Clang checks that a word fits within the current page before loading it, then locates the first matching byte. Near a page edge it scans in order. Both paths are written in Nelua."
+}

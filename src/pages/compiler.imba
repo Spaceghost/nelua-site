@@ -49,14 +49,14 @@ export def body
 				'On '
 				<time html:datetime="2026-11-21"> '21 November 2026'
 				', the two biggest differences came from syntax checking and source-location lookups. A syntax-only invocation can skip the built-in code generator and analyzer. During C generation, the compiler now indexes source line breaks once per file so repeated runtime diagnostics can find their source locations cheaply.'
-			<div className="table-wrap" role="region" aria-label="Median frontend wall time in milliseconds" html:tabindex="0">
+			<div className="table-wrap" html:role="region" aria-label="Median frontend wall time in milliseconds" html:tabindex="0">
 				<table>
 					<thead>
 						<tr>
 							<th scope="col"> 'Workload'
 							<th className="num" scope="col"> '5995eba (ms)'
-								<th className="num" scope="col"> '874acdd (ms)'
-								<th className="num" scope="col"> 'Old / new'
+							<th className="num" scope="col"> '874acdd (ms)'
+							<th className="num" scope="col"> 'Old / new'
 					<tbody>
 						for row in frontendTimings
 							<tr>

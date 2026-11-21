@@ -1,698 +1,148 @@
-export const title = "nebox · a toybox-style userland in Nelua on nelibc · spacegho.st/nelua"
-export const description = "nebox is a toybox/busybox-style multicall binary written in Nelua and linked against nelibc's standalone profile. Explore its 138 executable applets and see which commands it covers from BusyBox 1.38.0 and Toybox 0.8.15."
+export const title = 'nebox · Unix applets in Nelua · spacegho.st/nelua'
+export const description = 'Nebox is a native Nelua userland. Browse its 138 standalone applets, try its shell, and check command coverage against BusyBox and Toybox.'
+
+const groups = [
+	{ range: '[ – C', names: '[ arch awk b2sum base32 base64 basenc basename cat chgrp chmod chown chroot cksum clear cmp comm cp csplit cut' }
+	{ range: 'D – G', names: 'date dd df diff dir dircolors dirname dnsdomainname domainname du echo egrep env expand expr factor false fgrep find fmt fold free fsync grep groups gunzip gzip' }
+	{ range: 'H – M', names: 'hd head hexdump hostid hostname id install join kill link ln logname ls lsmod mcookie md5sum mkdir mkfifo mknod mktemp mount mv' }
+	{ range: 'N – R', names: 'nice nisdomainname nl nohup nproc nsh od paste patch pathchk pidof pinky printenv printf pwd pwdx readlink realpath rev rm rmdir' }
+	{ range: 'S – T', names: 'sed seq setsid sh sha1sum sha224sum sha256sum sha384sum sha512sum shuf sleep sort split stat strings sum sync tac tail tar tee test timeout touch tr true truncate tsort tty ttysize' }
+	{ range: 'U – Z', names: 'umount uname unexpand uniq unlink uptime users usleep uuidgen vdir wc which who whoami xargs yes ypdomainname zcat' }
+]
 
 export def body
-	<div className="page-content">
-		<section className="hero">
-			<p className="eyebrow"> "Core"
-			<h1> "nebox"
-			<p className="tagline"> "138 executable applets, including a POSIX shell, in one static binary."
-			<p className="blurb">
-				<a html:href="https://github.com/Spaceghost/nebox"> "Spaceghost/nebox"
-				" is a multicall binary written in Nelua and linked against "
-				<a html:href="/nelua/nelibc/"> "nelibc"
-				"'s standalone archive. Each applet is chosen from "
-				<code> "argv[0]"
-				" (a hard or symbolic link named after the applet) or from the first operand. It carries its own POSIX shell, regex engine, awk, stream editor, sort, find, diff and checksum implementations, all in Nelua."
-		<div className="page-details">
-			<h2 className="section" id="applet-coverage"> "BusyBox and Toybox coverage"
-			<p className="lead">
-				"BusyBox 1.38.0 and Toybox 0.8.15 declare 524 distinct command names between them. Nebox covers 148 of those names with 126 executables and 22 shell builtins. Another 376 still lack a required invocation form. See the "
-				<a href="/nelua/nebox/applet-coverage.txt"> "full command coverage table (plain text)"
-				"."
-			<p>
-				"Verified on 2026-11-21 at Nebox commit "
-				<code> "b948bce"
-				". The check reads executable names from "
-				<code> "nebox --list"
-				" and checks shell builtins with "
-				<code> "command -v"
-				" inside Nebox’s own shell with external commands off its search path. The conformance suite checks command behavior and options separately."
-			<p>
-				"This build adds clear, egrep, fgrep, fsync, lsmod, mcookie, pidof, pwdx, ttysize, usleep and uuidgen."
-			<h2 className="section" id="applets"> "Standalone applets"
-			<p className="lead">
-				<code> "nebox --list"
-				" prints the 138 names below, including 12 outside the two upstream catalogs. Use "
-				<code> "nebox --install [-s] DIR"
-				" to create a link for each one. The optional "
-				<a href="/nelua/init/"> "Theseus Init"
-				" build adds "
-				<code> "init"
-				" for a total of 139. "
-				<a href="/cascadia/#system"> "See what ships in Cascadia."
-			<ul className="applets">
-				<li> "["
-				<li> "arch"
-				<li> "awk"
-				<li> "b2sum"
-				<li> "base32"
-				<li> "base64"
-				<li> "basenc"
-				<li> "basename"
-				<li> "cat"
-				<li> "chgrp"
-				<li> "chmod"
-				<li> "chown"
-				<li> "chroot"
-				<li> "cksum"
-				<li> "clear"
-				<li> "cmp"
-				<li> "comm"
-				<li> "cp"
-				<li> "csplit"
-				<li> "cut"
-				<li> "date"
-				<li> "dd"
-				<li> "df"
-				<li> "diff"
-				<li> "dir"
-				<li> "dircolors"
-				<li> "dirname"
-				<li> "dnsdomainname"
-				<li> "domainname"
-				<li> "du"
-				<li> "echo"
-				<li> "egrep"
-				<li> "env"
-				<li> "expand"
-				<li> "expr"
-				<li> "factor"
-				<li> "false"
-				<li> "fgrep"
-				<li> "find"
-				<li> "fmt"
-				<li> "fold"
-				<li> "free"
-				<li> "fsync"
-				<li> "grep"
-				<li> "groups"
-				<li> "gunzip"
-				<li> "gzip"
-				<li> "hd"
-				<li> "head"
-				<li> "hexdump"
-				<li> "hostid"
-				<li> "hostname"
-				<li> "id"
-				<li> "install"
-				<li> "join"
-				<li> "kill"
-				<li> "link"
-				<li> "ln"
-				<li> "logname"
-				<li> "ls"
-				<li> "lsmod"
-				<li> "mcookie"
-				<li> "md5sum"
-				<li> "mkdir"
-				<li> "mkfifo"
-				<li> "mknod"
-				<li> "mktemp"
-				<li> "mount"
-				<li> "mv"
-				<li> "nice"
-				<li> "nisdomainname"
-				<li> "nl"
-				<li> "nohup"
-				<li> "nproc"
-				<li> "nsh"
-				<li> "od"
-				<li> "paste"
-				<li> "patch"
-				<li> "pathchk"
-				<li> "pidof"
-				<li> "pinky"
-				<li> "printenv"
-				<li> "printf"
-				<li> "pwd"
-				<li> "pwdx"
-				<li> "readlink"
-				<li> "realpath"
-				<li> "rev"
-				<li> "rm"
-				<li> "rmdir"
-				<li> "sed"
-				<li> "seq"
-				<li> "setsid"
-				<li> "sh"
-				<li> "sha1sum"
-				<li> "sha224sum"
-				<li> "sha256sum"
-				<li> "sha384sum"
-				<li> "sha512sum"
-				<li> "shuf"
-				<li> "sleep"
-				<li> "sort"
-				<li> "split"
-				<li> "stat"
-				<li> "strings"
-				<li> "sum"
-				<li> "sync"
-				<li> "tac"
-				<li> "tail"
-				<li> "tar"
-				<li> "tee"
-				<li> "test"
-				<li> "timeout"
-				<li> "touch"
-				<li> "tr"
-				<li> "true"
-				<li> "truncate"
-				<li> "tsort"
-				<li> "tty"
-				<li> "ttysize"
-				<li> "umount"
-				<li> "uname"
-				<li> "unexpand"
-				<li> "uniq"
-				<li> "unlink"
-				<li> "uptime"
-				<li> "users"
-				<li> "usleep"
-				<li> "uuidgen"
-				<li> "vdir"
-				<li> "wc"
-				<li> "which"
-				<li> "who"
-				<li> "whoami"
-				<li> "xargs"
-				<li> "yes"
-				<li> "ypdomainname"
-				<li> "zcat"
-
-			<h2 className="section"> "How it is checked"
-			<p className="lead">
-				"Every case in "
-				<code> "tests/run.sh"
-				" runs one shell command twice from identical fixture trees: once with the host's GNU coreutils, once with nebox's applet links first on "
-				<code> "PATH"
-				". stdout, the exit status and a snapshot of the resulting directory (names, modes, checksums) must match. Where the host has no reference tool, a pinned expected output is used instead."
-			<h3> "Conformance run on 2026-11-08"
-			<p className="stats">
-				<span>
-					<strong> "1,500+"
-					" conformance cases, 0 failing"
-				<span>
-					<strong> "24"
-					" terminal sessions"
-				<span>
-					<strong> "2,400"
-					" diff, "
-					<strong> "200"
-					" patch, "
-					<strong> "454"
-					" dd, "
-					<strong> "496"
-					" join, "
-					<strong> "789"
-					" checksum, "
-					<strong> "888"
-					" encoding, "
-					<strong> "459"
-					" chmod/mkdir, "
-					<strong> "558"
-					" tr, "
-					<strong> "135"
-					" split, "
-					<strong> "97"
-					" shuf, "
-					<strong> "674"
-					" stat, "
-					<strong> "134"
-					" rm, "
-					<strong> "149"
-					" ln, "
-					<strong> "357"
-					" df, "
-					<strong> "238"
-					" du, "
-					<strong> "273"
-					" chown, "
-					<strong> "175"
-					" cp, "
-					<strong> "116"
-					" mv, "
-					<strong> "100"
-					" install, "
-					<strong> "113"
-					" touch, "
-					<strong> "167"
-					" truncate, "
-					<strong> "355"
-					" tac, "
-					<strong> "419"
-					" tsort, "
-					<strong> "3,062"
-					" test, "
-					<strong> "124"
-					" env, "
-					<strong> "2,169"
-					" printf, "
-					<strong> "3,175"
-					" expr, "
-					<strong> "677"
-					" factor, "
-					<strong> "510"
-					" cmp, "
-					<strong> "670"
-					" od, "
-					<strong> "840"
-					" sort, "
-					<strong> "673"
-					" xargs, "
-					<strong> "2,864"
-					" ls, "
-					<strong> "6,514"
-					" date, "
-					<strong> "3,604"
-					" grep, "
-					<strong> "4,389"
-					" sed, "
-					<strong> "6,191"
-					" find, "
-					<strong> "3,356"
-					" hexdump, "
-					<strong> "493"
-					" rev, "
-					<strong> "1,448"
-					" strings, "
-					<strong> "1,136"
-					" free, "
-					<strong> "264"
-					" kill, "
-					<strong> "2,955"
-					" hostname and "
-					<strong> "233"
-					" option-parsing comparisons with GNU per test run"
-				<span>
-					<strong> "3,013,304 bytes"
-					" static"
-				<span>
-					<strong> "nm -u"
-					" empty"
-			<div className="grid grid-3">
-				<article className="card card-core">
-					<h3> "Link recipe"
-					<p className="small muted">
-						"Nelua emits C; "
-						<code> "zig cc"
-						" links the whole nelibc standalone archive with no libc, no PIE and nelibc's own "
-						<code> "_start"
-						"."
-					<pre>
-						<code> "nelua -r --cc 'zig cc -mcpu=x86_64' \\\n  --cflags='-DNELIBC_STANDALONE -nostdlib -static \\\n    -ffreestanding -fno-builtin -Wl,-e,_start' \\\n  --ldflags='-Wl,--whole-archive \\\n    libnelibc-standalone-zig.a -Wl,--no-whole-archive' \\\n  -o nebox src/nebox.nelua\nnm -u nebox   # must print nothing"
-				<article className="card">
-					<h3> "What the GC situation is"
-					<p className="small muted">
-						"The program is compiled with "
-						<code> "pragmas.nogc"
-						": nelibc has no "
-						<code> "_setjmp"
-						", which Nelua's collector needs, and a shell toolbox does not need a collector. Applets allocate with the default allocator and exit; memory is reclaimed by the kernel."
-				<article className="card">
-					<h3> "Own regex engine"
-					<p className="small muted">
-						"POSIX basic and extended syntax with brackets, classes, intervals, groups, alternation, back-references and the GNU word escapes, as a Pike VM with GNU leftmost-longest semantics in "
-						<code> "src/nebox/regex.nelua"
-						": earliest start wins, then the longest match. grep, sed, awk, expr and find share it."
-				<article className="card card-core">
-					<h3> "An interactive shell: sh and nsh"
+	<div className="nebox-guide">
+		<header className="ng-hero">
+			<div>
+				<p className="ng-crumb">
+					<a href="/nelua/#core"> 'Core'
+					<span aria-hidden="true"> ' / '
+					'Userland'
+				<h1> 'nebox'
+				<p className="ng-intro"> 'A Unix toolbox written in Nelua.'
+				<p className="ng-deck">
+					'One static x86-64 binary carries 138 executable applets, including a POSIX shell. Pass a command to '
+					<code> 'nebox'
+					' or run it through a link named after the applet.'
+				<nav className="ng-actions" aria-label="Explore Nebox">
+					<a className="ng-primary" href="#applets"> 'Browse applets'
+					<a href="#applet-coverage"> 'Check coverage'
+			<figure className="ng-terminal">
+				<figcaption>
+					<span> 'Shell session'
+					<span> 'x86-64'
+				<pre>
+					<code>
+						<span className="ng-command"> "$ nebox --list | nebox wc -l\n"
+						<span className="ng-output"> "138\n\n"
+						<span className="ng-command"> "$ nebox sh -c 'command -v cd'\n"
+						<span className="ng-output"> "cd"
+		<section className="ng-section ng-coverage" aria-labelledby="applet-coverage">
+			<div className="ng-section-head">
+				<h2 id="applet-coverage"> 'BusyBox and Toybox coverage'
+				<p className="ng-revision">
+					<time datetime="2026-11-21"> 'Verified 2026-11-21'
+					' · '
+					<code> 'b948bce'
+			<div className="ng-meter-panel">
+				<div className="ng-reading">
+					<div className="ng-number">
+						<strong> '148'
+						<span> ' / 524'
+					<p> 'upstream command names covered'
+				<div className="ng-breakdown">
+					<meter min="0" max="524" value="148" aria-label="Upstream command names covered"> '148 of 524'
+					<dl>
+						<div>
+							<dt> 'Executables'
+							<dd> '126'
+						<div>
+							<dt> 'Shell builtins'
+							<dd> '22'
+						<div>
+							<dt> 'Still missing'
+							<dd> '376'
+			<div className="ng-coverage-note">
+				<p>
+					'The catalog combines BusyBox 1.38.0 and Toybox 0.8.15. A name counts when Nebox supports each way upstream invokes it. The check reads '
+					<code> '--list'
+					' for executables and uses '
+					<code> 'command -v'
+					' inside the Nebox shell with external commands off its search path.'
+				<div className="ng-links">
+					<a href="/nelua/nebox/applet-coverage/"> 'Browse the full command table'
+					<a href="/nelua/nebox/applet-coverage.txt"> 'Plain text'
+		<section className="ng-section" aria-labelledby="applets">
+			<div className="ng-section-head">
+				<h2 id="applets"> 'Standalone applets'
+				<code className="ng-invocation"> 'nebox --list'
+			<p className="ng-copy">
+				'The standalone build lists 138 commands, including 12 outside the two upstream catalogs. Use '
+				<code> 'nebox --install [-s] DIR'
+				' to create a link for each applet.'
+			<div className="ng-directory">
+				for group in groups
+					<div className="ng-group">
+						<h3> group.range
+						<ul className="ng-names">
+							for name in group.names.split(' ')
+								<li> name
+			<div className="ng-footnotes">
+				<p>
+					<strong> 'Added in this build. '
+					'clear, egrep, fgrep, fsync, lsmod, mcookie, pidof, pwdx, ttysize, usleep and uuidgen.'
+				<p>
+					'The optional '
+					<a href="/nelua/init/"> 'Theseus Init'
+					' build adds '
+					<code> 'init'
+					' for a total of 139. '
+					<a href="/cascadia/#system"> 'See what ships in Cascadia.'
+		<section className="ng-section" aria-labelledby="compatibility">
+			<h2 id="compatibility"> 'Using the toolbox'
+			<div className="ng-features">
+				<article>
+					<h3> 'Shell and job control'
 					<p>
-						<code> "sh -i"
-						", or "
-						<code> "sh"
-						" on a terminal, reads commands through nebox's own line editor: lines that wrap past the terminal width, UTF-8 cursor motion, emacs keys with a kill buffer, history in "
-						<code> "HISTFILE"
-						" with Ctrl-R search, Tab completion of commands, files and "
-						<code> "$NAME"
-						"s, and bracketed paste. Errors return to the prompt as POSIX asks, Ctrl-C ends the command being typed or run, Ctrl-Z, "
-						<code> "fg"
-						", "
-						<code> "bg"
-						" and "
-						<code> "jobs"
-						" do job control, and "
-						<code> "ENV"
-						" runs at startup. "
-						<code> "nsh"
-						" is the same shell with a coloured prompt and XDG history and rc files: "
-						<a html:href="/nelua/nebox/nsh/"> "see it in action"
-						". Recovery from errors uses nelibc's new "
-						<code> "<setjmp.h>"
-						"."
-				<article className="card card-core">
-					<h3> "GNU's option parser, and the gaps it found"
+						'Start an interactive shell with '
+						<code> 'nebox sh -i'
+						'. It supports editable history, tab completion, pipelines and background jobs. '
+						<a href="/nelua/nebox/nsh/"> 'nsh'
+						' adds a colored prompt and XDG history and configuration files.'
+				<article>
+					<h3> 'Text and files'
 					<p>
-						"Most applets now parse options through a port of glibc's "
-						<code> "getopt_long"
-						": options after operands, GNU's long names with unique abbreviations and glibc's ambiguity rules, and the long options nebox lacks refused by name instead of misread. Comparing against GNU turned up applets that accepted options and ignored them; "
-						<code> "cat"
-						", "
-						<code> "fold"
-						", "
-						<code> "rmdir"
-						", "
-						<code> "chmod"
-						" (over gnulib's "
-						<code> "modechange.c"
-						", umask rules included), "
-						<code> "tr"
-						", "
-						<code> "cut"
-						", "
-						<code> "uniq"
-						", "
-						<code> "head"
-						", "
-						<code> "tail"
-						" (with "
-						<code> "-f"
-						"/"
-						<code> "-F"
-						" following), "
-						<code> "nl"
-						", "
-						<code> "comm"
-						", "
-						<code> "paste"
-						", "
-						<code> "timeout"
-						" (process groups and signal forwarding), "
-						<code> "tee"
-						", "
-						<code> "mktemp"
-						", "
-						<code> "readlink"
-						" and "
-						<code> "realpath"
-						" (over gnulib's canonicalizer), "
-						<code> "sort"
-						", "
-						<code> "wc"
-						", "
-						<code> "id"
-						", "
-						<code> "expand"
-						", "
-						<code> "unexpand"
-						", "
-						<code> "split"
-						" (every "
-						<code> "-n"
-						" chunk mode and "
-						<code> "--filter"
-						"), "
-						<code> "shuf"
-						" (byte-identical with GNU under "
-						<code> "--random-source"
-						", reservoir sampling included) "
-						<code> "stat"
-						" (every directive, over new ports of gnulib's quotearg and mount-list code), "
-						<code> "rm"
-						" and "
-						<code> "du"
-						" (over a traversal that reproduces what gnulib's fts hands them), "
-						<code> "ln"
-						" (with gnulib's backup-name logic), "
-						<code> "df"
-						" (with a port of gnulib's "
-						<code> "human.c"
-						"), "
-						<code> "chown"
-						" and "
-						<code> "chgrp"
-						" (over a shared fts iterator), "
-						<code> "cp"
-						", "
-						<code> "mv"
-						" and "
-						<code> "install"
-						" (over one port of "
-						<code> "copy.c"
-						": reflinks, sparse extents, hard-link maps, xattrs, backups, cross-device moves), "
-						<code> "touch"
-						" and "
-						<code> "truncate"
-						", "
-						<code> "echo"
-						", "
-						<code> "nproc"
-						", "
-						<code> "sleep"
-						", "
-						<code> "printenv"
-						", "
-						<code> "tac"
-						" (separators as regular expressions), "
-						<code> "tsort"
-						", "
-						<code> "test"
-						" and "
-						<code> "["
-						", "
-						<code> "env"
-						" ("
-						<code> "-S"
-						" split strings and the signal options), "
-						<code> "printf"
-						" (the shell's builtin too, "
-						<code> "%a"
-						" as glibc prints x87 long doubles), "
-						<code> "expr"
-						" (arbitrary-precision arithmetic, glibc's regex messages) "
-						<code> "factor"
-						" (any length, with GNU's output order through pipes), "
-						<code> "cmp"
-						" (diffutils), "
-						<code> "od"
-						", "
-						<code> "sort"
-						" (keys, -R, --debug, merge), "
-						<code> "xargs"
-						" (findutils, -P included) "
-						<code> "ls"
-						" (every 9.1 option, colors and --dired; plus "
-						<code> "dir"
-						" and "
-						<code> "vdir"
-						"), "
-						<code> "date"
-						" (with all of gnulib's parse-datetime, "
-						<code> "--debug"
-						" included), "
-						<code> "grep"
-						" (GNU grep 3.8: binary files, -r with include/exclude, colors) "
-						<code> "sed"
-						" (GNU sed 4.9, with its error positions), "
-						<code> "find"
-						" (findutils 4.9.0, -printf and -exec + included), "
-						<code> "hexdump"
-						" and "
-						<code> "hd"
-						" (util-linux 2.38.1 with its -e format language), "
-						<code> "rev"
-						", "
-						<code> "strings"
-						" (binutils 2.40), "
-						<code> "groups"
-						", "
-						<code> "which"
-						", "
-						<code> "sync"
-						" "
-						<code> "free"
-						" and "
-						<code> "kill"
-						" (procps 4.0.2), and "
-						<code> "hostname"
-						" (Debian 3.23, with dnsdomainname/domainname, over a port of glibc's resolver path) are now ports of their coreutils sources, each checked against GNU on hundreds to thousands of random cases."
-				<article className="card card-core">
-					<h3> "dd, join, checksums and encodings, ported from coreutils"
+						'Search with '
+						<code> 'grep'
+						', edit streams with '
+						<code> 'sed'
+						' and process records with '
+						<code> 'awk'
+						'. For larger jobs, sort can spill to disk, diff can compare directory trees, and tail can follow a rotating log.'
+				<article>
+					<h3> 'Archives and checksums'
 					<p>
-						<code> "dd"
-						" follows GNU coreutils 9.1's "
-						<code> "dd.c"
-						": every conversion including the EBCDIC tables, block and unblock, swab and sparse; every flag ("
-						<code> "fullblock"
-						", "
-						<code> "count_bytes"
-						", "
-						<code> "direct"
-						", "
-						<code> "nocache"
-						", ...); GNU's number syntax with "
-						<code> "kB"
-						"/"
-						<code> "KiB"
-						", "
-						<code> "B"
-						" and "
-						<code> "x"
-						"; "
-						<code> "bs="
-						" passing each read through while "
-						<code> "ibs"
-						"/"
-						<code> "obs"
-						" regroup; the statistics lines with gnulib's rounding, "
-						<code> "status=progress"
-						", and reports on SIGUSR1 and Ctrl-C. "
-						<code> "join"
-						" ports "
-						<code> "join.c"
-						", down to the obsolete "
-						<code> "-j1 ARG"
-						" operand rules, on top of a port of glibc's "
-						<code> "getopt_long"
-						". The nine checksum tools ("
-						<code> "md5sum"
-						", "
-						<code> "sha1sum"
-						" to "
-						<code> "sha512sum"
-						", "
-						<code> "b2sum"
-						", "
-						<code> "cksum"
-						", "
-						<code> "sum"
-						") are one port of "
-						<code> "digest.c"
-						" over nebox's own streaming MD5, SHA-1, SHA-2, BLAKE2b, SM3 and CRC code, with "
-						<code> "--tag"
-						", "
-						<code> "-z"
-						", escaped names and GNU's check-file parser. "
-						<code> "base64"
-						", "
-						<code> "base32"
-						" and "
-						<code> "basenc"
-						" port "
-						<code> "basenc.c"
-						" with gnulib's decoders, all eight encodings included. Comparisons against GNU on 754 dd, 1,596 join, 1,989 checksum and 2,588 encoding cases found no difference in output, diagnostics, exit status or files left behind."
-				<article className="card card-core">
-					<h3> "patch, read from GNU's source"
+						'Create or extract a tar archive, compress a stream with gzip, or write decompressed data to standard output with zcat. Use '
+						<code> 'sha256sum'
+						' to verify a file.'
+			<details className="ng-details" id="known-limits">
+				<summary> 'Known limits'
+				<p> 'Standalone locale data covers C, UTF-8 character handling and German collation. Some commands work byte by byte. Account enumeration reads the local databases. The grep -P option requires a build linked with static PCRE2.'
+				<a href="https://github.com/Spaceghost/nebox#known-limits"> 'Applet compatibility notes'
+		<section className="ng-section" aria-labelledby="build">
+			<h2 id="build"> 'Build and test'
+			<div className="ng-build">
+				<div>
 					<p>
-						<code> "patch"
-						" places hunks with GNU patch 2.7.6's own search (offsets outward, then fuzz), detects reversed patches and asks GNU's questions, rebuilds rejects the way GNU does, and backs files up when a patch did not match exactly. A fuzzer feeds both programs random diffs in three formats against shifted, edited and already-patched files: 2,000 cases with identical output, status, result, reject and backup files."
-				<article className="card card-core">
-					<h3> "diff, step for step with GNU"
-					<p>
-						<code> "diff"
-						" ports GNU diffutils 3.8's analysis: identical ends trimmed on bytes with horizon lines, lines of one file with no match in the other discarded first, the middle-snake divide and conquer with its cost cut-off, and boundary shifting. The edit scripts are GNU's: a fuzzer compares both on random files for twelve option sets, 24,000 comparisons without a difference, and 40,000-line files with heavy changes match too."
-			<h2 className="section" id="compatibility"> "Compatibility"
-			<ul>
-				<li>
-					<a href="/nelua/nebox/nsh/"> "sh and nsh"
-					" query and set resource limits with "
-					<code> "ulimit"
-					". Changes apply to the shell and its children."
-				<li>
-					<code> "awk"
-					" supports "
-					<code> "gensub"
-					", "
-					<code> "fflush"
-					", "
-					<code> "systime"
-					", and local or UTC "
-					<code> "strftime"
-					". Regex literals can contain a slash inside a bracket expression. "
-					<code> "BEGINFILE"
-					" and "
-					<code> "ENDFILE"
-					" run before and after each input file. A regex "
-					<code> "RS"
-					" splits input as it arrives, and "
-					<code> "RT"
-					" holds the matched separator."
-				<li>
-					<code> "diff"
-					" supports side-by-side, ifdef and RCS output, custom line and group formats, recursive exclusions, function headings, labels, and regex-based change filtering."
-				<li>
-					<code> "tail"
-					" uses Linux inotify to wake on file changes and rotation, with periodic checks as a fallback. "
-					<code> "timeout"
-					" uses interval timers and signals."
-				<li>
-					<code> "date"
-					" supports ISO and RFC 3339 output, batch input and setting the clock when permitted. "
-					<code> "ls"
-					" supports quoting, color and symlink options. "
-					<code> "grep"
-					" handles binary files and long options, "
-					<code> "sed"
-					" supports "
-					<code> "--posix"
-					" and "
-					<code> "-u"
-					", "
-					<code> "sort"
-					" supports month ordering, and "
-					<code> "xargs"
-					" runs jobs in parallel."
-				<li>
-					<code> "sort"
-					" spills large inputs to temporary files and sorts independent runs in parallel. "
-					<code> "-S"
-					" sets the buffer budget, "
-					<code> "-T"
-					" selects temporary storage, and "
-					<code> "--parallel"
-					" caps workers. "
-					<code> "--compress-program"
-					" compresses temporary runs."
-				<li>
-					"With UTF-8 enabled, "
-					<code> "wc"
-					" counts characters and display columns, "
-					<code> "grep"
-					" and "
-					<code> "sed"
-					" match Unicode text, and "
-					<code> "diff -i"
-					" folds Unicode case. "
-					<code> "cut -c"
-					" selects whole characters, and the shell accepts multibyte "
-					<code> "IFS"
-					" separators."
-				<li>
-					"With an nscd-enabled build of Nelibc, keyed user and group lookups use the system account service when available. Local files provide fallback."
-				<li>
-					<code> "hostname"
-					" retries truncated DNS replies over TCP, supports nameserver rotation, and tries the next server after UDP failures such as SERVFAIL. "
-					<code> "grep -P"
-					" is available in builds linked with static PCRE2."
-			<p>
-				<a href="/nelua/init/"> "Theseus init"
-				" provides the optional Nebox initramfs entry point."
-			<h2 className="section" id="known-limits"> "Known limits"
-			<p className="lead">
-				"See the "
-				<a href="https://github.com/Spaceghost/nebox#known-limits"> "repository’s full compatibility notes"
-				" for applet-specific differences and the tests that document them."
-			<ul>
-				<li> "Standalone locale data covers C, UTF-8 character handling, and German collation. Some applet operations still work byte by byte."
-				<li> "Account enumeration reads the local databases."
-			<h2 className="section"> "Build"
-			<p>
-				<a href="/nelua/nebuild/"> 'nebuild'
-				' runs the distro build graph, and '
-				<a href="/nelua/necc/"> 'necc'
-				' compiles the userland.'
-			<pre>
-				<code> "git clone https://github.com/Spaceghost/nelibc\nmake -C nelibc lib-standalone-zig\ngit clone https://github.com/Spaceghost/nebox\nmake -C nebox NELIBC=../nelibc        # build/nebox\nmake -C nebox NELIBC=../nelibc test   # the conformance suite"
-			<p className="note">
-				"Compatibility checks ran in a Debian 12 container with Nelua "
-				<code> "4707e21"
-				", Zig 0.17.0, and GNU utilities and dash as references."
-			<div className="actions">
-				<a className="button" html:href="https://github.com/Spaceghost/nebox"> "Repository"
-				" "
-				<a className="button button-ghost" html:href="https://github.com/Spaceghost/nebox/blob/master/tests/run.sh"> "Conformance suite"
+						'Nebox links against '
+						<a href="/nelua/nelibc/"> 'nelibc’s standalone archive'
+						'. The conformance suite checks command output, exit status and changes to the filesystem. The coverage check tests which commands can be invoked.'
+					<div className="ng-links">
+						<a href="https://github.com/Spaceghost/nebox"> 'Nebox repository'
+						<a href="https://github.com/Spaceghost/nebox/blob/master/tests/run.sh"> 'Conformance suite'
+				<pre>
+					<code> "git clone https://github.com/Spaceghost/nelibc\nmake -C nelibc lib-standalone-zig\ngit clone https://github.com/Spaceghost/nebox\nmake -C nebox NELIBC=../nelibc\nmake -C nebox NELIBC=../nelibc test"
 
 export def footerLinks
 	<div className="footer-links">
-		<a html:href="https://github.com/Spaceghost/nebox"> "Spaceghost/nebox"
+		<a href="https://github.com/Spaceghost/nebox"> 'Spaceghost/nebox'

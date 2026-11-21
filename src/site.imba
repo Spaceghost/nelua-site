@@ -76,7 +76,7 @@ const pages = [
 	{ source: comptime, path: '/nelua/compiler/comptime/', active: '/nelua/compiler/', body: comptime.body() }
 	{ source: syntaxGuide, path: '/nelua/compiler/syntax-extensions/', active: '/nelua/compiler/', body: syntaxGuide.body(content('syntax-guide'), content('syntax-toc')) }
 	{ source: nelibc, path: '/nelua/nelibc/', body: nelibc.body(content('nelibc-comparison'), content('nelibc-stats')), scripts: ['/nelua/assets/explorer.js'] }
-	{ source: nebox, path: '/nelua/nebox/', body: nebox.body() }
+	{ source: nebox, path: '/nelua/nebox/', body: nebox.body(), stylesheet: '/nelua/nebox/guide.css' }
 	{ source: nsh, path: '/nelua/nebox/nsh/', body: nsh.body() }
 	{ source: neboot, path: '/nelua/neboot/', body: neboot.body() }
 	{ source: init, path: '/nelua/init/', body: init.body(), stylesheet: '/nelua/init/vm/demo.css', scripts: ['/nelua/init/vm/demo.js'] }
@@ -88,6 +88,7 @@ const pages = [
 ]
 
 copyFileSync('src/site.css', 'public/nelua/assets/site.css')
+copyFileSync('src/nebox.css', 'public/nelua/nebox/guide.css')
 copyFileSync('src/community.css', 'public/nelua/community/styles.css')
 const terminalCss = readFileSync('node_modules/@xterm/xterm/css/xterm.css', 'utf8')
 writeFileSync('public/nelua/init/vm/demo.css', terminalCss + '\n' + readFileSync('src/theseus-demo.css', 'utf8'))

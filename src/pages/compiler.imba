@@ -9,6 +9,13 @@ const frontendTimings = [
 	["Emit C · 2,048 runtime assertions (synthetic)", "282.06", "146.39", "1.93×"]
 ]
 
+const compilerPassRows = [
+	["Hello world · compile", "134.50", "113.56"]
+	["Hello world · run", "0.77", "0.78"]
+	["Matrix multiplication · compile", "1109.31", "1158.70"]
+	["Matrix multiplication · run", "29.62", "29.73"]
+]
+
 export def body
 	<div className="page-content">
 		<section className="hero">
@@ -44,6 +51,28 @@ export def body
 				<a href="/nelua/necc/"> 'necc'
 				' packages this frontend with a standalone Linux toolchain.'
 		<div className="page-details">
+			<h2 className="section" id="release-timing"> "Release compilation and generated programs"
+			<p> "On 21 November 2026 the fork at 874acdd and upstream at a584505 used the same input files and GCC backend. The compile interval includes C generation, compilation and linking. The execution interval starts with a fresh process."
+			<div className="table-wrap">
+				<table>
+					<thead>
+						<tr>
+							<th scope="col"> "Workload"
+							<th scope="col"> "Fork (ms)"
+							<th scope="col"> "Upstream (ms)"
+					<tbody>
+						for row in compilerPassRows
+							<tr>
+								<th scope="row"> row[0]
+								<td className="num"> row[1]
+								<td className="num"> row[2]
+			<p> "Each median covers seven alternating rounds after warm-up. Both generated matrix programs printed −18.8963499125. The hello-world compile took longer in the fork while the matrix compile finished sooner. The runtime distributions overlapped."
+			<p className="upstream-links">
+				<a href="/nelua/assets/ecosystem-20261121/frontend-flags.csv"> "Interpreter build-flag samples"
+				<a href="/nelua/assets/ecosystem-20261121/nelua.csv"> "Compiler and program samples"
+				<a href="/nelua/assets/ecosystem-20261121/summary.csv"> "Quartiles and observed ranges"
+				<a href="/nelua/assets/ecosystem-20261121/replay.tar.gz"> "Replay scripts"
+				<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> "Versions and reproduction"
 			<h2 className="section" id="performance"> 'Frontend compile times'
 			<p>
 				'On '

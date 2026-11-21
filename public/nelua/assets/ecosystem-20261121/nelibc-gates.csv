@@ -1,0 +1,13 @@
+target,exit_status
+sys-ops-check,0
+smoke-matrix,0
+dogfood-matrix,0
+host-matrix,0
+host-bend-hello-zig,0
+host-bend-parallel-zig,0
+host-snapshot-matrix,0
+libc-test-gcc,0
+libc-test-zig,0
+libc-test-standalone-gcc,0
+libc-test-standalone-zig,0
+shootout-matrix,0

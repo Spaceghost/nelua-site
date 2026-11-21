@@ -143,6 +143,38 @@ export def body
 				<pre>
 					<code> "git clone https://github.com/Spaceghost/nelibc\nmake -C nelibc lib-standalone-zig\ngit clone https://github.com/Spaceghost/nebox\nmake -C nebox NELIBC=../nelibc\nmake -C nebox NELIBC=../nelibc test"
 
+		<section className="ng-section" aria-labelledby="line-count">
+			<h2 id="line-count"> 'Counting lines in Nelibc source'
+			<p> 'Median elapsed milliseconds across 15 measured rounds on an i5-10400. Each process read the same 1,965,199-byte file. The line-only path now counts newline bytes directly.'
+			<div className="table-wrap">
+				<table>
+					<thead>
+						<tr>
+							<th> 'Options'
+							<th> 'Previous Nebox (ms)'
+							<th> 'Updated Nebox (ms)'
+							<th> 'GNU wc 9.1 (ms)'
+					<tbody>
+						<tr>
+							<th scope="row"> '-l'
+							<td> '4.663'
+							<td> '1.612'
+							<td> '0.965'
+						<tr>
+							<th scope="row"> '-lc'
+							<td> '4.659'
+							<td> '1.598'
+							<td> '0.948'
+						<tr>
+							<th scope="row"> '-w'
+							<td> '4.689'
+							<td> '4.218'
+							<td> '9.762'
+			<div className="ng-links">
+				<a href="/nelua/assets/ecosystem-20261121/wc.csv"> 'Individual timings and counts'
+				<a href="/nelua/assets/ecosystem-20261121/summary.csv"> 'Quartiles and ranges'
+				<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> 'Builds and reproduction'
+
 export def footerLinks
 	<div className="footer-links">
 		<a href="https://github.com/Spaceghost/nebox"> 'Spaceghost/nebox'

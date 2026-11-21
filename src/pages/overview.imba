@@ -63,6 +63,10 @@ export def body comparison
 			<h2 id="performance"> 'Core performance'
 			<p> 'Each project names the workloads, hardware and baselines used for its timings. Open a comparison for the measured results and individual samples.'
 			<div className="core-guides">
+				<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> '21 November 2026 performance results and reproduction'
+				<a href="/nelua/assets/ecosystem-20261121/summary.csv"> 'Median timings, quartiles and ranges'
+				<a href="/nelua/nebox/#line-count"> 'Nebox line counting'
+				<a href="/nelua/nebox/nsh/#shell-time"> 'Shell startup and catalog processing'
 				<a href="/nelua/compiler/#performance"> 'Nelua syntax checks and C generation'
 				<a href="/nelua/nelibc/#performance"> 'C library routines'
 				<a href="/nelua/necc/#benchmarks"> 'C compilation and program runtime'

@@ -15,6 +15,11 @@ const timings = [
 	['Whole SDK with allocator', '3.009', '4.527', 'TinyCC · 5.795', '995,860', '992,583']
 ]
 
+const nelinkerPassRows = [
+	["SDK getpid member", "ld.bfd", "0.74", "3.39", "1,804", "4,944"]
+	["Bundled Lua and whole SDK", "TinyCC", "10.71", "16.31", "5,532", "5,528"]
+]
+
 export def body
 	<div className="page-content">
 		<section className="hero">
@@ -101,6 +106,34 @@ export def body
 			<a href="/nelua/assets/linker-20261121/samples.csv"> 'Individual link times (CSV)'
 			<a href="/nelua/assets/linker-20261121/method.txt"> 'Method, builds and checks'
 			<a href="/nelua/assets/linker-20261121/replay.tar.gz"> 'Replay the link inputs'
+		<h3 id="link-memory"> "Link time and peak resident memory"
+		<p> "On 21 November 2026 nelinker a349c2a linked a real SDK member and a complete Lua interpreter. Time and maximum resident set size came from separate invocations with identical inputs."
+		<div className="table-wrap">
+			<table>
+				<thead>
+					<tr>
+						<th scope="col"> "Input"
+						<th scope="col"> "Reference"
+						<th scope="col"> "nelinker (ms)"
+						<th scope="col"> "Reference (ms)"
+						<th scope="col"> "nelinker (KiB)"
+						<th scope="col"> "Reference (KiB)"
+				<tbody>
+					for row in nelinkerPassRows
+						<tr>
+							<th scope="row"> row[0]
+							<td className="num"> row[1]
+							<td className="num"> row[2]
+							<td className="num"> row[3]
+							<td className="num"> row[4]
+							<td className="num"> row[5]
+		<p> "The syscall executable returned 42 after calling getpid. The linked Lua interpreter evaluated a command and printed 42. The table reports warm medians on one i7-9700K logical CPU."
+		<p className="upstream-links">
+			<a href="/nelua/assets/ecosystem-20261121/link.csv"> "SDK link samples"
+			<a href="/nelua/assets/ecosystem-20261121/link-vm.csv"> "Interpreter link samples"
+			<a href="/nelua/assets/ecosystem-20261121/summary.csv"> "Quartiles and observed ranges"
+			<a href="/nelua/assets/ecosystem-20261121/replay.tar.gz"> "Replay scripts"
+			<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> "Versions and reproduction"
 		<h3> 'Creating an archive'
 		<p>
 			'On '

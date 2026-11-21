@@ -1,0 +1,252 @@
+Nelua ecosystem measurements · 21 November 2026
+
+Read summary.csv for medians, inclusive quartiles, minimum, maximum and units.
+The raw CSVs include the warm-up where it was recorded (round zero). Each
+comparison used fresh, interleaved processes on the same host. These are warm
+filesystem results. Other host activity contributed to wide wall-time ranges.
+No installation telemetry or workload-frequency counts were available.
+
+Priorities and coverage
+
+* Cascadia Core. Boot-to-command runs once per VM launch. Changing the local
+  compression of the release initramfs saved 2.27 s at the median in TCG.
+  The direct-shell control also used the same kernel and cpio. It bypasses
+  service startup, including the fixture's requested 350 ms failed readiness
+  check. It is a diagnostic lower bound, not an equivalent production boot.
+  Theseus Init is a related project outside Nelua core.
+* Generated Lua VM. Switch dispatch occurs on every interpreted bytecode.
+  The table improvement saved 108 ms per million-call run and 93 ms during
+  a fresh Nelua matrix C emission with this interpreter configuration.
+  TinyCC still led by 329 ms on the million-call input and 238 ms on the
+  frontend workload. This comparison applies to an interpreter whose VM
+  was compiled by necc; the system Nelua compiler uses its own interpreter.
+* Nelibc. Search is a library primitive and the distribution matters.
+  The alternating 64 KiB memmem miss saved 215 us/call. The interior-byte
+  miss saved 126 us/call. The 63-byte-run miss already took about 1 us.
+  Early long-needle memmem hits became more expensive. See all 33 rows per
+  round for text, seeded random data, binary data, hits and misses.
+* Native Nelua and necc compilation. Building the real Lua VM translation
+  unit still took 138 ms with necc versus 24 ms with the SDK TinyCC. Fork
+  versus upstream release compilation differed by workload. Trying -O3
+  for the bundled Lua interpreter gave mixed results; frontend-flags.csv
+  compares it with the default -O2 in seven interleaved rounds, including
+  byte-identical C checks. No compiler flag change was shipped.
+* nelinker. The current standalone build linked the full Lua interpreter in
+  10.71 ms versus TinyCC's 16.31 ms. Their peak RSS differed by 4 KiB.
+  nebuild was competitive on unchanged targets; Ninja led by 0.81 ms on
+  the larger manifest. These timings do not establish a scheduling gap.
+* Inventory. The Core index covers the compiler, Nelibc, necc, nelinker,
+  nebuild, neboot and the Nebox userland including nsh. The established
+  compiler frontend, C-toolchain, linker/archive, unchanged-build and libc
+  tables remain available on their project pages. The neboot page records
+  an OVMF boot qualification. Direct kernel boot here exercises no EFI
+  menu. The Workshop also lists Drift, Atlas firmware, melodica.h,
+  libc.bend and Writ. They supply no matched timing table on the index.
+
+Substring search
+
+  Before 70bcd89457f2b1433916747df715ea8546e54ffb
+  After  84267ab9185f25c88eca4cd10366207a5028ecc7
+  Reference glibc 2.36; gcc 12.2.0 Debian 12; Linux 6.18.54-0-lts
+  Intel Core i5-10400; pinned logical CPU 0; GCC/glibc hybrid
+  Nelua /opt/nelua-dabbd9ef/nelua; Zig 0.17.0 /opt/zig/zig
+
+In separate current and previous Nelibc trees on the designated builder,
+build each GCC hybrid archive as the unprivileged build user. Give each
+tree its own compiler cache. Example for either tree:
+  make lib-gcc "NELUA=/opt/nelua-dabbd9ef/nelua --cache-dir $PWD/cache" ZIG=/opt/zig/zig
+In an empty working directory download substring-rounds.sh alongside this
+file and run:
+  INPUT=$AFTER_TREE/tools/substring_cases.c BEFORE=$BEFORE_TREE/build/libnelibc-gcc.a \
+    AFTER=$AFTER_TREE/build/libnelibc-gcc.a CPU=0 sh substring-rounds.sh >repeat.csv
+The driver links the same GCC -O2 -fno-builtin consumer three ways.
+The executable calls the functions through volatile function pointers.
+Each sample is ns/call over 256 searches. The C source defines all bytes,
+the independent first-match oracle and guard mappings for both inputs.
+For the early 63-byte-run fixture, inserting 64 bytes at 8 completes the
+earlier run at offset 0. substring.csv records the actual first offset.
+The binary miss and hit cases use an eight-byte needle containing NUL.
+Round zero warms each implementation. Every measured round rotates order.
+Hybrid archive SHA-256: before 7b49ca2d980184a62927f12fe9189b2f7da29374ae15d409a8bbbb43423a246d
+after c041b9f73446ee7e181cb7bf6a229892a0a9b7765fd2d7dd2423f09c4a483efa.
+
+Toolchain and build-tool reproduction
+
+Download replay.tar.gz from the same directory. In an empty work directory
+extract it, then obtain these sibling checkouts. Repository names are
+under github.com/Spaceghost except for nelua-reference and tcc-source.
+The sibling directory nelua is Spaceghost/nelua.
+The public necc runtime fixture is loaded from nelua-site by the replay.
+
+  nelua            874acdd1049a35bc5d8d631d9ddb573d127fc32b
+  nelua-reference  edubart/nelua-lang a58450563e2d2ec49bff499865c8b5cfdf6ff81a
+  necc             e1eab18d53e763693ca91cef30b476c6c29f45b0
+  necc-before      2ebbb9d95777071d1209e65c50e6178b40ada980 (necc)
+  nelinker         a349c2a9177aeeeae01078c1632d5a36cb276559
+  nebuild          60d1200805b0529720fdea2a21b68c1156816340
+  nebuild-before   0441e93 (nebuild)
+  nelua-site       5f61fa3c44c53920401e0b578af4ff49e5234672
+  tcc-source       TinyCC/tinycc 32d1c0a5614b9979768b3711726db3d601750ed3
+
+These experiments used x86-64 Fedora 44, Linux 7.1.10-200.fc44.x86_64,
+Intel Core i7-9700K, GCC 16.2.1, GNU binutils 2.46.1, GNU make and
+Ninja 1.13.2. The compiler and linker processes used CPU 2; nebuild used
+CPU 3. Tests include process startup. Use an available CPU when replaying.
+For the compiler and linker process timings, round zero is excluded in summary.csv. The boot and EFI samples include every launch. The nebuild harness discards its
+own three warm-ups and numbers the twelve measured rounds from 1.
+
+  mkdir -p timings/{necc,link,vm} necc/build nelinker/build sdkroot
+  make -C nelua && make -C nelua-reference
+  taskset -c 2 python3 timings/compare-nelua.py > nelua.csv
+
+For the -O3 experiment use another tree at 874acdd, build it with
+make OPTCFLAGS=-O3, then run the fork's tools/bench-frontend.py on both
+trees with --rounds 7 on one CPU. The regular release compilation above
+used -C -r -b --cc gcc. Generated programs ran outside the compilation
+timer. They printed "hello world" and "-18.8963499125" respectively.
+
+Use Cascadia release core-dev-2026.11.20 as the immutable bootstrap SDK.
+Obtain the image with repository access and verify its published SHA256SUMS:
+  archive=$PWD/cascadia-core-x86_64.cpio.gz
+  (cd sdkroot && gzip -dc "$archive" | cpio -id --no-absolute-filenames 'bin/necc' 'bin/nelinker' 'usr/lib/necc/*')
+  export NECC_SYSROOT=$PWD/sdkroot/usr/lib/necc
+  export NECC_NELINKER=$PWD/sdkroot/bin/nelinker
+  (cd necc-before && ../sdkroot/bin/necc --release necc.nelua -o ../necc/build/necc)
+  (cd nelinker/src && NECC_NELINKER= ../../sdkroot/bin/necc --release nelinker.nelua -o ../build/nelinker)
+
+For the C compile and VM workloads rebuild the SDK's single-threaded TinyCC
+with the current necc recipe. Apply the Nelibc pinned x87 fix with its
+zero-context patch option in the TinyCC source checkout. Confirm the added
+assignment is directly after the fstpt encoding in the VT_LDOUBLE case.
+  git -C tcc-source apply --unidiff-zero "$PWD/nelibc/tools/toolchains/tinycc-x87-argument-pop.patch"
+  (cd tcc-source && ./configure && make tccdefs_.h)
+  necc/rebuild-tcc.sh "$NECC_SYSROOT" "$PWD/tcc-source" "$PWD/timings/new-tcc"
+  cp timings/new-tcc "$NECC_SYSROOT/tcc/tcc"
+  (cd necc && ../sdkroot/bin/necc --release necc.nelua -o build/candidate)
+  unset NECC_NELINKER
+  bash timings/build_vm.sh
+  ln -s ../../nelua/lualib timings/vm/lualib
+  ln -s ../../nelua/lib timings/vm/lib
+  taskset -c 2 python3 timings/compare-necc.py > necc-final.csv
+  taskset -c 2 python3 timings/vmbench.py > vm.csv
+  taskset -c 2 python3 timings/frontend-vmbench.py > frontend-vm.csv
+  taskset -c 2 python3 timings/link_bench.py > link.csv
+  taskset -c 2 python3 timings/link-vm.py > link-vm.csv
+
+The source for all interpreter objects is the fork's bundled Lua. The VM
+dispatch comparison compiles lvm.c with LUA_USE_JUMPTABLE=0 for all three
+builds so the compiler receives the same portable C switch. All its other
+objects use the same TinyCC, headers and ABI. GNU as and ld.bfd build the
+separate arithmetic runtime control. compare-necc.py verifies its eight
+output bytes. The arithmetic necc objects had identical SHA-256 before
+and after: 3b94f54406b4ab1188281294c1536109ae4b384b3e6fc9ba622462256ba2e157.
+The arithmetic timings on these identical objects varied. Compile time,
+standalone program execution and execution of the mixed interpreter have
+separate rows. Both previous-revision compiler builds (before and after the SDK
+preprocessor update) produced identical executables on the measurement host.
+
+Link time measures process launch through exit. GNU time -f %M measures
+peak RSS in a second fresh invocation, excluding the Python harness.
+Both outputs must execute successfully. For the real SDK archive-member
+input the check requires exit 42. For the full Lua input, both linked
+programs must evaluate an expression and print 42.
+
+  for d in nebuild-before nebuild; do
+    (cd "$d/src" && NECC_NELINKER= ../../sdkroot/bin/necc --release nebuild.nelua -o ../nebuild)
+  done
+  python3 nelua-site/public/nelua/assets/build-tools-20261121/bench.py incremental \
+    nebuild-before/nebuild nebuild/nebuild --rounds 12 --cpu 3 --output timings/nebuild
+
+Boot reproduction and effect of the host
+
+Theseus Init checkout: 72095fd70e77da93fada45686459985cee5429d3.
+The source revision, conversion commands, first-command timing harness and
+release asset names are in Cascadia 3fa30c5703ef7801b9ebd327f29d359f903026eb,
+docs/CORE-DEVELOPER.md, section "Faster repeated boots under software
+emulation". The timing harness uses the same graph for both codecs.
+boot.csv has the individual prompt and successful command times. QEMU
+10.0.13 (Debian), one pinned i7-9700K logical CPU, one TCG vCPU, 512 MiB,
+serial stdio, local storage, no network. The archive sizes were 47,925,071
+and 55,997,154 bytes before and after. Each round alternated order. The
+full release smoke checked the readiness ordering, skipped dependency,
+interactive console, supervisor exit and poweroff on the LZ4 image.
+
+EFI menu profile
+
+The Core EFI disk from the Cascadia core-native-services-e15751b artifacts
+uses neboot b8c56a815f6e07beb7abdad9339568790594d4d4. Four fresh boots
+on the same i7-9700K with QEMU 10.0.13, TCG, one vCPU, 1 GiB and OVMF
+split launch to completed menu, immediate option 1 selection to the
+"Starting" marker immediately before EFI StartImage, and handoff to a
+working shell checking /proc/1/exe. All four powered off on request.
+The timings in efi.csv include every run. This is a separate EFI disk
+experiment from the gzip/LZ4 direct-kernel comparison.
+
+Uncompress cascadia-core-uefi-x86_64.img.gz as core.img in an empty
+directory. Copy OVMF_CODE.fd and a clean OVMF_VARS.fd template into it.
+The measured disk SHA-256 was 50ed4d8452ff4925522dcba33eb08fb24bbf3c53e137454913e482845f4e9630.
+Firmware SHA-256 was 904bfa3e0d966372b43b804c4fe323ae63751566687c2bfdf52ca947f47eb13a
+and vars SHA-256 was 6ed987af3a3c155be71665f510eae3e007eda9b8b94afd59d45e91c4a11565cc.
+Run efi.py in that directory with the neboot checkout mounted at /tools,
+or update its /tools path for the checkout. It uses the repository's QEMU
+console, fresh EFI variables per round, q35, -cpu max and removable USB.
+
+Additional substring controls
+
+readme-search.c and readme-search.sh exercise the unmodified 5,334-byte
+Nelibc README in the updated checkout. Copy both files into an empty
+directory and run sh readme-search.sh PREVIOUS UPDATED. Supply absolute
+paths to the two GCC hybrid checkouts with built archives. The six rounds
+after warm-up verified offsets on all 512 calls per cell. readme-search.csv
+records every case, including process warm-up. The anchor control archive
+contains the original tools/strstr_bench.c --anchor-controls samples.
+Build each using gcc -O2 -fno-builtin with the corresponding archive
+(or no archive for glibc), -pthread -lm. Run in rotating order on CPU 0.
+The CSV filename identifies the implementation. Across six rounds the
+64-byte equal-frequency control rose from 83 to 101 ns, and the equivalent
+64 KiB case moved from 66.85 to 66.48 us (glibc 107.28 us).
+
+Nebox word count
+
+Before 94fac62b7ad738620ffc5c9028bac2029a1efa7d
+After  339eae37a65f6e93ddea6e57275b6815714f8545
+GNU coreutils 9.1, LC_ALL=C, same i5-10400 guest as Nelibc. Build both
+revisions with the Spaceghost Nelua fork at 874acdd, Zig, and the same
+static Zig archive from Nelibc 84267ab (SHA-256
+5b01a7c67d20968a6dec81c44518751b27c6fcc9298f8ff7dddd9bfc167d05f2).
+Use the repository Makefile, specifying NELUA, ZIG and NELIBC, then copy
+the binaries to previous/nebox and updated/nebox in a scratch directory.
+With the Nelibc checkout at 84267ab, generate the source corpus:
+
+  (cd nelibc && git ls-files 'src/*.nelua' | LC_ALL=C sort | xargs cat) > corpus.nelua
+  LC_ALL=C python3 wc.py > wc.csv
+
+The corpus SHA-256 is edc71e2ae6ec70c67eddf93ad5422b4d3527292f2f3f6af50c200bba02f007df.
+For the shell control, place a Nebox checkout at nebox/ and run
+LC_ALL=C python3 shell.py. Debian dash 0.5.12-2 ran the same scripts.
+The catalog fixture and interpreter arguments are recorded in shell.py.
+
+The 16 rotating word-count rounds include one warm-up. Every process checked its counts.
+For wc -l, 15 measured times spanned 4.64–5.00 ms before and 1.59–1.68 ms
+after, compared with 0.95–1.35 ms for GNU. All counted 47,135 lines.
+
+Qualification
+
+Nelibc manual gate results for 84267ab are recorded in nelibc-gates.csv.
+All twelve targets exited zero as an unprivileged build user. The separate
+Fedora job completed successfully, including both Bend smoke targets:
+https://github.com/Spaceghost/nelibc/actions/runs/44938088906
+necc passed check.sh, check-driver.sh, the SysV and Microsoft ABI checks,
+and the runtime check. Cascadia passed its repository check and boot smoke.
+
+Nebox's unprivileged conformance suite recorded 1,570 passes. The wc/id
+differential suite matched all 446 cases. Another 70 previous/updated
+comparisons exercised empty, binary, UTF-8 and cross-buffer inputs in C
+and C.UTF-8 locales. The options -l, -lc and -lm also matched GNU wc.
+On Debian 12, make test stopped at factor's directory-read comparison:
+GNU coreutils 9.1 returned zero while both Nebox revisions returned one.
+The complete factor comparison on the same updated binary with Ubuntu
+24.04's GNU coreutils 9.4 passed all 677 cases. The subsequent Debian
+Makefile comparisons were invoked individually on the same updated binary.
+All 21 exited zero. Nebox shipped on its default branch, master. Its hosted
+push workflow selects main, and this master push did not trigger it.

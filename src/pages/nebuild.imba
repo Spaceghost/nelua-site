@@ -1,6 +1,11 @@
 export const title = 'nebuild · Incremental build runner · Nelua at spacegho.st'
 export const description = 'Run incremental and parallel builds from a build.ne dependency graph with the standalone Nelua build runner.'
 
+const nebuildPassRows = [
+	["256 rules", "3.86", "1.05", "1.70", "2.34"]
+	["2,048 rules", "28.12", "4.70", "3.92", "3.89"]
+]
+
 export def body
 	<div className="page-content">
 		<section className="hero">
@@ -46,6 +51,30 @@ export def body
 							for value in row.slice(1)
 								<td className="num"> value
 		<p> 'Each median covers 31 warm runs on one CPU. Every rule copied the same source to a different output. Each invocation opened its manifest and checked one previously built output. The harness verified its contents and timestamp after every invocation. Clean builds and parallel recipe execution were outside this timing.'
+		<h3 id="incremental-repeat"> "Independent manifest timing"
+		<p> "On 21 November 2026, twelve warm rounds repeated the unchanged-target check on one i7-9700K CPU. Every result retained the same output contents and timestamp."
+		<div className="table-wrap">
+			<table>
+				<thead>
+					<tr>
+						<th scope="col"> "Graph"
+						<th scope="col"> "0441e93 (ms)"
+						<th scope="col"> "60d1200 (ms)"
+						<th scope="col"> "GNU make (ms)"
+						<th scope="col"> "Ninja (ms)"
+				<tbody>
+					for row in nebuildPassRows
+						<tr>
+							<th scope="row"> row[0]
+							<td className="num"> row[1]
+							<td className="num"> row[2]
+							<td className="num"> row[3]
+							<td className="num"> row[4]
+		<p> "Reading the larger manifest cost about 0.8 ms more than Ninja on this host. This comparison covers a single requested target."
+		<p className="upstream-links">
+			<a href="/nelua/assets/ecosystem-20261121/incremental.csv"> "Manifest timing samples"
+			<a href="/nelua/assets/ecosystem-20261121/summary.csv"> "Quartiles and observed ranges"
+			<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> "Versions and reproduction"
 		<p className="upstream-links">
 			<a href="/nelua/assets/build-tools-20261121/incremental.csv"> 'Individual times (CSV)'
 			<a href="/nelua/assets/build-tools-20261121/method.txt"> 'Method and reproduction'

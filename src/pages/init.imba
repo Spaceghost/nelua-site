@@ -13,6 +13,12 @@ export def body
 				<a className="button button-ghost" href="https://github.com/Spaceghost/theseus-init"> 'Theseus repository'
 				' '
 				<a className="button button-ghost" href="https://github.com/Spaceghost/nebox#boot-with-theseus"> 'Boot Nebox in QEMU'
+		<h2 className="section" id="core-boot-time"> 'Time to a working serial shell'
+		<p> 'Theseus Init is a related project outside Nelua core. In the Cascadia Core developer image it starts the Nebox console. On 21 November 2026, five alternating pairs of QEMU software-emulated boots took a median 9.51 s from launch to a successful shell command with the gzip release image. Encoding the same cpio bytes with legacy LZ4 reduced the median to 7.24 s.'
+		<p> 'The gzip runs ranged from 8.67 to 10.58 s, and LZ4 ranged from 6.76 to 8.17 s. An independent paired control booted directly to the shell in 8.47 s with gzip, versus 9.34 s with the full service graph. Compression accounted for the larger measured difference.'
+		<p className="upstream-links">
+			<a href="/nelua/assets/ecosystem-20261121/boot.csv"> 'Boot samples'
+			<a href="https://github.com/Spaceghost/cascadia/blob/3fa30c5703ef7801b9ebd327f29d359f903026eb/docs/CORE-DEVELOPER.md#faster-repeated-boots-under-software-emulation"> 'Boot commands and timing harness'
 		<h2 className="section"> 'Supervise services'
 		<p>
 			'The userspace daemon runs foreground services and native targets. It tracks child processes with Linux pidfds, reaps adopted children, and applies each service’s restart policy. The OpenRC adapter runs installed Alpine service scripts through the system OpenRC runtime.'

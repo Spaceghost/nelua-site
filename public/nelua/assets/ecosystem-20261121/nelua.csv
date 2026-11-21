@@ -1,0 +1,65 @@
+round,tool,workload,phase,nanoseconds,output
+0,nelua,helloworld,compile,97875615,
+0,nelua,helloworld,run,794266,hello world
+0,nelua,matmul,compile,1784985686,
+0,nelua,matmul,run,25551881,-18.8963499125
+0,nelua-reference,helloworld,compile,137438491,
+0,nelua-reference,helloworld,run,2648395,hello world
+0,nelua-reference,matmul,compile,1065931645,
+0,nelua-reference,matmul,run,25712541,-18.8963499125
+1,nelua-reference,helloworld,compile,182268108,
+1,nelua-reference,helloworld,run,844953,hello world
+1,nelua-reference,matmul,compile,1140791217,
+1,nelua-reference,matmul,run,29734709,-18.8963499125
+1,nelua,helloworld,compile,211083574,
+1,nelua,helloworld,run,832787,hello world
+1,nelua,matmul,compile,1002709152,
+1,nelua,matmul,run,44397387,-18.8963499125
+2,nelua,helloworld,compile,134504276,
+2,nelua,helloworld,run,794063,hello world
+2,nelua,matmul,compile,1120716615,
+2,nelua,matmul,run,41237050,-18.8963499125
+2,nelua-reference,helloworld,compile,117778214,
+2,nelua-reference,helloworld,run,785832,hello world
+2,nelua-reference,matmul,compile,1134195614,
+2,nelua-reference,matmul,run,26904329,-18.8963499125
+3,nelua-reference,helloworld,compile,113559178,
+3,nelua-reference,helloworld,run,921856,hello world
+3,nelua-reference,matmul,compile,1158701866,
+3,nelua-reference,matmul,run,26248823,-18.8963499125
+3,nelua,helloworld,compile,150689303,
+3,nelua,helloworld,run,667539,hello world
+3,nelua,matmul,compile,1109311017,
+3,nelua,matmul,run,25749003,-18.8963499125
+4,nelua,helloworld,compile,107026472,
+4,nelua,helloworld,run,751572,hello world
+4,nelua,matmul,compile,1127961682,
+4,nelua,matmul,run,26762852,-18.8963499125
+4,nelua-reference,helloworld,compile,103597891,
+4,nelua-reference,helloworld,run,729399,hello world
+4,nelua-reference,matmul,compile,1169229808,
+4,nelua-reference,matmul,run,29828036,-18.8963499125
+5,nelua-reference,helloworld,compile,100966448,
+5,nelua-reference,helloworld,run,759568,hello world
+5,nelua-reference,matmul,compile,1683244200,
+5,nelua-reference,matmul,run,26334580,-18.8963499125
+5,nelua,helloworld,compile,130954432,
+5,nelua,helloworld,run,765126,hello world
+5,nelua,matmul,compile,1056966611,
+5,nelua,matmul,run,29619657,-18.8963499125
+6,nelua,helloworld,compile,109840757,
+6,nelua,helloworld,run,748293,hello world
+6,nelua,matmul,compile,1002268909,
+6,nelua,matmul,run,38671052,-18.8963499125
+6,nelua-reference,helloworld,compile,142699382,
+6,nelua-reference,helloworld,run,777136,hello world
+6,nelua-reference,matmul,compile,1118158772,
+6,nelua-reference,matmul,run,37449718,-18.8963499125
+7,nelua-reference,helloworld,compile,112046422,
+7,nelua-reference,helloworld,run,779113,hello world
+7,nelua-reference,matmul,compile,1322471646,
+7,nelua-reference,matmul,run,62424833,-18.8963499125
+7,nelua,helloworld,compile,269638217,
+7,nelua,helloworld,run,3879535,hello world
+7,nelua,matmul,compile,1275711545,
+7,nelua,matmul,run,25594208,-18.8963499125

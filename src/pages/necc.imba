@@ -8,6 +8,12 @@ const timings = [
 	['Run six million arithmetic iterations', '20.277', '9.371', '2.099', 'Zig cc -O2']
 ]
 
+const neccPassRows = [
+	["Run one million Lua calls", "605.81", "498.10", "168.98"]
+	["Emit C for Nelua matrix multiplication", "1077.34", "984.03", "746.34"]
+	["Compile the Lua VM to an object", "160.26", "138.43", "23.77"]
+]
+
 export def body
 	<div className="page-content">
 		<section className="hero">
@@ -114,6 +120,31 @@ export def body
 			<a href="/nelua/assets/necc-codegen-20261121/method.txt"> 'Method and checks'
 			<a href="/nelua/assets/necc-codegen-20261121/runtime-replay.py"> 'Replay the runtime comparison'
 			<a href="/nelua/assets/necc-codegen-20261121/independent-checks.tar.gz"> 'Independent loop and Lua checks'
+		<h3 id="switch-dispatch"> "Dense switch dispatch"
+		<p> "On 21 November 2026 necc e1eab18 emitted relative jump tables for dense integer switches. Both runtime workloads used the same interpreter objects except for Lua’s VM. The third row times a separate compiler invocation."
+		<div className="table-wrap">
+			<table>
+				<thead>
+					<tr>
+						<th scope="col"> "Workload"
+						<th scope="col"> "2ebbb9d (ms)"
+						<th scope="col"> "e1eab18 (ms)"
+						<th scope="col"> "TinyCC (ms)"
+				<tbody>
+					for row in neccPassRows
+						<tr>
+							<th scope="row"> row[0]
+							<td className="num"> row[1]
+							<td className="num"> row[2]
+							<td className="num"> row[3]
+		<p> "Each Lua workload returned the expected result. All three frontend runs emitted byte-identical C at the same output path. The small arithmetic control produced identical necc objects before and after."
+		<p className="upstream-links">
+			<a href="/nelua/assets/ecosystem-20261121/vm.csv"> "Lua runtime samples"
+			<a href="/nelua/assets/ecosystem-20261121/frontend-vm.csv"> "Frontend runtime samples"
+			<a href="/nelua/assets/ecosystem-20261121/necc-final.csv"> "C compilation and arithmetic samples"
+			<a href="/nelua/assets/ecosystem-20261121/summary.csv"> "Quartiles and observed ranges"
+			<a href="/nelua/assets/ecosystem-20261121/replay.tar.gz"> "Replay scripts"
+			<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> "Versions and reproduction"
 		<h3> 'Earlier SDK comparison'
 		<p> 'Earlier on 21 November, changing the SDK preprocessor cut the 128-function compile from 9.370 to 5.425 ms. Both SDKs used the same necc executable and emitted byte-identical objects. The old arithmetic executable took 9.729 ms against Zig’s 3.071 ms. Zig combined four recurrence steps per group, while that necc build executed one step at a time.'
 		<p className="upstream-links">

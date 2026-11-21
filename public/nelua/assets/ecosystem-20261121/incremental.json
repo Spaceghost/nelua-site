@@ -1,0 +1,23 @@
+{
+  "host": "x86_64",
+  "kernel": "7.1.10-200.fc44.x86_64",
+  "cpu": 3,
+  "load_start": [
+    9.703125,
+    13.525390625,
+    13.24267578125
+  ],
+  "rounds": 12,
+  "warmups": 3,
+  "comparator": "GNU Make 4.4.1",
+  "binary_sha256": {
+    "before": "787b477dc760bb9d863c7eead3ab3e34db78cc7bcf1475431b2905848647fd39",
+    "after": "2ace3b6bf474113f70b423517cbbe1a42045e970f7c9db1c714985225738e930"
+  },
+  "ninja": "1.13.2",
+  "load_end": [
+    9.703125,
+    13.525390625,
+    13.24267578125
+  ]
+}

@@ -10,6 +10,11 @@ export def body
 			<div className="actions">
 				<a className="button" href="#run"> 'Boot in QEMU'
 				<a className="text-link" href="#ovmf"> 'See the OVMF results'
+		<h2 className="section" id="efi-boot-time"> 'Time through the Core boot menu'
+		<p> 'On 21 November 2026, four QEMU TCG boots of the Core EFI image reached the menu in a median 3.99 s. With the first entry selected immediately, kernel loading through the StartImage handoff took 0.26 s. The next 12.37 s elapsed before the serial shell reported the Theseus PID 1 executable.'
+		<p className="upstream-links">
+			<a href="/nelua/assets/ecosystem-20261121/efi.csv"> 'Four boot timings'
+			<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> 'Firmware, inputs and reproduction'
 		<h2 className="section" id="run"> 'Boot in QEMU'
 		<p>
 			'In the '

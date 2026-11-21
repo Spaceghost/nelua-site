@@ -1,6 +1,15 @@
 export const title = "nelibc · a C library written in Nelua · spacegho.st/nelua"
 export const description = "nelibc replaces C library functions with Nelua implementations: hybrid archives over glibc, musl or Cosmopolitan, a standalone Linux x86-64 runtime, and a host profile for kernels. Compare symbol coverage for glibc, musl and Cosmopolitan."
 
+const nelibcPassRows = [
+	["strstr · ab / aa", "39.36", "3.76", "2.52"]
+	["strstr · 63 / 64 a bytes", "1.65", "1.71", "5.88"]
+	["strstr · One interior b", "118.77", "1.32", "269.79"]
+	["memmem · ab / aa", "217.87", "2.88", "44.05"]
+	["memmem · 63 / 64 a bytes", "1.06", "1.06", "8.15"]
+	["memmem · One interior b", "126.89", "0.67", "268.17"]
+]
+
 export def body comparison, stats
 	<div className="page-content">
 		<section className="hero">
@@ -49,6 +58,67 @@ export def body comparison, stats
 				<a className="button button-ghost" html:href="#completion"> "Completion"
 				<a className="button button-ghost" html:href="#conformance"> "Conformance"
 				<a className="button button-ghost" html:href="#performance"> "Matched performance"
+			<h3 id="repeated-byte-search"> "Repeated-byte substring search"
+			<p> "Median microseconds for a 64 KiB miss on 21 November 2026. GCC 12.2, glibc 2.36 and Nelibc’s GCC hybrid ran in nine rotating rounds on an i5-10400."
+			<div className="table-wrap">
+				<table>
+					<thead>
+						<tr>
+							<th scope="col"> "Miss"
+							<th scope="col"> "70bcd89 (µs)"
+							<th scope="col"> "84267ab (µs)"
+							<th scope="col"> "glibc (\u00b5s)"
+					<tbody>
+						for row in nelibcPassRows
+							<tr>
+								<th scope="row"> row[0]
+								<td className="num"> row[1]
+								<td className="num"> row[2]
+								<td className="num"> row[3]
+			<h4> "First-match timings"
+			<p> "Each cell shows the previous revision, updated revision and glibc medians in microseconds. Early matches begin near the start of the buffer. Late matches end at the last haystack byte."
+			<div className="table-wrap">
+				<table>
+					<thead>
+						<tr>
+							<th> "Function and input"
+							<th> "Early match (µs)"
+							<th> "Late match (µs)"
+					<tbody>
+						<tr>
+							<th scope="row"> "strstr · alternating"
+							<td> "0.669 / 0.010 / 0.010"
+							<td> "39.667 / 3.603 / 2.508"
+						<tr>
+							<th scope="row"> "strstr · interior"
+							<td> "0.988 / 1.008 / 0.348"
+							<td> "118.281 / 1.662 / 268.864"
+						<tr>
+							<th scope="row"> "strstr · runs63"
+							<td> "0.908 / 0.036 / 0.039"
+							<td> "1.676 / 1.760 / 5.910"
+						<tr>
+							<th scope="row"> "memmem · alternating"
+							<td> "0.030 / 0.004 / 0.009"
+							<td> "220.952 / 3.098 / 43.818"
+						<tr>
+							<th scope="row"> "memmem · interior"
+							<td> "0.370 / 0.443 / 0.137"
+							<td> "116.757 / 1.064 / 270.268"
+						<tr>
+							<th scope="row"> "memmem · runs63"
+							<td> "0.227 / 0.269 / 0.053"
+							<td> "1.075 / 1.069 / 8.110"
+			<p> "The same harness covers early and late hits, binary data, text, and seeded random bytes. For the 128-byte needle with an interior b, early memmem hits rose from 370 to 443 ns. The 64-byte uniform needle’s early memmem hit rose from 227 to 269 ns. Each timed call checked the first offset against a bytewise oracle. Guard-page checks ran before timing."
+			<p className="upstream-links">
+				<a href="/nelua/assets/ecosystem-20261121/readme-search.csv"> "Searches in the project README"
+				<a href="/nelua/assets/ecosystem-20261121/nelibc-gates.csv"> "Manual gate results"
+				<a href="https://github.com/Spaceghost/nelibc/actions/runs/44938088906"> "Fedora CI"
+				<a href="/nelua/assets/ecosystem-20261121/substring-rounds.sh"> "Replay script"
+				<a href="/nelua/assets/ecosystem-20261121/substring-anchor.tar.gz"> "Existing benchmark controls"
+				<a href="/nelua/assets/ecosystem-20261121/substring.csv"> "All substring samples"
+				<a href="/nelua/assets/ecosystem-20261121/summary.csv"> "Quartiles and observed ranges"
+				<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> "Versions and reproduction"
 			<div innerHTML=comparison>
 			<h2 className="section"> "What works today"
 			<div className="table-wrap">

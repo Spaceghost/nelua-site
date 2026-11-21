@@ -39,3 +39,5 @@ Generated arithmetic control
 The disassembled necc loop multiplies by 33 and masks on each iteration. The qualified Zig cc -O2 object multiplies by 33⁴ (0x121881), adds an offset that starts at 0x9a18a and advances by 0x24310 for every four input iterations, then masks to 20 bits. Its scalar loop runs 1,500,000 times for the six-million-iteration input. A separate loop handles the remainder for other trip counts.
 
 Adding only -fno-unroll-loops to the original Zig cc -O2 command produced a one-step loop. In an independent 23-round randomized repeat on CPU 5 with the original process timer and eight-byte output check, the original Zig object took 3.310 ms, the no-unroll control took 6.607 ms, and necc took 10.223 ms (medians). Both Zig objects and necc also matched the reference on 64 trip-count and seed combinations, including empty loops and all four remainders.
+
+All 92 samples from the four-tool control are in arithmetic-control.csv. GCC -O2 served as an additional reference.

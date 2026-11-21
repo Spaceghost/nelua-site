@@ -108,6 +108,7 @@ export def body
 								for median in tool.medians
 									<td className="num"> median
 		<p className="upstream-links">
+			<a href="/nelua/assets/necc-20261121/arithmetic-control.csv"> 'Arithmetic loop control (CSV)'
 			<a href="/nelua/assets/necc-20261121/summary.csv"> 'Timings, quartiles and object sizes (CSV)'
 			<a href="/nelua/assets/necc-20261121/samples.csv"> 'All 2,760 samples (CSV)'
 			<a href="/nelua/assets/necc-20261121/method.txt"> 'Method and correctness checks'

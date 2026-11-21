@@ -56,6 +56,17 @@ export def body comparison
 						<h3>
 							<a href=item.path> item.title
 						<p> item.description
+			<h3 id="cascadia-core"> 'Cascadia developer image'
+			<p> 'Boot an x86-64 VM and rebuild Core from its Nebox login shell. These files are available to accounts with access to the Cascadia repository.'
+			<div className="core-guides">
+				<a href="https://github.com/Spaceghost/cascadia/releases/tag/core-dev-2026.11.20"> 'Release 2026.11.20'
+				<a href="https://github.com/Spaceghost/cascadia/releases/download/core-dev-2026.11.20/core-release-inputs.tar.gz"> 'Pinned sources and build inputs'
+				<a href="https://github.com/Spaceghost/cascadia/releases/download/core-dev-2026.11.20/vmlinuz"> 'Boot kernel'
+				<a href="https://github.com/Spaceghost/cascadia/releases/download/core-dev-2026.11.20/cascadia-core-x86_64.cpio.gz"> 'Developer image'
+				<a href="https://github.com/Spaceghost/cascadia/releases/download/core-dev-2026.11.20/cascadia-core-rebuilt-x86_64.cpio.gz"> 'Guest-built image'
+				<a href="https://github.com/Spaceghost/cascadia/releases/download/core-dev-2026.11.20/SHA256SUMS"> 'Checksums'
+				<a href="https://github.com/Spaceghost/cascadia/blob/core-dev-2026.11.20/docs/CORE-DEVELOPER.md"> 'Build instructions'
+				<a href="https://github.com/Spaceghost/cascadia/releases/download/core-dev-2026.11.20/boot-evidence.tar.gz"> 'Boot evidence'
 			<div className="core-guides">
 				<a href="/nelua/compiler/syntax-extensions/"> 'Syntax extensions guide'
 				<a href="/nelua/compiler/comptime/"> 'Compile-time record configs'

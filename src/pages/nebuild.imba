@@ -25,9 +25,9 @@ export def body
 		<p> 'nebuild records the recipe, declared inputs and their metadata, and the last successful build of each generated input. An output rebuilds when it is missing or when one of those records changes. Declare headers, compiler binaries and configuration files as inputs when they affect the output.'
 		<p> 'Recipes run through /bin/sh. Independent jobs can run in parallel. A lock serializes invocations that share the working directory.'
 		<h2 className="section"> 'Build nebuild'
-		<p> 'The standalone nebuild project is maintained in its own repository. Build it with Nelua, Zig and the standalone Nelibc archive available.'
+		<p> 'Clone the private nebuild repository with a GitHub account that has access. Build it with Nelua, Zig and the standalone Nelibc archive.'
 		<pre>
-			<code> "git clone https://github.com/Spaceghost/nebuild\ncd nebuild\nmake NELIBC=/path/to/nelibc\nmake NELIBC=/path/to/nelibc test\nmake NELIBC=/path/to/nelibc install PREFIX=/usr/local"
+			<code> "git clone https://github.com/Spaceghost/nebuild\ncd nebuild\nmake NELIBC=/path/to/nelibc\nmake NELIBC=/path/to/nelibc test\nmake NELIBC=/path/to/nelibc install PREFIX=\"$HOME/.local\""
 		<div className="actions">
 			<a className="button" href="https://github.com/Spaceghost/nebuild"> 'nebuild repository'
 			' '

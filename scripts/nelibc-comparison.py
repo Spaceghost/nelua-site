@@ -98,10 +98,40 @@ if current_gate:
  block+='<h3 id="integration-gate">Build and integration checks</h3>'
  block+=f'<p>On {esc(current_gate["date_utc"][:10])} the measured revision passed {pass_count} of {len(results)} Makefile targets as an unprivileged user in the x86-64 Linux build guest. Four libc-test targets compare failures with the project’s existing expected-failure lists. The independent corpus above counts each test result directly. <a href="{url}/gate-summary.json">Download the per-target results</a>.</p>'
  block+=table('Build and integration checks',['Target','Exit','Seconds'],[[esc(r['target']),str(r['exit']),str(r['seconds'])] for r in results])
+ if (data/'host-ci.json').is_file():
+  ci=load('host-ci.json')
+  assert ci['measured_revision']==source_commit and re.fullmatch('[0-9a-f]{40}',ci['tested_revision'])
+  assert ci['conclusion']=='success' and ci['checks'] and all(step['conclusion']=='success' for step in ci['checks'])
+  block+=(f'<p>On {esc(ci["completed_utc"][:10])}, CI on {esc(ci["platform"])} passed the host, Bend, standalone, '
+          f'freestanding and generated-C checks at <code>{esc(ci["tested_revision"][:8])}</code>. '
+          f'The library source matches the benchmark revision. <a href="{url}/host-ci.json">Fedora check results</a>.</p>')
 block+=f'<div class="performance-summary"><h2 class="section" id="performance">Performance</h2><p class="eyebrow">{date} · Linux x86-64</p>'
 block+=phase_headline(data, rows)
 block+=f'<p>Each profile compares the same consumer with and without Nelibc. Speedups above 1× favor Nelibc. <a href="#all-results">Browse {len(rows)} results across {len(labels)} profiles.</a></p></div>'
 block+=render_results(rows, labels, url)
+if repeat_name := followup.get('frequency_repeat'):
+ assert re.fullmatch(r'strstr-repeat-[0-9]{8}', repeat_name)
+ repeat_url=url.rsplit('/',1)[0]+'/'+repeat_name
+ repeat_dir=data.parent/repeat_name
+ manifest=json.loads((repeat_dir/'strstr-repeat-manifest.json').read_text())
+ assert manifest['source_commit']=={'previous':meta['previous_commit'],'candidate':source_commit}
+ repeat_summary=json.loads((repeat_dir/'strstr-repeat-summary.json').read_text())
+ distro_inputs={'first-dense-then-sparse':'16 a bytes, then b bytes', 'first-sparse-then-dense':'16 b bytes, then a bytes','equal-frequency':'Alternating a and b bytes'}
+ repeat_rows=[]
+ for case,description in distro_inputs.items():
+  measured=repeat_summary[case]
+  times=measured['median_ns']
+  ratio_change=measured['previous_over_candidate']
+  repeat_rows.append([description,*[f'{times[k]/1000:.2f}' for k in ('baseline','previous','candidate')],
+                      f'{ratio_change["median"]:.2f}×',f'{ratio_change["min"]:.2f}–{ratio_change["max"]:.2f}×'])
+ block+='<h3 id="substring-repeat">When the substring is missing</h3>'
+ block+=(f'<p>In a separate {manifest["rounds"]}-round repeat, GCC/glibc consumers searched 64 KiB for <code>{esc(manifest["needle"])}</code>. '
+         'Each process checked its answers before timing. Each executable ran first, second and third equally often.</p>')
+ block+=table('Median microseconds per search · GCC and glibc', ['Input','glibc','Previous Nelibc','Current Nelibc','Previous ÷ current','Observed range'], repeat_rows)
+ block+=(f'<p><a href="{repeat_url}/strstr-repeat-64k.csv">Raw 64 KiB samples</a> · '
+         f'<a href="{repeat_url}/strstr-repeat-all.csv">All tested sizes</a> · '
+         f'<a href="{repeat_url}/reproduce.md">Repeat the measurement</a> · '
+         f'<a href="{repeat_url}/strstr-repeat-manifest.json">Run manifest</a></p>')
 selected=[('memcpy',4096),('memmove-overlap',128),('memset',4096),('memcmp-equal',128),('memchr-absent',128),('strlen',128),('strcmp-equal',128),('strstr-tail',128),('strtol-decimal',0),('strtod-decimal',0),('sin',0),('sqrt',0),('malloc-free',64),('snprintf-mixed',0),('qsort-128-integers',0),('parse-record',0)]
 performance=[]
 for case,size in selected:

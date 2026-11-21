@@ -25,7 +25,7 @@ export def body
 					<code> 'nebox'
 					' or run it through a link named after the applet.'
 				<nav className="ng-actions" aria-label="Explore Nebox">
-					<a className="ng-primary" href="#applets"> 'Browse applets'
+					<a className="button" href="#applets"> 'Browse applets'
 					<a href="#applet-coverage"> 'Check coverage'
 			<figure className="ng-terminal">
 				<figcaption>

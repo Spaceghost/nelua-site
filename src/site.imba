@@ -15,12 +15,11 @@ import * as community from './pages/community.imba'
 import * as notFound from './pages/not-found.imba'
 
 const navigation = [
-	{ label: 'Overview', path: '/nelua/' }
-	{ label: 'Compiler', path: '/nelua/compiler/' }
-	{ label: 'nelibc', path: '/nelua/nelibc/' }
-	{ label: 'nebox', path: '/nelua/nebox/' }
-	{ label: 'Init', path: '/nelua/init/' }
-	{ label: 'Community', path: '/nelua/community/' }
+	{ title: 'Overview', path: '/nelua/' }
+	...overview.core
+	{ title: 'Cascadia', path: '/nelua/#cascadia-core' }
+	{ title: 'Community', path: '/nelua/community/' }
+	{ title: 'nelua.io', path: 'https://nelua.io/' }
 ]
 
 def content filename
@@ -59,8 +58,7 @@ def documentFor page
 						<span> 'Nelua'
 					<nav aria-label="Sections">
 						for item in navigation
-							<a href=item.path aria-current=(item.path == active ? current : null)> item.label
-						<a href="https://nelua.io/" rel="external"> 'nelua.io'
+							<a href=item.path rel=(item.path.startsWith('https://') ? 'external' : null) aria-current=(item.path == active ? current : null)> item.title
 				<main id="main" html:tabindex="-1">
 					page.body
 				<footer>
@@ -79,11 +77,11 @@ const pages = [
 	{ source: syntaxGuide, path: '/nelua/compiler/syntax-extensions/', active: '/nelua/compiler/', body: syntaxGuide.body(content('syntax-guide'), content('syntax-toc')) }
 	{ source: nelibc, path: '/nelua/nelibc/', body: nelibc.body(content('nelibc-comparison'), content('nelibc-stats')), scripts: ['/nelua/assets/explorer.js'] }
 	{ source: nebox, path: '/nelua/nebox/', body: nebox.body() }
-	{ source: nsh, path: '/nelua/nebox/nsh/', active: '/nelua/nebox/', body: nsh.body() }
+	{ source: nsh, path: '/nelua/nebox/nsh/', body: nsh.body() }
 	{ source: init, path: '/nelua/init/', body: init.body(), stylesheet: '/nelua/init/vm/demo.css', scripts: ['/nelua/init/vm/demo.js'] }
-	{ source: necc, path: '/nelua/necc/', active: '/nelua/compiler/', body: necc.body() }
-	{ source: nelinker, path: '/nelua/nelinker/', active: '/nelua/compiler/', body: nelinker.body() }
-	{ source: nebuild, path: '/nelua/nebuild/', active: '/nelua/nebox/', body: nebuild.body() }
+	{ source: necc, path: '/nelua/necc/', body: necc.body() }
+	{ source: nelinker, path: '/nelua/nelinker/', body: nelinker.body() }
+	{ source: nebuild, path: '/nelua/nebuild/', body: nebuild.body() }
 	{ source: community, path: '/nelua/community/', body: community.body(), stylesheet: '/nelua/community/styles.css', scripts: ['/nelua/community/app.js', '/nelua/community/account.js'] }
 	{ source: notFound, path: '/nelua/404.html', body: notFound.body() }
 ]

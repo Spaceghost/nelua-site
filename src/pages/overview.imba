@@ -1,7 +1,7 @@
 export const title = 'Nelua at spacegho.st · Compiler, libc and userland'
 export const description = 'Explore the Nelua compiler, C library, userland, native build tools, Theseus Init, and the wider Nelua community.'
 
-const core = [
+export const core = [
 	{ title: 'Compiler', path: '/nelua/compiler/', kind: 'Language', description: 'A Nelua compiler fork with exhaustive matching, ownership, compile-time evaluation and file-local syntax extensions.' }
 	{ title: 'nelibc', path: '/nelua/nelibc/', kind: 'C library', description: 'A C library written in Nelua, with hybrid builds over glibc, musl and Cosmopolitan and a standalone Linux runtime.' }
 	{ title: 'nebox', path: '/nelua/nebox/', kind: 'Userland', description: 'Unix applets in a single static executable linked against standalone nelibc.' }

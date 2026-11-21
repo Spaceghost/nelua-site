@@ -1,5 +1,5 @@
 export const title = 'nebuild · Incremental build runner · Nelua at spacegho.st'
-export const description = 'Run incremental and parallel builds from a build.ne dependency graph with Nebox’s standalone nebuild runner.'
+export const description = 'Run incremental and parallel builds from a build.ne dependency graph with the standalone Nelua build runner.'
 
 export def body
 	<div className="page-content">
@@ -24,12 +24,11 @@ export def body
 		<h2 className="section"> 'What makes a recipe run again'
 		<p> 'nebuild records the recipe, declared inputs and their metadata, and the last successful build of each generated input. An output rebuilds when it is missing or when one of those records changes. Declare headers, compiler binaries and configuration files as inputs when they affect the output.'
 		<p> 'Recipes run through /bin/sh. Independent jobs can run in parallel. A lock serializes invocations that share the working directory.'
-		<h2 className="section"> 'Build the runner from Nebox'
-		<p><a href="https://github.com/Spaceghost/nebox/blob/master/tools/nebuild.nelua"> 'nebuild source in Nebox'
-		<p> 'From a Nebox checkout with Nelua, Zig and the standalone Nelibc archive available, build and test the runner with the same toolchain used for Nebox.'
+		<h2 className="section"> 'Build nebuild'
+		<p> 'The standalone nebuild project is maintained in its own repository. Build it with Nelua, Zig and the standalone Nelibc archive available.'
 		<pre>
-			<code> "make NELIBC=/path/to/nelibc nebuild\nmake NELIBC=/path/to/nelibc test-nebuild"
+			<code> "git clone https://github.com/Spaceghost/nebuild\ncd nebuild\nmake NELIBC=/path/to/nelibc\nmake NELIBC=/path/to/nelibc test\nmake NELIBC=/path/to/nelibc install PREFIX=/usr/local"
 		<div className="actions">
-			<a className="button" href="https://github.com/Spaceghost/nebox#build-runner-for-the-distro-bootstrap"> 'Nebox build documentation'
+			<a className="button" href="https://github.com/Spaceghost/nebuild"> 'nebuild repository'
 			' '
 			<a className="button button-ghost" href="/nelua/necc/"> 'Compile with necc'

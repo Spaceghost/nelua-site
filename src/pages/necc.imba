@@ -79,6 +79,6 @@ export def body
 			<a href="/nelua/nebuild/"> 'nebuild'
 			' runs the build graph that uses necc to compile Nebox and package the Theseus boot image.'
 		<div className="actions">
-			<a className="button" href="https://github.com/Spaceghost/nebox#build-runner-for-the-distro-bootstrap"> 'Bootstrap instructions'
+			<a className="button" href="https://github.com/Spaceghost/nebuild"> 'nebuild repository'
 			' '
 			<a className="button button-ghost" href="/nelua/compiler/"> 'Full Nelua compiler'

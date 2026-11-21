@@ -1,8 +1,8 @@
 # nelua-site
 
 The pages at [spacegho.st/nelua](https://spacegho.st/nelua/) cover the Nelua
-compiler fork, nelibc, nebox, necc, nelinker, nebuild, and Theseus Init. They
-also cover workshop projects built on Core and the wider Nelua community.
+compiler fork, nelibc, nebox, necc, nelinker, and nebuild. Workshop covers
+projects built on Core, including Theseus Init. World covers the wider Nelua community.
 
 ## Layout
 

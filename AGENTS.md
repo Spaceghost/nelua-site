@@ -7,8 +7,8 @@
   leave both alone.
 - No inline styles or scripts: the CSP in `public/_headers` forbids them.
 - Keep the three-ring split: Core covers the compiler, nelibc, nebox, necc,
-  nelinker, nebuild, Theseus Init, and this site's documentation. Workshop
-  covers projects built on Core. World covers upstream and community.
+  nelinker, nebuild, and this site's documentation. Workshop covers projects
+  built on Core, including Theseus Init. World covers upstream and community.
 - `legacy/` is the previous site kept for reference; it is not served.
 
 - Owner-authorized exception, 2026-11-18: `community-api/` is the separate

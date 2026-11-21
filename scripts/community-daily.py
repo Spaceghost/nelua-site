@@ -134,20 +134,21 @@ def run(args):
 
         # Check the deployed bytes using a fresh cache key, without watching CI.
         expected = hashlib.sha256((stage / 'data.json').read_bytes()).hexdigest()
-        url = 'https://spacegho.st/nelua/community/data.json?snapshot=' + expected
-        for attempt in range(3):
-            try:
-                request = urllib.request.Request(url, headers={
-                    'User-Agent': 'Mozilla/5.0 Chrome/131.0.0.0 Safari/537.36', 'Cache-Control': 'no-cache'})
-                with urllib.request.urlopen(request, timeout=30) as response:
-                    actual = hashlib.sha256(response.read()).hexdigest()
-                if actual != expected:
-                    raise RuntimeError('Published data does not match the validated snapshot')
-                break
-            except Exception:
-                if attempt == 2:
-                    raise
-                time.sleep(2)
+        for origin in ('https://nelua.tech', 'https://spacegho.st'):
+            url = origin + '/nelua/community/data.json?snapshot=' + expected
+            for attempt in range(3):
+                try:
+                    request = urllib.request.Request(url, headers={
+                        'User-Agent': 'Mozilla/5.0 Chrome/131.0.0.0 Safari/537.36', 'Cache-Control': 'no-cache'})
+                    with urllib.request.urlopen(request, timeout=30) as response:
+                        actual = hashlib.sha256(response.read()).hexdigest()
+                    if actual != expected:
+                        raise RuntimeError(f'{origin} does not match the validated snapshot')
+                    break
+                except Exception:
+                    if attempt == 2:
+                        raise
+                    time.sleep(2)
         snapshot = json.loads((stage / 'data.json').read_text())
         report.update(status='published', generatedAt=snapshot['generatedAt'], sha256=expected,
                       coverage=snapshot['coverage'])

@@ -30,6 +30,8 @@ def asset path
 	const hash = createHash('sha256').update(readFileSync('public' + path)).digest('hex').slice(0, 12)
 	"{path}?v={hash}"
 
+const monogram = asset('/nelua/assets/icon.svg')
+
 def documentFor page
 	const active = page.active || page.path
 	const current = page.path == active ? 'page' : 'location'
@@ -45,7 +47,7 @@ def documentFor page
 			if page.path != '/nelua/404.html'
 				<link rel="canonical" href=(page.path == '/nelua/' ? 'https://nelua.tech/' : 'https://nelua.tech' + page.path)>
 			<link rel="stylesheet" href=asset('/nelua/assets/site.css')>
-			<link rel="icon" href="/nelua/assets/icon.svg" type="image/svg+xml">
+			<link rel="icon" href=monogram type="image/svg+xml">
 			if page.stylesheet
 				<link rel="stylesheet" href=asset(page.stylesheet)>
 			for script in page.scripts || []
@@ -55,7 +57,7 @@ def documentFor page
 			<div className="wrap">
 				<header className="top">
 					<a className="home" href="/nelua/">
-						<span className="monogram" aria-hidden="true"> 'n'
+						<img src=monogram width="34" height="34" alt="">
 						<span> 'Nelua'
 					<nav aria-label="Sections">
 						for item in navigation

@@ -42,6 +42,18 @@ jobs:
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '24'
+      - name: Provide GitHub CLI on the runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          if command -v gh >/dev/null; then exit 0; fi
+          tool_dir="$(mktemp -d "$RUNNER_TEMP/nelua-gh.XXXXXX")"
+          cd "$tool_dir"
+          archive=gh_2.105.0_linux_amd64.tar.gz
+          curl --fail --silent --show-error --location --retry 3 -O "https://github.com/cli/cli/releases/download/v2.105.0/$archive"
+          echo "79e7ab5db738c48777b696e374f8b428f0647debfb424f44d2f426370407fe2f  $archive" | sha256sum --check --status
+          tar -xzf "$archive" --strip-components=1 gh_2.105.0_linux_amd64/bin/gh
+          echo "$tool_dir/bin" >> "$GITHUB_PATH"
       - name: Check private counting and consent boundaries
         shell: bash
         run: |

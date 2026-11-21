@@ -1,6 +1,6 @@
 # nelua-site
 
-The pages at [spacegho.st/nelua](https://spacegho.st/nelua/) cover the Nelua
+The pages at [nelua.tech](https://nelua.tech/) and [spacegho.st/nelua](https://spacegho.st/nelua/) cover the Nelua
 compiler fork, nelibc, nebox, necc, nelinker, nebuild, and neboot. Workshop
 covers projects built on Core, including Theseus Init and Cascadia's developer
 image. World covers the wider Nelua community.
@@ -73,7 +73,11 @@ npm run check
 npm run deploy
 ```
 
-Wrangler uploads `public/` directly using the existing Cloudflare login.
+Wrangler uploads one copy of `public/` to the `nelua-site` Worker. Its custom
+domain serves `nelua.tech`, and its two path routes serve `spacegho.st/nelua`
+and its subpages. One deploy updates both addresses. The renderer writes both
+homepages from the same source. Keep both path routes until the owner retires
+the old address. GitHub sign-in still uses that address.
 
 ## Refresh the matched libc comparison
 

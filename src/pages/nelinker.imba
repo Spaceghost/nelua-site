@@ -2,9 +2,17 @@ export const title = 'nelinker · Static x86-64 linker · Nelua at spacegho.st'
 export const description = 'Link x86-64 ELF objects and static archives into a Linux executable or a relocatable PE32+ UEFI application.'
 
 const timings = [
-	['One member from a 256-member archive', '0.348', '0.392', '0.410', 'TinyCC']
-	['256 archive members in reverse dependency order', '0.941', '1.881', '4.718', 'GNU gold']
-	['257 explicit object files', '2.242', '2.911', '5.948', 'TinyCC']
+	['Three loose objects', '1.449', '1.454', 'TinyCC · 1.526', '205', '727']
+	['257 loose objects', '3.123', '3.682', 'TinyCC · 5.900', '2,491', '3,015']
+	['32,768 relocations', '1.850', '2.422', 'GNU gold · 3.454', '270,336', '263,031']
+	['8,192 distinct symbols', '2.254', '4.530', 'TinyCC · 4.866', '106,496', '99,191']
+	['SDK syscall, loose objects', '1.445', '1.468', 'TinyCC · 1.553', '4,378', '1,088']
+	['SDK syscall, archive-suite control', '1.494', '1.479', 'TinyCC · 1.611', '4,378', '1,088']
+	['One member from the SDK archive', '1.564', '1.626', 'TinyCC · 1.812', '4,378', '1,088']
+	['One member from 256', '1.501', '1.544', 'TinyCC · 1.557', '196', '719']
+	['256 members, reverse dependency order', '1.986', '2.738', 'Wild · 3.909', '2,491', '3,015']
+	['All 256 archive members', '1.898', '2.371', 'Wild · 3.823', '1,726', '2,247']
+	['Whole SDK with allocator', '3.009', '4.527', 'TinyCC · 5.795', '995,860', '992,583']
 ]
 
 export def body
@@ -62,23 +70,13 @@ export def body
 			' so firmware can adjust them if it loads the image at another address. The '
 			<a href="/nelua/neboot/#ovmf"> 'neboot OVMF run'
 			' shows the address firmware used.'
-		<h2 className="section" id="benchmarks"> 'Link times'
+		<h2 className="section" id="benchmarks"> 'Link times and executable sizes'
 		<p>
 			'On '
 			<time html:datetime="2026-11-21"> '21 November 2026'
-			', creating a deterministic archive from 256 x86-64 objects with short filenames took 3.343 ms, down from 4.231 ms. GNU ar took 22.216 ms. The new writer stores ordinary filenames directly in the member header and preserves short filenames containing spaces. The archive shrank from 215,484 to 213,376 bytes, matching the GNU archive size.'
-		<p> 'These are medians across 31 interleaved warm runs on one CPU. GNU ar listed the members, nm read their index, and both nelinker and GNU ld linked a program that returned 42. A separate run repeated six link workloads with GNU ld and TinyCC. The raw samples record wall time and the size of each working executable.'
-		<p className="upstream-links">
-			<a href="/nelua/assets/build-tools-20261121/archive.csv"> 'Archive creation samples (CSV)'
-			<a href="/nelua/assets/build-tools-20261121/link-summary.csv"> 'Six link workloads (CSV)'
-			<a href="/nelua/assets/build-tools-20261121/method.txt"> 'Method and reproduction'
-		<h3> 'Earlier linker comparison'
-		<p>
-			'In the '
-			<time html:datetime="2026-11-19"> '19 November 2026'
-			' x86-64 Linux shootout, both builds had the lowest median link time in all 11 timed cases. nelinker produced the smallest executable in five. Each output had to pass its execution check.'
-		<p> 'The two columns show how the linker itself was built. One used GCC 12.2 at -O3. The distro build used necc and the staged TinyCC. Times are median milliseconds across 31 warm rounds for archives and 23 for explicit objects.'
-		<div className="table-wrap" role="region" aria-label="Median link time in milliseconds" html:tabindex="0">
+			', both nelinker builds had a lower median than the fastest qualifying external linker in all 11 workloads on one Intel Core i7-11700F core. Both produced the smallest executable in five. For the single member from a 256-member archive, the distro build and TinyCC were within 0.013 ms of each other.'
+		<p> 'The first five rows use loose objects and 23 warm rounds. The remaining six use the archive harness and 31 rounds. Its explicit-syscall control also uses loose objects. Every timed link had to produce a program that returned 42. The external field consisted of GNU BFD, GNU gold, TinyCC, LLD 14, LLD 22 through Zig, mold and Wild.'
+		<div className="table-wrap" role="region" aria-label="Median elapsed link time and executable size" html:tabindex="0">
 			<table>
 				<thead>
 					<tr>
@@ -86,13 +84,32 @@ export def body
 						<th className="num" scope="col"> 'GCC-built (ms)'
 						<th className="num" scope="col"> 'Distro-built (ms)'
 						<th scope="col"> 'Fastest external (ms)'
+						<th className="num" scope="col"> 'nelinker bytes'
+						<th className="num" scope="col"> 'Smallest external bytes'
 				<tbody>
 					for row in timings
 						<tr>
 							<th scope="row"> row[0]
 							<td className="num"> row[1]
 							<td className="num"> row[2]
-							<td> "{row[3]} · {row[4]}"
+							<td> row[3]
+							<td className="num"> row[4]
+							<td className="num"> row[5]
+		<p> 'The GCC build used GCC 12.2 at -O3. The distro build used necc and its staged TinyCC. The inputs and seven external binaries matched the earlier run by SHA-256. For the whole-SDK allocator, TinyCC was the only external linker whose program passed the execution check.'
 		<p className="upstream-links">
-			<a href="/nelua/assets/toolchain-20261119/archives.csv"> 'Archive results (CSV)'
-			<a href="/nelua/assets/toolchain-20261119/toolchain.csv"> 'Object and compiler results (CSV)'
+			<a href="/nelua/assets/linker-20261121/summary.csv"> 'Full field and quartiles (CSV)'
+			<a href="/nelua/assets/linker-20261121/samples.csv"> 'Individual link times (CSV)'
+			<a href="/nelua/assets/linker-20261121/method.txt"> 'Method, builds and checks'
+			<a href="/nelua/assets/linker-20261121/replay.tar.gz"> 'Replay the link inputs'
+		<h3> 'Creating an archive'
+		<p>
+			'On '
+			<time html:datetime="2026-11-21"> '21 November 2026'
+			', creating a deterministic archive from 256 x86-64 objects with short filenames took 3.343 ms, down from 4.231 ms. GNU ar took 22.216 ms. The new writer stores ordinary filenames directly in the member header and preserves short filenames containing spaces. The archive shrank from 215,484 to 213,376 bytes, matching the GNU archive size.'
+		<p> 'Archive creation used 31 interleaved warm runs on one Intel Core i5-10400 core. GNU ar listed the members, nm read their index, and both nelinker and GNU ld linked a program that returned 42.'
+		<p className="upstream-links">
+			<a href="/nelua/assets/build-tools-20261121/archive.csv"> 'Archive creation samples (CSV)'
+			<a href="/nelua/assets/build-tools-20261121/method.txt"> 'Archive writer method'
+		<p className="upstream-links">
+			<a href="/nelua/assets/toolchain-20261119/archives.csv"> '19 November archive link results (CSV)'
+			<a href="/nelua/assets/toolchain-20261119/toolchain.csv"> '19 November object and compiler results (CSV)'

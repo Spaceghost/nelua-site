@@ -1,0 +1,66 @@
+{
+  "core_count_available_to_tools": 1,
+  "date": "2026-11-21",
+  "host_userland": "Debian 12",
+  "logical_cpu": 1,
+  "nelinker": "58a38e701004a697720948266f50ed61394e89c5",
+  "processor": "Intel Core i7-11700F",
+  "suites": {
+    "archives": {
+      "cpu": 1,
+      "kernel": "7.2.11-ogc4.1.fc44.x86_64",
+      "load_end": [
+        1.8505859375,
+        2.66015625,
+        2.22998046875
+      ],
+      "load_start": [
+        2.0146484375,
+        2.7294921875,
+        2.2451171875
+      ],
+      "rounds": 31,
+      "seed": 32499,
+      "tools": {
+        "GNU-bfd": "f6d71a1bcd45764550a42dfaa179bc43b63ee879ec6f875bfd39fca013515da7",
+        "GNU-gold": "7eb4c269b2b58f8acc4e1ec302e1217926a48e3c8aa39ac9e91c90a1d23741c3",
+        "LLD-14": "90f0356be0ebfcc92d95888fbf3bfac28eda5d646a1068c5d3aa51810c54bf23",
+        "LLD-22-Zig": "7c61539af19fa4082c94848f1c2b57b89e76dc6cfd5bd4c57764c3caf8f82272",
+        "TinyCC": "9b1ff67ab808384fe12e03b15183ff2110c4e555cc87e6a1fe6b0013c85d8795",
+        "Wild": "1f24956f3ee750d6ac4ab28cf8d273ddff54c9de53aba5f9820adaa894489f28",
+        "mold": "ada05c08a5686fdc8cf047f946f6c9b5163b7181ee7c500f7a904bcb750642a3",
+        "nelinker-distro": "71feaf240329924890f8e792ff7c1ff8fd6558815613a91b1fde3d6609368016",
+        "nelinker-gcc": "cfc34fbe445771fb067a5f8485850160c31434e2df6c89434dff0f0726f85c92"
+      },
+      "warmup_rounds": 1
+    },
+    "objects": {
+      "cpu": 1,
+      "kernel": "7.2.11-ogc4.1.fc44.x86_64",
+      "load_end": [
+        2.1904296875,
+        2.77587890625,
+        2.25732421875
+      ],
+      "load_start": [
+        2.04248046875,
+        2.76806640625,
+        2.24853515625
+      ],
+      "rounds": 23,
+      "seed": 60491,
+      "tools": {
+        "GNU-bfd": "f6d71a1bcd45764550a42dfaa179bc43b63ee879ec6f875bfd39fca013515da7",
+        "GNU-gold": "7eb4c269b2b58f8acc4e1ec302e1217926a48e3c8aa39ac9e91c90a1d23741c3",
+        "LLD-14": "90f0356be0ebfcc92d95888fbf3bfac28eda5d646a1068c5d3aa51810c54bf23",
+        "LLD-22-Zig": "7c61539af19fa4082c94848f1c2b57b89e76dc6cfd5bd4c57764c3caf8f82272",
+        "TinyCC": "9b1ff67ab808384fe12e03b15183ff2110c4e555cc87e6a1fe6b0013c85d8795",
+        "Wild": "1f24956f3ee750d6ac4ab28cf8d273ddff54c9de53aba5f9820adaa894489f28",
+        "mold": "ada05c08a5686fdc8cf047f946f6c9b5163b7181ee7c500f7a904bcb750642a3",
+        "nelinker-distro": "71feaf240329924890f8e792ff7c1ff8fd6558815613a91b1fde3d6609368016",
+        "nelinker-gcc": "cfc34fbe445771fb067a5f8485850160c31434e2df6c89434dff0f0726f85c92"
+      },
+      "warmup_rounds": 1
+    }
+  }
+}

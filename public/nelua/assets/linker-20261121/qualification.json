@@ -1,0 +1,398 @@
+{
+  "archives/explicit-syscall/GNU-bfd": {
+    "bytes": 8544,
+    "passed": true
+  },
+  "archives/explicit-syscall/GNU-gold": {
+    "bytes": 1088,
+    "passed": true
+  },
+  "archives/explicit-syscall/LLD-14": {
+    "bytes": 1192,
+    "passed": true
+  },
+  "archives/explicit-syscall/LLD-22-Zig": {
+    "bytes": 1184,
+    "passed": true
+  },
+  "archives/explicit-syscall/TinyCC": {
+    "bytes": 1160,
+    "passed": true
+  },
+  "archives/explicit-syscall/Wild": {
+    "bytes": 1424,
+    "passed": true
+  },
+  "archives/explicit-syscall/mold": {
+    "bytes": 1744,
+    "passed": true
+  },
+  "archives/explicit-syscall/nelinker-distro": {
+    "bytes": 4378,
+    "passed": true
+  },
+  "archives/explicit-syscall/nelinker-gcc": {
+    "bytes": 4378,
+    "passed": true
+  },
+  "archives/one-of-256/GNU-bfd": {
+    "bytes": 4328,
+    "passed": true
+  },
+  "archives/one-of-256/GNU-gold": {
+    "bytes": 4560,
+    "passed": true
+  },
+  "archives/one-of-256/LLD-14": {
+    "bytes": 816,
+    "passed": true
+  },
+  "archives/one-of-256/LLD-22-Zig": {
+    "bytes": 808,
+    "passed": true
+  },
+  "archives/one-of-256/TinyCC": {
+    "bytes": 719,
+    "passed": true
+  },
+  "archives/one-of-256/Wild": {
+    "bytes": 1056,
+    "passed": true
+  },
+  "archives/one-of-256/mold": {
+    "bytes": 1456,
+    "passed": true
+  },
+  "archives/one-of-256/nelinker-distro": {
+    "bytes": 196,
+    "passed": true
+  },
+  "archives/one-of-256/nelinker-gcc": {
+    "bytes": 196,
+    "passed": true
+  },
+  "archives/reverse-chain-256/GNU-bfd": {
+    "bytes": 6624,
+    "passed": true
+  },
+  "archives/reverse-chain-256/GNU-gold": {
+    "bytes": 4560,
+    "passed": true
+  },
+  "archives/reverse-chain-256/LLD-14": {
+    "bytes": 3112,
+    "passed": true
+  },
+  "archives/reverse-chain-256/LLD-22-Zig": {
+    "bytes": 3104,
+    "passed": true
+  },
+  "archives/reverse-chain-256/TinyCC": {
+    "bytes": 3015,
+    "passed": true
+  },
+  "archives/reverse-chain-256/Wild": {
+    "bytes": 3352,
+    "passed": true
+  },
+  "archives/reverse-chain-256/mold": {
+    "bytes": 3752,
+    "passed": true
+  },
+  "archives/reverse-chain-256/nelinker-distro": {
+    "bytes": 2491,
+    "passed": true
+  },
+  "archives/reverse-chain-256/nelinker-gcc": {
+    "bytes": 2491,
+    "passed": true
+  },
+  "archives/sdk-one-member/GNU-bfd": {
+    "bytes": 8544,
+    "passed": true
+  },
+  "archives/sdk-one-member/GNU-gold": {
+    "bytes": 1088,
+    "passed": true
+  },
+  "archives/sdk-one-member/LLD-14": {
+    "bytes": 1192,
+    "passed": true
+  },
+  "archives/sdk-one-member/LLD-22-Zig": {
+    "bytes": 1184,
+    "passed": true
+  },
+  "archives/sdk-one-member/TinyCC": {
+    "bytes": 1160,
+    "passed": true
+  },
+  "archives/sdk-one-member/Wild": {
+    "bytes": 1424,
+    "passed": true
+  },
+  "archives/sdk-one-member/mold": {
+    "bytes": 1744,
+    "passed": true
+  },
+  "archives/sdk-one-member/nelinker-distro": {
+    "bytes": 4378,
+    "passed": true
+  },
+  "archives/sdk-one-member/nelinker-gcc": {
+    "bytes": 4378,
+    "passed": true
+  },
+  "archives/whole-256/GNU-bfd": {
+    "bytes": 5856,
+    "passed": true
+  },
+  "archives/whole-256/GNU-gold": {
+    "bytes": 4560,
+    "passed": true
+  },
+  "archives/whole-256/LLD-14": {
+    "bytes": 2344,
+    "passed": true
+  },
+  "archives/whole-256/LLD-22-Zig": {
+    "bytes": 2336,
+    "passed": true
+  },
+  "archives/whole-256/TinyCC": {
+    "bytes": 2247,
+    "passed": true
+  },
+  "archives/whole-256/Wild": {
+    "bytes": 2584,
+    "passed": true
+  },
+  "archives/whole-256/mold": {
+    "bytes": 2984,
+    "passed": true
+  },
+  "archives/whole-256/nelinker-distro": {
+    "bytes": 1726,
+    "passed": true
+  },
+  "archives/whole-256/nelinker-gcc": {
+    "bytes": 1726,
+    "passed": true
+  },
+  "archives/whole-sdk-allocator/GNU-bfd": {
+    "passed": false,
+    "reason": "linked program exceeded 1 s runtime deadline"
+  },
+  "archives/whole-sdk-allocator/GNU-gold": {
+    "passed": false,
+    "reason": "link: ld.gold: internal error in set_offset, at ../../gold/output.cc:4734"
+  },
+  "archives/whole-sdk-allocator/LLD-14": {
+    "passed": false,
+    "reason": "linked program exceeded 1 s runtime deadline"
+  },
+  "archives/whole-sdk-allocator/LLD-22-Zig": {
+    "passed": false,
+    "reason": "linked program exceeded 1 s runtime deadline"
+  },
+  "archives/whole-sdk-allocator/TinyCC": {
+    "bytes": 992583,
+    "passed": true
+  },
+  "archives/whole-sdk-allocator/Wild": {
+    "passed": false,
+    "reason": "linked program exceeded 1 s runtime deadline"
+  },
+  "archives/whole-sdk-allocator/mold": {
+    "passed": false,
+    "reason": "linked program exceeded 1 s runtime deadline"
+  },
+  "archives/whole-sdk-allocator/nelinker-distro": {
+    "bytes": 995860,
+    "passed": true
+  },
+  "archives/whole-sdk-allocator/nelinker-gcc": {
+    "bytes": 995860,
+    "passed": true
+  },
+  "objects/257-objects/GNU-bfd": {
+    "bytes": 6624,
+    "passed": true
+  },
+  "objects/257-objects/GNU-gold": {
+    "bytes": 4560,
+    "passed": true
+  },
+  "objects/257-objects/LLD-14": {
+    "bytes": 3112,
+    "passed": true
+  },
+  "objects/257-objects/LLD-22-Zig": {
+    "bytes": 3104,
+    "passed": true
+  },
+  "objects/257-objects/TinyCC": {
+    "bytes": 3015,
+    "passed": true
+  },
+  "objects/257-objects/Wild": {
+    "bytes": 3352,
+    "passed": true
+  },
+  "objects/257-objects/mold": {
+    "bytes": 3752,
+    "passed": true
+  },
+  "objects/257-objects/nelinker-distro": {
+    "bytes": 2491,
+    "passed": true
+  },
+  "objects/257-objects/nelinker-gcc": {
+    "bytes": 2491,
+    "passed": true
+  },
+  "objects/32768-relocations/GNU-bfd": {
+    "bytes": 270696,
+    "passed": true
+  },
+  "objects/32768-relocations/GNU-gold": {
+    "bytes": 266776,
+    "passed": true
+  },
+  "objects/32768-relocations/LLD-14": {
+    "bytes": 263064,
+    "passed": true
+  },
+  "objects/32768-relocations/LLD-22-Zig": {
+    "bytes": 263056,
+    "passed": true
+  },
+  "objects/32768-relocations/TinyCC": {
+    "bytes": 263031,
+    "passed": true
+  },
+  "objects/32768-relocations/Wild": {
+    "bytes": 263304,
+    "passed": true
+  },
+  "objects/32768-relocations/mold": {
+    "bytes": 263704,
+    "passed": true
+  },
+  "objects/32768-relocations/nelinker-distro": {
+    "bytes": 270336,
+    "passed": true
+  },
+  "objects/32768-relocations/nelinker-gcc": {
+    "bytes": 270336,
+    "passed": true
+  },
+  "objects/8192-symbols/GNU-bfd": {
+    "bytes": 106848,
+    "passed": true
+  },
+  "objects/8192-symbols/GNU-gold": {
+    "bytes": 102936,
+    "passed": true
+  },
+  "objects/8192-symbols/LLD-14": {
+    "bytes": 99232,
+    "passed": true
+  },
+  "objects/8192-symbols/LLD-22-Zig": {
+    "bytes": 99224,
+    "passed": true
+  },
+  "objects/8192-symbols/TinyCC": {
+    "bytes": 99191,
+    "passed": true
+  },
+  "objects/8192-symbols/Wild": {
+    "bytes": 99472,
+    "passed": true
+  },
+  "objects/8192-symbols/mold": {
+    "bytes": 99872,
+    "passed": true
+  },
+  "objects/8192-symbols/nelinker-distro": {
+    "bytes": 106496,
+    "passed": true
+  },
+  "objects/8192-symbols/nelinker-gcc": {
+    "bytes": 106496,
+    "passed": true
+  },
+  "objects/nelibc-syscall/GNU-bfd": {
+    "bytes": 8544,
+    "passed": true
+  },
+  "objects/nelibc-syscall/GNU-gold": {
+    "bytes": 1088,
+    "passed": true
+  },
+  "objects/nelibc-syscall/LLD-14": {
+    "bytes": 1192,
+    "passed": true
+  },
+  "objects/nelibc-syscall/LLD-22-Zig": {
+    "bytes": 1184,
+    "passed": true
+  },
+  "objects/nelibc-syscall/TinyCC": {
+    "bytes": 1160,
+    "passed": true
+  },
+  "objects/nelibc-syscall/Wild": {
+    "bytes": 1424,
+    "passed": true
+  },
+  "objects/nelibc-syscall/mold": {
+    "bytes": 1744,
+    "passed": true
+  },
+  "objects/nelibc-syscall/nelinker-distro": {
+    "bytes": 4378,
+    "passed": true
+  },
+  "objects/nelibc-syscall/nelinker-gcc": {
+    "bytes": 4378,
+    "passed": true
+  },
+  "objects/three-objects/GNU-bfd": {
+    "bytes": 4336,
+    "passed": true
+  },
+  "objects/three-objects/GNU-gold": {
+    "bytes": 4560,
+    "passed": true
+  },
+  "objects/three-objects/LLD-14": {
+    "bytes": 824,
+    "passed": true
+  },
+  "objects/three-objects/LLD-22-Zig": {
+    "bytes": 816,
+    "passed": true
+  },
+  "objects/three-objects/TinyCC": {
+    "bytes": 727,
+    "passed": true
+  },
+  "objects/three-objects/Wild": {
+    "bytes": 1064,
+    "passed": true
+  },
+  "objects/three-objects/mold": {
+    "bytes": 1464,
+    "passed": true
+  },
+  "objects/three-objects/nelinker-distro": {
+    "bytes": 205,
+    "passed": true
+  },
+  "objects/three-objects/nelinker-gcc": {
+    "bytes": 205,
+    "passed": true
+  }
+}

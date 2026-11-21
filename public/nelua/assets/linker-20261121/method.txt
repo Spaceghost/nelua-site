@@ -1,0 +1,42 @@
+Linking the original eleven workloads
+21 November 2026
+
+Machine and measurement
+
+One physical core on an Intel Core i7-11700F, using logical CPU 1. Other measurement jobs avoided its sibling CPU 9. Debian 12 userland ran inside Podman on the Linux x86-64 host. The November 19 primary comparison ran on four physical cores of an i5-10400. Cross-date differences include hardware, scheduling, and affinity.
+
+Both builds used nelinker 58a38e701004a697720948266f50ed61394e89c5. One used the staged necc and TinyCC. The other used GCC 12.2 at -O3 to compile the same generated C. Stage two and stage three self-links produced identical linker binaries in each build. The standalone 19 November SDK and the seven external binary digests matched the original field.
+
+  GNU ld.bfd 2.40, GNU gold 1.16 (binutils 2.40), SDK TinyCC 0.9.28rc
+  Debian LLD 14.0.6, LLD 22.1.8 via Zig 0.17.0
+  mold 3.0.0, Wild 0.11.0
+
+The five explicit-object fixtures and six archive-suite fixtures used the original generators. Every input's SHA-256 digest was compared with the 19 November metadata. GNU as 2.40 produced the same objects. TinyCC embeds its allocator source pathname, so that fixture was compiled using the original pathname inside an isolated container. All digests matched.
+
+Time begins when the harness launches a fresh linker process and ends when that process completes. Each case and tool qualified by actually running the output. Each measured executable had to exit with status 42. Both suites unlink the old output, interleave tools and workloads in seeded random order, discard one warm-up round, and exclude failures from their summaries. The explicit-object suite takes 23 measured rounds. The archive suite takes 31. The archive harness also ran an older nelinker as a historical control. The current table compares the two current builds against seven external linkers.
+
+The archive-suite explicit syscall is deliberately kept as its own control. It uses loose objects and a different command path from the SDK syscall in the explicit-object suite. Both were part of the earlier eleven registered workloads.
+
+Results and qualification
+
+  summary.csv          median and inclusive quartiles in milliseconds, output bytes
+  samples.csv          2,523 individual fresh-process wall times in nanoseconds
+  qualification.json   execution check for all 99 tool/workload pairs
+  manifest.json        binary SHA-256 digests, host, affinity, seeds, round counts and load
+
+There were 93 qualifying pairs. For the whole-SDK allocator, GNU gold rejected the object layout and five external linkers produced an executable that missed the one-second runtime deadline. Both nelinker builds and TinyCC passed. All nine tools passed all ten other timed workloads. The fastest-external and smallest-external columns use independent minima among qualifying tools. The smallest executable need not come from the fastest external linker.
+
+Replay the output checks
+
+The fixture archive contains the measured synthetic ELF objects and archives, their SHA-256 digests, exact linker flags and output checks. Supply the staged 19 November SDK and your own linker binary. The script extracts the syscall member from the SDK with GNU ar and verifies every input before running the selected link commands. Python 3 and an x86-64 Linux system are required.
+
+  tar xzf replay.tar.gz
+  python3 replay-kit/replay.py nelinker-gcc /path/to/nelinker /path/to/sdk
+  python3 replay-kit/replay.py TinyCC /path/to/sdk/tcc/tcc /path/to/sdk --case archives/one-of-256
+
+The other tool labels are nelinker-distro, GNU-bfd, GNU-gold, LLD-14, LLD-22-Zig, mold and Wild. For LLD-22-Zig pass the zig executable. Use an existing writable scratch directory in TMPDIR for replay.
+
+Repeat the timed suites using the 19 November round-two toolchain kit (SHA-256 a40cf80936b5154391e37bbab27dc17e486ebd8fde15edec59e59d119a7838c5). Install the current GCC-built and distro-built linkers at bin/nelinker and bootstrap-only/nelinker. Set ZIG to the matching Zig binary and supply the pinned tools from bench/prepare-tools.sh. The published run selected the link phase in the object suite, and kept the fixture-generator directory fixed for the allocator object's embedded filename.
+
+  bench/run.sh --rounds 23 --cpus 1 --label current --only nelinker-next,nelinker-bootstrap,GNU-bfd,GNU-gold,LLD-14,LLD-22-Zig,mold,Wild,TinyCC
+  bench/run.sh archives --rounds 31 --cpus 1 --tools "$PWD/bench/tools" --zig "$ZIG"

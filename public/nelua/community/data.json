@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-18T18:07:53.497997Z",
+  "generatedAt": "2026-11-21T19:43:09.223108Z",
   "metric": "Current original .nelua SLOC",
   "methodology": [
     "A bounded index of candidate GitHub repositories; this is not a complete census of all Nelua code or developers.",
@@ -21,10 +21,10 @@
     "owners": 43,
     "people": 40,
     "organizations": 3,
-    "lines": 197362,
-    "bytes": 9727467,
-    "files": 1098,
-    "distinctCandidateBlobs": 1203,
+    "lines": 201281,
+    "bytes": 9913233,
+    "files": 1119,
+    "distinctCandidateBlobs": 1224,
     "excludedPathFiles": 6,
     "excludedGeneratedFiles": 127,
     "excludedDuplicateFiles": 236,
@@ -37,9 +37,9 @@
       "ownerType": "User",
       "avatarUrl": "https://avatars.githubusercontent.com/u/251370?v=4",
       "url": "https://github.com/Spaceghost",
-      "lines": 75839,
-      "bytes": 3905131,
-      "files": 278,
+      "lines": 79758,
+      "bytes": 4090897,
+      "files": 299,
       "repositories": [
         {
           "name": "Spaceghost/ghostty-dalamud",
@@ -1547,6 +1547,173 @@
           ]
         },
         {
+          "name": "Spaceghost/theseus-init",
+          "url": "https://github.com/Spaceghost/theseus-init",
+          "branch": "main",
+          "sha": "72095fd70e77da93fada45686459985cee5429d3",
+          "public": true,
+          "fork": false,
+          "lines": 5290,
+          "bytes": 240673,
+          "files": 25,
+          "excludedPathFiles": 0,
+          "excludedGeneratedFiles": 0,
+          "excludedDuplicateFiles": 0,
+          "status": "measured",
+          "sourceFiles": [
+            {
+              "path": "src/graph.nelua",
+              "blob": "98acd8d8c24fd4b9148f620b7a05e37a1f6b8349",
+              "lines": 32,
+              "bytes": 1111
+            },
+            {
+              "path": "src/init.nelua",
+              "blob": "e680dd4e693294247ae821da85e0ace0cab0c16f",
+              "lines": 757,
+              "bytes": 36229
+            },
+            {
+              "path": "src/install.nelua",
+              "blob": "88746c0f5731254f229669e9534c3d14698d9c1e",
+              "lines": 149,
+              "bytes": 7733
+            },
+            {
+              "path": "src/live_client.nelua",
+              "blob": "28383c0478c898afcae8db6a155e1e4bf075ee28",
+              "lines": 304,
+              "bytes": 14119
+            },
+            {
+              "path": "src/supervisor.nelua",
+              "blob": "e8cc84a0dbf615efa9f8d2a6f5bccdb589d4fff6",
+              "lines": 1302,
+              "bytes": 56595
+            },
+            {
+              "path": "src/theseus.nelua",
+              "blob": "bcffe00e2edd5ba8e0d64bcfb957b3377ede372e",
+              "lines": 641,
+              "bytes": 25775
+            },
+            {
+              "path": "src/theseus/cgroup.nelua",
+              "blob": "604315a3f0eda9be9a9cc9ea94cf10af28fcedba",
+              "lines": 124,
+              "bytes": 6552
+            },
+            {
+              "path": "src/theseus/daemon_log.nelua",
+              "blob": "a2317c35d4ae1a41d4815bdb648d0f5043a26ecf",
+              "lines": 167,
+              "bytes": 7586
+            },
+            {
+              "path": "src/theseus/earlyboot.nelua",
+              "blob": "4a00334c938879027341f439c9950063ea86d849",
+              "lines": 96,
+              "bytes": 3934
+            },
+            {
+              "path": "src/theseus/graph.nelua",
+              "blob": "4028d9d7944dc63227d91dbdde857e1beb6781a5",
+              "lines": 306,
+              "bytes": 11557
+            },
+            {
+              "path": "src/theseus/install_paths.nelua",
+              "blob": "66eb8b2105110297436c5bf0eee1354471cfc1bc",
+              "lines": 7,
+              "bytes": 356
+            },
+            {
+              "path": "src/theseus/name.nelua",
+              "blob": "3a6d63fad0f254cb6caff2ac94c7ac88967232a8",
+              "lines": 4,
+              "bytes": 162
+            },
+            {
+              "path": "src/theseus/openrc.nelua",
+              "blob": "dba952fbdd699b68e5e1daffa001e99028dac1d3",
+              "lines": 73,
+              "bytes": 2872
+            },
+            {
+              "path": "src/theseus/pidfd.nelua",
+              "blob": "64453e24ac654482e8899ee99cab35ca7099ef78",
+              "lines": 27,
+              "bytes": 1486
+            },
+            {
+              "path": "src/theseus/readiness.nelua",
+              "blob": "f2a3f770ad6cab4d5d7de1ff853d2e843bdce614",
+              "lines": 49,
+              "bytes": 2093
+            },
+            {
+              "path": "src/theseus/recovery.nelua",
+              "blob": "ce727d1388fea740d8d0cf2c6dc0a09dbdeeb5fb",
+              "lines": 157,
+              "bytes": 8728
+            },
+            {
+              "path": "src/theseus/restart.nelua",
+              "blob": "2e5cf6d3aabe1ef3d32ad14ea8b4bd8f990b2076",
+              "lines": 28,
+              "bytes": 1564
+            },
+            {
+              "path": "src/theseus/runtime_service.nelua",
+              "blob": "42ab0c15395d91d028bae99e01f17ced31126ab0",
+              "lines": 119,
+              "bytes": 4982
+            },
+            {
+              "path": "src/theseus/shutdown_policy.nelua",
+              "blob": "ccbaa3202e96f2fbe5a0999ae20ca00f8e318085",
+              "lines": 21,
+              "bytes": 1162
+            },
+            {
+              "path": "tests/alpine_openrc.nelua",
+              "blob": "07c6655ccd89e48880e6a8d10d128fe254032d9a",
+              "lines": 160,
+              "bytes": 7486
+            },
+            {
+              "path": "tests/alpine_qualification.nelua",
+              "blob": "e0dea6bc3936e0e8eec94d743ce4dcfddd8cd489",
+              "lines": 317,
+              "bytes": 17462
+            },
+            {
+              "path": "tests/command.nelua",
+              "blob": "a19b032d4b3281c76b55070dabaf63d5f0024381",
+              "lines": 61,
+              "bytes": 3034
+            },
+            {
+              "path": "tests/live_control.nelua",
+              "blob": "68b106b18ea00ef0fe49d83dd1fd108da0310419",
+              "lines": 263,
+              "bytes": 11700
+            },
+            {
+              "path": "tests/pid1_guest.nelua",
+              "blob": "a7b6b30885ba79318cb658f58e3d6396c52ebc6e",
+              "lines": 46,
+              "bytes": 2397
+            },
+            {
+              "path": "tests/pid1_openrc_guest.nelua",
+              "blob": "104630095dad0eb26b3054c9a43cc099f0d8c329",
+              "lines": 80,
+              "bytes": 3998
+            }
+          ]
+        },
+        {
           "name": "Spaceghost/drift",
           "url": "https://github.com/Spaceghost/drift",
           "branch": "main",
@@ -1693,7 +1860,7 @@
           "name": "Spaceghost/melodica.h",
           "url": "https://github.com/Spaceghost/melodica.h",
           "branch": "main",
-          "sha": "4447943dd0c43b1b288f963f542502bb772e5802",
+          "sha": "50f8bdf1fbfab008d7e998aa3423208eed3bbb9c",
           "public": true,
           "fork": false,
           "lines": 1736,
@@ -1721,47 +1888,6 @@
               "blob": "2179f962450cc43bba6d40f96e506c2646348b4c",
               "lines": 1037,
               "bytes": 54840
-            }
-          ]
-        },
-        {
-          "name": "Spaceghost/theseus-init",
-          "url": "https://github.com/Spaceghost/theseus-init",
-          "branch": "main",
-          "sha": "d49979504e4ba11f99836bef70411ddc88490bd7",
-          "public": true,
-          "fork": false,
-          "lines": 1371,
-          "bytes": 54907,
-          "files": 4,
-          "excludedPathFiles": 0,
-          "excludedGeneratedFiles": 0,
-          "excludedDuplicateFiles": 0,
-          "status": "measured",
-          "sourceFiles": [
-            {
-              "path": "src/graph.nelua",
-              "blob": "b5d33b17a501c1d7442548e3386ddf2fcddc916b",
-              "lines": 267,
-              "bytes": 9956
-            },
-            {
-              "path": "src/live_client.nelua",
-              "blob": "3daf64e3fb117380199d4060f53a5118b4c2c334",
-              "lines": 170,
-              "bytes": 6451
-            },
-            {
-              "path": "src/supervisor.nelua",
-              "blob": "f84bfbe8863adbd62715f13c337b9d312e9c8ba5",
-              "lines": 348,
-              "bytes": 15664
-            },
-            {
-              "path": "src/theseus.nelua",
-              "blob": "285c7e4b46d1bad58a2448be1142bb7678658cee",
-              "lines": 586,
-              "bytes": 22836
             }
           ]
         },
@@ -8714,6 +8840,111 @@
       "repository": "Rahyulty/TempName",
       "reason": "GitHub API 404"
     }
+  ],
+  "excludedGeneratedBlobs": [
+    "0716ee9b49a3be7a185a3b9ce1bd4dc75ab9111c",
+    "0cb306dac4696ac202da3cfd8358667ec9932735",
+    "0d8ae43dbab036078a3404599bd3aeefd2edc7ad",
+    "118b90443ab59bdc96bc81e12edea2a113bcea0a",
+    "16237b519eb74f2e0be3231676031b773e88ad77",
+    "16d652269082b021fc2bf1ca0fa08be0e25eefe4",
+    "189dfe6de76be8bd0b0c0355a07d0221c5845fad",
+    "1984e93034082000989dc612416c616c3fc1476c",
+    "25c7d7360289f01f5a548a37674e4cce0a3be7a2",
+    "270a22c20ed57a7174d658699c380014c26117b2",
+    "288f8abdaa02d811d0b6236609c1be4b15b4a433",
+    "2c263f7b46e7fa650eadb2701dd124131299120d",
+    "2e426cf2946738d219dd99ad8e76711f2a2ec954",
+    "303b8614e78725d0431d353ea6b510ac395c4ec2",
+    "31f6b23d9d1a6b3ed796ddc0353ec1de9fb39a7d",
+    "32d9717839df82db816f9e0f9ae481b57bf48937",
+    "358925795746198c2e59a54b00e9821c7534e8fa",
+    "365d54c006fffa578c7ef47b50dce2db0b3f31e5",
+    "36c63cd4937c990f4f710222424447be46861d58",
+    "3a6591784f4c5540b4824e06ac48aa914b6f456f",
+    "3b28ccc028f708e03f8126ea65aab25ab16f6c12",
+    "3e2476d47cbf33af7d8764d2c25bf80f240802ee",
+    "3f609cc609d71a306f1658b1bf48b5808143297c",
+    "4102ef66f54f8de30bd4f49e26d1fcb734a5426d",
+    "419c7cbb3b6263d89a201b2de17a7aa53d1e67e2",
+    "429a64dcfda10a227142ce9c39d789a90bfd2ede",
+    "4342031e22309a6bd3c646ca51dc9cc540726c87",
+    "47a2bdb72779b32952075c740dfb38434737bd9c",
+    "49b6643e8d76b9ff088e1cf5cdbfcdb8d561cfd1",
+    "5065166377f6d16f3a365593079c8e802e8547fc",
+    "519e53cf22f6b12abf79286146b19ce636416621",
+    "5444629bd14af34fd2d17cdbe0ac8a8183a282b7",
+    "57325b4b92006cc51fd56a48a8189178aa272d7b",
+    "5873dcc5dcd0dd028213467ca66fee0ef36514fa",
+    "5a45995203f58bf12091ca6a8a5f43f0e3ffe5a8",
+    "5c14031dd7542d29f1c0bdde0ec89aacaaa09cfc",
+    "5f88f112fd0de6f140b78e340c54561cc07be0ba",
+    "61436b1e2b15f7d6013891307740d5b2e43bdeec",
+    "619a0d5bf975bda47224f66afb49dd05358a2227",
+    "61f5b19409d1a492ef7b058b644e8577fe026c22",
+    "635ecc0901f23e43dddee503ae2ec738275588a1",
+    "63bc6cf3e1a5d2bdfa1a2c6e93b9c91347eff509",
+    "6482176637068b52beb6044d270f04a1fd558976",
+    "6666aac0c33af1278ca6c22f5ec31d4737070e32",
+    "6756b94366afa089aa704c996e8e77ef9c350e63",
+    "68d609e8db479b8e4d139bcb166c4b33d4bef9ef",
+    "6a613987442fc37fd0c9c99d61aa72f51a9a818a",
+    "6b42d52fd49080bba4c8fc9283c6c849f67282b2",
+    "6b6018546b2a06e7cc3e1bcb7ed34fe70e330c06",
+    "6bad6e0a5c0028d12c6fdbad05517d43e6a7fe64",
+    "6cb84786960e2b273ef63559adcdb00019cb8ffe",
+    "6e1f46461fe058a58302c0bd3968e6e03d102cba",
+    "6f4fc2a6de0bf26f18bfbfb7ba78353793b8bb5e",
+    "6ff5c0088f4649ddaab9fe10214ae4cc1fe8b1b9",
+    "70a055f87a4cc27fcc6c68f8ab17a5f3a4b0f20e",
+    "74474268116b602ede5fde02e7437a2a8bb81258",
+    "7568c337855ba3361f2b014c7c2a626cb4ce988f",
+    "7af70783518c9978b5a9127b99ddcc3ebe1aebf6",
+    "7e441e429637c411087fa6cc296a6a2335755249",
+    "8146a48b5f44c5532e4b54fee0e0c39a519845f4",
+    "8416e9c15bec0c2478836434b2ffeb560159d5f1",
+    "851ce367f410ee307b7933cf82531526d7d6c2bd",
+    "88998dda6fcfa66e148dba2e7a653b63ce5ef801",
+    "8d24861720915776a8d646d71daad626dd3b5d85",
+    "8e35f5235fa2e8c43c0a67f54666f1b7e96fdcf6",
+    "9753307fc453bb61089a432abfd1f55b729ed29b",
+    "97d7fff3adf7aef838c32b4d90fcd79551717e6a",
+    "9cf426fbb6a83bbea1a46c00259b58db7fc6c146",
+    "9d8947954ac3471b86bc8a5d9eea57941af0bbe2",
+    "9e6c095398a3e79058c215d71badaba78c0d1d98",
+    "9ea1674e7eed2103c3234c6722b1843119ef2677",
+    "9fd8d29d6d7fbd7d6f93a2b7baf1a492e0389bc0",
+    "a2e4ba62deb3077c15b5a2a5688acfb6851d17fe",
+    "a4c171718ad03b82a58957c1bf6ebdc6603eddb0",
+    "a54b0c4811ab7d6d660351d64a96b5d55509c8ab",
+    "abe2fe0456b5b87ff36af4d41c3a0edbb59a305a",
+    "af855b8d1f733aa29a213e888a0ae294c2233cb7",
+    "b7fd437bea60005483a6c173b9e3038606bf3bd9",
+    "bead35f03bebdb6a6b6b55bb2454a9fc84e1d7be",
+    "c0b72a9b1be2da66bb4e02b93eaac2d105556dee",
+    "c0f045f0ff94546bac0bec992b7f52b96add5c87",
+    "c2d95ad0633880cd8676257f608054b6919ecd36",
+    "c6a03d1843daed0e4a03bb1977db499c5e8dcbdd",
+    "c8db6c00dbf86b1a4d6b9d83209531188bf13964",
+    "c956a1099e738be4ff3cc6511ab6222ffff17309",
+    "d7b29114d5f66bd9abdd2b1bcf44d0cb660d371a",
+    "db7d4112a1953688c8ffa89cede562a719c965d9",
+    "dccc8332069ad7ee886730e875cfecabaea7a728",
+    "e28743f823fd84ec58c708db73ac417f1c5b139c",
+    "e2c283623f0a035d235c90278c687b1ba3afa247",
+    "e3632838ee8b3b5f2f80bda89ee600b73430c4c5",
+    "e438dd52530a8a1471567dab7adeb3631c906ddd",
+    "e8083e5126946182a8ffc3843dad9e3138b7b614",
+    "e8582fe86a6b389a1b868c248d760ce8c4b60c53",
+    "ee425984d85ee407cbf588efe3f5bc8026ea7ed0",
+    "f0cc60be66b695e2c45f6aa6f348b1202552d945",
+    "f2228292e115dea5528994c2e58e31e31fd503bc",
+    "f5e4821be51f9ff91da19d2a4dfc7a52e0ff9a89",
+    "f7c309295c4ed86fbf554accbb159785e8ecdc6a",
+    "f871460706a6108430c0e4e144f380421b8b1bc6",
+    "f90b443a37d435bc39e62a25e31fb0c87ec8c455",
+    "fa5a2b76178be0dbe1f1bbfb902350439862a55b",
+    "fc50ab51a332286c63b763393a757b885c80e29f"
   ],
   "excludedRepositories": [
     {
@@ -17294,7 +17525,7 @@
       "name": "Spaceghost/melodica.h",
       "url": "https://github.com/Spaceghost/melodica.h",
       "branch": "main",
-      "sha": "4447943dd0c43b1b288f963f542502bb772e5802",
+      "sha": "50f8bdf1fbfab008d7e998aa3423208eed3bbb9c",
       "public": true,
       "fork": false,
       "lines": 1736,
@@ -17329,12 +17560,12 @@
       "name": "Spaceghost/theseus-init",
       "url": "https://github.com/Spaceghost/theseus-init",
       "branch": "main",
-      "sha": "d49979504e4ba11f99836bef70411ddc88490bd7",
+      "sha": "72095fd70e77da93fada45686459985cee5429d3",
       "public": true,
       "fork": false,
-      "lines": 1371,
-      "bytes": 54907,
-      "files": 4,
+      "lines": 5290,
+      "bytes": 240673,
+      "files": 25,
       "excludedPathFiles": 0,
       "excludedGeneratedFiles": 0,
       "excludedDuplicateFiles": 0,
@@ -17342,27 +17573,153 @@
       "sourceFiles": [
         {
           "path": "src/graph.nelua",
-          "blob": "b5d33b17a501c1d7442548e3386ddf2fcddc916b",
-          "lines": 267,
-          "bytes": 9956
+          "blob": "98acd8d8c24fd4b9148f620b7a05e37a1f6b8349",
+          "lines": 32,
+          "bytes": 1111
+        },
+        {
+          "path": "src/init.nelua",
+          "blob": "e680dd4e693294247ae821da85e0ace0cab0c16f",
+          "lines": 757,
+          "bytes": 36229
+        },
+        {
+          "path": "src/install.nelua",
+          "blob": "88746c0f5731254f229669e9534c3d14698d9c1e",
+          "lines": 149,
+          "bytes": 7733
         },
         {
           "path": "src/live_client.nelua",
-          "blob": "3daf64e3fb117380199d4060f53a5118b4c2c334",
-          "lines": 170,
-          "bytes": 6451
+          "blob": "28383c0478c898afcae8db6a155e1e4bf075ee28",
+          "lines": 304,
+          "bytes": 14119
         },
         {
           "path": "src/supervisor.nelua",
-          "blob": "f84bfbe8863adbd62715f13c337b9d312e9c8ba5",
-          "lines": 348,
-          "bytes": 15664
+          "blob": "e8cc84a0dbf615efa9f8d2a6f5bccdb589d4fff6",
+          "lines": 1302,
+          "bytes": 56595
         },
         {
           "path": "src/theseus.nelua",
-          "blob": "285c7e4b46d1bad58a2448be1142bb7678658cee",
-          "lines": 586,
-          "bytes": 22836
+          "blob": "bcffe00e2edd5ba8e0d64bcfb957b3377ede372e",
+          "lines": 641,
+          "bytes": 25775
+        },
+        {
+          "path": "src/theseus/cgroup.nelua",
+          "blob": "604315a3f0eda9be9a9cc9ea94cf10af28fcedba",
+          "lines": 124,
+          "bytes": 6552
+        },
+        {
+          "path": "src/theseus/daemon_log.nelua",
+          "blob": "a2317c35d4ae1a41d4815bdb648d0f5043a26ecf",
+          "lines": 167,
+          "bytes": 7586
+        },
+        {
+          "path": "src/theseus/earlyboot.nelua",
+          "blob": "4a00334c938879027341f439c9950063ea86d849",
+          "lines": 96,
+          "bytes": 3934
+        },
+        {
+          "path": "src/theseus/graph.nelua",
+          "blob": "4028d9d7944dc63227d91dbdde857e1beb6781a5",
+          "lines": 306,
+          "bytes": 11557
+        },
+        {
+          "path": "src/theseus/install_paths.nelua",
+          "blob": "66eb8b2105110297436c5bf0eee1354471cfc1bc",
+          "lines": 7,
+          "bytes": 356
+        },
+        {
+          "path": "src/theseus/name.nelua",
+          "blob": "3a6d63fad0f254cb6caff2ac94c7ac88967232a8",
+          "lines": 4,
+          "bytes": 162
+        },
+        {
+          "path": "src/theseus/openrc.nelua",
+          "blob": "dba952fbdd699b68e5e1daffa001e99028dac1d3",
+          "lines": 73,
+          "bytes": 2872
+        },
+        {
+          "path": "src/theseus/pidfd.nelua",
+          "blob": "64453e24ac654482e8899ee99cab35ca7099ef78",
+          "lines": 27,
+          "bytes": 1486
+        },
+        {
+          "path": "src/theseus/readiness.nelua",
+          "blob": "f2a3f770ad6cab4d5d7de1ff853d2e843bdce614",
+          "lines": 49,
+          "bytes": 2093
+        },
+        {
+          "path": "src/theseus/recovery.nelua",
+          "blob": "ce727d1388fea740d8d0cf2c6dc0a09dbdeeb5fb",
+          "lines": 157,
+          "bytes": 8728
+        },
+        {
+          "path": "src/theseus/restart.nelua",
+          "blob": "2e5cf6d3aabe1ef3d32ad14ea8b4bd8f990b2076",
+          "lines": 28,
+          "bytes": 1564
+        },
+        {
+          "path": "src/theseus/runtime_service.nelua",
+          "blob": "42ab0c15395d91d028bae99e01f17ced31126ab0",
+          "lines": 119,
+          "bytes": 4982
+        },
+        {
+          "path": "src/theseus/shutdown_policy.nelua",
+          "blob": "ccbaa3202e96f2fbe5a0999ae20ca00f8e318085",
+          "lines": 21,
+          "bytes": 1162
+        },
+        {
+          "path": "tests/alpine_openrc.nelua",
+          "blob": "07c6655ccd89e48880e6a8d10d128fe254032d9a",
+          "lines": 160,
+          "bytes": 7486
+        },
+        {
+          "path": "tests/alpine_qualification.nelua",
+          "blob": "e0dea6bc3936e0e8eec94d743ce4dcfddd8cd489",
+          "lines": 317,
+          "bytes": 17462
+        },
+        {
+          "path": "tests/command.nelua",
+          "blob": "a19b032d4b3281c76b55070dabaf63d5f0024381",
+          "lines": 61,
+          "bytes": 3034
+        },
+        {
+          "path": "tests/live_control.nelua",
+          "blob": "68b106b18ea00ef0fe49d83dd1fd108da0310419",
+          "lines": 263,
+          "bytes": 11700
+        },
+        {
+          "path": "tests/pid1_guest.nelua",
+          "blob": "a7b6b30885ba79318cb658f58e3d6396c52ebc6e",
+          "lines": 46,
+          "bytes": 2397
+        },
+        {
+          "path": "tests/pid1_openrc_guest.nelua",
+          "blob": "104630095dad0eb26b3054c9a43cc099f0d8c329",
+          "lines": 80,
+          "bytes": 3998
         }
       ]
     },

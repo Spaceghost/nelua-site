@@ -4,7 +4,7 @@ export const description = 'Boot Cascadia from loose files with neboot, an x86-6
 export def body
 	<div className="page-content">
 		<section className="hero">
-			<p className="eyebrow"><a href="/nelua/#workshop"> 'Workshop'
+			<p className="eyebrow"> 'Core · the boot manager'
 			<h1> 'neboot'
 			<p className="lead"> 'A UEFI boot menu written in Nelua. It starts Cascadia with Theseus Init or OpenRC recovery from the same kernel and initramfs. A third entry starts another EFI application.'
 			<div className="actions">

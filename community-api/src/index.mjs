@@ -181,7 +181,8 @@ export async function handle(request, env, options = {}) {
   const path = url.pathname.slice(BASE.length);
   let operation = 'route';
   try {
-    need(url.origin === ORIGIN && url.pathname.startsWith(BASE + '/'), 404, 'not_found');
+    const publicTotals = url.origin === 'https://nelua.tech' && url.pathname === BASE + '/private-totals' && request.method === 'GET';
+    need((url.origin === ORIGIN || publicTotals) && url.pathname.startsWith(BASE + '/'), 404, 'not_found');
     if (path === '/private-totals' && request.method === 'GET') {
       const result = await env.DB.prepare('SELECT id,login,name,totals,counted_at FROM users WHERE consent=1 AND totals IS NOT NULL AND counted_at>?').bind(now - 36 * 3600).all();
       return json({people: result.results.filter(row => JSON.parse(row.totals).metric === PRIVATE_METRIC).map(row => ({id: row.id, login: row.login, name: row.login, ...JSON.parse(row.totals), generatedAt: new Date(row.counted_at * 1000).toISOString()}))});

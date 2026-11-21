@@ -11,7 +11,7 @@ export def body
 				<p className="blurb"> 'The index tracks original public source and includes authored totals from private projects that builders choose to count.'
 				<div className="actions">
 					<a className="button" href="#leaderboard"> 'Browse the index'
-					<a className="text-link" href="api/auth/start" id="nav-sign-in"> 'Sign in with GitHub'
+					<a className="text-link" href="https://spacegho.st/nelua/community/api/auth/start" id="nav-sign-in"> 'Sign in with GitHub'
 					<a className="text-link" href="#methodology"> 'How we count'
 			<section className="stats" html:aria-label="Index totals">
 				<div className="stat">
@@ -77,7 +77,7 @@ export def body
 					<strong> "Updates daily at 7:17 a.m. Pacific"
 					<p> "New projects and saved repository changes are included in the next daily refresh."
 				<div html:id="account-controls">
-					<a className="account-button" html:href="api/auth/start"> "Sign in with GitHub"
+					<a className="account-button" html:href="https://spacegho.st/nelua/community/api/auth/start"> "Sign in with GitHub"
 				<p html:id="account-status" className="account-status" html:role="status" html:aria-live="polite">
 			<section html:id="methodology" className="methodology" html:aria-labelledby="method-title">
 				<div className="method-intro">

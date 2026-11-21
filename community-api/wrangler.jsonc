@@ -5,7 +5,10 @@
   "workers_dev": false,
   "preview_urls": false,
   "secrets": {"required": ["ENCRYPTION_KEY"]},
-  "routes": [{"pattern": "spacegho.st/nelua/community/api/*", "zone_name": "spacegho.st"}],
+  "routes": [
+    {"pattern": "spacegho.st/nelua/community/api/*", "zone_name": "spacegho.st"},
+    {"pattern": "nelua.tech/nelua/community/api/private-totals", "zone_name": "nelua.tech"}
+  ],
   "d1_databases": [{
     "binding": "DB",
     "database_name": "nelua-community",

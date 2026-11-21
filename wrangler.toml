@@ -5,8 +5,9 @@ compatibility_date = "2026-10-01"
 workers_dev = false
 preview_urls = false
 
-# Exactly the /nelua prefix on spacegho.st; every other route on the zone is untouched.
+# Serve the apex and the existing spacegho.st project paths.
 routes = [
+  { pattern = "nelua.tech", custom_domain = true },
   { pattern = "spacegho.st/nelua", zone_name = "spacegho.st" },
   { pattern = "spacegho.st/nelua/*", zone_name = "spacegho.st" }
 ]

@@ -43,7 +43,7 @@ def documentFor page
 			if view.description
 				<meta name="description" content=view.description>
 			if page.path != '/nelua/404.html'
-				<link rel="canonical" href=('https://spacegho.st' + page.path)>
+				<link rel="canonical" href=(page.path == '/nelua/' ? 'https://nelua.tech/' : 'https://nelua.tech' + page.path)>
 			<link rel="stylesheet" href=asset('/nelua/assets/site.css')>
 			<link rel="icon" href="/nelua/assets/icon.svg" type="image/svg+xml">
 			if page.stylesheet
@@ -63,7 +63,7 @@ def documentFor page
 				<main id="main" html:tabindex="-1">
 					page.body
 				<footer>
-					<a className="footer-home" href="/nelua/"> 'Nelua at spacegho.st'
+					<a className="footer-home" href="/nelua/"> 'Nelua'
 					if view.footerLinks
 						view.footerLinks()
 					else
@@ -105,5 +105,7 @@ for page in pages
 		mkdirSync('public' + page.path, { recursive: true })
 	const html = documentFor(page).outerHTML.replace(/^<!DOCTYPE html>/, '<!doctype html>\n')
 	writeFileSync(output, html + '\n')
+
+copyFileSync('public/nelua/index.html', 'public/index.html')
 
 console.log("Rendered {pages.length} Nelua pages")

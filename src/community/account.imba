@@ -99,6 +99,9 @@ root.addEventListener('click', do(event)
 		button.disabled = false
 )
 
-refresh().catch(do
-	status.textContent = 'Account access is temporarily unavailable. The public index remains available.'
-)
+if location.hostname == 'nelua.tech'
+	status.innerHTML = '<a href="https://spacegho.st/nelua/community/#private-projects">Manage your community account on spacegho.st</a>'
+else
+	refresh().catch(do
+		status.textContent = 'Account access is temporarily unavailable. The public index remains available.'
+	)

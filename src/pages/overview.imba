@@ -61,7 +61,7 @@ export def body comparison
 				<a href="/nelua/compiler/comptime/"> 'Compile-time record configs'
 		<section className="overview-section" aria-labelledby="performance">
 			<h2 id="performance"> 'Core performance'
-			<p> 'The 21 November 2026 shootout covers the compiler, C library, linker and build runner. Each result includes workloads, baselines and individual samples.'
+			<p> 'Each project names the workloads, hardware and baselines used for its timings. Open a comparison for the measured results and individual samples.'
 			<div className="core-guides">
 				<a href="/nelua/compiler/#performance"> 'Nelua syntax checks and C generation'
 				<a href="/nelua/nelibc/#performance"> 'C library routines'

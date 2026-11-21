@@ -123,6 +123,19 @@ if followup.get('headline_case')=='first-sparse-then-dense':
          f'Native glibc took {times["baseline"]/1000:.2f} µs. The median paired speedup over the previous Nelibc was {gain:.1f}×.</p>'
          '<p>The input starts with 16 <code>b</code> bytes followed by <code>a</code> bytes and contains no <code>abaa</code>. '
          '<a href="#substring-repeat">Compare all three 64 KiB inputs.</a></p>')
+elif followup.get('headline_case')=='memchr-absent-8':
+ measured=find('cosmopolitan','memchr-absent',8)
+ block+=(f'<p class="lead">For an 8-byte buffer with no matching byte, the Cosmopolitan consumer measured '
+         f'<strong>{measured["previous_ns"]:.2f} ns with previous Nelibc, {measured["nelibc_ns"]:.2f} ns with current Nelibc, '
+         f'and {measured["baseline_ns"]:.2f} ns with Cosmopolitan alone</strong>. Paired median ratios were '
+         f'{measured["speedup_vs_previous"]:.2f}× previous/current '
+         f'({measured["previous_ratio_min"]:.2f}–{measured["previous_ratio_max"]:.2f}× observed) and '
+         f'{measured["speedup"]:.2f}× native/current '
+         f'({measured["ratio_min"]:.2f}–{measured["ratio_max"]:.2f}× observed).</p>'
+         '<p>This is the fixed 8-byte absent-match case from the paired benchmark; it does not measure other '
+         'lengths, match positions, alignments, or page-boundary behavior. '
+         '<a href="/nelua/assets/comparison-20261121-gap-fixes/reproduce.md">Reproduce the previous immutable comparison</a> · '
+         '<a href="/nelua/assets/comparison-20261121-gap-fixes/summary.csv">See its summary</a>.</p>')
 else:
  block+=phase_headline(data, rows)
 block+=f'<p>Each profile compares the same consumer with and without Nelibc. Speedups above 1× favor Nelibc. <a href="#all-results">Browse {len(rows)} results across {len(labels)} profiles.</a></p></div>'
@@ -149,26 +162,40 @@ performance=[]
 for case,size in selected:
  performance.append([esc(case)+(f' · {size:,} B' if size else ''),*[ratio(find(p,case,size)) for p in labels]])
 if any('previous_ns' in r for r in rows):
- block+='<h3 id="gap-reduction">Optimization follow-up: the previous revision and the measured revision</h3><p>The previous production archives were saved before changing the implementations. Each profile now rotates three builds of the same consumer: libc alone, the previous Nelibc candidate, and the new candidate. This table uses GCC/glibc only. The three builds run in rotating order on the same CPU.</p>'
+ focus_profile=followup.get('focus_profile','glibc')
+ assert focus_profile in labels
+ block+=f'<h3 id="gap-reduction">Optimization follow-up: the previous revision and the measured revision</h3><p>The previous production archives were saved before changing the implementations. Each profile now rotates three builds of the same consumer: libc alone, the previous Nelibc candidate, and the new candidate. This table uses {labels[focus_profile]} only. The three builds run in rotating order on the same CPU.</p>'
  improvements=[]
  for case,size in followup.get('cases',[('memcpy',128),('memcpy',1024),('memset',1024),('memcmp-equal',8),('memchr-absent',1024),('strlen',1024),('strcmp-equal',32)]):
-  r=find('glibc',case,size)
+  r=find(focus_profile,case,size)
   improvements.append([esc(case)+(f' · {size} B' if size else ''),f'{r["previous_ns"]:.2f}',f'{r["nelibc_ns"]:.2f}',f'{r["baseline_ns"]:.2f}',f'{r["speedup_vs_previous"]:.2f}×'])
- block+=table('GCC/glibc, seven rotating process triplets; nanoseconds per operation',['Case','Previous Nelibc','New Nelibc','glibc alone','Gain vs previous'],improvements)
+ block+=table(f'{labels[focus_profile]}, rotating process triplets; nanoseconds per operation',['Case','Previous Nelibc','New Nelibc',labels[focus_profile]+' alone','Gain vs previous'],improvements)
  block+='<p>'+esc(followup.get('changes','Changes: bounded head/tail copies and fills, runtime AVX2 paths for mid-size buffers and long strings, word-sized tiny comparisons, and fewer page checks on short strings. Read-only queries carry C purity metadata; operations that write memory or errno retain their effects.'))+' The timed wrappers keep calls observable, so these gains measure the implementations. Slower cases and all raw samples remain below.</p>'
  for case,size in followup.get('tradeoffs', [('memset',8),('memchr-absent',8)]):
-  r=find('glibc',case,size)
-  block+=f'<p class="small muted">Tradeoff: {esc(case)}({size}) measured {r["previous_ns"]:.2f} → {r["nelibc_ns"]:.2f} ns; glibc alone {r["baseline_ns"]:.2f} ns.</p>'
+  r=find(focus_profile,case,size)
+  block+=f'<p class="small muted">Tradeoff: {esc(case)}({size}) measured {r["previous_ns"]:.2f} → {r["nelibc_ns"]:.2f} ns; {labels[focus_profile]} alone {r["baseline_ns"]:.2f} ns.</p>'
  if (data/'strcmp-distribution.json').exists():
   r=next(r for r in load('strcmp-distribution.json') if r['bytes']==65536 and r['left_offset']==r['right_offset']==0 and r['case']=='equal')
   ns=r['median_ns']
   block+=f'<p class="small muted">The separate alignment consumer measured equal 64 KiB strcmp at offsets (0,0): previous {ns["previous"]:.2f}, new {ns["candidate"]:.2f}, glibc {ns["baseline"]:.2f} ns. Long-string results differ between consumers; the headline gains do not mean every case improved.</p>'
  evidence_links=[('validation.json','Independent numerical and guard-page checks'),('optimization-notes.md','Optimization notes and verification'),('strcmp-distribution.json','String alignment/mismatch results'),('memory-distribution.json','Memory alignment results'),('scan-distribution.json','Length/search alignment and match positions'),('previous-source.tar.gz','Previous candidate source'),('strstr-distribution.csv','Substring input distributions'),('strstr-phase-controls.csv','Changing-byte-frequency controls'),('before-summary.csv','Pre-change run on the build host'),('before-raw.csv','Pre-change raw pairs'),('before-manifest.json','Pre-change build manifest'),('reproduce.md','Reproduce this comparison'),('preliminary-conformance.json','Earlier candidate under I/O load')]
+ if (data/'memchr-controls.csv').is_file(): evidence_links.append(('memchr-controls.csv','Memchr length, alignment and hit-position controls'))
+ if (data/'memchr-controls-raw.csv.gz').is_file(): evidence_links.append(('memchr-controls-raw.csv.gz','Raw memchr control samples'))
  block+='<p>'+' · '.join(f'<a href="{url}/{file}">{label}</a>' for file,label in evidence_links if (data/file).exists())+'</p>'
  if source_commit:
   block+=f'<p>Measured revisions: <code>{esc(meta["previous_commit"][:12])}</code> before the change and <code>{esc(source_commit[:12])}</code> after it. The manifest identifies each linked archive by SHA-256.</p>'
  else:
   block+='<p><a href="/nelua/assets/comparison-20261117/manifest.json">Original comparison manifest</a>. '+('The dated comparison snapshots remain the exact sources measured; the integrated tree also includes the build, test and benchmark fixes recorded in the full gate above.' if gate else 'The new source is still an unmerged candidate; the repository’s full integration gate remains separate from these focused checks and the independent corpus.')+'</p>'
+ if followup.get('headline_case')=='memchr-absent-8':
+  assert source_commit and (data/'memchr-controls.csv').is_file()
+  controls_url=f'{url}/memchr-controls.csv'
+  raw_controls=f' · <a href="{url}/memchr-controls-raw.csv.gz">Paired raw control samples</a>' if (data/'memchr-controls-raw.csv.gz').is_file() else ''
+  block+=(f'<p>Source revisions: previous <code>{esc(meta["previous_commit"])}</code>, measured <code>{esc(source_commit)}</code>. '
+          f'<a href="{url}/manifest.json">Run manifest and archive identities</a> · '
+          f'<a href="{url}/raw.csv">Matched benchmark samples</a> · '
+          f'<a href="{controls_url}">Memchr length, alignment and hit-position controls</a>{raw_controls} · '
+          f'<a href="{url}/reproduce.md">Reproduce this comparison</a> · '
+          '<a href="/nelua/assets/comparison-20261121-gap-fixes/reproduce.md">Reproduce the previous immutable comparison</a>.</p>')
 block+=table('Representative cases, median of seven paired speedups', ['Case','glibc → +Nelibc','musl/Zig → +Nelibc','Cosmopolitan → +Nelibc'],performance)
 block+=f'''<p class="small muted">{meta['pairs']} comparison rounds ({'rotating triplets with the previous candidate' if 'previous_archive_sha256' in meta else 'alternating pairs'}), rotating profile order. Each timed loop runs for at least 5 ms after calibration. Consumer flags include <code>-O2 -fno-builtin</code>; volatile pointers to noinline direct-call wrappers stop pure-function calls being hoisted out of the loop. The same wrappers are used in every profile. Taking the address of Cosmopolitan 4.0.2’s strstr IFUNC failed in this toolchain; direct calls passed, so this measures the direct-call path and does not establish function-pointer ABI conformance. Loop, pointer-call and checksum overhead is included equally, not subtracted. Buffers are hot and aligned; this is not a DRAM bandwidth, cold-cache, multicore or application throughput result. The record parser is a synthetic combined workload; qsort includes initializing its input, and malloc/free includes writing the first and last byte.</p>
 '''

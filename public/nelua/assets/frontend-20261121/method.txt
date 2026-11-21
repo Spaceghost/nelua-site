@@ -1,0 +1,38 @@
+Nelua frontend benchmark, 2026-11-21 (x86-64)
+Baseline  5995eba598541d75d6a2557b73994a15c0922c58
+Candidate 874acdd1049a35bc5d8d631d9ddb573d127fc32b
+Linux, Debian 12 userspace, Intel Core i7-11700F, CPU 3, performance governor.
+GCC 12.2.0 built the bundled Lua 5.4.6 interpreter; its binary was identical in both trees.
+
+The timer starts just before launching the nelua CLI and stops when it exits.
+-c includes parsing, analysis, generating C and writing the output file. The resulting
+C program is not compiled or executed inside the measurement. --lint parses the source
+and applies file-local syntax extensions. Each invocation starts a fresh compiler.
+Two independent batches each start with one untimed warm-up pair per input, followed by 15 measured pairs. Workload order rotates and
+the older/newer revision goes first on alternate rounds for each input. OS file caches
+and the explicit shared compiler cache are warm. No timing samples were removed.
+Revisions use the same absolute staging and output paths. Each emitted C file is hashed
+outside the timer and compared to the first result for that input. A mismatch aborts.
+The table divides the pooled median baseline time by the pooled median candidate time.
+Batch 1 used 0e1cb4a13ee24b7d4f03057c4f1dc6efb8223a25 and batch 2 used the candidate above.
+The sole intervening change was a spec assertion. All benchmark inputs, compiler sources,
+launchers and the harness were identical. Batch IDs in samples.csv preserve each run.
+Other project pages report independent experiments with different hardware or build profiles.
+
+Inputs: examples/helloworld.nelua, examples/matmul.nelua, tests/all_test.nelua,
+examples/syntax_tour.nelua from each revision, plus one generated function containing
+2,048 comparisons against distinct negative integers. That last fixture intentionally
+requests a large number of diagnostic source locations.
+
+Reproduce on Linux in an environment with access to the Nelua fork:
+  git clone https://github.com/Spaceghost/nelua.git frontend
+  git -C frontend checkout 874acdd1049a35bc5d8d631d9ddb573d127fc32b
+  git -C frontend worktree add --detach ../frontend-before 5995eba598541d75d6a2557b73994a15c0922c58
+  make -C frontend-before
+  cp frontend-before/nelua-lua frontend/nelua-lua
+  taskset -c 3 python3 frontend/tools/bench-frontend.py frontend-before frontend --rounds 15 > samples.csv
+
+Run the harness twice to reproduce the two batches, saving each CSV separately.
+Choose a CPU available to your process. Timings are nanoseconds in the CSV.
+Position is the execution order within each pair. Output bytes is zero for silent lint
+success. Times and file lengths can vary between machines and temporary directory paths.

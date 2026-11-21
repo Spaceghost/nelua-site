@@ -1,6 +1,14 @@
 export const title = "Nelua compiler fork · spacegho.st/nelua"
 export const description = "Spaceghost/nelua: upstream Nelua plus variants, optionals, an exhaustive match statement, owned records with move, closures, structured compile-time evaluation, const pointers, a compiler-enforced freestanding pragma, cross-compilation with --target and nelua-bindgen."
 
+const frontendTimings = [
+	["Check syntax · extension tour", "38.16", "23.90", "1.60×"]
+	["Emit C · hello world", "29.47", "29.30", "1.01×"]
+	["Emit C · matrix multiplication", "131.19", "130.63", "1.00×"]
+	["Emit C · standard library test suite", "1,383.74", "1,379.74", "1.00×"]
+	["Emit C · 2,048 runtime assertions (synthetic)", "282.06", "146.39", "1.93×"]
+]
+
 export def body
 	<div className="page-content">
 		<section className="hero">
@@ -24,20 +32,42 @@ export def body
 				" walks through each one with examples."
 			<p className="stats">
 				<span>
-					<strong> "Base"
+					<strong> "Upstream base"
 					" a584505 · 2025-06-24"
 				<span>
-					<strong> "102 commits"
-					" past upstream, 11 additions"
+					<strong> "609 specs passed"
+					" · 2026-11-21"
 				<span>
-					<strong> "566 specs"
-					" green on master "
-					<code> "f745ca8"
-				<span> "updated 2026-11-07"
+					<strong> "Fork revision "
+					<code> "874acdd"
 			<p>
 				<a href="/nelua/necc/"> 'necc'
 				' packages this frontend with a standalone Linux toolchain.'
 		<div className="page-details">
+			<h2 className="section" id="performance"> 'Frontend compile times'
+			<p>
+				'On '
+				<time html:datetime="2026-11-21"> '21 November 2026'
+				', the two biggest differences came from syntax checking and source-location lookups. A syntax-only invocation can skip the built-in code generator and analyzer. During C generation, the compiler now indexes source line breaks once per file so repeated runtime diagnostics can find their source locations cheaply.'
+			<div className="table-wrap" role="region" aria-label="Median frontend wall time in milliseconds" html:tabindex="0">
+				<table>
+					<thead>
+						<tr>
+							<th scope="col"> 'Workload'
+							<th className="num" scope="col"> '5995eba (ms)'
+								<th className="num" scope="col"> '874acdd (ms)'
+								<th className="num" scope="col"> 'Old / new'
+					<tbody>
+						for row in frontendTimings
+							<tr>
+								<th scope="row"> row[0]
+								<td className="num"> row[1]
+								<td className="num"> row[2]
+								<td className="num"> row[3]
+			<p> 'Each median covers 30 alternating pairs in two batches on one Intel Core i7-11700F logical CPU under Debian 12. A fresh process parsed the input and either exited after the syntax check or wrote C. All four C workloads produced byte-identical output across the two revisions. The 2,048-assertion fixture compiled 1.93× as fast. Hello world, matrix multiplication and the standard library suite moved by less than 1% in the pooled medians.'
+			<p className="upstream-links">
+				<a href="/nelua/assets/frontend-20261121/samples.csv"> 'All 300 samples (CSV)'
+				<a href="/nelua/assets/frontend-20261121/method.txt"> 'Method and reproduction'
 			<h2 className="section"> "What the fork adds"
 			<p className="lead">
 				"Everything below is opt-in syntax or tooling. Code written for upstream Nelua compiles unchanged. The first five are language features that fit together: variants and optionals carry \"one of these\" data, "
@@ -314,9 +344,9 @@ export def body
 				<dt> "Specs"
 				<dd>
 					<code> "make test"
-					" runs upstream's spec suite plus the fork's specs (const pointers, freestanding, target, bindgen, variant, optional, match, ownership, closures, the batteries libraries, comptime). Last run: 566 specs on master "
-					<code> "f745ca8"
-					", 2026-11-07, all green except one that needs libasan on the machine that ran it."
+					" runs upstream's spec suite plus the fork's specs (const pointers, freestanding, target, bindgen, variant, optional, match, ownership, closures, the batteries libraries, comptime). All 609 specs passed on 21 November 2026 at fork revision "
+					<code> "874acdd"
+					" using Clang 23 and Bend 2.0.40."
 				<dt> "Examples"
 				<dd> "Every example in the fork guide was compiled and run with the checkout it documents and prints what its comments say."
 				<dt> "Consumers"

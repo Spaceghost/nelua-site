@@ -59,6 +59,15 @@ export def body comparison
 			<div className="core-guides">
 				<a href="/nelua/compiler/syntax-extensions/"> 'Syntax extensions guide'
 				<a href="/nelua/compiler/comptime/"> 'Compile-time record configs'
+		<section className="overview-section" aria-labelledby="performance">
+			<h2 id="performance"> 'Core performance'
+			<p> 'The 21 November 2026 shootout covers the compiler, C library, linker and build runner. Each result includes workloads, baselines and individual samples.'
+			<div className="core-guides">
+				<a href="/nelua/compiler/#performance"> 'Nelua syntax checks and C generation'
+				<a href="/nelua/nelibc/#performance"> 'C library routines'
+				<a href="/nelua/necc/#benchmarks"> 'C compilation and program runtime'
+				<a href="/nelua/nelinker/#benchmarks"> 'Linking and archive creation'
+				<a href="/nelua/nebuild/#benchmarks"> 'Incremental builds'
 		<section className="overview-section" aria-labelledby="libc-comparison">
 			<div innerHTML=comparison>
 		<section className="overview-section" aria-labelledby="build">

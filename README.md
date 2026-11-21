@@ -1,8 +1,8 @@
 # nelua-site
 
-The pages at [spacegho.st/nelua](https://spacegho.st/nelua/): the Nelua core
-ecosystem (the compiler fork, nelibc, nebox), the workshop libraries built on
-it, and the wider Nelua world.
+The pages at [spacegho.st/nelua](https://spacegho.st/nelua/) cover the Nelua
+compiler fork, nelibc, nebox, necc, nelinker, nebuild, and Theseus Init. They
+also cover workshop projects built on Core and the wider Nelua community.
 
 ## Layout
 

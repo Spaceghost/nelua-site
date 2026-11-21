@@ -1,0 +1,98 @@
+{
+  "explicit-syscall/nelinker": {
+    "passed": true,
+    "file_bytes": 4378
+  },
+  "explicit-syscall/GNU-bfd": {
+    "passed": true,
+    "file_bytes": 8544
+  },
+  "explicit-syscall/GNU-gold": {
+    "passed": false,
+    "reason": "[Errno 2] No such file or directory: 'ld.gold'"
+  },
+  "explicit-syscall/TinyCC": {
+    "passed": true,
+    "file_bytes": 1160
+  },
+  "sdk-one-member/nelinker": {
+    "passed": true,
+    "file_bytes": 4378
+  },
+  "sdk-one-member/GNU-bfd": {
+    "passed": true,
+    "file_bytes": 8544
+  },
+  "sdk-one-member/GNU-gold": {
+    "passed": false,
+    "reason": "[Errno 2] No such file or directory: 'ld.gold'"
+  },
+  "sdk-one-member/TinyCC": {
+    "passed": true,
+    "file_bytes": 1160
+  },
+  "one-of-256/nelinker": {
+    "passed": true,
+    "file_bytes": 196
+  },
+  "one-of-256/GNU-bfd": {
+    "passed": true,
+    "file_bytes": 4328
+  },
+  "one-of-256/GNU-gold": {
+    "passed": false,
+    "reason": "[Errno 2] No such file or directory: 'ld.gold'"
+  },
+  "one-of-256/TinyCC": {
+    "passed": true,
+    "file_bytes": 719
+  },
+  "reverse-chain-256/nelinker": {
+    "passed": true,
+    "file_bytes": 2491
+  },
+  "reverse-chain-256/GNU-bfd": {
+    "passed": true,
+    "file_bytes": 6624
+  },
+  "reverse-chain-256/GNU-gold": {
+    "passed": false,
+    "reason": "[Errno 2] No such file or directory: 'ld.gold'"
+  },
+  "reverse-chain-256/TinyCC": {
+    "passed": true,
+    "file_bytes": 3015
+  },
+  "whole-256/nelinker": {
+    "passed": true,
+    "file_bytes": 1726
+  },
+  "whole-256/GNU-bfd": {
+    "passed": true,
+    "file_bytes": 5856
+  },
+  "whole-256/GNU-gold": {
+    "passed": false,
+    "reason": "[Errno 2] No such file or directory: 'ld.gold'"
+  },
+  "whole-256/TinyCC": {
+    "passed": true,
+    "file_bytes": 2247
+  },
+  "whole-sdk-allocator/nelinker": {
+    "passed": true,
+    "file_bytes": 995860
+  },
+  "whole-sdk-allocator/GNU-bfd": {
+    "passed": false,
+    "reason": "linked program exceeded 1 s runtime deadline"
+  },
+  "whole-sdk-allocator/GNU-gold": {
+    "passed": false,
+    "reason": "[Errno 2] No such file or directory: 'ld.gold'"
+  },
+  "whole-sdk-allocator/TinyCC": {
+    "passed": true,
+    "file_bytes": 992583
+  }
+}

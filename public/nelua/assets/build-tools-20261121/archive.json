@@ -1,0 +1,22 @@
+{
+  "host": "x86_64",
+  "kernel": "6.18.54-0-lts",
+  "cpu": 5,
+  "load_start": [
+    9.5546875,
+    14.1416015625,
+    13.60888671875
+  ],
+  "rounds": 31,
+  "warmups": 3,
+  "comparator": "GNU ar (GNU Binutils) 2.45.1",
+  "binary_sha256": {
+    "before": "12c817c2f1a093b347cc6b47da6a96465741a8a199cc79b8eec35fd2a8859e8d",
+    "after": "863d54f5ef08ffe8ec30c2540824b3244442723e9bd0fc7cdbc1ad78bed4f770"
+  },
+  "load_end": [
+    9.5546875,
+    14.1416015625,
+    13.60888671875
+  ]
+}

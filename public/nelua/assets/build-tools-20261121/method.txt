@@ -1,0 +1,54 @@
+Linker and incremental build measurements on Linux x86-64
+21 November 2026
+
+The paired runs used an Intel Core i5-10400 and one logical CPU (5) on Alpine Linux, kernel 6.18.54-0-lts, with a warm ZFS workspace. Sibling CPU 11 was reserved from other benchmark jobs. Other workloads ran on the host. These measurements include process startup and warm file I/O. Read the per-round wall and child CPU milliseconds to examine spread.
+
+Source revisions and tool versions
+
+  nelinker    0c27372 -> 58a38e7
+  nebuild     0441e93 -> 60d1200
+  GNU ar      binutils 2.45.1
+  GNU make    4.4.1
+  Ninja       1.13.2
+
+Each before/after pair used the same standalone necc driver, staged Nelua frontend, TinyCC backend and static Nelibc. The checks also passed on binaries compiled with the independent native necc backend. Timing used the TinyCC-built binaries. The SDK's necc driver, TinyCC and libnelibc.a had these SHA-256 digests.
+
+  necc          2b1cfc407876533c795c7118081a2aa27af32e5746b7429bbfb0e2ef408702ae
+  tcc           9b1ff67ab808384fe12e03b15183ff2110c4e555cc87e6a1fe6b0013c85d8795
+  libnelibc.a   ee83d55a02a33755bb5131977f17d8eae5a1c176c045318125496d0d2186635f
+
+Build each source revision using the same SDK. Set NECC_SYSROOT to the staged SDK and put its necc driver on PATH. In the corresponding repository, run these commands, giving each revision its own output filename.
+
+  (cd src && NECC_NELINKER= necc --release nelinker.nelua -o ../nelinker)
+  (cd src && NECC_NELINKER= necc --release nebuild.nelua -o ../nebuild)
+
+Download the paired harness at https://spacegho.st/nelua/assets/build-tools-20261121/bench.py and run it with Python 3, GNU binutils, GNU make and Ninja. Set TMPDIR to an existing scratch directory on the intended benchmark filesystem. Replace 5 with an available logical CPU.
+
+  python3 bench.py archive ./nelinker-before ./nelinker-after --cpu 5 --rounds 31 --output results
+  python3 bench.py incremental ./nebuild-before ./nebuild-after --cpu 5 --rounds 31 --output results
+
+The harness shuffles tool order within each round with a fixed seed and discards three warm-up rounds. The archive writer receives the same 256 individually assembled inputs, in order, and starts with an absent output. The reader benchmark holds the new linker constant and chooses the archive from each writer. GNU ar checks the member names, GNU nm checks the 256-symbol index, every repeat is checked for determinism, and both GNU ld and nelinker produce an executable returning 42. The recorded byte count refers to the archive during creation and to the executable during linking.
+
+The build graphs use the same declared inputs, outputs and copy command. The selected target is primed in each tool before timing. Each sample runs in a fresh process, reads the entire manifest, checks the same single target and verifies its contents and modification time. Recipe execution and full-graph scheduling are separate workloads. GNU make uses file timestamps, Ninja also keeps a command log, and nebuild checks command signatures and input metadata.
+
+Paired data and tool manifests are beside this file.
+
+  archive.csv       archive creation and lookup, one row per timing
+  archive.json      kernel, affinity, host load and executable SHA-256 digests
+  incremental.csv   unchanged-target runs, one row per timing
+  incremental.json  kernel, affinity, host load and executable SHA-256 digests
+
+Additional linker check
+
+The archive shootout harness from 19 November 2026 was rerun for 15 measured rounds plus one warm-up on CPU 5, with the new linker, GNU ld.bfd and the SDK's TinyCC. Timings include process startup under the historical runner's timeout policy. Each linked executable had to return 42 within one second before its pair was admitted. The host lacked GNU gold. The whole-SDK allocator produced by GNU ld.bfd missed its execution deadline. Seventeen of eighteen available linker/workload pairs passed. The scores apply to those pairs. The historical 11-workload comparison also used other toolchains and hardware conditions.
+
+Place bench_archives.py from this directory next to tests/check_archives.py from nelinker revision 58a38e7, then run from that repository.
+
+  python3 tests/bench_archives.py ./nelinker "$NECC_SYSROOT" results --cpus 5 --rounds 15
+
+  link-summary.csv  median, quartiles and executable bytes per qualifying pair
+  link-samples.csv  individual wall-clock nanoseconds
+  link-checks.json  each runtime qualification or exclusion
+
+  https://github.com/Spaceghost/nelinker/commit/58a38e7
+  https://github.com/Spaceghost/nebuild/commit/60d1200

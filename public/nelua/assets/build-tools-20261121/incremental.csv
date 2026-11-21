@@ -1,0 +1,249 @@
+case,tool,round,wall_ms,child_cpu_ms,output_bytes
+unchanged-target-256-rules,before,1,3.2101,2.933,3
+unchanged-target-256-rules,GNU make,1,0.95078,0.71,3
+unchanged-target-256-rules,Ninja,1,2.40414,2.18,3
+unchanged-target-256-rules,after,1,0.82247,0.626,3
+unchanged-target-256-rules,before,2,3.07553,2.88,3
+unchanged-target-256-rules,GNU make,2,0.8925,0.688,3
+unchanged-target-256-rules,after,2,0.7669,0.597,3
+unchanged-target-256-rules,Ninja,2,2.36239,2.114,3
+unchanged-target-256-rules,before,3,3.10167,2.898,3
+unchanged-target-256-rules,GNU make,3,0.93914,0.713,3
+unchanged-target-256-rules,Ninja,3,2.46685,2.229,3
+unchanged-target-256-rules,after,3,0.82362,0.63,3
+unchanged-target-256-rules,before,4,3.10545,2.902,3
+unchanged-target-256-rules,GNU make,4,0.92755,0.714,3
+unchanged-target-256-rules,Ninja,4,2.4596,2.207,3
+unchanged-target-256-rules,after,4,0.79905,0.615,3
+unchanged-target-256-rules,Ninja,5,2.28668,2.062,3
+unchanged-target-256-rules,before,5,3.89325,3.045,3
+unchanged-target-256-rules,GNU make,5,0.97517,0.733,3
+unchanged-target-256-rules,after,5,0.81364,0.626,3
+unchanged-target-256-rules,GNU make,6,1.00974,0.703,3
+unchanged-target-256-rules,after,6,0.89389,0.617,3
+unchanged-target-256-rules,Ninja,6,2.56191,2.33,3
+unchanged-target-256-rules,before,6,3.1409,2.927,3
+unchanged-target-256-rules,before,7,3.06534,2.889,3
+unchanged-target-256-rules,Ninja,7,2.677,2.381,3
+unchanged-target-256-rules,after,7,0.86127,0.667,3
+unchanged-target-256-rules,GNU make,7,0.92087,0.701,3
+unchanged-target-256-rules,Ninja,8,2.51001,2.247,3
+unchanged-target-256-rules,before,8,3.41088,3.162,3
+unchanged-target-256-rules,after,8,1.05112,0.626,3
+unchanged-target-256-rules,GNU make,8,0.93734,0.722,3
+unchanged-target-256-rules,GNU make,9,0.8737,0.67,3
+unchanged-target-256-rules,before,9,3.10918,2.928,3
+unchanged-target-256-rules,Ninja,9,2.81618,2.4,3
+unchanged-target-256-rules,after,9,0.80276,0.624,3
+unchanged-target-256-rules,before,10,3.07531,2.883,3
+unchanged-target-256-rules,after,10,0.84664,0.617,3
+unchanged-target-256-rules,GNU make,10,1.09182,0.802,3
+unchanged-target-256-rules,Ninja,10,2.59056,2.325,3
+unchanged-target-256-rules,Ninja,11,2.50543,2.259,3
+unchanged-target-256-rules,after,11,0.83391,0.62,3
+unchanged-target-256-rules,GNU make,11,0.89974,0.692,3
+unchanged-target-256-rules,before,11,3.08967,2.9,3
+unchanged-target-256-rules,before,12,3.03,2.86,3
+unchanged-target-256-rules,after,12,0.78421,0.616,3
+unchanged-target-256-rules,GNU make,12,0.93832,0.701,3
+unchanged-target-256-rules,Ninja,12,2.43399,2.212,3
+unchanged-target-256-rules,before,13,3.09439,2.878,3
+unchanged-target-256-rules,GNU make,13,0.88006,0.675,3
+unchanged-target-256-rules,after,13,0.78105,0.602,3
+unchanged-target-256-rules,Ninja,13,2.33892,2.119,3
+unchanged-target-256-rules,Ninja,14,2.26594,2.02,3
+unchanged-target-256-rules,before,14,3.06309,2.889,3
+unchanged-target-256-rules,GNU make,14,1.11321,0.748,3
+unchanged-target-256-rules,after,14,0.78521,0.618,3
+unchanged-target-256-rules,after,15,0.75625,0.586,3
+unchanged-target-256-rules,Ninja,15,2.3748,2.133,3
+unchanged-target-256-rules,before,15,3.21847,2.97,3
+unchanged-target-256-rules,GNU make,15,0.94387,0.724,3
+unchanged-target-256-rules,after,16,0.78902,0.615,3
+unchanged-target-256-rules,Ninja,16,2.52736,2.258,3
+unchanged-target-256-rules,GNU make,16,0.91213,0.702,3
+unchanged-target-256-rules,before,16,3.22126,2.945,3
+unchanged-target-256-rules,Ninja,17,2.49087,2.245,3
+unchanged-target-256-rules,before,17,3.1282,2.909,3
+unchanged-target-256-rules,after,17,1.21274,0.684,3
+unchanged-target-256-rules,GNU make,17,0.97597,0.734,3
+unchanged-target-256-rules,Ninja,18,2.61243,2.322,3
+unchanged-target-256-rules,GNU make,18,1.13968,0.831,3
+unchanged-target-256-rules,before,18,3.25173,3.022,3
+unchanged-target-256-rules,after,18,0.81283,0.623,3
+unchanged-target-256-rules,before,19,3.19346,2.961,3
+unchanged-target-256-rules,Ninja,19,2.70088,2.413,3
+unchanged-target-256-rules,GNU make,19,0.98675,0.722,3
+unchanged-target-256-rules,after,19,0.85076,0.651,3
+unchanged-target-256-rules,GNU make,20,1.18802,0.783,3
+unchanged-target-256-rules,after,20,0.78178,0.609,3
+unchanged-target-256-rules,Ninja,20,2.94433,2.659,3
+unchanged-target-256-rules,before,20,3.27772,3.07,3
+unchanged-target-256-rules,Ninja,21,2.81298,2.489,3
+unchanged-target-256-rules,GNU make,21,1.22132,0.787,3
+unchanged-target-256-rules,before,21,5.01612,3.049,3
+unchanged-target-256-rules,after,21,0.84501,0.64,3
+unchanged-target-256-rules,before,22,4.4513,4.154,3
+unchanged-target-256-rules,after,22,1.15541,0.908,3
+unchanged-target-256-rules,Ninja,22,3.59248,3.32,3
+unchanged-target-256-rules,GNU make,22,1.39797,1.135,3
+unchanged-target-256-rules,Ninja,23,3.36979,3.049,3
+unchanged-target-256-rules,after,23,1.27917,0.999,3
+unchanged-target-256-rules,before,23,4.07651,3.797,3
+unchanged-target-256-rules,GNU make,23,1.3293,1.051,3
+unchanged-target-256-rules,after,24,1.08878,0.851,3
+unchanged-target-256-rules,GNU make,24,1.19045,0.955,3
+unchanged-target-256-rules,Ninja,24,3.02504,2.729,3
+unchanged-target-256-rules,before,24,4.26696,4.031,3
+unchanged-target-256-rules,before,25,4.35533,4.092,3
+unchanged-target-256-rules,GNU make,25,1.53596,1.149,3
+unchanged-target-256-rules,after,25,1.14575,0.889,3
+unchanged-target-256-rules,Ninja,25,3.49488,3.173,3
+unchanged-target-256-rules,after,26,0.94335,0.723,3
+unchanged-target-256-rules,GNU make,26,1.25177,0.983,3
+unchanged-target-256-rules,Ninja,26,3.88807,3.465,3
+unchanged-target-256-rules,before,26,4.74625,4.434,3
+unchanged-target-256-rules,Ninja,27,3.62743,3.284,3
+unchanged-target-256-rules,before,27,5.10068,4.756,3
+unchanged-target-256-rules,GNU make,27,1.45682,1.124,3
+unchanged-target-256-rules,after,27,1.16629,0.924,3
+unchanged-target-256-rules,after,28,1.09047,0.852,3
+unchanged-target-256-rules,GNU make,28,1.37409,1.093,3
+unchanged-target-256-rules,before,28,3.56324,3.334,3
+unchanged-target-256-rules,Ninja,28,2.74995,2.44,3
+unchanged-target-256-rules,before,29,3.29811,3.068,3
+unchanged-target-256-rules,after,29,0.86851,0.663,3
+unchanged-target-256-rules,GNU make,29,1.33045,1.069,3
+unchanged-target-256-rules,Ninja,29,2.71224,2.449,3
+unchanged-target-256-rules,Ninja,30,2.71828,2.357,3
+unchanged-target-256-rules,after,30,1.22591,0.844,3
+unchanged-target-256-rules,GNU make,30,1.08984,0.817,3
+unchanged-target-256-rules,before,30,3.36221,3.149,3
+unchanged-target-256-rules,before,31,3.16654,2.946,3
+unchanged-target-256-rules,GNU make,31,0.96673,0.744,3
+unchanged-target-256-rules,Ninja,31,2.72837,2.374,3
+unchanged-target-256-rules,after,31,0.8382,0.638,3
+unchanged-target-2048-rules,before,1,22.93572,22.594,3
+unchanged-target-2048-rules,GNU make,1,4.13542,3.833,3
+unchanged-target-2048-rules,Ninja,1,3.79283,3.543,3
+unchanged-target-2048-rules,after,1,3.75879,3.569,3
+unchanged-target-2048-rules,before,2,22.85525,22.467,3
+unchanged-target-2048-rules,GNU make,2,4.02797,3.767,3
+unchanged-target-2048-rules,after,2,3.68962,3.505,3
+unchanged-target-2048-rules,Ninja,2,3.87508,3.586,3
+unchanged-target-2048-rules,before,3,23.15231,22.763,3
+unchanged-target-2048-rules,GNU make,3,4.13829,3.861,3
+unchanged-target-2048-rules,Ninja,3,3.72618,3.497,3
+unchanged-target-2048-rules,after,3,3.63954,3.455,3
+unchanged-target-2048-rules,before,4,23.01538,22.598,3
+unchanged-target-2048-rules,GNU make,4,4.24475,3.922,3
+unchanged-target-2048-rules,Ninja,4,3.88693,3.628,3
+unchanged-target-2048-rules,after,4,3.66119,3.467,3
+unchanged-target-2048-rules,Ninja,5,3.96541,3.673,3
+unchanged-target-2048-rules,before,5,23.14461,22.747,3
+unchanged-target-2048-rules,GNU make,5,4.6885,4.253,3
+unchanged-target-2048-rules,after,5,3.99689,3.724,3
+unchanged-target-2048-rules,GNU make,6,3.93231,3.706,3
+unchanged-target-2048-rules,after,6,3.66916,3.488,3
+unchanged-target-2048-rules,Ninja,6,3.80826,3.554,3
+unchanged-target-2048-rules,before,6,23.07041,22.71,3
+unchanged-target-2048-rules,before,7,22.81471,22.452,3
+unchanged-target-2048-rules,Ninja,7,4.02782,3.677,3
+unchanged-target-2048-rules,after,7,3.67368,3.476,3
+unchanged-target-2048-rules,GNU make,7,4.00841,3.772,3
+unchanged-target-2048-rules,Ninja,8,3.65922,3.419,3
+unchanged-target-2048-rules,before,8,22.9548,22.531,3
+unchanged-target-2048-rules,after,8,3.82501,3.599,3
+unchanged-target-2048-rules,GNU make,8,4.21202,3.916,3
+unchanged-target-2048-rules,GNU make,9,4.00652,3.74,3
+unchanged-target-2048-rules,before,9,22.6882,22.316,3
+unchanged-target-2048-rules,Ninja,9,4.28245,3.922,3
+unchanged-target-2048-rules,after,9,3.68239,3.49,3
+unchanged-target-2048-rules,before,10,23.72902,23.248,3
+unchanged-target-2048-rules,after,10,3.78063,3.559,3
+unchanged-target-2048-rules,GNU make,10,4.24047,3.903,3
+unchanged-target-2048-rules,Ninja,10,3.88668,3.608,3
+unchanged-target-2048-rules,Ninja,11,3.5407,3.301,3
+unchanged-target-2048-rules,after,11,3.66032,3.461,3
+unchanged-target-2048-rules,GNU make,11,4.16068,3.826,3
+unchanged-target-2048-rules,before,11,22.67075,22.362,3
+unchanged-target-2048-rules,before,12,22.458,22.152,3
+unchanged-target-2048-rules,after,12,3.81866,3.576,3
+unchanged-target-2048-rules,GNU make,12,4.08111,3.803,3
+unchanged-target-2048-rules,Ninja,12,3.7643,3.522,3
+unchanged-target-2048-rules,before,13,22.50114,22.172,3
+unchanged-target-2048-rules,GNU make,13,4.14896,3.822,3
+unchanged-target-2048-rules,after,13,3.6934,3.493,3
+unchanged-target-2048-rules,Ninja,13,3.77442,3.526,3
+unchanged-target-2048-rules,Ninja,14,3.52368,3.294,3
+unchanged-target-2048-rules,before,14,22.74401,22.414,3
+unchanged-target-2048-rules,GNU make,14,4.11946,3.823,3
+unchanged-target-2048-rules,after,14,3.68031,3.489,3
+unchanged-target-2048-rules,after,15,3.66913,3.461,3
+unchanged-target-2048-rules,Ninja,15,3.79811,3.537,3
+unchanged-target-2048-rules,before,15,22.46186,22.149,3
+unchanged-target-2048-rules,GNU make,15,4.36854,3.934,3
+unchanged-target-2048-rules,after,16,3.69786,3.502,3
+unchanged-target-2048-rules,Ninja,16,3.78439,3.537,3
+unchanged-target-2048-rules,GNU make,16,3.90097,3.68,3
+unchanged-target-2048-rules,before,16,22.59743,22.28,3
+unchanged-target-2048-rules,Ninja,17,4.17631,3.802,3
+unchanged-target-2048-rules,before,17,22.63509,22.26,3
+unchanged-target-2048-rules,after,17,3.75162,3.521,3
+unchanged-target-2048-rules,GNU make,17,4.07713,3.809,3
+unchanged-target-2048-rules,Ninja,18,3.88512,3.63,3
+unchanged-target-2048-rules,GNU make,18,4.04551,3.77,3
+unchanged-target-2048-rules,before,18,22.59655,22.218,3
+unchanged-target-2048-rules,after,18,3.84405,3.624,3
+unchanged-target-2048-rules,before,19,22.5625,22.258,3
+unchanged-target-2048-rules,Ninja,19,4.014,3.684,3
+unchanged-target-2048-rules,GNU make,19,3.963,3.749,3
+unchanged-target-2048-rules,after,19,3.6268,3.449,3
+unchanged-target-2048-rules,GNU make,20,3.88742,3.67,3
+unchanged-target-2048-rules,after,20,3.6534,3.44,3
+unchanged-target-2048-rules,Ninja,20,3.81896,3.545,3
+unchanged-target-2048-rules,before,20,22.37215,22.057,3
+unchanged-target-2048-rules,Ninja,21,4.11301,3.602,3
+unchanged-target-2048-rules,GNU make,21,3.9925,3.727,3
+unchanged-target-2048-rules,before,21,22.5768,22.203,3
+unchanged-target-2048-rules,after,21,3.78613,3.528,3
+unchanged-target-2048-rules,before,22,22.44698,22.078,3
+unchanged-target-2048-rules,after,22,3.70589,3.485,3
+unchanged-target-2048-rules,Ninja,22,4.3779,3.913,3
+unchanged-target-2048-rules,GNU make,22,3.99724,3.751,3
+unchanged-target-2048-rules,Ninja,23,3.59339,3.352,3
+unchanged-target-2048-rules,after,23,3.68249,3.434,3
+unchanged-target-2048-rules,before,23,22.48749,22.178,3
+unchanged-target-2048-rules,GNU make,23,4.18494,3.826,3
+unchanged-target-2048-rules,after,24,3.65239,3.46,3
+unchanged-target-2048-rules,GNU make,24,3.89104,3.685,3
+unchanged-target-2048-rules,Ninja,24,3.69319,3.453,3
+unchanged-target-2048-rules,before,24,22.39298,22.103,3
+unchanged-target-2048-rules,before,25,23.87569,22.322,3
+unchanged-target-2048-rules,GNU make,25,4.24016,3.91,3
+unchanged-target-2048-rules,after,25,3.77568,3.533,3
+unchanged-target-2048-rules,Ninja,25,4.11524,3.769,3
+unchanged-target-2048-rules,after,26,3.75074,3.522,3
+unchanged-target-2048-rules,GNU make,26,4.41193,3.885,3
+unchanged-target-2048-rules,Ninja,26,4.04372,3.68,3
+unchanged-target-2048-rules,before,26,23.284,22.646,3
+unchanged-target-2048-rules,Ninja,27,3.86515,3.582,3
+unchanged-target-2048-rules,before,27,22.51962,22.184,3
+unchanged-target-2048-rules,GNU make,27,4.13286,3.822,3
+unchanged-target-2048-rules,after,27,3.70682,3.5,3
+unchanged-target-2048-rules,after,28,3.60348,3.41,3
+unchanged-target-2048-rules,GNU make,28,3.92306,3.695,3
+unchanged-target-2048-rules,before,28,22.43352,22.112,3
+unchanged-target-2048-rules,Ninja,28,3.93963,3.605,3
+unchanged-target-2048-rules,before,29,22.45629,22.16,3
+unchanged-target-2048-rules,after,29,3.68917,3.482,3
+unchanged-target-2048-rules,GNU make,29,4.10456,3.796,3
+unchanged-target-2048-rules,Ninja,29,3.79368,3.523,3
+unchanged-target-2048-rules,Ninja,30,3.57592,3.331,3
+unchanged-target-2048-rules,after,30,3.60609,3.426,3
+unchanged-target-2048-rules,GNU make,30,3.88826,3.671,3
+unchanged-target-2048-rules,before,30,22.58707,22.252,3
+unchanged-target-2048-rules,before,31,22.36055,22.037,3
+unchanged-target-2048-rules,GNU make,31,4.13753,3.848,3
+unchanged-target-2048-rules,Ninja,31,3.75265,3.523,3
+unchanged-target-2048-rules,after,31,3.61259,3.429,3

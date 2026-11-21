@@ -64,6 +64,16 @@ export def body
 			' shows the address firmware used.'
 		<h2 className="section" id="benchmarks"> 'Link times'
 		<p>
+			'On '
+			<time html:datetime="2026-11-21"> '21 November 2026'
+			', creating a deterministic archive from 256 x86-64 objects with short filenames took 3.343 ms, down from 4.231 ms. GNU ar took 22.216 ms. The new writer stores ordinary filenames directly in the member header and preserves short filenames containing spaces. The archive shrank from 215,484 to 213,376 bytes, matching the GNU archive size.'
+		<p> 'These are medians across 31 interleaved warm runs on one CPU. GNU ar listed the members, nm read their index, and both nelinker and GNU ld linked a program that returned 42. A separate run repeated six link workloads with GNU ld and TinyCC. The raw samples record wall time and the size of each working executable.'
+		<p className="upstream-links">
+			<a href="/nelua/assets/build-tools-20261121/archive.csv"> 'Archive creation samples (CSV)'
+			<a href="/nelua/assets/build-tools-20261121/link-summary.csv"> 'Six link workloads (CSV)'
+			<a href="/nelua/assets/build-tools-20261121/method.txt"> 'Method and reproduction'
+		<h3> 'Earlier linker comparison'
+		<p>
 			'In the '
 			<time html:datetime="2026-11-19"> '19 November 2026'
 			' x86-64 Linux shootout, both builds had the lowest median link time in all 11 timed cases. nelinker produced the smallest executable in five. Each output had to pass its execution check.'

@@ -6,6 +6,7 @@ import * as comptime from './pages/comptime.imba'
 import * as syntaxGuide from './pages/syntax-guide.imba'
 import * as nelibc from './pages/nelibc.imba'
 import * as nebox from './pages/nebox.imba'
+import * as neboxCoverage from './pages/nebox-coverage.imba'
 import * as nsh from './pages/nsh.imba'
 import * as init from './pages/init.imba'
 import * as neboot from './pages/neboot.imba'
@@ -78,6 +79,7 @@ const pages = [
 	{ source: nelibc, path: '/nelua/nelibc/', body: nelibc.body(content('nelibc-comparison'), content('nelibc-stats')), scripts: ['/nelua/assets/explorer.js'] }
 	{ source: nebox, path: '/nelua/nebox/', body: nebox.body() }
 	{ source: nsh, path: '/nelua/nebox/nsh/', body: nsh.body() }
+	{ source: neboxCoverage, path: '/nelua/nebox/applet-coverage/', active: '/nelua/nebox/', body: neboxCoverage.body(readFileSync('public/nelua/nebox/applet-coverage.txt', 'utf8')), stylesheet: '/nelua/nebox/applet-coverage.css', scripts: ['/nelua/nebox/applet-coverage.js'] }
 	{ source: neboot, path: '/nelua/neboot/', body: neboot.body() }
 	{ source: init, path: '/nelua/init/', body: init.body(), stylesheet: '/nelua/init/vm/demo.css', scripts: ['/nelua/init/vm/demo.js'] }
 	{ source: necc, path: '/nelua/necc/', body: necc.body() }
@@ -89,6 +91,8 @@ const pages = [
 
 copyFileSync('src/site.css', 'public/nelua/assets/site.css')
 copyFileSync('src/community.css', 'public/nelua/community/styles.css')
+copyFileSync('src/applet-coverage.css', 'public/nelua/nebox/applet-coverage.css')
+copyFileSync('src/applet-coverage.js', 'public/nelua/nebox/applet-coverage.js')
 const terminalCss = readFileSync('node_modules/@xterm/xterm/css/xterm.css', 'utf8')
 writeFileSync('public/nelua/init/vm/demo.css', terminalCss + '\n' + readFileSync('src/theseus-demo.css', 'utf8'))
 

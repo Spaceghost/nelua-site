@@ -11,12 +11,9 @@ export def body
 				<a className="button" href="#run"> 'Boot in QEMU'
 				<a className="text-link" href="#ovmf"> 'See the OVMF results'
 		<h2 className="section" id="run"> 'Boot in QEMU'
-		<p>
-			'On an x86-64 host with the Cascadia launcher, install '
-			<code> 'tools/neboot-live'
-			' from the neboot repository on your PATH. The build needs the Nelua fork, necc and its staged SDK, nelinker, make, Python 3, xorriso, sfdisk and mtools. QEMU uses x86-64 OVMF firmware.'
-		<pre><code> 'cascadia-live --uefi'
-		<p> 'The launcher fetches neboot, prepares the latest Cascadia image, extracts the kernel and initramfs, and stages a temporary EFI disk as the user who runs it. At the serial menu, choose a key.'
+		<p> 'From the neboot checkout, stage Cascadia’s x86-64 EFI-stub kernel and its matching initramfs. Replace the two example paths with your local files. The build uses the Nelua fork, necc with its staged SDK, and nelinker.'
+		<pre><code> 'make stage KERNEL=/path/to/vmlinuz INITRD=/path/to/initramfs\npython3 tests/smoke-ovmf.py --esp build/esp --interactive'
+		<p> 'The Python script uses sfdisk and mtools to prepare a temporary EFI disk, then boots it in QEMU with x86-64 OVMF. Choose a key at the serial menu.'
 		<ul>
 			<li>
 				<kbd> '1'

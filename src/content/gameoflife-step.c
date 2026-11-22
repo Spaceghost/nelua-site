@@ -4,8 +4,7 @@ void gameoflife_GameState_step(gameoflife_GameState_ptr self) {
       gameoflife_CellField_set_alive(self->b, x, y, gameoflife_CellField_next(self->a, x, y));
     }
   }
-  gameoflife_CellField_ptr _asgntmp_1 = self->b;
-  gameoflife_CellField_ptr _asgntmp_2 = self->a;
-  self->a = _asgntmp_1;
-  self->b = _asgntmp_2;
+  gameoflife_CellField_ptr _asgntmp_1 = self->a;
+  self->a = self->b;
+  self->b = _asgntmp_1;
 }

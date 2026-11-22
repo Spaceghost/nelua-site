@@ -96,7 +96,7 @@ export def body
 							<a className="file-origin" href="/nelua/examples/life/"> 'Step a glider with Imba, Bend and WebAssembly'
 							<details className="generated-c">
 								<summary> 'Show generated C'
-								<p> 'GameState:step as emitted by the Nelua fork at 874acdd.'
+								<p> 'GameState:step as emitted by the Nelua fork at 0f29b8f.'
 								<pre>
 									<code innerHTML=highlight(readFileSync('src/content/gameoflife-step.c', 'utf8').trimEnd())>
 						if file.key == 'boot'

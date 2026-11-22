@@ -1,0 +1,23 @@
+.workbench > section:not(.hero) { border-top: 1px solid var(--line); padding: clamp(1.5rem,4vw,3rem) 0; }
+.workbench h2 { font-size: clamp(1.6rem,3vw,2.4rem); }
+.workbench p { max-width: 70ch; }
+.workbench fieldset { border: 0; background: var(--quiet); margin: 1.25rem 0; padding: 1rem; display: flex; flex-wrap: wrap; align-items: center; gap: .8rem; }
+.workbench legend { padding: 0 .25rem; font-weight: 600; }
+.workbench :is(select,input,button) { font: inherit; padding: .35rem .65rem; }
+.workbench input { max-width: 9rem; }
+.workbench button, .workbench summary { cursor: pointer; }
+.workbench .readout, .workbench .console { background: #172339; color: #a5e2cc; padding: 1rem; }
+.workbench .readout span { display: block; color: #c1cde0; font-size: .9rem; }
+.workbench .readout output { font: 1.6rem/1.6 var(--mono); }
+.workbench progress { width: min(100%,32rem); accent-color: var(--accent); }
+.workbench article { min-width: 0; }
+.workbench .hero { display: grid; justify-items: start; gap: .75rem; }
+.workbench .hero .tagline { margin-block: 0; }
+.workshop-jump { display: flex; flex-wrap: wrap; gap: .5rem; }
+.workshop-jump a { border: 1px solid var(--line); border-radius: 2rem; padding: .3rem .9rem; text-decoration: none; }
+.workshop-jump a:is(:hover,:focus-visible) { background: var(--accent-light); }
+.workbench fieldset { border-radius: .65rem; }
+.workbench .readout, .workbench .console { border-radius: .5rem; }
+.workbench select, .workbench input { background: white; color: var(--text); border: 1px solid #8292aa; border-radius: .3rem; }
+.workbench fieldset label { display: inline-flex; align-items: center; gap: .4rem; }
+.workbench #usage { font: .95rem var(--mono); }

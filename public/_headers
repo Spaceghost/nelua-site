@@ -33,3 +33,11 @@
 /nelua/examples/life/
   ! Content-Security-Policy
   Content-Security-Policy: default-src 'none'; style-src 'self'; script-src 'self' 'wasm-unsafe-eval'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'
+
+/examples/workshop/
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'none'; style-src 'self'; script-src 'self' 'wasm-unsafe-eval'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'
+
+/nelua/examples/workshop/
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'none'; style-src 'self'; script-src 'self' 'wasm-unsafe-eval'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'

@@ -39,6 +39,12 @@ def projectList items
 				<a href=item.path> item.title
 				<p> item.description
 
+def emitted path
+	<details className="generated-c">
+		<summary> 'Show generated C'
+		<pre>
+			<code innerHTML=highlight(readFileSync('src/content/' + path, 'utf8').trimEnd())>
+
 def example filename, output
 	const source = readFileSync('public/nelua/examples/' + filename, 'utf8').trimEnd()
 	<figure className="language-example">
@@ -49,6 +55,8 @@ def example filename, output
 		<div className="example-output">
 			<span> 'Output'
 			<samp> output
+		emitted('showcase/' + filename.split('.')[0] + '.c')
+		<a className="file-origin" href=('/nelua/examples/workshop/#' + filename.split('.')[0])> 'Run in the workbench'
 
 export def body
 	<div className="overview">
@@ -80,6 +88,10 @@ export def body
 									for name in opcodeNames
 										<option value=name> name
 								<output id="opcode-result" for="opcode-name"> 'local asm.HALT: uint8 <comptime> = 0'
+						if file.key == 'assembler' or file.key == 'arena'
+							<a className="file-origin" href=('/nelua/examples/workshop/#' + file.key)> (file.key == 'assembler' ? 'Encode an instruction' : 'Try the allocator')
+						if file.key != 'life'
+							emitted('showcase/' + file.key + '.c')
 						if file.key == 'life'
 							<a className="file-origin" href="/nelua/examples/life/"> 'Step a glider with Imba, Bend and WebAssembly'
 							<details className="generated-c">
@@ -106,6 +118,7 @@ export def body
 			<div className="core-guides">
 				<a href="https://nelua.io/installing/"> 'Install Nelua'
 				<a href="https://nelua.io/overview/"> 'Explore the language'
+				<a href="/nelua/examples/workshop/"> 'Open the example workbench'
 				<a href="/nelua/compiler/comptime/"> 'Compile-time programming in the fork'
 				<a href="/nelua/compiler/syntax-extensions/"> 'Fork syntax guide'
 		<section className="overview-section" aria-labelledby="core">

@@ -39,3 +39,14 @@ The script sets NELUA_BENDJS_SOURCE to a fresh staging file, checks the
 generated module’s import list and tests every three-by-three neighborhood
 before copying the browser artifacts. See board.imba for instantiation and
 the outputs life.c, rule.bend and rule.mjs for each compiler stage.
+
+To reuse the compiler pipeline for another application, give compile-web.sh
+a source file, a fresh empty staging directory and the Wasm entry points to
+export. For example, from this directory:
+
+    mkdir stage
+    ./compile-web.sh life.nelua stage next_row
+
+This emits the generated C, Wasm, lowered Bend and JavaScript module. The
+instruction encoder in the example workbench uses the same build command
+with opcode.nelua and the encode export.

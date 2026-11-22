@@ -3,3 +3,5 @@
 #life-board { display: block; width: min(100%, 24rem); height: auto; image-rendering: pixelated; }
 .life-lab summary { cursor: pointer; padding-block: .4rem; }
 .life-lab pre { max-height: 28rem; }
+
+#life-pattern { margin-bottom: .75rem; font: inherit; }

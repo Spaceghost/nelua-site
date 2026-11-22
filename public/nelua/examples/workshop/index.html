@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><title>The example workbench · Nelua</title><meta name="description" content="Encode a Drift instruction, allocate WebAssembly memory, and run Nelua programs in the browser."><link rel="canonical" href="https://nelua.tech/examples/workshop/"><link rel="stylesheet" href="/nelua/assets/site.css?v=d23b592000da"><link rel="icon" href="/nelua/assets/icon.svg?v=665133d8c8a3" type="image/svg+xml"><link rel="stylesheet" href="/nelua/examples/workshop/workshop.css?v=866b0b14b0d0"><script src="/nelua/examples/workshop/workshop.js?v=0882800f7873" defer=""></script></head><body><a class="skip-link" href="#main">Skip to content</a><div class="wrap"><header class="top"><a class="home" href="/nelua/"><img src="/nelua/assets/icon.svg?v=665133d8c8a3" width="34" height="34" alt=""><span>Nelua</span></a><nav aria-label="Sections"><span class="nav-group"><a href="/nelua/">Overview</a><a href="https://nelua.io/tutorial/" rel="external">Learn</a><a href="/nelua/performance/">Performance</a><a href="/nelua/community/">Community</a></span><span class="nav-group"><a href="/nelua/compiler/">Compiler</a><a href="/nelua/nelibc/">nelibc</a><a href="/nelua/nebox/">nebox</a><a href="/nelua/neboot/">neboot</a><a href="/nelua/nebox/nsh/">nsh</a><a href="/nelua/necc/">necc</a><a href="/nelua/nelinker/">nelinker</a><a href="/nelua/nebuild/">nebuild</a><a href="https://nelua.io/" rel="external">nelua.io</a></span></nav></header><main id="main" tabindex="-1"><div class="workbench"><section class="hero"><h1>The example workbench</h1><p class="tagline">Change the operands, watch memory fill, or send a string through C. Each experiment runs its compiled code in your browser.</p><p class="workshop-jump"><a href="#assembler">Instruction encoder</a><a href="#arena">Memory arena</a><a href="#console-title">Console</a></p><div class="actions"><a href="/nelua/init/?boot=1#browser-demo">Boot Theseus</a><a href="/nelua/examples/life/">Step through Game of Life</a></div></section><section id="assembler"><p class="eyebrow">Drift · instruction encoding</p><h2>Build an instruction word</h2><p>Pick an opcode and its three register fields. Nelua resolves the opcode in WebAssembly and calls Bend-generated JavaScript to pack the first four bytes of a Drift instruction.</p><fieldset id="registers" disabled=""><legend>Instruction fields</legend><label>Opcode <select id="op"><option value="0">HALT</option><option value="1">LIT</option><option value="2">MOV</option><option value="3" selected="">ADD</option><option value="4">SUB</option><option value="5">MUL</option><option value="6">DIV</option><option value="7">AND</option><option value="8">OR</option><option value="9">XOR</option><option value="10">SHL</option><option value="11">SHR</option><option value="12">LD8</option><option value="13">ST8</option><option value="14">LD32</option><option value="15">ST32</option><option value="16">JMP</option><option value="17">JEQ</option><option value="18">JNE</option><option value="19">JLT</option><option value="20">IO</option><option value="21">EVENT</option><option value="22">SLEEP</option></select></label><label>A<select id="a"><option value="0">0</option><option value="1" selected="">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option></select></label><label>B<select id="b"><option value="0">0</option><option value="1">1</option><option value="2" selected="">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option></select></label><label>C<select id="c"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3" selected="">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option></select></label></fieldset><p class="readout"><span>Instruction bytes</span><output id="encoded" aria-live="polite">Loading…</output></p><details><summary>Show generated C</summary><pre><code>static nluint8_arr23 opcode_codes = {.v = {0x0U, 1U, 2U, 3U, 4U, 5U, 6U, 7U, 8U, 9U, 10U, 11U, 12U, 13U, 14U, 15U, 16U, 17U, 18U, 19U, 20U, 21U, 22U}};
+uint32_t encode(uint32_t index, uint32_t a, uint32_t b, uint32_t c) {
+  <span class="code-keyword">if</span>(((((index &gt;= <span class="code-literal">23</span>) || (a &gt; <span class="code-literal">15</span>)) || (b &gt; <span class="code-literal">15</span>)) || (c &gt; <span class="code-literal">15</span>))) {
+    <span class="code-keyword">return</span> 0xffffffffULL;
+  }
+  <span class="code-keyword">return</span> pack_word((uint32_t)opcode_codes.v[index], a, b, c);
+}</code></pre></details><details><summary>Follow the Bend build</summary><p>The encoder below uses the same compile-web.sh pipeline as Game of Life.</p><details><summary>Nelua encoder</summary><pre><code>#syntax <span class="code-literal">'syntax.bendjs'</span>
+<span class="code-keyword">##</span> pragmas.noentrypoint = true
+<span class="code-keyword">##</span> pragmas.nogc = true
+<span class="code-keyword">##</span> pragmas.nochecks = true
+<span class="code-keyword">##</span> pragmas.nocstaticassert = true
+
+-- Opcode declarations from Drift, c970832, lib/drift/asm.nelua (MIT).
+<span class="code-keyword">local</span> asm: type = @<span class="code-keyword">record</span>{}
+
+<span class="code-keyword">##</span> <span class="code-keyword">local</span> names = {<span class="code-literal">'HALT'</span>,<span class="code-literal">'LIT'</span>,<span class="code-literal">'MOV'</span>,<span class="code-literal">'ADD'</span>,<span class="code-literal">'SUB'</span>,<span class="code-literal">'MUL'</span>,<span class="code-literal">'DIV'</span>,<span class="code-literal">'AND'</span>,<span class="code-literal">'OR'</span>,
+<span class="code-keyword">##</span>                <span class="code-literal">'XOR'</span>,<span class="code-literal">'SHL'</span>,<span class="code-literal">'SHR'</span>,<span class="code-literal">'LD8'</span>,<span class="code-literal">'ST8'</span>,<span class="code-literal">'LD32'</span>,<span class="code-literal">'ST32'</span>,<span class="code-literal">'JMP'</span>,
+<span class="code-keyword">##</span>                <span class="code-literal">'JEQ'</span>,<span class="code-literal">'JNE'</span>,<span class="code-literal">'JLT'</span>,<span class="code-literal">'IO'</span>,<span class="code-literal">'EVENT'</span>,<span class="code-literal">'SLEEP'</span>}
+<span class="code-keyword">##</span> <span class="code-keyword">for</span> i, name <span class="code-keyword">in</span> ipairs(names) <span class="code-keyword">do</span>
+<span class="code-keyword">local</span> asm.<span class="code-keyword">#|</span>name<span class="code-keyword">|#</span>: <span class="code-keyword">uint8</span> &lt;<span class="code-keyword">comptime</span>&gt; = <span class="code-keyword">#[</span>i-<span class="code-literal">1</span><span class="code-keyword">]#</span>
+<span class="code-keyword">##</span> <span class="code-keyword">end</span>
+
+<span class="code-keyword">local</span> codes: [<span class="code-literal">23</span>]<span class="code-keyword">uint8</span> = {
+  asm.HALT, asm.LIT, asm.MOV, asm.ADD, asm.SUB, asm.MUL, asm.DIV, asm.AND, asm.OR, asm.XOR, asm.SHL, asm.SHR, asm.LD8, asm.ST8, asm.LD32, asm.ST32, asm.JMP, asm.JEQ, asm.JNE, asm.JLT, asm.IO, asm.EVENT, asm.SLEEP
+}
+
+-- Pack the first four bytes of a Drift instruction <span class="code-keyword">in</span> little-endian order.
+bendjs (pack_word) <span class="code-keyword">do</span>
+  <span class="code-keyword">local</span> <span class="code-keyword">function</span> pack_word(op: uint32, a: uint32, b: uint32, c: uint32): uint32
+    <span class="code-keyword">return</span> op + 256_u32 * (a + 256_u32 * (b + 256_u32 * c))
+  <span class="code-keyword">end</span>
+<span class="code-keyword">end</span>
+
+<span class="code-keyword">local</span> <span class="code-keyword">function</span> encode(index: uint32, a: uint32, b: uint32, c: uint32): uint32
+    &lt;<span class="code-keyword">cexport</span>, <span class="code-keyword">codename</span> <span class="code-literal">'encode'</span>&gt;
+  <span class="code-keyword">if</span> index &gt;= #codes or a &gt; <span class="code-literal">15</span> or b &gt; <span class="code-literal">15</span> or c &gt; <span class="code-literal">15</span> <span class="code-keyword">then</span> <span class="code-keyword">return</span> 0xffffffff_u32 <span class="code-keyword">end</span>
+  <span class="code-keyword">return</span> pack_word(codes[index], a, b, c)
+<span class="code-keyword">end</span></code></pre></details><details><summary>Lowered Bend</summary><pre><code>import Base
+
+def nelua_lower_function1(+nelua_lower_value2: U32, +nelua_lower_value3: U32, +nelua_lower_value4: U32, +nelua_lower_value5: U32) -&gt; U32:
+  U32.add(nelua_lower_value2, U32.mul(U32.add(<span class="code-literal">0</span>, <span class="code-literal">256</span>), U32.add(nelua_lower_value3, U32.mul(U32.add(<span class="code-literal">0</span>, <span class="code-literal">256</span>), U32.add(nelua_lower_value4, U32.mul(U32.add(<span class="code-literal">0</span>, <span class="code-literal">256</span>), nelua_lower_value5))))))
+
+def pack_word(x1: U32, x2: U32, x3: U32, x4: U32) -&gt; U32:
+  nelua_lower_function1(x1, x2, x3, x4)</code></pre></details><details><summary>Bend-generated JavaScript</summary><pre><code><span class="code-keyword">function</span> word_to_u32(w) {
+  let x = <span class="code-literal">0</span>;
+  <span class="code-keyword">for</span> (let i = <span class="code-literal">0</span>; w.$ === "WCon"; i++) {
+    x |= Number(w.head) &lt;&lt; i;
+    w = w.tail;
+  }
+  <span class="code-keyword">return</span> x &gt;&gt;&gt; <span class="code-literal">0</span>;
+}
+
+<span class="code-keyword">function</span> u32_to_word(x) {
+  let w = {$: "WNil"};
+  <span class="code-keyword">for</span> (let i = <span class="code-literal">31</span>; i &gt;= <span class="code-literal">0</span>; i--) {
+    w = {$: "WCon", head: ((x &gt;&gt;&gt; i) &amp; <span class="code-literal">1</span>) === <span class="code-literal">1</span>, tail: w};
+  }
+  <span class="code-keyword">return</span> w;
+}
+
+<span class="code-keyword">function</span> cmp_new(a, b) {
+  <span class="code-keyword">return</span> {$: a &lt; b ? "LT" : a === b ? "EQ" : "GT"};
+}
+
+<span class="code-keyword">function</span> tup_new(a, b) {
+  <span class="code-keyword">return</span> {$: "Tuple", fst: a, snd: b};
+}
+
+<span class="code-keyword">function</span> nat_divmod(a, b) {
+  <span class="code-keyword">return</span> tup_new(b &amp;&amp; Math.trunc(a / b), b ? a % b : a);
+}
+
+<span class="code-keyword">function</span> nat_chk(n) {
+  <span class="code-keyword">if</span> (n &gt; <span class="code-literal">281474976710655</span>) {
+    throw "bend: a Nat past the largest immediate <span class="code-literal">2</span>^<span class="code-literal">48</span>-<span class="code-literal">1</span>";
+  }
+  <span class="code-keyword">return</span> n;
+}
+
+<span class="code-keyword">function</span> nat_in(n) {
+  <span class="code-keyword">if</span> (!Number.isInteger(n) || n &lt; <span class="code-literal">0</span> || n &gt; <span class="code-literal">2</span> ** <span class="code-literal">53</span>) {
+    throw "bend: expected a Nat host number: an <span class="code-keyword">integer</span> from <span class="code-literal">0</span> to <span class="code-literal">2</span>^<span class="code-literal">53</span>";
+  }
+  <span class="code-keyword">return</span> n;
+}
+
+<span class="code-keyword">function</span> f32_show(x) {
+  let s = "nan";
+  <span class="code-keyword">for</span> (let p = <span class="code-literal">1</span>; x === x &amp;&amp; p &lt;= <span class="code-literal">9</span> &amp;&amp; f32_round(s) !== x; p += <span class="code-literal">1</span>) {
+    s = String(Number(x.toExponential(p - <span class="code-literal">1</span>)));
+  }
+  <span class="code-keyword">return</span> (Object.is(x, -<span class="code-literal">0</span>) ? "-<span class="code-literal">0</span>" : s).replace("Infinity", "inf");
+}
+
+<span class="code-keyword">function</span> f32_bits(x) {
+  <span class="code-keyword">return</span> new Uint32Array(new Float32Array([x]).buffer)[<span class="code-literal">0</span>];
+}
+
+<span class="code-keyword">function</span> f32_from_bits(u) {
+  <span class="code-keyword">return</span> new Float32Array(new Uint32Array([u]).buffer)[<span class="code-literal">0</span>];
+}
+
+<span class="code-keyword">function</span> f32_read(s) {
+  const re = /^[\t\n\v\f\r ]*[+-]?((\d+(?:\.\d*)?|\.\d+)(e[+-]?\d+)?|inf(inity)?|nan)$/i;
+  <span class="code-keyword">return</span> re.test(s) ? {$: "Some", value: f32_round(
+    s.replace(/inf\w*/i, "Infinity"))} : {$: "None"};
+}
+
+const f32_round = <span class="code-keyword">function</span> f32_round(s) {
+  const d = Number(s);
+  const a = Math.abs(d);
+  const f = Math.fround(a);
+  const g = <span class="code-literal">2</span> * a - Math.min(f, <span class="code-literal">2</span> ** <span class="code-literal">128</span>);
+  <span class="code-keyword">if</span> (g === f || Math.fround(g) !== g || g === Infinity) {
+    <span class="code-keyword">return</span> Math.sign(d) * f;
+  }
+  let k = <span class="code-literal">0</span>;
+  while (a * <span class="code-literal">2</span> ** k % <span class="code-literal">1</span> !== <span class="code-literal">0</span>) {
+    k += <span class="code-literal">1</span>;
+  }
+  const [, i, r, e] = /(\d*)\.?(\d*)(?:e([+-]?\d+))?$/i.exec(s);
+  const n = Number(e ?? <span class="code-literal">0</span>) - r.length;
+  const x = BigInt(i + r) * 2n ** BigInt(k) * 10n ** BigInt(Math.max(n, <span class="code-literal">0</span>));
+  const y = BigInt(a * <span class="code-literal">2</span> ** k) * 10n ** BigInt(Math.max(-n, <span class="code-literal">0</span>));
+  <span class="code-keyword">return</span> Math.sign(d) * (x === y || x &gt; y !== g &gt; f ? f : g);
+};
+
+const char_new = <span class="code-keyword">function</span> char_new(c) {
+  <span class="code-keyword">return</span> c &lt; <span class="code-literal">55296</span> || c &gt;= <span class="code-literal">57344</span> &amp;&amp; c &lt;= <span class="code-literal">1114111</span> ? String.fromCodePoint(c) : String.fromCharCode(<span class="code-literal">56320</span>, c &gt;&gt;&gt; <span class="code-literal">22</span>, c &gt;&gt;&gt; <span class="code-literal">11</span> &amp; <span class="code-literal">2047</span>, c &amp; <span class="code-literal">2047</span>);
+};
+
+<span class="code-keyword">function</span> char_len(s, at = <span class="code-literal">0</span>) {
+  <span class="code-keyword">return</span> s[at] === "\uDC00" ? <span class="code-literal">4</span> : s.codePointAt(at) &gt; 0xFFFF ? <span class="code-literal">2</span> : <span class="code-literal">1</span>;
+}
+
+<span class="code-keyword">function</span> char_code(s) {
+  <span class="code-keyword">return</span> s.length &lt; <span class="code-literal">4</span> ? s.codePointAt(<span class="code-literal">0</span>)
+    : (s.charCodeAt(<span class="code-literal">1</span>) &lt;&lt; <span class="code-literal">22</span> | s.charCodeAt(<span class="code-literal">2</span>) &lt;&lt; <span class="code-literal">11</span> | s.charCodeAt(<span class="code-literal">3</span>)) &gt;&gt;&gt; <span class="code-literal">0</span>;
+}
+
+<span class="code-keyword">function</span> string_contains(s, p) {
+  // A match starts at a Char, not inside a packed U32 code.
+  <span class="code-keyword">for</span> (let at = <span class="code-literal">0</span>; at &lt;= s.length; at += char_len(s, at)) {
+    <span class="code-keyword">if</span> (s.startsWith(p, at)) {
+      <span class="code-keyword">return</span> true;
+    }
+  }
+  <span class="code-keyword">return</span> false;
+}
+
+<span class="code-keyword">function</span> str_out(s) {
+  <span class="code-keyword">return</span> s.replace(/\uDC00[^]{<span class="code-literal">3</span>}/gu, "\uFFFD");
+}
+
+<span class="code-keyword">function</span> str_in(s) {
+  <span class="code-keyword">return</span> s.replace(/\p{Cs}/gu, "\uFFFD");
+}
+
+// Array
+// =====
+
+<span class="code-keyword">function</span> array_new(d, v, lgs) {
+  <span class="code-keyword">if</span> (d &gt; <span class="code-literal">31</span> - lgs) {
+    throw "bend: an array past the deepest block class <span class="code-literal">31</span> (depth + log2 words per cell)";
+  }
+  <span class="code-keyword">return</span> Array(<span class="code-literal">2</span> ** d).fill(v);
+}
+
+<span class="code-keyword">function</span> array_node(a, b) {
+  <span class="code-keyword">if</span> (a.length !== b.length) {
+    throw "bend: runtime fail-stop";
+  }
+  <span class="code-keyword">return</span> a.concat(b);
+}
+
+<span class="code-keyword">function</span> array_rmw(a, i, f) {
+  const old = a[i %= a.length];
+  a[i] = f(old);
+  <span class="code-keyword">return</span> tup_new(a, old);
+}
+
+// Run
+// ===
+
+<span class="code-keyword">function</span> run_tail(f, x) {
+  <span class="code-keyword">return</span> {$: "$JMP", f: f.j?.f === f ? f.j : f, x};
+}
+
+<span class="code-keyword">function</span> run_clo(j) {
+  const f = (x) =&gt; run_loop(j(x));
+  f.j = j;
+  j.f = f;
+  <span class="code-keyword">return</span> f;
+}
+
+<span class="code-keyword">function</span> run_loop(r) {
+  while (r !== null &amp;&amp; typeof r === "object" &amp;&amp; r.$ === "$JMP") {
+    r = r.f(r.x);
+  }
+  <span class="code-keyword">return</span> r;
+}
+
+<span class="code-keyword">function</span> run_lib(f, n) {
+  <span class="code-keyword">return</span> (...a) =&gt; a.length &lt; n ? run_lib((...b) =&gt; f(...a, ...b), n - a.length)
+    : run_loop(f(...a));
+}
+
+// Effect
+// ======
+
+const $0eff = Object.create(null);
+const io_file_append = new Set();
+
+<span class="code-keyword">function</span> io_eff(k, run) {
+  <span class="code-keyword">if</span> (arguments.length &gt; <span class="code-literal">2</span>) {
+    throw new Error("bend: " + k + " takes no need: an effect that waits parks itself");
+  }
+  <span class="code-keyword">if</span> (k <span class="code-keyword">in</span> $0eff) {
+    throw new Error("bend: two effects register " + k);
+  }
+  $0eff[k] = run;
+}
+// Program
+// =======
+
+<span class="code-keyword">function</span> $nelua_lower_function1(_nelua_lower_value2_0, _nelua_lower_value3_0, _nelua_lower_value4_0, _nelua_lower_value5_0) {
+  const _x_0 = ((<span class="code-literal">0</span> + <span class="code-literal">256</span>) &gt;&gt;&gt; <span class="code-literal">0</span>);
+  const _x_1 = (Math.imul(_x_0, _nelua_lower_value5_0) &gt;&gt;&gt; <span class="code-literal">0</span>);
+  const _x_2 = ((<span class="code-literal">0</span> + <span class="code-literal">256</span>) &gt;&gt;&gt; <span class="code-literal">0</span>);
+  const _x_3 = ((_nelua_lower_value4_0 + _x_1) &gt;&gt;&gt; <span class="code-literal">0</span>);
+  const _x_4 = (Math.imul(_x_2, _x_3) &gt;&gt;&gt; <span class="code-literal">0</span>);
+  const _x_5 = ((<span class="code-literal">0</span> + <span class="code-literal">256</span>) &gt;&gt;&gt; <span class="code-literal">0</span>);
+  const _x_6 = ((_nelua_lower_value3_0 + _x_4) &gt;&gt;&gt; <span class="code-literal">0</span>);
+  const _x_7 = (Math.imul(_x_5, _x_6) &gt;&gt;&gt; <span class="code-literal">0</span>);
+  <span class="code-keyword">return</span> ((_nelua_lower_value2_0 + _x_7) &gt;&gt;&gt; <span class="code-literal">0</span>);
+}
+
+<span class="code-keyword">function</span> $pack_word(_x1_0, _x2_0, _x3_0, _x4_0) {
+  <span class="code-keyword">return</span> $nelua_lower_function1(_x1_0, _x2_0, _x3_0, _x4_0);
+}
+export default {
+  "nelua_lower_function1": run_lib((a0,a1,a2,a3) =&gt; run_loop($nelua_lower_function1(a0,a1,a2,a3)), <span class="code-literal">4</span>),
+  "pack_word": run_lib((a0,a1,a2,a3) =&gt; run_loop($pack_word(a0,a1,a2,a3)), <span class="code-literal">4</span>),
+};</code></pre></details></details></section><section id="arena"><p class="eyebrow">Melodica · WebAssembly memory</p><h2>Fill the arena</h2><p>Ask the extension’s allocator for 13 bytes. Its pointer advances by 16 because allocations align to eight-byte boundaries.</p><fieldset id="allocator" disabled=""><legend>Allocation request</legend><label for="bytes">Bytes</label><input id="bytes" type="number" min="0" max="262144" step="1" value="13" required=""><button id="allocate" class="button" type="button">Allocate</button><button id="clear-arena" type="button">Reset</button></fieldset><progress id="capacity" max="262144" value="0" aria-label="Used arena memory"></progress><p id="usage"></p><p id="address" role="status">No allocations yet.</p><details><summary>Show generated C</summary><pre><code>nluint8_arr0_ptr mx_alloc(uintptr_t n) {
+  uintptr_t size = n;
+  <span class="code-keyword">if</span>((size == <span class="code-literal">0</span>)) {
+    size = 1U;
+  }
+  size = ((size + <span class="code-literal">7</span>) &amp; 4294967288ULL);
+  <span class="code-keyword">if</span>((size &gt; (262144U - melodica_core_st.arena_top))) {
+    <span class="code-keyword">return</span> ((nluint8_arr0_ptr)NULL);
+  }
+  uintptr_t start = melodica_core_st.arena_top;
+  melodica_core_st.arena_top = (start + size);
+  <span class="code-keyword">return</span> ((nluint8_arr0_ptr)(&amp;melodica_core_st.arena[start]));
+}</code></pre></details></section><section aria-labelledby="console-title"><p class="eyebrow">C interop & compile-time evaluation</p><h2 id="console-title">Run the language examples</h2><div class="grid"><article id="c-call"><h3>Call puts from Nelua</h3><pre><code><span class="code-keyword">local</span> <span class="code-keyword">function</span> puts(s: <span class="code-keyword">cstring</span>): <span class="code-keyword">cint</span>
+  &lt;cimport, nodecl, cinclude <span class="code-literal">'&lt;stdio.h&gt;'</span>&gt; <span class="code-keyword">end</span>
+
+puts(<span class="code-literal">'Hello from Nelua'</span>)</code></pre><button id="run-c-call" type="button" disabled="">Run program</button><pre class="console"><samp id="stdout-c-call" role="status">Ready</samp></pre><details><summary>Show generated C</summary><pre><code>int nelua_main(int argc, char** argv) {
+  puts((char*)"Hello from Nelua");
+  <span class="code-keyword">return</span> <span class="code-literal">0</span>;
+}</code></pre></details></article><article id="comptime"><h3>Print a compile-time constant</h3><pre><code><span class="code-keyword">local</span> <span class="code-keyword">function</span> square(n: <span class="code-keyword">integer</span>): <span class="code-keyword">integer</span> &lt;<span class="code-keyword">comptime</span>&gt;
+  <span class="code-keyword">return</span> n * n
+<span class="code-keyword">end</span>
+
+<span class="code-keyword">local</span> tiles = square(<span class="code-literal">16</span>)
+print(tiles)</code></pre><button id="run-comptime" type="button" disabled="">Run program</button><pre class="console"><samp id="stdout-comptime" role="status">Ready</samp></pre><details><summary>Show generated C</summary><pre><code>static int64_t comptime_tiles = <span class="code-literal">256</span>;
+int nelua_main(int argc, char** argv) {
+  nelua_print_1(comptime_tiles);
+  <span class="code-keyword">return</span> <span class="code-literal">0</span>;
+}</code></pre></details></article><article id="point"><h3>Move a typed point</h3><pre><code><span class="code-keyword">local</span> Point = @<span class="code-keyword">record</span>{
+  x: <span class="code-keyword">integer</span>, y: <span class="code-keyword">integer</span>
+}
+
+<span class="code-keyword">local</span> start: Point = {x = <span class="code-literal">3</span>, y = <span class="code-literal">4</span>}
+<span class="code-keyword">local</span> finish = Point{
+  x = start.x + <span class="code-literal">5</span>, y = start.y
+}
+
+print(finish.x, finish.y)</code></pre><button id="run-point" type="button" disabled="">Run program</button><pre class="console"><samp id="stdout-point" role="status">Ready</samp></pre><details><summary>Show generated C</summary><pre><code>int nelua_main(int argc, char** argv) {
+  point_finish = (point_Point){.x = (point_start.x + <span class="code-literal">5</span>), .y = point_start.y};
+  nelua_print_1(point_finish.x, point_finish.y);
+  <span class="code-keyword">return</span> <span class="code-literal">0</span>;
+}</code></pre></details></article></div></section><p class="upstream-links"><a href="/nelua/examples/workshop/NOTICES.txt">Project credits and licenses</a></p><noscript>Enable JavaScript to run the experiments. The source and generated C are available below each example.</noscript></div></main><footer><p class="creator-credit">With love and admiration for <a href="https://github.com/edubart">Eduardo Bart</a>, the creator of Nelua. Thank you for giving us a language that makes writing systems code such a joy.</p><a class="footer-home" href="/nelua/">Nelua</a><div class="footer-links"><a href="https://github.com/Spaceghost/nelua-site">Site source</a><a href="https://johnneylee.com/">Johnneylee Rollins</a></div></footer></div></body></html>

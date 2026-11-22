@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><title>Game of Life · Imba, Bend and Nelua</title><meta name="description" content="Step a glider forward in a browser running a Bend-generated JavaScript rule inside a Nelua WebAssembly simulation."><link rel="canonical" href="https://nelua.tech/examples/life/"><link rel="stylesheet" href="/nelua/assets/site.css?v=d23b592000da"><link rel="icon" href="/nelua/assets/icon.svg?v=665133d8c8a3" type="image/svg+xml"><link rel="stylesheet" href="/nelua/examples/life/lab.css?v=f6230d02c9a4"><script src="/nelua/examples/life/board.js?v=b3e90e709d59" defer=""></script></head><body><a class="skip-link" href="#main">Skip to content</a><div class="wrap"><header class="top"><a class="home" href="/nelua/"><img src="/nelua/assets/icon.svg?v=665133d8c8a3" width="34" height="34" alt=""><span>Nelua</span></a><nav aria-label="Sections"><span class="nav-group"><a href="/nelua/">Overview</a><a href="https://nelua.io/tutorial/" rel="external">Learn</a><a href="/nelua/performance/">Performance</a><a href="/nelua/community/">Community</a></span><span class="nav-group"><a href="/nelua/compiler/">Compiler</a><a href="/nelua/nelibc/">nelibc</a><a href="/nelua/nebox/">nebox</a><a href="/nelua/neboot/">neboot</a><a href="/nelua/nebox/nsh/">nsh</a><a href="/nelua/necc/">necc</a><a href="/nelua/nelinker/">nelinker</a><a href="/nelua/nebuild/">nebuild</a><a href="https://nelua.io/" rel="external">nelua.io</a></span></nav></header><main id="main" tabindex="-1"><div class="grid life-lab"><section><canvas id="life-board" width="320" height="320" aria-label="Game of Life board">A 16 by 16 Game of Life board.</canvas><div class="actions"><button id="life-step" class="button" type="button" disabled="">Step one generation</button><button id="life-reset" class="button button-ghost" type="button" disabled="">Reset</button></div><p id="life-status" role="status">Loading the simulation…</p><noscript>Enable JavaScript to step the simulation.</noscript></section><section><h2>One tick through the toolchain</h2><p>Imba handles the button and draws the grid. A Nelua WebAssembly function counts the neighbors. For each cell it calls a JavaScript function compiled by Bend to decide whether the cell lives.</p><p>The survival rule starts as typed Nelua inside a file-local bendjs block. The extension reuses the fork’s Bend2 lowering pass. Open the artifacts below to follow the same rule through the build.</p><details><summary>Nelua source</summary><pre><code>#syntax <span class="code-literal">'syntax.bendjs'</span>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><title>Game of Life · Imba, Bend and Nelua</title><meta name="description" content="Step a glider forward in a browser running a Bend-generated JavaScript rule inside a Nelua WebAssembly simulation."><link rel="canonical" href="https://nelua.tech/examples/life/"><link rel="stylesheet" href="/nelua/assets/site.css?v=d23b592000da"><link rel="icon" href="/nelua/assets/icon.svg?v=665133d8c8a3" type="image/svg+xml"><link rel="stylesheet" href="/nelua/examples/life/lab.css?v=d72be9967393"><script src="/nelua/examples/life/board.js?v=4b193b6b3a18" defer=""></script></head><body><a class="skip-link" href="#main">Skip to content</a><div class="wrap"><header class="top"><a class="home" href="/nelua/"><img src="/nelua/assets/icon.svg?v=665133d8c8a3" width="34" height="34" alt=""><span>Nelua</span></a><nav aria-label="Sections"><span class="nav-group"><a href="/nelua/">Overview</a><a href="https://nelua.io/tutorial/" rel="external">Learn</a><a href="/nelua/performance/">Performance</a><a href="/nelua/community/">Community</a></span><span class="nav-group"><a href="/nelua/compiler/">Compiler</a><a href="/nelua/nelibc/">nelibc</a><a href="/nelua/nebox/">nebox</a><a href="/nelua/neboot/">neboot</a><a href="/nelua/nebox/nsh/">nsh</a><a href="/nelua/necc/">necc</a><a href="/nelua/nelinker/">nelinker</a><a href="/nelua/nebuild/">nebuild</a><a href="https://nelua.io/" rel="external">nelua.io</a></span></nav></header><main id="main" tabindex="-1"><div class="grid life-lab"><section><label for="life-pattern">Starting pattern </label><select id="life-pattern" disabled=""><option value="glider">Glider</option><option value="blinker">Blinker</option><option value="block">Still life</option></select><canvas id="life-board" width="320" height="320" aria-label="Game of Life board">A 16 by 16 Game of Life board.</canvas><div class="actions"><button id="life-step" class="button" type="button" disabled="">Step one generation</button><button id="life-play" class="button button-ghost" type="button" disabled="">Play</button><button id="life-reset" class="button button-ghost" type="button" disabled="">Reset</button></div><p id="life-status" role="status">Loading the simulation…</p><noscript>Enable JavaScript to step the simulation.</noscript></section><section><h2>One tick through the toolchain</h2><p>Imba handles the button and draws the grid. A Nelua WebAssembly function counts the neighbors. For each cell it calls a JavaScript function compiled by Bend to decide whether the cell lives.</p><p>The survival rule starts as typed Nelua inside a file-local bendjs block. The extension reuses the fork’s Bend2 lowering pass. Open the artifacts below to follow the same rule through the build.</p><details><summary>Nelua source</summary><pre><code>#syntax <span class="code-literal">'syntax.bendjs'</span>
 <span class="code-keyword">##</span> pragmas.noentrypoint = true
 <span class="code-keyword">##</span> pragmas.nogc = true
 <span class="code-keyword">##</span> pragmas.nochecks = true
@@ -401,6 +401,9 @@ uint32_t next_row(uint32_t above, uint32_t row, uint32_t below) {
   <span class="code-keyword">return</span> next_bits;
 }</code></pre></details><details><summary>Imba interface</summary><pre><code>const board = document.querySelector(<span class="code-literal">'#life-board'</span>)
 const step = document.querySelector(<span class="code-literal">'#life-step'</span>)
+const play = document.querySelector(<span class="code-literal">'#life-play'</span>)
+const pattern = document.querySelector(<span class="code-literal">'#life-pattern'</span>)
+let timer = null
 const reset = document.querySelector(<span class="code-literal">'#life-reset'</span>)
 const status = document.querySelector(<span class="code-literal">'#life-status'</span>)
 const context = board.getContext(<span class="code-literal">'2d'</span>)
@@ -414,14 +417,26 @@ def draw
 		<span class="code-keyword">for</span> x <span class="code-keyword">in</span> [<span class="code-literal">0</span>...<span class="code-literal">16</span>]
 			context.fillStyle = (rows[y] &amp; (<span class="code-literal">1</span> &lt;&lt; x)) ? <span class="code-literal">'#a5e2cc'</span> : <span class="code-literal">'#283b54'</span>
 			context.fillRect(x * <span class="code-literal">20</span> + <span class="code-literal">1</span>, y * <span class="code-literal">20</span> + <span class="code-literal">1</span>, <span class="code-literal">18</span>, <span class="code-literal">18</span>)
-	board.setAttribute(<span class="code-literal">'aria-label'</span>, "Game of Life glider at generation {generation}")
+	board.setAttribute(<span class="code-literal">'aria-label'</span>, "Game of Life {pattern.value} at generation {generation}")
 	status.textContent = "Generation {generation}"
 
+def pause
+	<span class="code-keyword">if</span> timer != null
+		clearInterval(timer)
+	timer = null
+	play.textContent = <span class="code-literal">'Play'</span>
+
 def seed
+	pause!
 	rows.fill(<span class="code-literal">0</span>)
-	rows[<span class="code-literal">4</span>] = <span class="code-literal">1</span> &lt;&lt; <span class="code-literal">6</span>
-	rows[<span class="code-literal">5</span>] = <span class="code-literal">1</span> &lt;&lt; <span class="code-literal">7</span>
-	rows[<span class="code-literal">6</span>] = <span class="code-literal">7</span> &lt;&lt; <span class="code-literal">5</span>
+	<span class="code-keyword">if</span> pattern.value == <span class="code-literal">'blinker'</span>
+		rows[<span class="code-literal">7</span>] = <span class="code-literal">7</span> &lt;&lt; <span class="code-literal">6</span>
+	elif pattern.value == <span class="code-literal">'block'</span>
+		rows[<span class="code-literal">7</span>] = rows[<span class="code-literal">8</span>] = <span class="code-literal">3</span> &lt;&lt; <span class="code-literal">7</span>
+	else
+		rows[<span class="code-literal">4</span>] = <span class="code-literal">1</span> &lt;&lt; <span class="code-literal">6</span>
+		rows[<span class="code-literal">5</span>] = <span class="code-literal">1</span> &lt;&lt; <span class="code-literal">7</span>
+		rows[<span class="code-literal">6</span>] = <span class="code-literal">7</span> &lt;&lt; <span class="code-literal">5</span>
 	generation = <span class="code-literal">0</span>
 	draw!
 
@@ -433,13 +448,27 @@ def load
 		throw new Error("HTTP {response.status}") unless response.ok
 		const survives = <span class="code-keyword">do</span>(alive, neighbors) rules.default.survives(alive &gt;&gt;&gt; <span class="code-literal">0</span>, neighbors &gt;&gt;&gt; <span class="code-literal">0</span>)
 		const wasm = await WebAssembly.instantiate(await response.arrayBuffer!, {env: {survives: survives}})
-		step.addEventListener(<span class="code-literal">'click'</span>) <span class="code-keyword">do</span>
+		def advance
 			const next = new Uint16Array(<span class="code-literal">16</span>)
 			<span class="code-keyword">for</span> y <span class="code-keyword">in</span> [<span class="code-literal">0</span>...<span class="code-literal">16</span>]
 				next[y] = wasm.instance.exports.next_row(rows[(y + <span class="code-literal">15</span>) % <span class="code-literal">16</span>], rows[y], rows[(y + <span class="code-literal">1</span>) % <span class="code-literal">16</span>])
 			rows = next
 			generation += <span class="code-literal">1</span>
 			draw!
+		step.addEventListener(<span class="code-literal">'click'</span>) <span class="code-keyword">do</span>
+			pause!
+			advance!
+		play.addEventListener(<span class="code-literal">'click'</span>) <span class="code-keyword">do</span>
+			<span class="code-keyword">if</span> timer == null
+				timer = setInterval(advance, <span class="code-literal">240</span>)
+				play.textContent = <span class="code-literal">'Pause'</span>
+			else
+				pause!
+		document.addEventListener(<span class="code-literal">'visibilitychange'</span>) <span class="code-keyword">do</span>
+			pause! <span class="code-keyword">if</span> document.hidden
+		pattern.addEventListener(<span class="code-literal">'change'</span>, seed)
+		play.disabled = false
+		pattern.disabled = false
 		reset.addEventListener(<span class="code-literal">'click'</span>, seed)
 		reset.disabled = false
 		step.disabled = false

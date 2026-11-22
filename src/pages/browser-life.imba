@@ -16,9 +16,15 @@ export def body
 		<p className="tagline"> 'Five cells travel across a wrapping board. Step four generations and watch the pattern reappear one square down and to the right.'
 	<div className="grid life-lab">
 		<section>
+			<label for="life-pattern"> 'Starting pattern '
+			<select id="life-pattern" html:disabled="">
+				<option value="glider"> 'Glider'
+				<option value="blinker"> 'Blinker'
+				<option value="block"> 'Still life'
 			<canvas id="life-board" width="320" height="320" aria-label="Game of Life board"> 'A 16 by 16 Game of Life board.'
 			<div className="actions">
 				<button id="life-step" type="button" className="button" html:disabled=""> 'Step one generation'
+				<button id="life-play" type="button" className="button button-ghost" html:disabled=""> 'Play'
 				<button id="life-reset" type="button" className="button button-ghost" html:disabled=""> 'Reset'
 			<p id="life-status" html:role="status"> 'Loading the simulation…'
 			<noscript> 'Enable JavaScript to step the simulation.'

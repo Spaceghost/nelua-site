@@ -1,0 +1,32 @@
+#syntax 'syntax.bendjs'
+## pragmas.noentrypoint = true
+## pragmas.nogc = true
+## pragmas.nochecks = true
+## pragmas.nocstaticassert = true
+
+-- Opcode declarations from Drift, c970832, lib/drift/asm.nelua (MIT).
+local asm: type = @record{}
+
+## local names = {'HALT','LIT','MOV','ADD','SUB','MUL','DIV','AND','OR',
+##                'XOR','SHL','SHR','LD8','ST8','LD32','ST32','JMP',
+##                'JEQ','JNE','JLT','IO','EVENT','SLEEP'}
+## for i, name in ipairs(names) do
+local asm.#|name|#: uint8 <comptime> = #[i-1]#
+## end
+
+local codes: [23]uint8 = {
+  asm.HALT, asm.LIT, asm.MOV, asm.ADD, asm.SUB, asm.MUL, asm.DIV, asm.AND, asm.OR, asm.XOR, asm.SHL, asm.SHR, asm.LD8, asm.ST8, asm.LD32, asm.ST32, asm.JMP, asm.JEQ, asm.JNE, asm.JLT, asm.IO, asm.EVENT, asm.SLEEP
+}
+
+-- Pack the first four bytes of a Drift instruction in little-endian order.
+bendjs (pack_word) do
+  local function pack_word(op: uint32, a: uint32, b: uint32, c: uint32): uint32
+    return op + 256_u32 * (a + 256_u32 * (b + 256_u32 * c))
+  end
+end
+
+local function encode(index: uint32, a: uint32, b: uint32, c: uint32): uint32
+    <cexport, codename 'encode'>
+  if index >= #codes or a > 15 or b > 15 or c > 15 then return 0xffffffff_u32 end
+  return pack_word(codes[index], a, b, c)
+end

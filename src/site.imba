@@ -20,7 +20,6 @@ import * as notFound from './pages/not-found.imba'
 const navigation = [
 	{ title: 'Overview', path: '/nelua/' }
 	{ title: 'Learn', path: 'https://nelua.io/tutorial/' }
-	{ title: 'Examples', path: '/nelua/#examples' }
 	{ title: 'Performance', path: '/nelua/performance/' }
 	{ title: 'Community', path: '/nelua/community/' }
 	...overview.core.filter(do(project) project.inMenu !== false)
@@ -69,6 +68,9 @@ def documentFor page
 				<main id="main" html:tabindex="-1">
 					page.body
 				<footer>
+					<p className="creator-credit">
+						<a href="https://github.com/edubart"> 'Eduardo Bart'
+						', thank you for creating Nelua. You gave us a language we love building with.'
 					<a className="footer-home" href="/nelua/"> 'Nelua'
 					if view.footerLinks
 						view.footerLinks()

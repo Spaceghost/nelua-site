@@ -85,6 +85,7 @@ pre code { background: none; padding: 0; font-size: .84rem; }
 .project-list a { font-weight: 600; }
 .project-list p { color: var(--muted); margin: 4px 0 0; }
 footer { margin-top: 40px; padding-block: 22px 32px; border-top: 1px solid var(--line); font-size: .875rem; color: var(--muted); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 24px; }
+.creator-credit { flex-basis: 100%; margin: 0; color: var(--text); font-size: 1rem; }
 .footer-links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
 .footer-home { color: var(--text); font-weight: 600; text-decoration: none; }
 

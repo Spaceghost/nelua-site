@@ -181,6 +181,20 @@ export async function handle(request, env, options = {}) {
   const path = url.pathname.slice(BASE.length);
   let operation = 'route';
   try {
+    if (url.pathname === '/nelua/community/data.json' && [ORIGIN, 'https://nelua.tech'].includes(url.origin)) {
+      if (!['GET', 'HEAD'].includes(request.method)) {
+        return new Response(null, {status: 405, headers: {Allow: 'GET, HEAD'}});
+      }
+      const object = request.method === 'HEAD'
+        ? await env.PUBLIC_SNAPSHOTS.head('data.json')
+        : await env.PUBLIC_SNAPSHOTS.get('data.json');
+      need(object, 503, 'snapshot_unavailable');
+      return new Response(object.body ?? null, {headers: {
+        'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=60',
+        'Content-Length': String(object.size), 'ETag': object.httpEtag,
+        'X-Content-Type-Options': 'nosniff'
+      }});
+    }
     const publicTotals = url.origin === 'https://nelua.tech' && url.pathname === BASE + '/private-totals' && request.method === 'GET';
     need((url.origin === ORIGIN || publicTotals) && url.pathname.startsWith(BASE + '/'), 404, 'not_found');
     if (path === '/private-totals' && request.method === 'GET') {

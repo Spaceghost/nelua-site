@@ -132,6 +132,11 @@ def run(args):
         command(wrangler + ['deploy', '--config', 'wrangler.toml', '--strict', '--keep-vars',
                             '--message', f'Daily Nelua community snapshot {stamp[:8]}'], cwd=worktree, timeout=300)
 
+        # Publish after the matching static avatar assets are available.
+        command(wrangler + ['r2', 'object', 'put', 'nelua-community-public/data.json',
+                            '--file', stage / 'data.json', '--remote', '--content-type', 'application/json'],
+                cwd=worktree, timeout=180)
+
         # Check the deployed bytes using a fresh cache key, without watching CI.
         expected = hashlib.sha256((stage / 'data.json').read_bytes()).hexdigest()
         for origin in ('https://nelua.tech', 'https://spacegho.st'):

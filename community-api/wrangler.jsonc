@@ -5,7 +5,10 @@
   "workers_dev": false,
   "preview_urls": false,
   "secrets": {"required": ["ENCRYPTION_KEY"]},
+  "r2_buckets": [{"binding": "PUBLIC_SNAPSHOTS", "bucket_name": "nelua-community-public"}],
   "routes": [
+    {"pattern": "spacegho.st/nelua/community/data.json*", "zone_name": "spacegho.st"},
+    {"pattern": "nelua.tech/nelua/community/data.json*", "zone_name": "nelua.tech"},
     {"pattern": "spacegho.st/nelua/community/api/*", "zone_name": "spacegho.st"},
     {"pattern": "nelua.tech/nelua/community/api/private-totals", "zone_name": "nelua.tech"}
   ],

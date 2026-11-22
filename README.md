@@ -149,17 +149,18 @@ immediately.
 
 The workflow validates consent boundaries, collects current public default
 branches, checks coverage and deduplication, pushes the dated public snapshot
-normally to `main`, deploys static assets, and checks the live JSON hash. Failed
+normally to `main`, deploys static assets, uploads the validated JSON to the R2 bucket
+`nelua-community-public` as `data.json`, and verifies its hash on both domains. Failed
 public collection or validation keeps the previous published snapshot. A
 concurrent source change stops the run. Private counting follows public
-publication. Seven-day Actions artifacts contain only the **public** report,
-log and snapshot. The job token supplies repository access; the existing
+publication. The Actions job summary records the public collection status and checksum. The job token supplies repository access; the existing
 Cloudflare deploy credential is encrypted in `CLOUDFLARE_API_TOKEN`.
 
 ### GitHub sign-in and private project consent
 
 The public site remains assets-only. `community-api/` is a separate Worker at
-`/nelua/community/api/*`, with its own D1 database. Sign-in uses the existing
+`/nelua/community/api/*`, with its own D1 database. It also serves the public R2 object
+at `/nelua/community/data.json` on both domains. Sign-in uses the existing
 `spaceghost-auth` GitHub provider, PKCE, a one-use state and nonce, signed
 ES256 tokens and an audience-specific immutable GitHub ID. Community session
 cookies are Secure, HttpOnly and SameSite=Lax; writes require same-origin CSRF

@@ -26,3 +26,15 @@
 }
 .language-hero .example-output { flex-wrap: wrap; gap: .25rem 1rem; }
 .language-hero .example-output samp { white-space: normal; }
+.source-browser { min-width: 0; color: #eff4ff; background: #172339; border-radius: .65rem; overflow: hidden; }
+.source-tabs { display: flex; flex-wrap: wrap; background: #101b2d; border-bottom: 1px solid #405070; }
+.source-tabs button { appearance: none; padding: .7rem .65rem; color: #c1cde0; background: transparent; border: 0; border-top: 3px solid transparent; cursor: pointer; font: .875rem/1.4 var(--mono); }
+.source-tabs button[aria-selected="true"] { background: #263854; color: white; border-top-color: #9ebcff; }
+.source-browser :focus-visible { outline: 2px solid #b4cbff; outline-offset: -3px; }
+.source-file { border-radius: 0; }
+.source-file header { padding: 1.1rem 1rem .3rem; }
+.source-file header span { color: #b4cbff; font: .88rem var(--mono); }
+.source-file h2 { margin: .4rem 0 0; font-size: 1.4rem; }
+.source-file pre { background: #101b2d; margin: .8rem 0; }
+.source-file p { margin: .8rem 1rem; color: #e4ebf5; }
+.file-origin { display: inline-block; margin: .65rem 1rem 1rem; font-size: .9rem; }

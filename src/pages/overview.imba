@@ -1,3 +1,4 @@
+import { files } from '../showcase-files.mjs'
 import { readFileSync } from 'node:fs'
 import { highlight } from '../example-code.mjs'
 
@@ -49,8 +50,6 @@ def example filename, output
 			<span> 'Output'
 			<samp> output
 
-const bootExcerpt = "local flags = MS_NODEV | MS_NOEXEC | MS_NOSUID\nmount_one('proc', '/proc', 'proc', flags)\nmount_one('sysfs', '/sys', 'sysfs', flags)\nsetenv('PATH', '/bin:/sbin', 1)\nreport('theseus: starting console shell')"
-
 export def body
 	<div className="overview">
 		<section className="language-hero" aria-labelledby="overview-title">
@@ -62,14 +61,23 @@ export def body
 					<a className="button" href="/nelua/init/?boot=1#browser-demo"> 'Boot Linux in your browser'
 					<a href="https://nelua.io/tutorial/"> 'Learn Nelua'
 				<p className="run-example"> 'About 30 MB to start the local VM.'
-			<figure className="language-example">
-				<figcaption>
-					<a href="https://github.com/Spaceghost/theseus-init/blob/72095fd70e77da93fada45686459985cee5429d3/src/theseus/earlyboot.nelua"> 'Theseus Init / earlyboot.nelua'
-				<pre>
-					<code innerHTML=highlight(bootExcerpt)>
-				<div className="example-output">
-					<span> 'Console'
-					<samp> 'theseus: starting console shell'
+			<div className="source-browser">
+				<div className="source-tabs" html:role="tablist" aria-label="Nelua source files" html:hidden="">
+					for file in files
+						<button type="button" html:role="tab" id=("tab-" + file.key) aria-controls=("file-" + file.key)> file.file
+				for file in files
+					<article className="language-example source-file" id=("file-" + file.key)>
+						<header>
+							<span> file.project
+							<h2> file.title
+						<pre>
+							<code innerHTML=highlight(file.code)>
+						<p> file.note
+						if file.key == 'boot'
+							<div className="example-output">
+								<span> 'Console'
+								<samp> 'theseus: starting console shell'
+						<a className="file-origin" href=file.source> "View {file.file} on GitHub"
 		<section className="overview-section" aria-labelledby="language">
 			<h2 id="language"> 'From source to executable'
 			<div className="language-tour">

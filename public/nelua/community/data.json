@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-22T06:54:56.683159Z",
+  "generatedAt": "2026-11-22T06:58:43.526167Z",
   "metric": "Current original .nelua SLOC",
   "methodology": [
     "A bounded index of candidate GitHub repositories; this is not a complete census of all Nelua code or developers.",

@@ -28,7 +28,7 @@ tag coverage-explorer
 
 	def mount
 		try
-			const res = await window.fetch('/nelua/assets/nelibc-coverage-profiles.json')
+			const res = await window.fetch('../assets/nelibc-coverage-profiles.json')
 			if !res.ok
 				throw new Error('coverage data unavailable')
 			const data = await res.json!
@@ -120,9 +120,9 @@ tag coverage-explorer
 		if failed
 			<p className="muted" role="alert">
 				"The coverage data could not be loaded. You can still download the "
-				<a html:href="/nelua/assets/nelibc-coverage-profiles.json"> "profile coverage data"
+				<a html:href="../assets/nelibc-coverage-profiles.json"> "profile coverage data"
 				" or view the "
-				<a html:href="/nelua/assets/nelibc-coverage.json"> "historical coverage snapshot"
+				<a html:href="../assets/nelibc-coverage.json"> "historical coverage snapshot"
 				"."
 		elif !loaded
 			<p className="muted count" role="status" aria-live="polite"> "Loading coverage inventories and profiles…"

@@ -90,7 +90,7 @@ def run(args):
         base = command(['git', 'rev-parse', 'origin/main'], capture=True)
         command(['git', 'worktree', 'add', '-b', f'release/community-{stamp}', worktree, base])
         config = tomllib.loads((worktree / 'wrangler.toml').read_text())
-        if config.get('name') != 'nelua-site' or 'main' in config or config.get('assets', {}).get('directory') != 'public':
+        if config.get('name') != 'nelua-site' or 'main' in config or config.get('assets', {}).get('directory') != 'build/site':
             raise RuntimeError('Expected the existing assets-only nelua-site configuration')
         if not os.environ.get('CLOUDFLARE_ACCOUNT_ID'):
             raise RuntimeError('CLOUDFLARE_ACCOUNT_ID must select the established deployment account')
@@ -144,8 +144,8 @@ def run(args):
 
         # Check the deployed bytes using a fresh cache key, without watching CI.
         expected = hashlib.sha256((stage / 'data.json').read_bytes()).hexdigest()
-        for origin in ('https://nelua.tech', 'https://spacegho.st'):
-            url = origin + '/nelua/community/data.json?snapshot=' + expected
+        for origin in ('https://nelua.tech', 'https://spacegho.st/nelua'):
+            url = origin + '/community/data.json?snapshot=' + expected
             for attempt in range(3):
                 try:
                     request = urllib.request.Request(url, headers={

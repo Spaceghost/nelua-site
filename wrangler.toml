@@ -14,7 +14,10 @@ routes = [
 
 # Assets-only Worker: no script, so page views are static-asset requests (not
 # Worker invocations). public/_headers sets caching; nothing is dynamic.
+[build]
+command = "node scripts/site-assets.mjs"
+
 [assets]
-directory = "public"
+directory = "build/site"
 html_handling = "auto-trailing-slash"
 not_found_handling = "404-page"

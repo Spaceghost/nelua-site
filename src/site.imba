@@ -45,7 +45,7 @@ def documentFor page
 			if view.description
 				<meta name="description" content=view.description>
 			if page.path != '/nelua/404.html'
-				<link rel="canonical" href=(page.path == '/nelua/' ? 'https://nelua.tech/' : 'https://nelua.tech' + page.path)>
+				<link rel="canonical" href=('https://nelua.tech' + page.path.slice('/nelua'.length))>
 			<link rel="stylesheet" href=asset('/nelua/assets/site.css')>
 			<link rel="icon" href=monogram type="image/svg+xml">
 			if page.stylesheet
@@ -107,7 +107,5 @@ for page in pages
 		mkdirSync('public' + page.path, { recursive: true })
 	const html = documentFor(page).outerHTML.replace(/^<!DOCTYPE html>/, '<!doctype html>\n')
 	writeFileSync(output, html + '\n')
-
-copyFileSync('public/nelua/index.html', 'public/index.html')
 
 console.log("Rendered {pages.length} Nelua pages")

@@ -73,8 +73,8 @@ npm run check
 npm run deploy
 ```
 
-Wrangler uploads one copy of `public/` to the `nelua-site` Worker. Its custom
-domain serves `nelua.tech`, and its two path routes serve `spacegho.st/nelua`
+Wrangler assembles `build/site/` from `public/nelua/` and uploads it to the `nelua-site` Worker. Its custom
+domain serves pages at the root of `nelua.tech`, and its two path routes serve `spacegho.st/nelua`
 and its subpages. One deploy updates both addresses. The renderer writes both
 homepages from the same source. Keep both path routes until the owner retires
 the old address. GitHub sign-in still uses that address.
@@ -160,7 +160,7 @@ Cloudflare deploy credential is encrypted in `CLOUDFLARE_API_TOKEN`.
 
 The public site remains assets-only. `community-api/` is a separate Worker at
 `/nelua/community/api/*`, with its own D1 database. It also serves the public R2 object
-at `/nelua/community/data.json` on both domains. Sign-in uses the existing
+at `nelua.tech/community/data.json` and `spacegho.st/nelua/community/data.json`. Sign-in uses the existing
 `spaceghost-auth` GitHub provider, PKCE, a one-use state and nonce, signed
 ES256 tokens and an audience-specific immutable GitHub ID. Community session
 cookies are Secure, HttpOnly and SameSite=Lax; writes require same-origin CSRF

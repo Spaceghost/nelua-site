@@ -2,7 +2,7 @@ import { Terminal } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import { openpty } from 'xterm-pty'
 
-const assets = new URL('/nelua/init/vm/', globalThis.location.origin)
+const assets = new URL('vm/', globalThis.location.href)
 const roms = [
 	['bios-256k.bin', 0, 262144]
 	['efi-virtio.rom', 262144, 422912]

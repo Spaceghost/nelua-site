@@ -27,6 +27,7 @@ for (const [index, tab] of tabs.entries()) {
     event.preventDefault();
     selectFile(tabs[next]);
     tabs[next].focus();
+    tabs[next].scrollIntoView({ block: "nearest", inline: "nearest" });
   });
 }
 selectFile(tabs[0]);

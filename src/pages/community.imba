@@ -45,6 +45,9 @@ export def body
 							<option html:value="lines"> "Most Nelua lines"
 							<option html:value="repositories"> "Most projects"
 							<option html:value="files"> "Most source files"
+				<div className="score-key">
+					<span> "Public lines"
+					<span className="private-key"> "(+Private lines)"
 				<div className="table-wrap">
 					<table>
 						<thead>

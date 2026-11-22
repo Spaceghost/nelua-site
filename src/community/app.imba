@@ -46,6 +46,17 @@ def details person
 	const summary = totals ? "<div class=\"private-summary\">{format.format(totals.repositories)} private projects · {format.format(totals.lines)} lines · counted {escape(new Date(totals.generatedAt).toLocaleDateString())}. Names and source stay private.</div>" : ''
 	"<tr class=\"repo-detail\"><td colspan=\"{columns()}\"><div class=\"repo-list\">{rows}{summary}</div><p class=\"repo-meta\"><a href=\"{escape(github(person.url))}\" target=\"_blank\" rel=\"noopener noreferrer\">Visit @{escape(person.login)} on GitHub</a> · Public source links point to measured commits.</p></td></tr>"
 
+def lineScore person, maximum
+	const privateLines = number(person.privateTotals && person.privateTotals.lines)
+	const publicLines = number(person.lines) - privateLines
+	const publicWidth = 100 * publicLines / maximum
+	const privateWidth = 100 * privateLines / maximum
+	const label = "{format.format(publicLines)} public lines, {format.format(privateLines)} private lines"
+	"<span class='line-count' aria-hidden='true'>{format.format(publicLines)} <span class='private-count'>(+{format.format(privateLines)})</span></span>" +
+		"<svg class='score-track' role='img' aria-label='{label}'><title>{label}</title>" +
+		"<rect class='score-public' width='{publicWidth}%' height='100%'></rect>" +
+		"<rect class='score-private' x='{publicWidth}%' width='{privateWidth}%' height='100%'></rect></svg>"
+
 def builderRow person, index, maximum
 	const open = state.expanded.has(person.login)
 	const image = avatar(person.localAvatarUrl)
@@ -59,7 +70,7 @@ def builderRow person, index, maximum
 	"<tr class=\"builder-row\"><td class=\"rank\">{index + 1}</td>" +
 		"<td><div class=\"builder\"><span class=\"avatar\" aria-hidden=\"true\">{escape(person.login.charAt(0).toUpperCase())}{picture}</span>" +
 		"<button class=\"builder-toggle\" data-login=\"{login}\" aria-expanded=\"{open}\"><span class=\"builder-name\">{escape(person.name || person.login)}{team}{privateBadge}</span><span class=\"builder-handle\">@{login}</span></button></div></td>" +
-		"<td class=\"number\">{format.format(number(person.lines))}<progress class=\"score-track\" max=\"{maximum}\" value=\"{number(person.lines)}\" aria-hidden=\"true\"></progress></td>" +
+		"<td class=\"number\">{lineScore(person, maximum)}</td>" +
 		"<td class=\"number secondary-col\">{format.format(number(person.files))}</td>" +
 		"<td class=\"number\"><button class=\"project-button\" data-login=\"{login}\" aria-expanded=\"{open}\" aria-label=\"{action} {login}'s {count} projects\">{count}<span aria-hidden=\"true\">{sign}</span></button></td></tr>" +
 		(open ? details(person) : '')

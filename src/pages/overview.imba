@@ -1,5 +1,8 @@
-export const title = 'Nelua at spacegho.st · Compiler, libc and userland'
-export const description = 'Explore the Nelua compiler, C library, userland, native build tools, projects built with Nelua, and the wider community.'
+import { readFileSync } from 'node:fs'
+import { highlight } from '../example-code.mjs'
+
+export const title = 'Nelua · Lua syntax for native programs'
+export const description = 'Learn Nelua through runnable examples of typed records, C interop and compile-time functions. Explore the Spaceghost compiler fork and projects built with it.'
 
 export const core = [
 	{ title: 'Compiler', path: '/nelua/compiler/', kind: 'Language', description: 'A Nelua compiler fork with exhaustive matching, ownership, compile-time evaluation and file-local syntax extensions.' }
@@ -10,17 +13,6 @@ export const core = [
 	{ title: 'necc', path: '/nelua/necc/', kind: 'Compiler driver', description: 'Compile C and Nelua against standalone Nelibc or run Lua from the staged SDK.' }
 	{ title: 'nelinker', path: '/nelua/nelinker/', kind: 'Linker', description: 'Link x86-64 ELF objects into Linux executables or PE32+ EFI applications.' }
 	{ title: 'nebuild', path: '/nelua/nebuild/', kind: 'Build runner', description: 'Run incremental, parallel builds from a build.ne dependency graph.' }
-]
-
-const timingsRoot = "/nelua/assets/ecosystem-20261121/"
-const timings = [
-	{ project: "Nelua compiler", path: "compiler/#performance", task: "Build the matrix multiplication example", time: "1.109 s", reference: "Upstream Nelua", refTime: "1.159 s", finding: "The resulting programs ran in 29.62 and 29.73 ms.", samples: "nelua.csv" }
-	{ project: "necc", path: "necc/#benchmarks", task: "Compile the Lua VM translation unit", time: "138.43 ms", reference: "SDK TinyCC", refTime: "23.77 ms", finding: "Compilation took 115 ms longer with necc.", samples: "necc-final.csv" }
-	{ project: "nelinker", path: "nelinker/#benchmarks", task: "Link the full Lua interpreter", time: "10.71 ms", reference: "TinyCC", refTime: "16.31 ms", finding: "Peak memory was nearly identical at 5,532 and 5,528 KiB.", samples: "link-vm.csv" }
-	{ project: "nebuild", path: "nebuild/#benchmarks", task: "Check an unchanged target among 2,048 rules", time: "4.70 ms", reference: "Ninja", refTime: "3.89 ms", finding: "For 256 rules, nebuild took 1.05 ms and Ninja took 2.34 ms.", samples: "incremental.csv" }
-	{ project: "Nelibc", path: "nelibc/#performance", task: "Search 64 KiB of alternating ab for aa with memmem", time: "2.88 µs", reference: "glibc", refTime: "44.05 µs", finding: "The previous Nelibc took 217.87 µs for the same miss.", samples: "substring.csv" }
-	{ project: "Nebox", path: "nebox/#line-count", task: "Count 47,135 source lines with wc -l", time: "1.61 ms", reference: "GNU wc", refTime: "0.97 ms", finding: "The previous Nebox took 4.66 ms. All runs returned the same count.", samples: "wc.csv" }
-	{ project: "nsh", path: "nebox/nsh/#shell-time", task: "Run the shell catalog script", time: "14.77 ms", reference: "Debian dash", refTime: "7.27 ms", finding: "Startup alone favored nsh at 0.49 ms versus 0.71 ms.", samples: "shell.csv" }
 ]
 
 const workshop = [
@@ -46,18 +38,47 @@ def projectList items
 				<a href=item.path> item.title
 				<p> item.description
 
-export def body comparison
+def example filename, output
+	const source = readFileSync('public/nelua/examples/' + filename, 'utf8').trimEnd()
+	<figure className="language-example">
+		<figcaption>
+			<a href=('/nelua/examples/' + filename) download=filename> filename
+		<pre>
+			<code innerHTML=highlight(source)>
+		<div className="example-output">
+			<span> 'Output'
+			<samp> output
+
+export def body
 	<div className="overview">
-		<section className="overview-hero" aria-labelledby="overview-title">
-			<p className="eyebrow"> 'The Nelua ecosystem'
-			<h1 id="overview-title">
-				<span> 'Nelua'
-				<span> 'A native stack'
-			<div className="hero-details">
-				<p> 'A compiler, C library and Unix userland in one systems programming ecosystem. Nelua brings Lua syntax and compile-time metaprogramming to native programs that compile through C.'
+		<section className="language-hero" aria-labelledby="overview-title">
+			<div>
+				<h1 id="overview-title"> 'Nelua'
+				<p className="language-lead"> 'Lua syntax for native programs.'
+				<p> 'Write functions and loops in the familiar style of Lua. Give a record a precise layout, let the compiler infer local types, and compile the result to C.'
 				<div className="actions">
-					<a className="button" href="#core"> 'Explore the stack'
-					<a className="text-link" href="https://github.com/Spaceghost/nelua"> 'Compiler on GitHub'
+					<a className="button" href="https://nelua.io/tutorial/"> 'Start the tutorial'
+					<a href="https://nelua.io/installing/"> 'Install Nelua'
+			<div>
+				example('point.nelua', '8    4')
+				<p className="run-example">
+					'Run it with '
+					<code> 'nelua point.nelua'
+		<section className="overview-section" aria-labelledby="language">
+			<h2 id="language"> 'From source to executable'
+			<div className="language-tour">
+				<article>
+					<h3> 'Call a C library'
+					<p> 'Declare a C function with its argument and return types. This program calls puts from the C standard library.'
+					example('c-call.nelua', 'Hello from Nelua')
+				<article>
+					<h3> 'Compute a value while compiling'
+					<p> 'In the Spaceghost fork, a function marked <comptime> runs during compilation. Here the executable prints the precomputed tile count.'
+					example('comptime.nelua', '256')
+			<div className="core-guides">
+				<a href="https://nelua.io/overview/"> 'Explore the language'
+				<a href="/nelua/compiler/comptime/"> 'Compile-time programming in the fork'
+				<a href="/nelua/compiler/syntax-extensions/"> 'Fork syntax guide'
 		<section className="overview-section" aria-labelledby="core">
 			<h2 id="core"> 'Core'
 			<div className="core-grid">
@@ -67,51 +88,9 @@ export def body comparison
 						<h3>
 							<a href=item.path> item.title
 						<p> item.description
-			<div className="core-guides">
-				<a href="/nelua/compiler/syntax-extensions/"> 'Syntax extensions guide'
-				<a href="/nelua/compiler/comptime/"> 'Compile-time record configs'
-		<section className="overview-section" aria-labelledby="performance">
-			<h2 id="performance"> 'Core performance'
-			<p className="bench-intro"> 'Median wall times from 21 November 2026. Each comparison used the same input and host, with implementations taking turns. Shorter times are better.'
-			<article className="bench-feature">
-				<div>
-					<p className="eyebrow"> 'necc · Generated program runtime'
-					<h3> 'A million Lua calls took 108 ms less'
-					<p> 'Changing how the compiled Lua VM dispatches bytecode cut its median runtime across 15 rounds. The TinyCC-built interpreter still finished 329 ms sooner.'
-					<a href=(timingsRoot + 'vm.csv')> 'Inspect the 15 rounds'
-				<dl className="bench-chart" aria-label="Median time to run one million Lua calls">
-					for item in [{label: 'Previous necc', value: 606}, {label: 'Updated necc', value: 498}, {label: 'TinyCC', value: 169}]
-						<div>
-							<dt> item.label
-							<dd>
-								<strong> "{item.value} ms"
-								<meter min=0 max=606 value=item.value aria-hidden="true">
-			<h3 className="bench-subtitle"> 'Time per workload'
-			<div className="bench-list">
-				for row in timings
-					<article className="bench-row">
-						<div className="bench-work">
-							<a href=('/nelua/' + row.path)> row.project
-							<h4> row.task
-						<dl className="bench-pair">
-							<div>
-								<dt> row.project
-								<dd> row.time
-							<div>
-								<dt> row.reference
-								<dd> row.refTime
-						<div className="bench-note">
-							<p> row.finding
-							<a href=(timingsRoot + row.samples)> "{row.project} samples"
-			<p className="bench-boot">
-				<strong> 'Boot timing · '
-				<a href="/nelua/neboot/#efi-boot-time"> 'neboot reached EFI handoff'
-				' 0.26 s after menu selection. The working shell followed 12.37 s later under QEMU software emulation.'
-			<div className="bench-sources">
-				<a href=(timingsRoot + 'reproduce.txt')> 'Hardware, revisions and reproduction steps'
-				<a href=(timingsRoot + 'summary.csv')> 'Download medians, quartiles and ranges'
-		<section className="overview-section" aria-labelledby="libc-comparison">
-			<div innerHTML=comparison>
+		<div className="core-guides">
+			<a id="performance" href="/nelua/performance/"> 'Core performance measurements'
+			<a id="libc-comparison" href="/nelua/performance/#libc-comparison"> 'Nelibc benchmark comparison'
 		<section className="overview-section" aria-labelledby="build">
 			<div className="build-panel">
 				<div>

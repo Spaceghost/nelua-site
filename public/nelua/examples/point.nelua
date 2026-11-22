@@ -1,0 +1,10 @@
+local Point = @record{
+  x: integer, y: integer
+}
+
+local start: Point = {x = 3, y = 4}
+local finish = Point{
+  x = start.x + 5, y = start.y
+}
+
+print(finish.x, finish.y)

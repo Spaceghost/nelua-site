@@ -1,0 +1,6 @@
+local function square(n: integer): integer <comptime>
+  return n * n
+end
+
+local tiles = square(16)
+print(tiles)

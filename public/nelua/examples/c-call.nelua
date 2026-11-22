@@ -1,0 +1,4 @@
+local function puts(s: cstring): cint
+  <cimport, nodecl, cinclude '<stdio.h>'> end
+
+puts('Hello from Nelua')

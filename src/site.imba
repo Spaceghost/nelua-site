@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto'
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import * as overview from './pages/overview.imba'
+import * as performancePage from './pages/performance.imba'
 import * as compiler from './pages/compiler.imba'
 import * as comptime from './pages/comptime.imba'
 import * as syntaxGuide from './pages/syntax-guide.imba'
@@ -74,7 +75,8 @@ def documentFor page
 							<a href="https://johnneylee.com/"> 'Johnneylee Rollins'
 
 const pages = [
-	{ source: overview, path: '/nelua/', body: overview.body(content('nelibc-overview')), stylesheet: '/nelua/assets/performance.css' }
+	{ source: overview, path: '/nelua/', body: overview.body(), stylesheet: '/nelua/assets/language.css' }
+	{ source: performancePage, path: '/nelua/performance/', body: performancePage.body(content('nelibc-overview')), stylesheet: '/nelua/assets/performance.css' }
 	{ source: compiler, path: '/nelua/compiler/', body: compiler.body() }
 	{ source: comptime, path: '/nelua/compiler/comptime/', active: '/nelua/compiler/', body: comptime.body() }
 	{ source: syntaxGuide, path: '/nelua/compiler/syntax-extensions/', active: '/nelua/compiler/', body: syntaxGuide.body(content('syntax-guide'), content('syntax-toc')) }
@@ -92,6 +94,7 @@ const pages = [
 ]
 
 copyFileSync('src/site.css', 'public/nelua/assets/site.css')
+copyFileSync('src/language.css', 'public/nelua/assets/language.css')
 copyFileSync('src/performance.css', 'public/nelua/assets/performance.css')
 copyFileSync('src/nelibc-results.css', 'public/nelua/nelibc/results.css')
 copyFileSync('src/nelibc-results.js', 'public/nelua/nelibc/results.js')

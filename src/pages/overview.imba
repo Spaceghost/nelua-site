@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 import { highlight } from '../example-code.mjs'
 
 export const title = 'Nelua · Lua syntax for native programs'
-export const description = 'Learn Nelua through runnable examples of typed records, C interop and compile-time functions. Explore the Spaceghost compiler fork and projects built with it.'
+export const description = 'Boot Linux with a Nelua init and shell, then explore C interop and compile-time functions. Explore the Spaceghost compiler fork and projects built with it.'
 
 export const core = [
 	{ title: 'Compiler', path: '/nelua/compiler/', kind: 'Language', description: 'A Nelua compiler fork with exhaustive matching, ownership, compile-time evaluation and file-local syntax extensions.' }
@@ -49,21 +49,27 @@ def example filename, output
 			<span> 'Output'
 			<samp> output
 
+const bootExcerpt = "local flags = MS_NODEV | MS_NOEXEC | MS_NOSUID\nmount_one('proc', '/proc', 'proc', flags)\nmount_one('sysfs', '/sys', 'sysfs', flags)\nsetenv('PATH', '/bin:/sbin', 1)\nreport('theseus: starting console shell')"
+
 export def body
 	<div className="overview">
 		<section className="language-hero" aria-labelledby="overview-title">
 			<div>
 				<h1 id="overview-title"> 'Nelua'
-				<p className="language-lead"> 'Lua syntax for native programs.'
-				<p> 'Write functions and loops in the familiar style of Lua. Give a record a precise layout, let the compiler infer local types, and compile the result to C.'
+				<p className="language-lead"> 'Write the first program Linux runs.'
+				<p> 'When this Linux guest boots, the kernel hands control to Nelua code. Theseus Init mounts the filesystems and starts a Nebox shell. You can type commands at its console, right here in your browser.'
 				<div className="actions">
-					<a className="button" href="https://nelua.io/tutorial/"> 'Start the tutorial'
-					<a href="https://nelua.io/installing/"> 'Install Nelua'
-			<div>
-				example('point.nelua', '8    4')
-				<p className="run-example">
-					'Run it with '
-					<code> 'nelua point.nelua'
+					<a className="button" href="/nelua/init/?boot=1#browser-demo"> 'Boot Linux in your browser'
+					<a href="https://nelua.io/tutorial/"> 'Learn Nelua'
+				<p className="run-example"> 'About 30 MB to start the local VM.'
+			<figure className="language-example">
+				<figcaption>
+					<a href="https://github.com/Spaceghost/theseus-init/blob/72095fd70e77da93fada45686459985cee5429d3/src/theseus/earlyboot.nelua"> 'Theseus Init / earlyboot.nelua'
+				<pre>
+					<code innerHTML=highlight(bootExcerpt)>
+				<div className="example-output">
+					<span> 'Console'
+					<samp> 'theseus: starting console shell'
 		<section className="overview-section" aria-labelledby="language">
 			<h2 id="language"> 'From source to executable'
 			<div className="language-tour">
@@ -76,6 +82,7 @@ export def body
 					<p> 'In the Spaceghost fork, a function marked <comptime> runs during compilation. Here the executable prints the precomputed tile count.'
 					example('comptime.nelua', '256')
 			<div className="core-guides">
+				<a href="https://nelua.io/installing/"> 'Install Nelua'
 				<a href="https://nelua.io/overview/"> 'Explore the language'
 				<a href="/nelua/compiler/comptime/"> 'Compile-time programming in the fork'
 				<a href="/nelua/compiler/syntax-extensions/"> 'Fork syntax guide'

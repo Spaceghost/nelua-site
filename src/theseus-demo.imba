@@ -111,3 +111,8 @@ def boot
 
 start.addEventListener('click', boot)
 reset.addEventListener('click') do globalThis.location.reload!
+
+# The homepage boot link opens the console directly. Ordinary project visits
+# still wait for the Start button before fetching the guest.
+if new URL(globalThis.location.href).searchParams.get('boot') == '1'
+	boot!

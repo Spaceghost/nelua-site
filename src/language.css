@@ -24,3 +24,5 @@
 @media (max-width: 32rem) {
   .language-example pre { white-space: pre-wrap; overflow-wrap: anywhere; }
 }
+.language-hero .example-output { flex-wrap: wrap; gap: .25rem 1rem; }
+.language-hero .example-output samp { white-space: normal; }

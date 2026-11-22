@@ -385,6 +385,11 @@ export async function handle(request, env, options = {}) {
     }
     if (path.startsWith('/refresh/')) {
       const identity = await actionsIdentity(request, env, fetcher, now);
+      if (path === '/refresh/snapshot' && request.method === 'POST') {
+        const snapshot = await limitedBody(request, 4 * 1024 * 1024);
+        await env.PUBLIC_SNAPSHOTS.put('data.json', snapshot, {httpMetadata: {contentType: 'application/json'}});
+        return json({published: true});
+      }
       if (path === '/refresh/owners' && request.method === 'GET') {
         await env.DB.batch(['DELETE FROM states WHERE expires<?', 'DELETE FROM sessions WHERE expires<?', 'DELETE FROM scan_tasks WHERE expires<?'].map(sql => env.DB.prepare(sql).bind(now)));
         const result = await env.DB.prepare('SELECT id FROM users WHERE consent=1 AND installation_id IS NOT NULL AND selection IS NOT NULL ORDER BY CAST(id AS INTEGER) LIMIT 1000').all();

@@ -17,11 +17,14 @@ import * as nebuild from './pages/nebuild.imba'
 import * as community from './pages/community.imba'
 import * as notFound from './pages/not-found.imba'
 
-const navigation = [
+const siteLinks = [
 	{ title: 'Overview', path: '/nelua/' }
 	{ title: 'Learn', path: 'https://nelua.io/tutorial/' }
 	{ title: 'Performance', path: '/nelua/performance/' }
 	{ title: 'Community', path: '/nelua/community/' }
+]
+
+const projectLinks = [
 	...overview.core.filter(do(project) project.inMenu !== false)
 	{ title: 'nelua.io', path: 'https://nelua.io/' }
 ]
@@ -63,14 +66,17 @@ def documentFor page
 						<img src=monogram width="34" height="34" alt="">
 						<span> 'Nelua'
 					<nav aria-label="Sections">
-						for item in navigation
-							<a href=item.path rel=(item.path.startsWith('https://') ? 'external' : null) aria-current=(item.path == active ? current : null)> item.title
+						for links in [siteLinks, projectLinks]
+							<span className="nav-group">
+								for item in links
+									<a href=item.path rel=(item.path.startsWith('https://') ? 'external' : null) aria-current=(item.path == active ? current : null)> item.title
 				<main id="main" html:tabindex="-1">
 					page.body
 				<footer>
 					<p className="creator-credit">
+						'With love and admiration for '
 						<a href="https://github.com/edubart"> 'Eduardo Bart'
-						', thank you for creating Nelua. You gave us a language we love building with.'
+						', the creator of Nelua. Thank you for giving us a language that makes writing systems code such a joy.'
 					<a className="footer-home" href="/nelua/"> 'Nelua'
 					if view.footerLinks
 						view.footerLinks()

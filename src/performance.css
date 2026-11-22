@@ -1,0 +1,27 @@
+.bench-intro { max-width: 70ch; color: var(--muted); }
+.bench-feature { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(1.5rem, 5vw, 4rem); align-items: center; margin: 1.5rem 0 2rem; padding: clamp(1.2rem, 3vw, 2.4rem); background: var(--accent-light); border-top: 3px solid var(--accent); }
+.bench-feature .eyebrow { color: var(--accent); }
+.bench-feature h3 { font-size: clamp(1.6rem, 3vw, 2.5rem); }
+.bench-chart, .bench-chart dd, .bench-pair, .bench-pair dd { margin: 0; }
+.bench-chart > div { position: relative; padding-bottom: 1.2rem; margin: .6rem 0; }
+.bench-chart strong { position: absolute; right: 0; top: 0; }
+.bench-chart meter { position: absolute; bottom: .3rem; width: 100%; height: .52rem; appearance: none; border: 0; background: #d4ddef; border-radius: 0; }
+.bench-chart meter::-webkit-meter-bar { background: #d4ddef; border: 0; height: 100%; border-radius: 0; }
+.bench-chart meter::-webkit-meter-optimum-value { background: var(--accent); }
+.bench-chart meter::-moz-meter-bar { background: var(--accent); }
+.bench-subtitle { font-size: 1.5rem; }
+.bench-list { margin-top: 1rem; border-top: 2px solid var(--text); }
+.bench-row { display: grid; grid-template-columns: 1.12fr 1fr 1.05fr; gap: 1.4rem; padding: 1.15rem 0; border-bottom: 1px solid var(--line); align-items: center; }
+.bench-work a, .bench-note a { font-size: .9rem; }
+.bench-work h4 { font-size: 1.05rem; line-height: 1.35; margin: .2rem 0 0; }
+.bench-pair { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+.bench-pair dt { color: var(--muted); font-size: .875rem; }
+.bench-pair dd, .bench-chart strong { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.bench-pair dd { font-weight: 650; white-space: nowrap; }
+.bench-note p { margin: 0; color: var(--muted); font-size: .95rem; }
+.bench-boot { max-width: 75ch; }
+.bench-sources { display: flex; gap: .5rem 2rem; flex-wrap: wrap; font-size: .95rem; }
+@media (max-width: 48rem) {
+  .bench-feature, .bench-row { grid-template-columns: 1fr; gap: .75rem; }
+  .bench-pair { max-width: 22rem; }
+}

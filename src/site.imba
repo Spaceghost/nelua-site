@@ -74,7 +74,7 @@ def documentFor page
 							<a href="https://johnneylee.com/"> 'Johnneylee Rollins'
 
 const pages = [
-	{ source: overview, path: '/nelua/', body: overview.body(content('nelibc-overview')) }
+	{ source: overview, path: '/nelua/', body: overview.body(content('nelibc-overview')), stylesheet: '/nelua/assets/performance.css' }
 	{ source: compiler, path: '/nelua/compiler/', body: compiler.body() }
 	{ source: comptime, path: '/nelua/compiler/comptime/', active: '/nelua/compiler/', body: comptime.body() }
 	{ source: syntaxGuide, path: '/nelua/compiler/syntax-extensions/', active: '/nelua/compiler/', body: syntaxGuide.body(content('syntax-guide'), content('syntax-toc')) }
@@ -92,6 +92,7 @@ const pages = [
 ]
 
 copyFileSync('src/site.css', 'public/nelua/assets/site.css')
+copyFileSync('src/performance.css', 'public/nelua/assets/performance.css')
 copyFileSync('src/nelibc-results.css', 'public/nelua/nelibc/results.css')
 copyFileSync('src/nelibc-results.js', 'public/nelua/nelibc/results.js')
 copyFileSync('src/nebox.css', 'public/nelua/nebox/guide.css')

@@ -32,3 +32,13 @@ for (const [index, tab] of tabs.entries()) {
 }
 selectFile(tabs[0]);
 tabList.hidden = false;
+
+const opcode = document.getElementById('opcode-name');
+const declaration = document.getElementById('opcode-result');
+function showDeclaration() {
+  declaration.textContent = `local asm.${opcode.value}: uint8 <comptime> = ${opcode.selectedIndex}`;
+}
+opcode.addEventListener('change', showDeclaration);
+showDeclaration();
+opcode.labels[0].hidden = false;
+opcode.hidden = false;

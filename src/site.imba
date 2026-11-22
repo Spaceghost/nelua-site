@@ -19,8 +19,11 @@ import * as notFound from './pages/not-found.imba'
 
 const navigation = [
 	{ title: 'Overview', path: '/nelua/' }
-	...overview.core.filter(do(project) project.inMenu !== false)
+	{ title: 'Learn', path: 'https://nelua.io/tutorial/' }
+	{ title: 'Examples', path: '/nelua/#examples' }
+	{ title: 'Performance', path: '/nelua/performance/' }
 	{ title: 'Community', path: '/nelua/community/' }
+	...overview.core.filter(do(project) project.inMenu !== false)
 	{ title: 'nelua.io', path: 'https://nelua.io/' }
 ]
 

@@ -36,3 +36,7 @@ export const files = [
     "code": "local function mx_alloc(n: usize): *[0]byte <cexport, codename 'mx_alloc'>\n  local size: usize = n\n  if size == 0 then size = 1 end\n  size = (size + 7) & ~7_usize\n  if size > ARENA_SIZE - st.arena_top then return nilptr end\n  local start: usize = st.arena_top\n  st.arena_top = start + size\n  return (@*[0]byte)(&st.arena[start])\nend"
   }
 ];
+
+// Drift assigns i - 1 while iterating the quoted names in this excerpt.
+const assembler = files.find(file => file.key === 'assembler');
+export const opcodeNames = Array.from(assembler.code.matchAll(/'([A-Z0-9]+)'/g), match => match[1]);

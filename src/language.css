@@ -38,3 +38,9 @@
 .source-file pre { background: #101b2d; margin: .8rem 0; }
 .source-file p { margin: .8rem 1rem; color: #e4ebf5; }
 .file-origin { display: inline-block; margin: .65rem 1rem 1rem; font-size: .9rem; }
+.opcode-inspector, .generated-c { background: #22324d; margin: 1rem 0 0; padding: .85rem 1rem; }
+.opcode-inspector select { margin-left: .7rem; font: inherit; }
+.opcode-inspector output { display: block; margin-top: .5rem; color: #a5e2cc; font: .9rem/1.5 var(--mono); overflow-wrap: anywhere; }
+.generated-c summary { cursor: pointer; }
+.source-file .generated-c p { margin: .6rem 0; }
+.generated-c pre { margin-bottom: 0; }

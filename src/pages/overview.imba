@@ -1,4 +1,4 @@
-import { files } from '../showcase-files.mjs'
+import { files, opcodeNames } from '../showcase-files.mjs'
 import { readFileSync } from 'node:fs'
 import { highlight } from '../example-code.mjs'
 
@@ -61,7 +61,7 @@ export def body
 					<a className="button" href="/nelua/init/?boot=1#browser-demo"> 'Boot Linux in your browser'
 					<a href="https://nelua.io/tutorial/"> 'Learn Nelua'
 				<p className="run-example"> 'About 30 MB to start the local VM.'
-			<div className="source-browser">
+			<div className="source-browser" id="examples">
 				<div className="source-tabs" html:role="tablist" aria-label="Nelua source files" html:hidden="">
 					for file in files
 						<button type="button" html:role="tab" id=("tab-" + file.key) aria-controls=("file-" + file.key)> file.file
@@ -73,6 +73,19 @@ export def body
 						<pre>
 							<code innerHTML=highlight(file.code)>
 						<p> file.note
+						if file.key == 'assembler'
+							<div className="opcode-inspector">
+								<label for="opcode-name" html:hidden=""> 'Inspect opcode'
+								<select id="opcode-name" html:hidden="">
+									for name in opcodeNames
+										<option value=name> name
+								<output id="opcode-result" for="opcode-name"> 'local asm.HALT: uint8 <comptime> = 0'
+						if file.key == 'life'
+							<details className="generated-c">
+								<summary> 'Show generated C'
+								<p> 'GameState:step as emitted by the Nelua fork at 874acdd.'
+								<pre>
+									<code innerHTML=highlight(readFileSync('src/content/gameoflife-step.c', 'utf8').trimEnd())>
 						if file.key == 'boot'
 							<div className="example-output">
 								<span> 'Console'

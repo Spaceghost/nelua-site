@@ -1,0 +1,5 @@
+.life-lab { align-items: start; }
+.life-lab section { min-width: 0; }
+#life-board { display: block; width: min(100%, 24rem); height: auto; image-rendering: pixelated; }
+.life-lab summary { cursor: pointer; padding-block: .4rem; }
+.life-lab pre { max-height: 28rem; }

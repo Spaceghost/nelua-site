@@ -12,6 +12,8 @@ export def body guide, toc
 				<a className="button" html:href="#start-here"> "Try the complete pack"
 				" "
 				<a className="button button-ghost" html:href="#write-an-inline-extension"> "Write an extension"
+			<p>
+				<a href="/nelua/examples/life/"> 'Try a project-local Bend syntax extension in the browser'
 		<div className="guide-layout">
 			<nav className="guide-toc" html:aria-label="Guide contents">
 				<p className="eyebrow"> "In this guide"

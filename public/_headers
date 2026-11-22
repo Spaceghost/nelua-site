@@ -25,3 +25,11 @@
   Content-Security-Policy: default-src 'none'; style-src 'self'; style-src-elem 'self' 'unsafe-inline'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'
   Cross-Origin-Opener-Policy: same-origin
   Cross-Origin-Embedder-Policy: require-corp
+
+/examples/life/
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'none'; style-src 'self'; script-src 'self' 'wasm-unsafe-eval'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'
+
+/nelua/examples/life/
+  ! Content-Security-Policy
+  Content-Security-Policy: default-src 'none'; style-src 'self'; script-src 'self' 'wasm-unsafe-eval'; img-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'

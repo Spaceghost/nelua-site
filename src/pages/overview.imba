@@ -81,6 +81,7 @@ export def body
 										<option value=name> name
 								<output id="opcode-result" for="opcode-name"> 'local asm.HALT: uint8 <comptime> = 0'
 						if file.key == 'life'
+							<a className="file-origin" href="/nelua/examples/life/"> 'Step a glider with Imba, Bend and WebAssembly'
 							<details className="generated-c">
 								<summary> 'Show generated C'
 								<p> 'GameState:step as emitted by the Nelua fork at 874acdd.'

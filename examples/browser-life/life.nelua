@@ -1,0 +1,36 @@
+#syntax 'syntax.bendjs'
+## pragmas.noentrypoint = true
+## pragmas.nogc = true
+## pragmas.nochecks = true
+## pragmas.nocstaticassert = true
+
+-- The host supplies this rule as a Bend-generated JavaScript function.
+bendjs (survives) do
+  local function survives(alive: uint32, neighbors: uint32): uint32
+    if neighbors == 3_u32 then
+      return 1_u32
+    elseif neighbors == 2_u32 then
+      return alive
+    else
+      return 0_u32
+    end
+  end
+end
+
+-- The guest computes one row from three 16-bit rows on a wrapping board.
+local function next_row(above: uint32, row: uint32, below: uint32): uint32
+    <cexport, codename 'next_row'>
+  local next_bits: uint32 = 0
+  for x: uint32 = 0, < 16 do
+    local left = (x + 15) % 16
+    local right = (x + 1) % 16
+    local count: uint32 = 0
+    for offset: uint32 = 0, < 3 do
+      local at = (left + offset) % 16
+      count = count + ((above >> at) & 1) + ((below >> at) & 1)
+    end
+    count = count + ((row >> left) & 1) + ((row >> right) & 1)
+    next_bits = next_bits | (survives((row >> x) & 1, count) << x)
+  end
+  return next_bits
+end

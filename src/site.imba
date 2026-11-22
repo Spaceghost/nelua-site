@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto'
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import * as browserLife from './pages/browser-life.imba'
 import * as overview from './pages/overview.imba'
 import * as performancePage from './pages/performance.imba'
 import * as compiler from './pages/compiler.imba'
@@ -86,6 +87,7 @@ def documentFor page
 							<a href="https://johnneylee.com/"> 'Johnneylee Rollins'
 
 const pages = [
+	{ source: browserLife, path: '/nelua/examples/life/', body: browserLife.body(), stylesheet: '/nelua/examples/life/lab.css', scripts: ['/nelua/examples/life/board.js'] }
 	{ source: overview, path: '/nelua/', body: overview.body(), stylesheet: '/nelua/assets/language.css', scripts: ['/nelua/assets/source-tabs.js'] }
 	{ source: performancePage, path: '/nelua/performance/', body: performancePage.body(content('nelibc-overview')), stylesheet: '/nelua/assets/performance.css' }
 	{ source: compiler, path: '/nelua/compiler/', body: compiler.body() }

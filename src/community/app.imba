@@ -51,8 +51,9 @@ def lineScore person, maximum
 	const publicLines = number(person.lines) - privateLines
 	const publicWidth = 100 * publicLines / maximum
 	const privateWidth = 100 * privateLines / maximum
-	const label = "{format.format(publicLines)} public lines, {format.format(privateLines)} private lines"
-	"<span class='line-count' aria-hidden='true'>{format.format(publicLines)} <span class='private-count'>(+{format.format(privateLines)})</span></span>" +
+	const privateCount = privateLines > 0 ? " <span class='private-count'>(+{format.format(privateLines)})</span>" : ''
+	const label = "{format.format(publicLines)} public lines" + (privateLines > 0 ? ", {format.format(privateLines)} private lines" : '')
+	"<span class='line-count' aria-hidden='true'>{format.format(publicLines)}{privateCount}</span>" +
 		"<svg class='score-track' role='img' aria-label='{label}'><title>{label}</title>" +
 		"<rect class='score-public' width='{publicWidth}%' height='100%'></rect>" +
 		"<rect class='score-private' x='{publicWidth}%' width='{privateWidth}%' height='100%'></rect></svg>"

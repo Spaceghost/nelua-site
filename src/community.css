@@ -32,12 +32,13 @@
 .builder-handle { display: block; overflow-wrap: anywhere; }
 .team-badge, .private-badge { display: inline-block; margin-left: 6px; color: var(--accent); font: .75rem var(--mono); }
 .score-track { display: block; width: 100%; max-width: 7rem; height: 6px; margin: 4px 0 0 auto; border-radius: 2px; background: var(--quiet); }
+.community { --private-line-color: #663399; }
 .score-public { fill: var(--accent); }
-.score-private { fill: #a54b0a; }
-.private-count { color: #894008; white-space: nowrap; }
+.score-private { fill: var(--private-line-color); }
+.private-count { color: var(--private-line-color); white-space: nowrap; }
 .score-key { display: flex; justify-content: flex-end; gap: 12px; margin-bottom: 6px; font-size: .8125rem; }
 .score-key span::before { content: ""; display: inline-block; width: .8em; height: .45em; margin-right: .3em; background: var(--accent); }
-.score-key .private-key::before { background: #a54b0a; }
+.score-key .private-key::before { background: var(--private-line-color); }
 .project-button { white-space: nowrap; }
 .project-button span { margin-left: 5px; }
 .repo-detail { background: var(--quiet); }

@@ -2,28 +2,37 @@ export const title = 'neboot · Cascadia’s UEFI boot menu · Nelua at spacegho
 export const description = 'Boot Cascadia from loose files with neboot, an x86-64 UEFI application written in Nelua. See how necc and nelinker build it and what ran under OVMF.'
 
 export def body
-	<div className="page-content">
-		<section className="hero">
-			<p className="eyebrow"> 'Core · the boot manager'
-			<h1> 'neboot'
-			<p className="lead"> 'A UEFI boot menu written in Nelua. It starts Cascadia with Theseus Init or OpenRC recovery from the same kernel and initramfs. A third entry starts another EFI application.'
-			<div className="actions">
-				<a className="button" href="#run"> 'Boot in QEMU'
-				<a className="text-link" href="#ovmf"> 'See the OVMF results'
-				<a className="text-link" href="#browser-boot"> 'See the browser experiment'
-		<h2 className="section" id="browser-boot"> 'Browser boot experiment'
-		<p> 'The browser prototype uses the same x86-64 QEMU Wasm engine as the Theseus demo. It gives the emulator an OVMF firmware image and a disk containing BOOTX64.EFI, so the firmware must start Neboot before Linux can run. It does not use QEMU’s direct Linux boot option.'
-		<p> 'The same disk passed a native QEMU test: OVMF displayed the Neboot menu, option 3 ran the second EFI application, and option 1 reached a Theseus/Nebox shell that answered a command. The picture below is the virtual VGA output from that native run.'
-		<figure>
-			<a href="/nelua/neboot/browser-proof/native-firmware.png">
-				<img src="/nelua/neboot/browser-proof/native-firmware.png" width="1280" height="800" loading="lazy" alt="Native QEMU VGA screenshot of OVMF launching Neboot and displaying the Cascadia EFI menu">
-			<figcaption> 'Native QEMU and OVMF capture, not a browser screenshot.'
-		<p>
-			'An end-to-end browser boot and framebuffer capture are not verified, so there is no browser launch button yet. This is a firmware display experiment, not a Wayland or accelerated GPU desktop. '
-			<a href="/nelua/init/"> 'Theseus still has a separate browser serial demo.'
-		<p className="upstream-links">
-			<a href="/nelua/neboot/browser-proof/native-serial.txt"> 'Native serial evidence'
-			<a href="/nelua/neboot/browser-proof/provenance.txt"> 'Test scope, source pins and hashes'
+	<div className="boot-lab boot-lab-neboot">
+		<section className="boot-lab-hero" aria-labelledby="boot-title">
+			<div className="boot-lab-intro">
+				<p className="boot-lab-kicker"> 'Core / x86-64 UEFI'
+				<h1 id="boot-title"> 'neboot'
+				<p className="boot-lab-lead"> 'A boot menu before Linux.'
+				<p> 'A UEFI application written in Nelua. Start Cascadia with Theseus Init, choose OpenRC recovery, or launch a second EFI application from the same disk.'
+				<div className="boot-lab-actions">
+					<a className="button boot-lab-primary" href="#run"> 'Run it in QEMU'
+					<a className="boot-lab-link" href="#browser-boot"> 'See the boot proof'
+			<figure className="boot-lab-figure">
+				<div className="boot-lab-screenhead"><span> 'From the firmware'
+				<a className="boot-lab-image" href="./browser-proof/native-firmware.png" aria-label="Open the full native firmware capture">
+					<img src="/nelua/neboot/browser-proof/native-firmware.png" width="1280" height="800" decoding="async" alt="Cascadia Core EFI menu displayed by neboot in native QEMU with OVMF">
+				<figcaption> 'Neboot menu · native QEMU and OVMF capture'
+		<nav className="boot-lab-nav" aria-label="neboot project links">
+			<a href="#build"> 'How neboot builds'
+			<a href="#ovmf"> 'Native OVMF results'
+			<a href="/nelua/init/"> 'Meet Theseus Init'
+		<section className="boot-lab-proof" aria-labelledby="browser-boot">
+			<div>
+				<p className="boot-lab-label"> 'Recorded test · native QEMU'
+				<h2 className="section" id="browser-boot"> 'From firmware to a shell'
+				<p> 'OVMF started neboot from an EFI disk. The menu launched the second EFI application, then booted Linux to a working Theseus/Nebox shell. The native capture above is the guest’s virtual VGA output.'
+			<div className="boot-lab-notes">
+				<h3> 'Browser prototype'
+				<p> 'The browser build uses QEMU Wasm with the same EFI disk, not direct Linux boot. An end-to-end browser boot is not verified, so there is no browser launch button yet.'
+				<p className="boot-lab-source-links">
+					<a href="./browser-proof/native-serial.txt"> 'Read native serial evidence'
+					<a href="./browser-proof/provenance.txt"> 'See source pins and hashes'
+
 		<h2 className="section" id="efi-boot-time"> 'Time through the Core boot menu'
 		<p> 'On 22 November 2026 four QEMU 10.2.2 TCG boots on an i7-11700F reached the Core menu in a median 1.35 s. Selecting the first entry took 4.00 s to reach the marker before StartImage. The median from that marker to a shell command identifying Theseus as PID 1 was 28.30 s. Each run started with fresh EFI variables and powered off successfully.'
 		<p> 'This disk was rebuilt with neboot b8c56a8, necc 7ed048c, nelinker a349c2a, the core-dev-2026.11.20 release kernel and gzip initramfs. The four handoff-to-command intervals varied substantially on this host.'

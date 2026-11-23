@@ -59,6 +59,8 @@ def documentFor page
 			<link rel="icon" href=monogram type="image/svg+xml">
 			if page.stylesheet
 				<link rel="stylesheet" href=asset(page.stylesheet)>
+			if page.bootLab
+				<link rel="stylesheet" href=asset('/nelua/assets/boot-lab.css')>
 			for script in page.scripts || []
 				<script src=asset(script) html:defer="">
 		<body>
@@ -100,8 +102,8 @@ const pages = [
 	{ source: nebox, path: '/nelua/nebox/', body: nebox.body(), stylesheet: '/nelua/nebox/guide.css' }
 	{ source: nsh, path: '/nelua/nebox/nsh/', body: nsh.body() }
 	{ source: neboxCoverage, path: '/nelua/nebox/applet-coverage/', active: '/nelua/nebox/', body: neboxCoverage.body(readFileSync('public/nelua/nebox/applet-coverage.txt', 'utf8')), stylesheet: '/nelua/nebox/applet-coverage.css', scripts: ['/nelua/nebox/applet-coverage.js'] }
-	{ source: neboot, path: '/nelua/neboot/', body: neboot.body() }
-	{ source: init, path: '/nelua/init/', body: init.body(), stylesheet: '/nelua/init/vm/demo.css', scripts: ['/nelua/init/vm/demo.js'] }
+	{ source: neboot, path: '/nelua/neboot/', body: neboot.body(), bootLab: true }
+	{ source: init, path: '/nelua/init/', body: init.body(), bootLab: true, stylesheet: '/nelua/init/vm/demo.css', scripts: ['/nelua/init/vm/demo.js'] }
 	{ source: necc, path: '/nelua/necc/', body: necc.body() }
 	{ source: nelinker, path: '/nelua/nelinker/', body: nelinker.body() }
 	{ source: nebuild, path: '/nelua/nebuild/', body: nebuild.body() }
@@ -110,6 +112,7 @@ const pages = [
 ]
 
 copyFileSync('src/site.css', 'public/nelua/assets/site.css')
+copyFileSync('src/boot-lab.css', 'public/nelua/assets/boot-lab.css')
 copyFileSync('src/source-tabs.js', 'public/nelua/assets/source-tabs.js')
 copyFileSync('src/language.css', 'public/nelua/assets/language.css')
 copyFileSync('src/performance.css', 'public/nelua/assets/performance.css')

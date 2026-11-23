@@ -1,0 +1,118 @@
+/* Only the Theseus and neboot pages load the boot lab theme. */
+.boot-lab {
+  --boot-accent: #9cb7ff;
+  --boot-night: #10192b;
+  --boot-line: #35435f;
+}
+.boot-lab-neboot { --boot-accent: #97dfc7; --boot-night: #101e25; --boot-line: #33505b; }
+.boot-lab-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(24px, 5vw, 64px);
+  padding: clamp(24px, 5vw, 58px);
+  background: radial-gradient(ellipse at 90% 0, color-mix(in srgb, var(--boot-night) 76%, var(--boot-accent)), transparent 66%), var(--boot-night);
+  color: #e3ebf7;
+  border-block-start: 3px solid var(--boot-accent);
+}
+.boot-lab-hero h1 {
+  color: #fff;
+  font-size: clamp(3rem, 7vw, 6.25rem);
+  font-weight: 620;
+  line-height: .94;
+  letter-spacing: -.075em;
+}
+.boot-lab-kicker, .boot-lab-label, .boot-lab-screenhead {
+  font: 650 .72rem/1.5 var(--mono);
+  letter-spacing: .105em;
+  text-transform: uppercase;
+}
+.boot-lab-kicker { margin: 0 0 20px; color: var(--boot-accent); }
+.boot-lab-lead {
+  font-size: clamp(1.15rem, 2.3vw, 1.55rem);
+  line-height: 1.4;
+  color: #fff;
+  margin: 16px 0 8px;
+}
+.boot-lab-intro > p:last-of-type { max-width: 43ch; color: #d2ddf0; margin: 0; }
+.boot-lab-actions, .boot-lab-nav, .boot-lab-source-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+.boot-lab-actions { margin-top: 22px; }
+.boot-lab-actions a, .boot-lab-nav a, .boot-lab-live button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.boot-lab-actions .boot-lab-primary { background: var(--boot-accent); color: #102137; border-color: var(--boot-accent); }
+.boot-lab-actions .boot-lab-primary:hover { background: #fff; border-color: #fff; }
+.boot-lab-hero .boot-lab-link { color: #fff; font-size: .93rem; }
+.boot-lab-hero a:focus-visible { outline-color: #fff; }
+.boot-lab-figure {
+  min-width: 0;
+  margin: 0;
+  padding: 10px;
+  background: #0e1521;
+  border: 1px solid var(--boot-line);
+}
+.boot-lab-screenhead { color: var(--boot-accent); padding: 0 1px 8px; }
+.boot-lab-image {
+  display: grid;
+  place-items: center;
+  margin: 0;
+  background: #0b1119;
+}
+.boot-lab-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+}
+.boot-lab-pixels img { image-rendering: pixelated; }
+.boot-lab-figure figcaption {
+  padding: 9px 1px 0;
+  font-size: .78rem;
+  color: #c2cde1;
+}
+.boot-lab-nav {
+  min-height: 57px;
+  border-bottom: 1px solid var(--line);
+  padding-block: 4px;
+  font-size: .9rem;
+}
+.boot-lab-nav a { color: var(--text); }
+.boot-lab-live, .boot-lab-proof {
+  margin-top: clamp(24px, 4vw, 42px);
+  padding: clamp(19px, 4vw, 38px);
+  border: 1px solid var(--line);
+}
+.boot-lab-live { background: #f4f6fb; }
+.boot-lab-proof {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+  gap: 25px 40px;
+}
+.boot-lab-label { margin: 0 0 9px; color: var(--muted); }
+.boot-lab-live .section, .boot-lab-proof .section { margin: 0; }
+.boot-lab-proof p:last-child, .boot-lab-live p:last-child { margin-bottom: 0; }
+.boot-lab-notes {
+  align-self: start;
+  padding-inline-start: 18px;
+  border-inline-start: 2px solid var(--line);
+  color: var(--muted);
+}
+.boot-lab-notes h3 { color: var(--text); font-size: 1.14rem; letter-spacing: -.02em; }
+.boot-lab-source-links { font-size: .9rem; gap: 7px 14px; }
+.boot-lab-live #theseus-console { min-width: 0; max-width: 100%; }
+
+@media (max-width: 730px) {
+  .boot-lab-hero, .boot-lab-proof { grid-template-columns: minmax(0, 1fr); }
+  .boot-lab-figure { width: min(100%, 32rem); }
+}
+@media (max-width: 400px) {
+  .boot-lab-nav { gap: 0 16px; }
+  .boot-lab-actions { gap: 4px 12px; }
+}

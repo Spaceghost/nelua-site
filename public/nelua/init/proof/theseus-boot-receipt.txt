@@ -18,4 +18,11 @@ THESEUS_GRAPHICS_FRAME=320x240 mode=1
 Measured top-left RGBA before virtual Space: 234,81,146,255.
 Measured top-left RGBA after virtual Space: 21,174,109,255.
 The PNG is the actual post-keypress guest frame. It is not a browser screenshot.
-No Wayland, guest Chromium, hardware GPU or browser pass was verified.
+This Node.js run did not exercise a browser.
+
+Local Chrome preview on November 23, 2026
+Boot displayed the initial 320x240 guest framebuffer. Pressing Send Space
+changed the visible frame; the guest reported mode=0 followed by mode=1.
+Console output identified /sbin/theseus-init as PID 1, the default target
+as running and no host network connected. This used a software framebuffer.
+No Wayland, guest Chromium, GPU acceleration or public graphics demo was verified.

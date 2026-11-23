@@ -18,8 +18,18 @@ LZ4 (lz4-copy.csv)
   ordinary selects LZ4's default memcpy; builtin adds -DLZ4_memcpy=__builtin_memcpy.
   Build in ms; encode/decode in ms per operation; each invocation repeats nine
   times and verifies the decoded corpus. The lz4 folder contains the common
-  driver and a standalone two-way replay with instructions in replay.py.
+  driver. The historical builtin row used the project-specific define above.
   GCC and Clang used -O2. SDK TinyCC used the same SDK headers as necc.
+
+LZ4 (lz4/native.csv)
+  Same codec, corpus, hardware and reference hashes. baseline = 7ed048c;
+  native = 55612d9; native + builtin adds -fbuiltin-memcpy. Each setting
+  uses the same portable source. Round 0 is warm-up. Use lz4/replay.py
+  to rerun the six configurations with the common driver.
+  lz4/builtin-pair.csv isolates changes since the old builtin: same procedure,
+  two shuffled configurations, 7ed048c with -DLZ4_memcpy=__builtin_memcpy and
+  55612d9 with -fbuiltin-memcpy. Acceleration 1 medians in ms (encode/decode)
+  were 7.993/1.313 and 7.358/1.156.
 
 necc/summary.csv and samples.csv cover 23 measurements per tool/workload on
   i7-11700F CPU 5 in Debian 12. necc-base = 22180f5, necc-next = 7ed048c.

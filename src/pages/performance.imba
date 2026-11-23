@@ -69,18 +69,19 @@ export def body comparison
 							for label in ['Compiler', 'Build codec object', 'Compress', 'Decompress']
 								<th scope="col"> label
 					<tbody>
-						for row in [["SDK TinyCC", "3.85", "12.34", "2.18"], ["necc · library copy", "15.03", "8.92", "1.84"], ["necc · builtin copy", "14.93", "7.66", "1.33"], ["GCC -O2", "2,147.30", "1.84", "0.31"], ["Clang -O2", "1,139.70", "1.85", "0.30"]]
+						for row in [["SDK TinyCC", "3.83", "12.20", "2.14"], ["necc 7ed048c · previous", "14.66", "8.75", "1.81"], ["necc 55612d9 · default", "14.08", "8.53", "1.73"], ["necc 55612d9 · -fbuiltin-memcpy", "14.21", "7.08", "1.12"], ["GCC -O2", "2,103.09", "1.81", "0.31"], ["Clang -O2", "1,104.12", "1.85", "0.30"]]
 							<tr>
 								<th scope="row"> row[0]
 								for value in row.slice(1)
 									<td> value
-			<p> 'LZ4 reads short, unaligned values with memcpy. Building the codec with necc 7ed048c and -DLZ4_memcpy=__builtin_memcpy eliminated all 59 direct calls to memcpy in its assembly. Fixed-size reads and writes use exact-width instructions. Both necc rows use the same compiler binary.'
-			<p> 'At acceleration 1, the builtin cut compression time by 14% and decompression time by 28%. At acceleration 4, compression took 6.71 ms and the output grew from 430,145 to 477,127 bytes. GCC and Clang still compressed the default case in under 1.9 ms.'
+			<p> 'LZ4 checks the machine word size when selecting a hash function. Native necc now evaluates that guard during compilation and branches directly on the remaining comparison.'
+			<p> 'With -fbuiltin-memcpy, necc also translates ordinary short copies into exact-width loads and stores. Against the previous default, compression time fell 19% and decompression time fell 38%. At acceleration 4 the new build compressed in 6.20 ms and produced 477,127 bytes.'
+			<p> 'TinyCC still built the object fastest. GCC and Clang produced the fastest codec. The necc assembly retains calls to hash and match-counting helpers that GCC inlines.'
 			<details>
 				<summary> 'Inputs, method and individual samples'
 				<p> 'The corpus concatenates tracked Lua files under lualib/nelua at 0f29b8f in Git tree order. Eleven shuffled rounds followed one warm-up on logical CPU 5. Each round rebuilt the object and timed nine in-memory compressions and decompressions per setting. File I/O, linking and verification fall outside the codec intervals.'
-				<p> 'Toolchains were native necc 7ed048c, its SDK TinyCC, GCC 16.2.1 and Clang 23.1.5. All compiled LZ4 1.10.0 with portable memory access and an equivalent typedef-based static assertion. The common GCC-built driver checked the round trip. Each compressed block matched the reference SHA-256 for its setting.'
-				<pre> readFileSync('src/content/lz4-copy.csv', 'utf8').trimEnd()
+				<p> 'Toolchains were native necc 7ed048c and 55612d9, its SDK TinyCC, GCC 16.2.1 and Clang 23.1.5. All compiled LZ4 1.10.0 with portable memory access and an equivalent typedef-based static assertion. The common GCC-built driver checked the round trip. Each compressed block matched the reference SHA-256 for its setting.'
+				<pre> readFileSync('src/content/results-20261122/lz4/native.csv', 'utf8').trimEnd()
 		<section className="overview-section" aria-labelledby="life-shootout">
 			<h2 id="life-shootout"> 'Game of Life compiler shootout'
 			<p> 'The original row update counted the neighbors around each cell from scratch. The new version keeps two column totals and counts only the column entering the window. Both call the same survival rule once per cell.'

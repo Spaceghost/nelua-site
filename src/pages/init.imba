@@ -30,7 +30,7 @@ export def body
 				<button id="theseus-start" className="button" type="button"> 'Start Nebox'
 				' '
 				<button id="theseus-reset" className="button button-ghost" type="button" html:hidden=""> 'Reset demo'
-			<p id="theseus-status" role="status" className="muted">
+			<p id="theseus-status" html:role="status" className="muted">
 				'Starting the VM downloads about 30 MB. Wait for the shell prompt to appear.'
 			<div id="theseus-console" html:hidden="">
 				<div id="theseus-terminal" aria-label="Nebox serial console">

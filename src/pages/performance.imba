@@ -68,16 +68,18 @@ export def body comparison
 							for label in ['Compiler', 'Build codec object', 'Compress', 'Decompress']
 								<th scope="col"> label
 					<tbody>
-						for row in [["TinyCC", "4.91", "9.32", "1.70"], ["necc", "15.30", "11.37", "2.11"], ["GCC -O2", "2,134.47", "1.83", "0.31"], ["Clang -O2", "1,117.72", "1.84", "0.29"]]
+						for row in [["TinyCC", "4.84", "9.33", "1.70"], ["necc before", "15.30", "11.47", "2.13"], ["necc updated", "15.20", "8.84", "1.80"], ["GCC -O2", "2,181.82", "1.83", "0.31"], ["Clang -O2", "1,153.06", "1.85", "0.31"]]
 							<tr>
 								<th scope="row"> row[0]
 								for value in row.slice(1)
 									<td> value
-			<p> 'Raising LZ4 acceleration from 1 to 4 reduced necc compression time from 11.37 to 9.82 ms. The compressed block grew by 46,982 bytes (10.9%).'
+			<p> 'necc used to push scalar arguments onto the stack and immediately pop them into call registers. The updated compiler loads eligible arguments directly and expands small private helpers at the call site. The LZ4 object’s machine code shrank from 34,524 to 34,311 bytes.'
+			<p> 'Raising LZ4 acceleration from 1 to 4 reduced necc compression time from 8.84 to 7.74 ms. The compressed block grew by 46,982 bytes (10.9%).'
 			<details>
 				<summary> 'Inputs and measurement method'
 				<p> 'The input concatenates tracked .lua files under lualib/nelua at Nelua revision 0f29b8f in Git tree order. Each shuffled round builds the object once and runs nine in-memory compressions and decompressions per setting on logical CPU 5. Timings exclude linking, file I/O and verification from the codec runs. One warm-up round was discarded.'
-				<p> 'Toolchains were necc 2ebbb9d, TinyCC 0.9.27, GCC 16.2.1 and Clang 23.1.5. All used the same LZ4 source with portable memory access and an equivalent typedef-based static assertion for necc compatibility. The common driver was built with GCC -O2. All four compilers produced identical compressed bytes at each setting.'
+				<p> 'In separate stage timings, updated necc spent 3.83 ms preprocessing, 5.90 ms compiling preprocessed C to assembly, and 5.80 ms assembling. Each stage timing includes its own driver launch.'
+				<p> 'Toolchains were necc e1eab18 and 22180f5, TinyCC 0.9.27, GCC 16.2.1 and Clang 23.1.5. All used the same LZ4 source with portable memory access and an equivalent typedef-based static assertion for necc compatibility. The common driver was built with GCC -O2. All four compilers produced identical compressed bytes at each setting.'
 		<section className="overview-section" aria-labelledby="life-shootout">
 			<h2 id="life-shootout"> 'Game of Life compiler shootout'
 			<p> 'The original row update counted the neighbors around each cell from scratch. The new version keeps two column totals and counts only the column entering the window. Both call the same survival rule once per cell.'

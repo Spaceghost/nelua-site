@@ -12,15 +12,17 @@ for (let alive = 0; alive <= 1; alive++) {
     assert.equal(rules.survives(alive, neighbors), Number(neighbors === 3 || (alive === 1 && neighbors === 2)));
   }
 }
-// Exhaust every 3-by-3 neighborhood, including the wrap across column zero.
-for (let mask = 0; mask < 512; mask++) {
-  const rows = [0, 0, 0];
-  let neighbors = 0;
-  for (let i = 0; i < 9; i++) {
-    const bit = (mask >> i) & 1;
-    rows[Math.floor(i / 3)] |= bit << ((15 + i % 3) % 16);
-    if (i !== 4) neighbors += bit;
+// Exercise the sliding window in all 16 positions, including both wrap edges.
+for (let x = 0; x < 16; x++) {
+  for (let mask = 0; mask < 512; mask++) {
+    const rows = [0, 0, 0];
+    let neighbors = 0;
+    for (let i = 0; i < 9; i++) {
+      const bit = (mask >> i) & 1;
+      rows[Math.floor(i / 3)] |= bit << ((x + 15 + i % 3) % 16);
+      if (i !== 4) neighbors += bit;
+    }
+    const expected = neighbors === 3 || (neighbors === 2 && Boolean(mask & 16));
+    assert.equal((instance.exports.next_row(...rows) >>> x) & 1, Number(expected));
   }
-  const expected = neighbors === 3 || (neighbors === 2 && Boolean(mask & 16));
-  assert.equal(instance.exports.next_row(...rows) & 1, Number(expected));
 }

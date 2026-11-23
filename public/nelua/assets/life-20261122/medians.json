@@ -1,0 +1,42 @@
+[
+  {
+    "tool": "TinyCC",
+    "before": 91.98,
+    "after": 28.04,
+    "compile": 1.71,
+    "speedup": 3.28
+  },
+  {
+    "tool": "necc",
+    "before": 191.2,
+    "after": 44.85,
+    "compile": 2.09,
+    "speedup": 4.26
+  },
+  {
+    "tool": "GCC -O2",
+    "before": 21.53,
+    "after": 12.21,
+    "compile": 20.07,
+    "speedup": 1.76
+  },
+  {
+    "tool": "Clang -O2",
+    "before": 15.71,
+    "after": 11.92,
+    "compile": 26.59,
+    "speedup": 1.32
+  },
+  {
+    "tool": "Chromium + Wasm",
+    "before": 105.7,
+    "after": 99.5,
+    "speedup": 1.06
+  },
+  {
+    "tool": "Node + Wasm",
+    "before": 111.49,
+    "after": 100.04,
+    "speedup": 1.11
+  }
+]

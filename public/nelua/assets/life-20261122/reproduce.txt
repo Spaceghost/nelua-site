@@ -1,0 +1,43 @@
+Game of Life row update, 22 November 2026
+Intel Core i7-11700F, Linux x86-64, logical CPU 5. Wall time in milliseconds.
+
+Each run advances 16,384 generations of a wrapping 16×16 board. Every 64
+generations the driver reseeds the board from the same deterministic sequence.
+The driver folds all 262,144 output rows into a 32-bit checksum. The board,
+seeding, checksum, and rule are identical for both kernels. Canvas painting,
+playback delays, linking, and process startup are outside simulation timing.
+
+Native builds use the generated C with a separate GCC -O2 driver and external
+C implementation of the survival rule. TinyCC and necc use their defaults.
+Compile-object times include compiler startup, preprocessing, and assembly,
+with warm filesystem caches and no compiler cache. GCC and Clang use -O2.
+Node and Chromium load the shipped Zig -Oz Wasm and Bend JavaScript rule.
+Wasm compile-object times were not collected. The Node and browser harnesses
+reuse two typed arrays. The UI also renders the board and schedules playback.
+
+Tool versions
+  TinyCC 0.9.27, Debian 0.9.27+git20200814.62c30a4a-1
+  necc 2ebbb9d, executable SHA256 be28e4808459d8cde318bc88453eeafbdfb94cf53b2cbe35d796a3e075ff17ab
+  GCC 16.2.1, Clang 23.1.5, Node 26.8.2, Chromium headless 159.0.8154.6
+  Nelua 874acdd, Bend 2.0.40, Zig 0.17.0
+  Baseline source: nelua-site 5bad356, examples/browser-life/life.nelua
+
+Extract replay.tar.gz in an empty directory. The archive includes both source
+versions, generated C and Wasm, the common JS rule, and timing drivers.
+Set NECC_SYSROOT to the staged necc SDK. Set NECC, TCC, and GCC to executable
+paths if their names are not on PATH. Use GCC directly to bypass ccache.
+
+  taskset -c 5 python3 run.py
+
+This writes samples.csv. It runs one unrecorded round followed by 11 rounds,
+shuffling tool and variant order each round using a fixed seed. Node warms each
+fresh instance once before measuring. To reproduce the browser measurements,
+serve the extracted directory and, from a second terminal, run the driver.
+
+  python3 -m http.server --bind 127.0.0.1 8000
+  taskset -c 5 node browser.cjs http://127.0.0.1:8000/
+
+The browser driver requires Playwright. Set PLAYWRIGHT to the installed
+package path and CHROME to a Chromium executable when needed. It warms both
+instances, alternates order across 11 paired rounds and writes browser.csv.
+The published samples.csv combines both outputs. Verify every checksum agrees.

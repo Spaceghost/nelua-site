@@ -1,6 +1,9 @@
+import { readFileSync } from 'node:fs'
 export const title = 'Core performance · Nelua'
 export const description = 'Compare measured compiler, library and toolchain workloads with reference implementations and individual samples.'
 
+const lifeData = '/nelua/assets/life-20261122/'
+const lifeMedians = JSON.parse(readFileSync('public' + lifeData + 'medians.json', 'utf8'))
 const timingsRoot = "/nelua/assets/ecosystem-20261121/"
 const timings = [
 	{ project: "Nelua compiler", path: "compiler/#performance", task: "Build the matrix multiplication example", time: "1.109 s", reference: "Upstream Nelua", refTime: "1.159 s", finding: "The resulting programs ran in 29.62 and 29.73 ms.", samples: "nelua.csv" }
@@ -54,5 +57,32 @@ export def body comparison
 			<div className="bench-sources">
 				<a href=(timingsRoot + 'reproduce.txt')> 'Hardware, revisions and reproduction steps'
 				<a href=(timingsRoot + 'summary.csv')> 'Download medians, quartiles and ranges'
+		<section className="overview-section" aria-labelledby="life-shootout">
+			<h2 id="life-shootout"> 'Game of Life compiler shootout'
+			<p> 'The original row update counted the neighbors around each cell from scratch. The new version keeps two column totals and counts only the column entering the window. Both call the same survival rule once per cell.'
+			<div className="table-wrap" html:role="region" aria-label="Game of Life timings" html:tabindex="0">
+				<table>
+					<caption> '16,384 generations · Intel Core i7-11700F · 22 November 2026 · median of 11 runs'
+					<thead>
+						<tr>
+							<th scope="col"> 'Tool'
+							<th scope="col"> 'Original run (ms)'
+							<th scope="col"> 'Updated run (ms)'
+							<th scope="col"> 'Speedup'
+							<th scope="col"> 'Compile updated C to object (ms)'
+					<tbody>
+						for row in lifeMedians
+							<tr>
+								<th scope="row"> row.tool
+								<td> row.before.toFixed(2)
+								<td> row.after.toFixed(2)
+								<td> "{row.speedup.toFixed(2)}×"
+								<td> (row.compile ? row.compile.toFixed(2) : '—')
+			<p> 'Native builds call a C implementation of the rule. Chromium and Node run the shipped Wasm and Bend JavaScript. Timings cover board updates with rendering and playback delays excluded. The Wasm module grew from 232 to 290 bytes.'
+			<div className="bench-sources">
+				<a href="/nelua/examples/life/"> 'Play Game of Life'
+				<a href=(lifeData + 'samples.csv')> 'Individual samples'
+				<a href=(lifeData + 'reproduce.txt')> 'Method and tool versions'
+				<a href=(lifeData + 'replay.tar.gz')> 'Download the benchmark'
 		<section className="overview-section" aria-labelledby="libc-comparison">
 			<div innerHTML=comparison>

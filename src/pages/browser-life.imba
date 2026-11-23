@@ -46,6 +46,8 @@ export def body
 			<h2> 'One tick through the toolchain'
 			<p> 'Imba controls playback and draws the grid. A Nelua WebAssembly function counts the neighbors. For each cell it calls a JavaScript function compiled by Bend to decide whether the cell lives.'
 			<p> 'The survival rule starts as typed Nelua inside a file-local bendjs block. The extension reuses the fork’s Bend2 lowering pass. Open the artifacts below to follow the same rule through the build.'
+			<p>
+				<a href="/nelua/performance/#life-shootout"> 'Compare the row update across six tool configurations'
 			listing('Nelua source', 'examples/browser-life/life.nelua')
 			listing('Lowered Bend', 'public/nelua/examples/life/rule.bend')
 			listing('JavaScript emitted by Bend', 'public/nelua/examples/life/rule.mjs')

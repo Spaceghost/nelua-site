@@ -20,17 +20,19 @@ end
 -- The guest computes one row from three 16-bit rows on a wrapping board.
 local function next_row(above: uint32, row: uint32, below: uint32): uint32
     <cexport, codename 'next_row'>
+  -- Column totals slide across the row. Append column zero to wrap on the right.
+  local left = ((above >> 15) & 1) + ((row >> 15) & 1) + ((below >> 15) & 1)
+  local middle = (above & 1) + (row & 1) + (below & 1)
+  above = (above & 0xffff) | ((above & 1) << 16)
+  row = (row & 0xffff) | ((row & 1) << 16)
+  below = (below & 0xffff) | ((below & 1) << 16)
   local next_bits: uint32 = 0
   for x: uint32 = 0, < 16 do
-    local left = (x + 15) % 16
-    local right = (x + 1) % 16
-    local count: uint32 = 0
-    for offset: uint32 = 0, < 3 do
-      local at = (left + offset) % 16
-      count = count + ((above >> at) & 1) + ((below >> at) & 1)
-    end
-    count = count + ((row >> left) & 1) + ((row >> right) & 1)
-    next_bits = next_bits | (survives((row >> x) & 1, count) << x)
+    local alive = row & 1
+    above, row, below = above >> 1, row >> 1, below >> 1
+    local right = (above & 1) + (row & 1) + (below & 1)
+    next_bits = next_bits | (survives(alive, left + middle + right - alive) << x)
+    left, middle = middle, right
   end
   return next_bits
 end

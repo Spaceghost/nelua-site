@@ -115,7 +115,6 @@ export def body
 							<div className="example-output">
 								<span> 'Console'
 								<samp> 'theseus: starting console shell'
-							<a className="file-origin" href="/nelua/init/?boot=1#browser-demo"> 'Boot Linux in your browser'
 						if file.source
 							<a className="file-origin" href=file.source> "View {file.file} on GitHub"
 		<section className="overview-section" aria-labelledby="language">
@@ -134,6 +133,13 @@ export def body
 				<a href="/nelua/examples/workshop/"> 'Open the example workbench'
 				<a href="/nelua/compiler/comptime/"> 'Compile-time programming in the fork'
 				<a href="/nelua/compiler/syntax-extensions/"> 'Fork syntax guide'
+		<section className="overview-section" aria-labelledby="linux-demo">
+			<h2 id="linux-demo"> 'Write the first program Linux runs'
+			<p> 'When this Linux guest boots, the kernel hands control to Theseus Init, written in Nelua. Theseus mounts the filesystems and starts a Nebox shell. You can type commands at its console right in your browser.'
+			<div className="actions">
+				<a className="button" href="/nelua/init/?boot=1#browser-demo"> 'Boot Linux in your browser'
+				<a href="/nelua/init/"> 'Explore Theseus Init'
+			<p className="run-example"> 'About 30 MB to start the local VM.'
 		<section className="overview-section" aria-labelledby="core">
 			<h2 id="core"> 'Core'
 			<div className="core-grid">

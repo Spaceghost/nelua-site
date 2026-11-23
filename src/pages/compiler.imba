@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 export const title = "Nelua compiler fork · spacegho.st/nelua"
-export const description = "Spaceghost/nelua: upstream Nelua plus variants, optionals, an exhaustive match statement, owned records with move, closures, structured compile-time evaluation, const pointers, a compiler-enforced freestanding pragma, cross-compilation with --target and nelua-bindgen."
+export const description = "Spaceghost/nelua: upstream Nelua plus variants, optionals, an exhaustive match statement, owned records with move, closures, structured compile-time evaluation, opt-in native Lua-style table libraries, const pointers, a compiler-enforced freestanding pragma, cross-compilation with --target and nelua-bindgen."
 
 const frontendTimings = [
 	["Check syntax · extension tour", "32.50", "32.30", "1.006×"]
@@ -107,7 +107,7 @@ export def body
 				<a href="/nelua/assets/frontend-20261121/method.txt"> '21 November method and reproduction'
 			<h2 className="section"> "What the fork adds"
 			<p className="lead">
-				"Everything below is opt-in syntax or tooling. Code written for upstream Nelua compiles unchanged. The first five are language features that fit together: variants and optionals carry \"one of these\" data, "
+				"Everything below is opt-in syntax, libraries or tooling. Code written for upstream Nelua compiles unchanged. The first five are language features that fit together: variants and optionals carry \"one of these\" data, "
 				<code> "match"
 				" takes it apart safely, ownership keeps resources from being released twice, and closures let the standard algorithms take a function."
 			<div className="grid">
@@ -223,6 +223,44 @@ export def body
 					<p className="meta">
 						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/fork.md#closures"> "guide "
 						<a html:href="https://github.com/Spaceghost/nelua/blob/master/docs/pages/overview.md#closures"> "overview "
+				<article className="card card-core" html:id="tables">
+					<h3> "Native Lua-style tables"
+					<p> "Two opt-in libraries for different jobs. Both compile to native code without a Lua VM or new table syntax."
+					<h4> "Known types: use the existing hashmap"
+					<p>
+						<code> "require 'typedluatable'"
+						" gives you a table with one key type, one value type and an explicit allocator. "
+						<code> "get"
+						" returns an optional: present "
+						<code> "false"
+						" is not missing. "
+						<code> "peek"
+						" reads without inserting; setting "
+						<code> "nil"
+						" deletes. Growth can fail without changing existing entries."
+					<pre>
+						<code> "require 'typedluatable'\nrequire 'allocators.general'\n\nlocal Flags = @TypedLuaTable(int64, boolean, GeneralAllocator)\nlocal flags <close> = Flags.make(general_allocator)\nassert(flags:set(92, false))\nassert(flags:get(92):has() and not flags:get(92):get())\nassert(flags:set(92, nil) and flags:peek(92) == nil)"
+					<p> "The typed facade mixes integer keys up to 64 bits by default so IDs that share low bits spread across buckets. You can supply your own hash; raw hashmap defaults are unchanged. Strings are borrowed, so keep their bytes alive and indexed keys unchanged."
+					<h4> "Mixed or bounded: use the tagged table"
+					<p>
+						<code> "require 'luatable'"
+						" supports integer and string keys in the same table, with tagged scalar values. "
+						<code> "LuaTable(Allocator)"
+						" owns copies of string keys and values; strings returned by reads are borrowed. The integer key "
+						<code> "1"
+						" and string key "
+						<code> "'1'"
+						" stay distinct."
+					<pre>
+						<code> "require 'luatable'\nrequire 'allocators.general'\n\nlocal Mixed = @LuaTable(GeneralAllocator)\nlocal row <close> = Mixed.make(general_allocator)\nassert(row:set(LuaKey.integer(1), LuaValue.boolean(false)))\nassert(row:set(LuaKey.string('1'), LuaValue.integer(42)))\nassert(row:get(LuaKey.string('1')).data.i == 42)\nassert(not row:get(LuaKey.integer(1)):truthy())"
+					<p>
+						"Use "
+						<code> "FixedLuaTable(N)"
+						" for a small bounded table: slots are inline, no allocator is needed, and strings are borrowed. A tested local fixed-key lookup optimized down to its scalar input. A separate growable typed table used bounded arena allocations in a Linux x86-64 executable with no C runtime; that is not a bare-metal test."
+					<p className="meta">
+						<a html:href="https://github.com/Spaceghost/nelua/blob/50dd2e3359164c280651a58126e6de3a3a0c6470/docs/design/typed-lua-tables.md"> "typed table guide"
+						<a html:href="https://github.com/Spaceghost/nelua/blob/50dd2e3359164c280651a58126e6de3a3a0c6470/docs/design/native-lua-tables.md"> "mixed and fixed table guide"
+						<a html:href="https://github.com/Spaceghost/nelua/blob/50dd2e3359164c280651a58126e6de3a3a0c6470/tests/typedluatable/check_freestanding.sh"> "freestanding proof"
 				<article className="card card-core" html:id="comptime">
 					<h3> "Compile-time evaluation"
 					<p>
@@ -351,7 +389,7 @@ export def body
 					<p>
 						"Tree-sitter and TextMate grammars under "
 						<code> "tools/"
-						" (the Tree-sitter scanner is itself written in Nelua) know every addition above: "
+						" (the Tree-sitter scanner is itself written in Nelua) know the fork's added syntax: "
 						<code> "*const T"
 						", "
 						<code> "A|B"

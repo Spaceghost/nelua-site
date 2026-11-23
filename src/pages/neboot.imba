@@ -10,6 +10,20 @@ export def body
 			<div className="actions">
 				<a className="button" href="#run"> 'Boot in QEMU'
 				<a className="text-link" href="#ovmf"> 'See the OVMF results'
+				<a className="text-link" href="#browser-boot"> 'See the browser experiment'
+		<h2 className="section" id="browser-boot"> 'Browser boot experiment'
+		<p> 'The browser prototype uses the same x86-64 QEMU Wasm engine as the Theseus demo. It gives the emulator an OVMF firmware image and a disk containing BOOTX64.EFI, so the firmware must start Neboot before Linux can run. It does not use QEMU’s direct Linux boot option.'
+		<p> 'The same disk passed a native QEMU test: OVMF displayed the Neboot menu, option 3 ran the second EFI application, and option 1 reached a Theseus/Nebox shell that answered a command. The picture below is the virtual VGA output from that native run.'
+		<figure>
+			<a href="/nelua/neboot/browser-proof/native-firmware.png">
+				<img src="/nelua/neboot/browser-proof/native-firmware.png" width="1280" height="800" loading="lazy" alt="Native QEMU VGA screenshot of OVMF launching Neboot and displaying the Cascadia EFI menu">
+			<figcaption> 'Native QEMU and OVMF capture, not a browser screenshot.'
+		<p>
+			'An end-to-end browser boot and framebuffer capture are not verified, so there is no browser launch button yet. This is a firmware display experiment, not a Wayland or accelerated GPU desktop. '
+			<a href="/nelua/init/"> 'Theseus still has a separate browser serial demo.'
+		<p className="upstream-links">
+			<a href="/nelua/neboot/browser-proof/native-serial.txt"> 'Native serial evidence'
+			<a href="/nelua/neboot/browser-proof/provenance.txt"> 'Test scope, source pins and hashes'
 		<h2 className="section" id="efi-boot-time"> 'Time through the Core boot menu'
 		<p> 'On 22 November 2026 four QEMU 10.2.2 TCG boots on an i7-11700F reached the Core menu in a median 1.35 s. Selecting the first entry took 4.00 s to reach the marker before StartImage. The median from that marker to a shell command identifying Theseus as PID 1 was 28.30 s. Each run started with fresh EFI variables and powered off successfully.'
 		<p> 'This disk was rebuilt with neboot b8c56a8, necc 7ed048c, nelinker a349c2a, the core-dev-2026.11.20 release kernel and gzip initramfs. The four handoff-to-command intervals varied substantially on this host.'

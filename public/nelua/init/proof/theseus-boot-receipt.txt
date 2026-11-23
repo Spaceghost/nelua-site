@@ -1,0 +1,21 @@
+Theseus graphical boot proof
+
+Local Node.js WebAssembly run on November 23, 2026.
+Runtime: unkernel 0.2.0-261122-4e58555.
+Theseus Init: 72095fd70e77da93fada45686459985cee5429d3.
+Guest: static AArch64 Linux binaries, one CPU, 128 MiB, no guest network.
+Console mode: real PID 1 and its native supervisor.
+Display: 320x240 software framebuffer, not GPU acceleration.
+
+Selected guest console output:
+TI1 supervisor-start 24
+THESEUS_GRAPHICS_PID1=/sbin/theseus-init
+THESEUS_GRAPHICS_NO_ETH0
+TE1 target default running
+THESEUS_GRAPHICS_FRAME=320x240 mode=0
+THESEUS_GRAPHICS_FRAME=320x240 mode=1
+
+Measured top-left RGBA before virtual Space: 234,81,146,255.
+Measured top-left RGBA after virtual Space: 21,174,109,255.
+The PNG is the actual post-keypress guest frame. It is not a browser screenshot.
+No Wayland, guest Chromium, hardware GPU or browser pass was verified.

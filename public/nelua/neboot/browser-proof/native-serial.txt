@@ -1,0 +1,16 @@
+neboot loaded 0x000000000a143000
+Cascadia EFI menu
+1  Cascadia (Theseus)
+2  Cascadia (OpenRC recovery)
+3  Chainload \EFI\TOOLS\second.efi
+Q  Return to firmware
+Starting \EFI\TOOLS\second.efi
+neboot child EFI application ran
+Cascadia EFI menu
+1  Cascadia (Theseus)
+2  Cascadia (OpenRC recovery)
+3  Chainload \EFI\TOOLS\second.efi
+Q  Return to firmware
+Starting \boot\vmlinuz
+theseus: starting console shell
+NEBOOT_GUEST_ACTIVE

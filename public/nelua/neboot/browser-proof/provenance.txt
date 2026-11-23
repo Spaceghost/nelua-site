@@ -1,0 +1,38 @@
+Neboot browser prototype, native control witness, 23 November 2026
+
+Verified: local QEMU 10.0.13 software emulation (TCG), x86-64 OVMF
+2025.02-8+deb13u1, guest networking disabled, stock fresh variable
+template and no user keys. The unmodified Neboot source was compiled
+into an EFI application. Firmware ran it from the EFI System Partition,
+and the guest reached a Theseus/Nebox shell through the Alpine Linux EFI
+stub. A second menu entry started the separate EFI child. Native QEMU
+produced the attached 1280 x 800 VGA framebuffer.
+
+Neboot source: b8c56a815f6e07beb7abdad9339568790594d4d4
+Nelua freestanding C emitter: d5be57955fe8551934db403e5faed3852536ab7a
+Alternate experiment compiler/linker: Zig/Clang + LLD 0.15.2
+Preferred EFI base: 0x100000000 (DIR64 relocation included)
+Observed EFI base: 0x000000000a143000
+Theseus browser inputs: nelua-site 0a0d0376fa48078569a2f7dc501c9e195210e15e
+The runtime and guest files match the pinned public site tree.
+
+This control run used the public Theseus demo kernel and initramfs, not
+the full Cascadia image from the earlier benchmark. Its EFI program was
+built with an alternate toolchain, not the normal necc/nelinker flow,
+and is not claimed byte-identical with canonical release binaries.
+No browser boot, graphics driver or GPU acceleration was verified.
+The website publishes only this evidence, not firmware or guest image bytes.
+
+Runtime source and license notices: init/vm/NOTICES.txt relative to
+the Nelua site root. The browser prototype does not use unkernel to run
+UEFI: unkernel boots Linux built for Wasm; this route requires an x86-64
+machine emulator so actual OVMF and Neboot can execute.
+
+SHA-256 of test inputs (artifact identities, not published assets):
+cf578558bbf433cb254bea9bfd965a381a2493fcd7a12c6cd799e0a35fee4f3f  BOOTX64.EFI
+f09d123b23c5a068837618212cf84aa9ea03d36c5a0f873787fb72707ab21b73  second.efi
+a76b4b227b199f51ce342563421c8e926ed4bb95df5ab8f03523ad3601090e62  neboot-esp.img.gz
+624e06de18b4fa535e90db7160d00d3d07d206422b89999bf1e27d920264e4e0  OVMF_CODE_4M.fd
+5d2ac383371b408398accee7ec27c8c09ea5b74a0de0ceea6513388b15be5d1e  OVMF_VARS_4M.fd
+fe4cb14dd4a5922aca3430bb71f5ef2dfde08b44f44636c66e47050d15f5ab2e  qemu-system-x86_64.wasm.gz
+8efab02a9cb5ee63ced22e9853bce74cbb895d15a5fb3d5139fef855c50f62ea  qemu-system-x86_64.worker.js

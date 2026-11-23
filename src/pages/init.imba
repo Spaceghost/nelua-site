@@ -50,6 +50,14 @@ export def body
 				<a href="https://github.com/ktock/qemu-wasm"> 'QEMU Wasm'
 				'. '
 				<a href="/nelua/init/vm/NOTICES.txt"> 'Demo sources and licenses'
+		<section aria-labelledby="graphics-proof">
+			<h2 id="graphics-proof" className="section"> 'Graphical boot proof'
+			<p> 'In a local test using unkernel’s Linux WebAssembly boot, AArch64 Theseus Init ran as PID 1 and started its default target. A supervised guest program drew to a software framebuffer, then changed the displayed colors after a virtual Space keypress.'
+			<figure>
+				<img src="./proof/theseus-guest-frame.png" alt="Four colored quadrants drawn by the Theseus guest after pressing Space" width="320" height="240" loading="lazy">
+				<figcaption> 'Actual guest pixels from the software framebuffer after Space; not a browser screenshot.'
+			<p> 'This records a local Node.js WASM test, not an interactive browser release. No Wayland, guest Chromium or hardware acceleration is claimed. The serial browser demo above is unchanged.'
+			<p><a href="./proof/theseus-boot-receipt.txt"> 'Read the test receipt'
 		<h2 className="section"> 'Working with mounts'
 		<p> 'In the Nebox guest, use mount to attach filesystems and umount to detach them. The following example creates a temporary filesystem at the existing /mnt directory in the boot image.'
 		<pre>

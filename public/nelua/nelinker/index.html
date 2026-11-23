@@ -4,4 +4,262 @@ as --64 -o answer.o answer.s
 ar rcs libanswer.a answer.o
 nelinker -t -o demo start.o libanswer.a
 ./demo
-echo &quot;$?&quot;</code></pre><p>The link trace includes <code>libanswer.a(answer.o)</code>. The program exits with status 42. Place an archive after the objects that reference its symbols. Use <code>--start-group</code> and <code>--end-group</code> around archives that depend on one another.</p><h2 id="inputs" class="section">Supported inputs</h2><p>In Linux mode, nelinker produces fixed-address static executables from x86-64 ELF objects. It reads regular GNU/SysV and BSD archives, resolves strong and weak symbols, and supports static GOT entries and local-exec TLS. PIE, shared libraries, thin archives, LTO and custom linker scripts are outside the current scope.</p><p>For C or Nelua programs using <a href="/nelua/nelibc/">nelibc</a>, let <a href="/nelua/necc/#linker">necc invoke nelinker</a>. The driver supplies the SDK libraries and their relocation conventions.</p><h2 id="uefi" class="section">Link a PE32+ EFI application</h2><p>With <code>--efi-app</code>, nelinker reads freestanding x86-64 ELF objects and static archives and writes a PE32+ EFI application. The entry symbol defaults to <code>efi_main</code>. This command links the neboot menu with a preferred load address of 4 GiB.</p><pre><code>nelinker --efi-app --image-base 0x100000000 -e efi_main -o BOOTX64.EFI menu.o</code></pre><p>The linker records 64-bit absolute image pointers as <code>DIR64</code> entries in <code>.reloc</code> so firmware can adjust them if it loads the image at another address. The <a href="/nelua/neboot/#ovmf">neboot OVMF run</a> shows the address firmware used.</p><h2 id="benchmarks" class="section">Link times and executable sizes</h2><p>On <time datetime="2026-11-21">21 November 2026</time>, both nelinker builds had a lower median than the fastest qualifying external linker in all 11 workloads on one Intel Core i7-11700F core. Both produced the smallest executable in five. For the single member from a 256-member archive, the distro build and TinyCC were within 0.013 ms of each other.</p><p>The first five rows use loose objects and 23 warm rounds. The remaining six use the archive harness and 31 rounds. Its explicit-syscall control also uses loose objects. Every timed link had to produce a program that returned 42. The external field consisted of GNU BFD, GNU gold, TinyCC, LLD 14, LLD 22 through Zig, mold and Wild.</p><div class="table-wrap" aria-label="Median elapsed link time and executable size" tabindex="0"><table><thead><tr><th scope="col">Workload</th><th class="num" scope="col">GCC-built (ms)</th><th class="num" scope="col">Distro-built (ms)</th><th scope="col">Fastest external (ms)</th><th class="num" scope="col">nelinker bytes</th><th class="num" scope="col">Smallest external bytes</th></tr></thead><tbody><tr><th scope="row">Three loose objects</th><td class="num">1.449</td><td class="num">1.454</td><td>TinyCC · 1.526</td><td class="num">205</td><td class="num">727</td></tr><tr><th scope="row">257 loose objects</th><td class="num">3.123</td><td class="num">3.682</td><td>TinyCC · 5.900</td><td class="num">2,491</td><td class="num">3,015</td></tr><tr><th scope="row">32,768 relocations</th><td class="num">1.850</td><td class="num">2.422</td><td>GNU gold · 3.454</td><td class="num">270,336</td><td class="num">263,031</td></tr><tr><th scope="row">8,192 distinct symbols</th><td class="num">2.254</td><td class="num">4.530</td><td>TinyCC · 4.866</td><td class="num">106,496</td><td class="num">99,191</td></tr><tr><th scope="row">SDK syscall, loose objects</th><td class="num">1.445</td><td class="num">1.468</td><td>TinyCC · 1.553</td><td class="num">4,378</td><td class="num">1,088</td></tr><tr><th scope="row">SDK syscall, archive-suite control</th><td class="num">1.494</td><td class="num">1.479</td><td>TinyCC · 1.611</td><td class="num">4,378</td><td class="num">1,088</td></tr><tr><th scope="row">One member from the SDK archive</th><td class="num">1.564</td><td class="num">1.626</td><td>TinyCC · 1.812</td><td class="num">4,378</td><td class="num">1,088</td></tr><tr><th scope="row">One member from 256</th><td class="num">1.501</td><td class="num">1.544</td><td>TinyCC · 1.557</td><td class="num">196</td><td class="num">719</td></tr><tr><th scope="row">256 members, reverse dependency order</th><td class="num">1.986</td><td class="num">2.738</td><td>Wild · 3.909</td><td class="num">2,491</td><td class="num">3,015</td></tr><tr><th scope="row">All 256 archive members</th><td class="num">1.898</td><td class="num">2.371</td><td>Wild · 3.823</td><td class="num">1,726</td><td class="num">2,247</td></tr><tr><th scope="row">Whole SDK with allocator</th><td class="num">3.009</td><td class="num">4.527</td><td>TinyCC · 5.795</td><td class="num">995,860</td><td class="num">992,583</td></tr></tbody></table></div><p>The GCC build used GCC 12.2 at -O3. The distro build used necc and its staged TinyCC. The inputs and seven external binaries matched the earlier run by SHA-256. For the whole-SDK allocator, TinyCC was the only external linker whose program passed the execution check.</p><p class="upstream-links"><a href="/nelua/assets/linker-20261121/summary.csv">Full field and quartiles (CSV)</a><a href="/nelua/assets/linker-20261121/samples.csv">Individual link times (CSV)</a><a href="/nelua/assets/linker-20261121/method.txt">Method, builds and checks</a><a href="/nelua/assets/linker-20261121/replay.tar.gz">Replay the link inputs</a></p><h3 id="link-memory">Link time and peak resident memory</h3><p>On 21 November 2026 nelinker a349c2a linked a real SDK member and a complete Lua interpreter. Time and maximum resident set size came from separate invocations with identical inputs.</p><div class="table-wrap"><table><thead><tr><th scope="col">Input</th><th scope="col">Reference</th><th scope="col">nelinker (ms)</th><th scope="col">Reference (ms)</th><th scope="col">nelinker (KiB)</th><th scope="col">Reference (KiB)</th></tr></thead><tbody><tr><th scope="row">SDK getpid member</th><td class="num">ld.bfd</td><td class="num">0.74</td><td class="num">3.39</td><td class="num">1,804</td><td class="num">4,944</td></tr><tr><th scope="row">Bundled Lua and whole SDK</th><td class="num">TinyCC</td><td class="num">10.71</td><td class="num">16.31</td><td class="num">5,532</td><td class="num">5,528</td></tr></tbody></table></div><p>The syscall executable returned 42 after calling getpid. The linked Lua interpreter evaluated a command and printed 42. The table reports warm medians on one i7-9700K logical CPU.</p><p class="upstream-links"><a href="/nelua/assets/ecosystem-20261121/link.csv">SDK link samples</a><a href="/nelua/assets/ecosystem-20261121/link-vm.csv">Interpreter link samples</a><a href="/nelua/assets/ecosystem-20261121/summary.csv">Quartiles and observed ranges</a><a href="/nelua/assets/ecosystem-20261121/replay.tar.gz">Replay scripts</a><a href="/nelua/assets/ecosystem-20261121/reproduce.txt">Versions and reproduction</a></p><h3>Creating an archive</h3><p>On <time datetime="2026-11-21">21 November 2026</time>, creating a deterministic archive from 256 x86-64 objects with short filenames took 3.343 ms, down from 4.231 ms. GNU ar took 22.216 ms. The new writer stores ordinary filenames directly in the member header and preserves short filenames containing spaces. The archive shrank from 215,484 to 213,376 bytes, matching the GNU archive size.</p><p>Archive creation used 31 interleaved warm runs on one Intel Core i5-10400 core. GNU ar listed the members, nm read their index, and both nelinker and GNU ld linked a program that returned 42.</p><p class="upstream-links"><a href="/nelua/assets/build-tools-20261121/archive.csv">Archive creation samples (CSV)</a><a href="/nelua/assets/build-tools-20261121/method.txt">Archive writer method</a></p><p class="upstream-links"><a href="/nelua/assets/toolchain-20261119/archives.csv">19 November archive link results (CSV)</a><a href="/nelua/assets/toolchain-20261119/toolchain.csv">19 November object and compiler results (CSV)</a></p></div></main><footer><p class="creator-credit">With love and admiration for <a href="https://github.com/edubart">Eduardo Bart</a>, the creator of Nelua. Thank you for giving us a language that makes writing systems code such a joy.</p><a class="footer-home" href="/nelua/">Nelua</a><div class="footer-links"><a href="https://github.com/Spaceghost/nelua-site">Site source</a><a href="https://johnneylee.com/">Johnneylee Rollins</a></div></footer></div></body></html>
+echo &quot;$?&quot;</code></pre><p>The link trace includes <code>libanswer.a(answer.o)</code>. The program exits with status 42. Place an archive after the objects that reference its symbols. Use <code>--start-group</code> and <code>--end-group</code> around archives that depend on one another.</p><h2 id="inputs" class="section">Supported inputs</h2><p>In Linux mode, nelinker produces fixed-address static executables from x86-64 ELF objects. It reads regular GNU/SysV and BSD archives, resolves strong and weak symbols, and supports static GOT entries and local-exec TLS. PIE, shared libraries, thin archives, LTO and custom linker scripts are outside the current scope.</p><p>For C or Nelua programs using <a href="/nelua/nelibc/">nelibc</a>, let <a href="/nelua/necc/#linker">necc invoke nelinker</a>. The driver supplies the SDK libraries and their relocation conventions.</p><h2 id="uefi" class="section">Link a PE32+ EFI application</h2><p>With <code>--efi-app</code>, nelinker reads freestanding x86-64 ELF objects and static archives and writes a PE32+ EFI application. The entry symbol defaults to <code>efi_main</code>. This command links the neboot menu with a preferred load address of 4 GiB.</p><pre><code>nelinker --efi-app --image-base 0x100000000 -e efi_main -o BOOTX64.EFI menu.o</code></pre><p>The linker records 64-bit absolute image pointers as <code>DIR64</code> entries in <code>.reloc</code> so firmware can adjust them if it loads the image at another address. The <a href="/nelua/neboot/#ovmf">neboot OVMF run</a> shows the address firmware used.</p><h2 id="benchmarks" class="section">Link times and executable sizes</h2><p>On <time datetime="2026-11-21">21 November 2026</time>, both nelinker builds had a lower median than the fastest qualifying external linker in all 11 workloads on one Intel Core i7-11700F core. Both produced the smallest executable in five. For the single member from a 256-member archive, the distro build and TinyCC were within 0.013 ms of each other.</p><p>The first five rows use loose objects and 23 warm rounds. The remaining six use the archive harness and 31 rounds. Its explicit-syscall control also uses loose objects. Every timed link had to produce a program that returned 42. The external field consisted of GNU BFD, GNU gold, TinyCC, LLD 14, LLD 22 through Zig, mold and Wild.</p><div class="table-wrap" aria-label="Median elapsed link time and executable size" tabindex="0"><table><thead><tr><th scope="col">Workload</th><th class="num" scope="col">GCC-built (ms)</th><th class="num" scope="col">Distro-built (ms)</th><th scope="col">Fastest external (ms)</th><th class="num" scope="col">nelinker bytes</th><th class="num" scope="col">Smallest external bytes</th></tr></thead><tbody><tr><th scope="row">Three loose objects</th><td class="num">1.449</td><td class="num">1.454</td><td>TinyCC · 1.526</td><td class="num">205</td><td class="num">727</td></tr><tr><th scope="row">257 loose objects</th><td class="num">3.123</td><td class="num">3.682</td><td>TinyCC · 5.900</td><td class="num">2,491</td><td class="num">3,015</td></tr><tr><th scope="row">32,768 relocations</th><td class="num">1.850</td><td class="num">2.422</td><td>GNU gold · 3.454</td><td class="num">270,336</td><td class="num">263,031</td></tr><tr><th scope="row">8,192 distinct symbols</th><td class="num">2.254</td><td class="num">4.530</td><td>TinyCC · 4.866</td><td class="num">106,496</td><td class="num">99,191</td></tr><tr><th scope="row">SDK syscall, loose objects</th><td class="num">1.445</td><td class="num">1.468</td><td>TinyCC · 1.553</td><td class="num">4,378</td><td class="num">1,088</td></tr><tr><th scope="row">SDK syscall, archive-suite control</th><td class="num">1.494</td><td class="num">1.479</td><td>TinyCC · 1.611</td><td class="num">4,378</td><td class="num">1,088</td></tr><tr><th scope="row">One member from the SDK archive</th><td class="num">1.564</td><td class="num">1.626</td><td>TinyCC · 1.812</td><td class="num">4,378</td><td class="num">1,088</td></tr><tr><th scope="row">One member from 256</th><td class="num">1.501</td><td class="num">1.544</td><td>TinyCC · 1.557</td><td class="num">196</td><td class="num">719</td></tr><tr><th scope="row">256 members, reverse dependency order</th><td class="num">1.986</td><td class="num">2.738</td><td>Wild · 3.909</td><td class="num">2,491</td><td class="num">3,015</td></tr><tr><th scope="row">All 256 archive members</th><td class="num">1.898</td><td class="num">2.371</td><td>Wild · 3.823</td><td class="num">1,726</td><td class="num">2,247</td></tr><tr><th scope="row">Whole SDK with allocator</th><td class="num">3.009</td><td class="num">4.527</td><td>TinyCC · 5.795</td><td class="num">995,860</td><td class="num">992,583</td></tr></tbody></table></div><p>The GCC build used GCC 12.2 at -O3. The distro build used necc and its staged TinyCC. The inputs and seven external binaries matched the earlier run by SHA-256. For the whole-SDK allocator, TinyCC was the only external linker whose program passed the execution check.</p><p class="upstream-links"><a href="/nelua/assets/linker-20261121/summary.csv">Full field and quartiles (CSV)</a><a href="/nelua/assets/linker-20261121/samples.csv">Individual link times (CSV)</a><a href="/nelua/assets/linker-20261121/method.txt">Method, builds and checks</a><a href="/nelua/assets/linker-20261121/replay.tar.gz">Replay the link inputs</a></p><h3 id="link-memory">Link time and peak resident memory</h3><p>On 22 November 2026 a native necc build of nelinker a349c2a linked a real SDK member and a complete Lua interpreter. Time and maximum resident set size came from separate invocations with identical inputs.</p><div class="table-wrap"><table><thead><tr><th scope="col">Input</th><th scope="col">Reference</th><th scope="col">nelinker (ms)</th><th scope="col">Reference (ms)</th><th scope="col">nelinker (KiB)</th><th scope="col">Reference (KiB)</th></tr></thead><tbody><tr><th scope="row">SDK archive member</th><td class="num">ld.bfd</td><td class="num">0.51</td><td class="num">1.85</td><td class="num">1,696</td><td class="num">4,936</td></tr><tr><th scope="row">Whole interpreter</th><td class="num">TinyCC</td><td class="num">7.02</td><td class="num">7.15</td><td class="num">5,364</td><td class="num">5,420</td></tr></tbody></table></div><p>The syscall executable returned 42 after calling getpid. The linked Lua interpreter evaluated a command and printed 42. The table reports warm medians on logical CPU 5 of an Intel Core i7-11700F across 19 SDK pairs and 15 interpreter pairs.</p><details id="link-samples"><summary>Individual link times, peak memory and file sizes</summary><p>SDK archive member</p><pre>round,tool,elapsed_ns,peak_kib,size
+0,nelinker,636007,1816,4378
+0,ld.bfd,2820182,4928,6208
+1,ld.bfd,1682671,4840,6208
+1,nelinker,499733,1696,4378
+2,nelinker,450382,1816,4378
+2,ld.bfd,1785344,4932,6208
+3,ld.bfd,1517274,4848,6208
+3,nelinker,469727,1504,4378
+4,nelinker,431319,1500,4378
+4,ld.bfd,1552750,4976,6208
+5,ld.bfd,1760040,4688,6208
+5,nelinker,511069,1616,4378
+6,nelinker,432196,1500,4378
+6,ld.bfd,1754669,4792,6208
+7,ld.bfd,1545573,5008,6208
+7,nelinker,509942,1688,4378
+8,nelinker,425054,1696,4378
+8,ld.bfd,1868402,4984,6208
+9,ld.bfd,1541043,5024,6208
+9,nelinker,544395,1696,4378
+10,nelinker,410685,1696,4378
+10,ld.bfd,1965823,4676,6208
+11,ld.bfd,1851726,4940,6208
+11,nelinker,551579,1632,4378
+12,nelinker,406966,1816,4378
+12,ld.bfd,1705440,4872,6208
+13,ld.bfd,2155555,5020,6208
+13,nelinker,765780,1504,4378
+14,nelinker,449352,1632,4378
+14,ld.bfd,2126529,4936,6208
+15,ld.bfd,2075912,4768,6208
+15,nelinker,592063,1696,4378
+16,nelinker,533188,1816,4378
+16,ld.bfd,2410768,4948,6208
+17,ld.bfd,2213777,4996,6208
+17,nelinker,548269,1504,4378
+18,nelinker,540622,1816,4378
+18,ld.bfd,1987287,5032,6208
+19,ld.bfd,2043976,4840,6208
+19,nelinker,634697,1816,4378</pre><p>Whole interpreter</p><pre>round,tool,elapsed_ns,peak_kib,size
+0,nelinker,5527544610,5364,1433300
+0,TinyCC,7290457,5420,1430439
+1,TinyCC,6770900,5420,1430439
+1,nelinker,7501557,5364,1433300
+2,nelinker,6800306,5364,1433300
+2,TinyCC,7704918,5420,1430439
+3,TinyCC,7709670,5420,1430439
+3,nelinker,7560300,5364,1433300
+4,nelinker,7021313,5364,1433300
+4,TinyCC,7011796,5420,1430439
+5,TinyCC,7375582,5420,1430439
+5,nelinker,6458743,5364,1433300
+6,nelinker,6368213,5364,1433300
+6,TinyCC,6877752,5420,1430439
+7,TinyCC,6920083,5420,1430439
+7,nelinker,5823868,5428,1433300
+8,nelinker,6907629,5428,1433300
+8,TinyCC,7143156,5420,1430439
+9,TinyCC,7148539,5420,1430439
+9,nelinker,6349547,5428,1433300
+10,nelinker,7430880,5364,1433300
+10,TinyCC,7621218,5420,1430439
+11,TinyCC,7974480,5420,1430439
+11,nelinker,7537336,5428,1433300
+12,nelinker,7276981,5364,1433300
+12,TinyCC,7712862,5420,1430439
+13,TinyCC,8297800,5420,1430439
+13,nelinker,8364584,5428,1433300
+14,nelinker,8127822,5364,1433300
+14,TinyCC,6923839,5420,1430439
+15,TinyCC,6686438,5420,1430439
+15,nelinker,6084101,5364,1433300</pre></details><p class="upstream-links"><a href="/nelua/assets/ecosystem-20261121/replay.tar.gz">Replay scripts</a></p><h3>Creating an archive</h3><p>On <time datetime="2026-11-22">22 November 2026</time>, creating a deterministic archive from 256 x86-64 objects with short filenames took 3.251 ms with native build a349c2a. The earlier TinyCC-built 0c27372 took 3.908 ms. GNU ar took 18.991 ms. The current writer stores ordinary filenames directly in the member header and preserves short filenames containing spaces. The output size fell from 215,484 to 213,376 bytes, matching the GNU archive size.</p><p>Archive creation used 31 interleaved warm runs on one Intel Core i5-10400 core. GNU ar listed the members, nm read their index, and both nelinker and GNU ld linked a program that returned 42.</p><details><summary>22 November archive creation and lookup samples</summary><pre>case,tool,round,wall_ms,child_cpu_ms,output_bytes
+write-256-members,GNU ar,1,18.69611,18.299,213376
+write-256-members,after,1,3.21588,2.978,213376
+write-256-members,before,1,3.87711,3.608,215484
+write-256-members,before,2,3.86884,3.632,215484
+write-256-members,after,2,3.20227,2.982,213376
+write-256-members,GNU ar,2,18.88839,18.478,213376
+write-256-members,GNU ar,3,18.91439,18.51,213376
+write-256-members,after,3,3.22417,2.991,213376
+write-256-members,before,3,3.86043,3.624,215484
+write-256-members,before,4,3.90094,3.663,215484
+write-256-members,after,4,3.26588,3.001,213376
+write-256-members,GNU ar,4,18.87944,18.472,213376
+write-256-members,before,5,3.88808,3.644,215484
+write-256-members,GNU ar,5,19.15018,18.623,213376
+write-256-members,after,5,3.17222,2.945,213376
+write-256-members,GNU ar,6,18.66834,18.289,213376
+write-256-members,after,6,3.14258,2.92,213376
+write-256-members,before,6,3.80702,3.547,215484
+write-256-members,GNU ar,7,18.94386,18.564,213376
+write-256-members,after,7,3.25144,3.013,213376
+write-256-members,before,7,3.83219,3.59,215484
+write-256-members,GNU ar,8,19.05199,18.646,213376
+write-256-members,after,8,3.15866,2.935,213376
+write-256-members,before,8,3.77981,3.531,215484
+write-256-members,after,9,3.17186,2.95,213376
+write-256-members,before,9,3.78559,3.553,215484
+write-256-members,GNU ar,9,18.49926,18.138,213376
+write-256-members,GNU ar,10,18.81189,18.436,213376
+write-256-members,after,10,3.26377,2.977,213376
+write-256-members,before,10,3.77863,3.551,215484
+write-256-members,before,11,4.02247,3.725,215484
+write-256-members,GNU ar,11,19.70516,18.928,213376
+write-256-members,after,11,3.21598,2.978,213376
+write-256-members,before,12,3.90395,3.65,215484
+write-256-members,GNU ar,12,18.81218,18.394,213376
+write-256-members,after,12,3.16288,2.94,213376
+write-256-members,GNU ar,13,18.9172,18.551,213376
+write-256-members,before,13,3.84197,3.596,215484
+write-256-members,after,13,3.21231,2.966,213376
+write-256-members,after,14,3.29228,3.022,213376
+write-256-members,GNU ar,14,18.81176,18.407,213376
+write-256-members,before,14,3.82453,3.594,215484
+write-256-members,before,15,3.92456,3.66,215484
+write-256-members,GNU ar,15,18.70738,18.332,213376
+write-256-members,after,15,3.16971,2.946,213376
+write-256-members,after,16,3.2408,3.007,213376
+write-256-members,GNU ar,16,19.06391,18.68,213376
+write-256-members,before,16,4.05403,3.788,215484
+write-256-members,before,17,4.90946,4.437,215484
+write-256-members,after,17,3.39646,3.113,213376
+write-256-members,GNU ar,17,21.56677,20.928,213376
+write-256-members,before,18,4.17227,3.864,215484
+write-256-members,after,18,3.50868,3.193,213376
+write-256-members,GNU ar,18,20.14285,19.546,213376
+write-256-members,before,19,3.9676,3.702,215484
+write-256-members,after,19,5.36375,4.644,213376
+write-256-members,GNU ar,19,29.55405,28.428,213376
+write-256-members,before,20,5.92499,5.496,215484
+write-256-members,GNU ar,20,27.01014,25.937,213376
+write-256-members,after,20,3.60818,3.262,213376
+write-256-members,GNU ar,21,24.71626,23.665,213376
+write-256-members,before,21,4.41418,4.076,215484
+write-256-members,after,21,4.21954,3.759,213376
+write-256-members,GNU ar,22,23.84502,23.199,213376
+write-256-members,before,22,6.93738,4.334,215484
+write-256-members,after,22,3.89838,3.502,213376
+write-256-members,GNU ar,23,20.47483,19.954,213376
+write-256-members,before,23,5.05323,4.64,215484
+write-256-members,after,23,4.645,4.248,213376
+write-256-members,after,24,4.33651,3.911,213376
+write-256-members,GNU ar,24,22.64298,21.985,213376
+write-256-members,before,24,8.05527,3.854,215484
+write-256-members,after,25,4.83429,3.172,213376
+write-256-members,GNU ar,25,20.03533,19.585,213376
+write-256-members,before,25,4.08265,3.692,215484
+write-256-members,before,26,3.98452,3.658,215484
+write-256-members,after,26,3.29135,2.98,213376
+write-256-members,GNU ar,26,19.74775,19.237,213376
+write-256-members,GNU ar,27,19.49581,19.08,213376
+write-256-members,before,27,3.91796,3.654,215484
+write-256-members,after,27,3.22866,2.995,213376
+write-256-members,after,28,3.26609,3.022,213376
+write-256-members,before,28,3.84098,3.613,215484
+write-256-members,GNU ar,28,18.86848,18.442,213376
+write-256-members,GNU ar,29,18.99125,18.609,213376
+write-256-members,after,29,3.29085,3.038,213376
+write-256-members,before,29,3.98121,3.674,215484
+write-256-members,GNU ar,30,18.9138,18.516,213376
+write-256-members,after,30,3.11221,2.893,213376
+write-256-members,before,30,3.74773,3.52,215484
+write-256-members,before,31,3.9075,3.661,215484
+write-256-members,after,31,3.20194,2.975,213376
+write-256-members,GNU ar,31,18.97737,18.553,213376
+link-one-from-256,GNU ar,1,0.48994,0.324,196
+link-one-from-256,after,1,0.48586,0.325,196
+link-one-from-256,before,1,0.52916,0.362,196
+link-one-from-256,before,2,0.51731,0.354,196
+link-one-from-256,after,2,0.48753,0.328,196
+link-one-from-256,GNU ar,2,0.47295,0.323,196
+link-one-from-256,GNU ar,3,0.50653,0.339,196
+link-one-from-256,after,3,0.4778,0.318,196
+link-one-from-256,before,3,0.54968,0.358,196
+link-one-from-256,before,4,0.52719,0.36,196
+link-one-from-256,after,4,0.48684,0.326,196
+link-one-from-256,GNU ar,4,0.49117,0.324,196
+link-one-from-256,before,5,0.52047,0.356,196
+link-one-from-256,GNU ar,5,0.47844,0.318,196
+link-one-from-256,after,5,0.48707,0.322,196
+link-one-from-256,GNU ar,6,0.48488,0.322,196
+link-one-from-256,after,6,0.48664,0.325,196
+link-one-from-256,before,6,0.60505,0.367,196
+link-one-from-256,GNU ar,7,0.49488,0.328,196
+link-one-from-256,after,7,0.48459,0.323,196
+link-one-from-256,before,7,0.52482,0.361,196
+link-one-from-256,GNU ar,8,0.48958,0.324,196
+link-one-from-256,after,8,0.48154,0.321,196
+link-one-from-256,before,8,0.72216,0.371,196
+link-one-from-256,after,9,0.49622,0.329,196
+link-one-from-256,before,9,0.5266,0.361,196
+link-one-from-256,GNU ar,9,0.5028,0.337,196
+link-one-from-256,GNU ar,10,0.49962,0.332,196
+link-one-from-256,after,10,0.4985,0.333,196
+link-one-from-256,before,10,0.54077,0.377,196
+link-one-from-256,before,11,0.5312,0.362,196
+link-one-from-256,GNU ar,11,0.51228,0.344,196
+link-one-from-256,after,11,0.49733,0.336,196
+link-one-from-256,before,12,0.52703,0.366,196
+link-one-from-256,GNU ar,12,0.60438,0.364,196
+link-one-from-256,after,12,0.48576,0.326,196
+link-one-from-256,GNU ar,13,0.48283,0.321,196
+link-one-from-256,before,13,0.53295,0.369,196
+link-one-from-256,after,13,0.54569,0.372,196
+link-one-from-256,after,14,0.55602,0.347,196
+link-one-from-256,GNU ar,14,0.60563,0.328,196
+link-one-from-256,before,14,0.52981,0.363,196
+link-one-from-256,before,15,0.51956,0.358,196
+link-one-from-256,GNU ar,15,0.48099,0.321,196
+link-one-from-256,after,15,0.49036,0.326,196
+link-one-from-256,after,16,0.48452,0.325,196
+link-one-from-256,GNU ar,16,0.47746,0.317,196
+link-one-from-256,before,16,0.55777,0.389,196
+link-one-from-256,before,17,0.51402,0.353,196
+link-one-from-256,after,17,0.48179,0.321,196
+link-one-from-256,GNU ar,17,0.48458,0.321,196
+link-one-from-256,before,18,0.51423,0.353,196
+link-one-from-256,after,18,0.48351,0.324,196
+link-one-from-256,GNU ar,18,0.4837,0.321,196
+link-one-from-256,before,19,0.51983,0.356,196
+link-one-from-256,after,19,0.48152,0.32,196
+link-one-from-256,GNU ar,19,0.49122,0.325,196
+link-one-from-256,before,20,0.53061,0.364,196
+link-one-from-256,GNU ar,20,0.48561,0.324,196
+link-one-from-256,after,20,0.49656,0.331,196
+link-one-from-256,GNU ar,21,0.48393,0.321,196
+link-one-from-256,before,21,0.52179,0.359,196
+link-one-from-256,after,21,0.49177,0.33,196
+link-one-from-256,GNU ar,22,0.49091,0.324,196
+link-one-from-256,before,22,0.51843,0.358,196
+link-one-from-256,after,22,0.57566,0.319,196
+link-one-from-256,GNU ar,23,0.48012,0.317,196
+link-one-from-256,before,23,0.5129,0.355,196
+link-one-from-256,after,23,0.47274,0.314,196
+link-one-from-256,after,24,0.65357,0.332,196
+link-one-from-256,GNU ar,24,0.48107,0.323,196
+link-one-from-256,before,24,0.51102,0.352,196
+link-one-from-256,after,25,0.48037,0.319,196
+link-one-from-256,GNU ar,25,0.47174,0.314,196
+link-one-from-256,before,25,0.51278,0.352,196
+link-one-from-256,before,26,0.51522,0.352,196
+link-one-from-256,after,26,0.47543,0.315,196
+link-one-from-256,GNU ar,26,0.47355,0.314,196
+link-one-from-256,GNU ar,27,0.47926,0.316,196
+link-one-from-256,before,27,0.51367,0.352,196
+link-one-from-256,after,27,0.47928,0.321,196
+link-one-from-256,after,28,0.48305,0.319,196
+link-one-from-256,before,28,0.50891,0.351,196
+link-one-from-256,GNU ar,28,0.47974,0.318,196
+link-one-from-256,GNU ar,29,0.67286,0.321,196
+link-one-from-256,after,29,0.47899,0.316,196
+link-one-from-256,before,29,0.51683,0.357,196
+link-one-from-256,GNU ar,30,0.48337,0.321,196
+link-one-from-256,after,30,0.47971,0.319,196
+link-one-from-256,before,30,0.51661,0.354,196
+link-one-from-256,before,31,0.51818,0.356,196
+link-one-from-256,after,31,0.47845,0.319,196
+link-one-from-256,GNU ar,31,0.47647,0.318,196</pre></details><p class="upstream-links"><a href="/nelua/assets/build-tools-20261121/archive.csv">21 November archive samples (CSV)</a><a href="/nelua/assets/build-tools-20261121/method.txt">Archive writer method</a></p><p class="upstream-links"><a href="/nelua/assets/toolchain-20261119/archives.csv">19 November archive link results (CSV)</a><a href="/nelua/assets/toolchain-20261119/toolchain.csv">19 November object and compiler results (CSV)</a></p></div></main><footer><p class="creator-credit">With love and admiration for <a href="https://github.com/edubart">Eduardo Bart</a>, the creator of Nelua. Thank you for giving us a language that makes writing systems code such a joy.</p><a class="footer-home" href="/nelua/">Nelua</a><div class="footer-links"><a href="https://github.com/Spaceghost/nelua-site">Site source</a><a href="https://johnneylee.com/">Johnneylee Rollins</a></div></footer></div></body></html>

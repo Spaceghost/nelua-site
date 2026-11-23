@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 export const title = "Nelua compiler fork · spacegho.st/nelua"
 export const description = "Spaceghost/nelua: upstream Nelua plus variants, optionals, an exhaustive match statement, owned records with move, closures, structured compile-time evaluation, const pointers, a compiler-enforced freestanding pragma, cross-compilation with --target and nelua-bindgen."
 
@@ -10,10 +11,10 @@ const frontendTimings = [
 ]
 
 const compilerPassRows = [
-	["Hello world · compile", "134.50", "113.56"]
-	["Hello world · run", "0.77", "0.78"]
-	["Matrix multiplication · compile", "1109.31", "1158.70"]
-	["Matrix multiplication · run", "29.62", "29.73"]
+	["Hello world · compile", "61.43", "58.25"]
+	["Hello world · run", "0.62", "0.53"]
+	["Matrix multiplication · compile", "516.77", "489.60"]
+	["Matrix multiplication · run", "15.65", "15.65"]
 ]
 
 export def body
@@ -42,17 +43,17 @@ export def body
 					<strong> "Upstream base"
 					" a584505 · 2025-06-24"
 				<span>
-					<strong> "609 specs passed"
-					" · 2026-11-21"
+					<strong> "610 specs passed"
+					" · 2026-11-22"
 				<span>
 					<strong> "Fork revision "
-					<code> "874acdd"
+					<code> "0f29b8f"
 			<p>
 				<a href="/nelua/necc/"> 'necc'
 				' packages this frontend with a standalone Linux toolchain.'
 		<div className="page-details">
 			<h2 className="section" id="release-timing"> "Release compilation and generated programs"
-			<p> "On 21 November 2026 the fork at 874acdd and upstream at a584505 used the same input files and GCC backend. The compile interval includes C generation, compilation and linking. The execution interval starts with a fresh process."
+			<p> "On 22 November 2026 the fork at 0f29b8f and upstream at a584505 used the same bundled interpreter binary, fork input files and GCC 16.2.1 on logical CPU 3 of an Intel Core i7-11700F with ccache disabled. The compile interval includes C generation, compilation and linking. The execution interval starts with a fresh process."
 			<div className="table-wrap">
 				<table>
 					<thead>
@@ -66,13 +67,12 @@ export def body
 								<th scope="row"> row[0]
 								<td className="num"> row[1]
 								<td className="num"> row[2]
-			<p> "Each median covers seven alternating rounds after warm-up. Both generated matrix programs printed −18.8963499125. The hello-world compile took longer in the fork while the matrix compile finished sooner. The runtime distributions overlapped."
+			<p> "Each median covers seven alternating rounds after warm-up. Both generated matrix programs printed −18.8963499125. Upstream compiled both examples sooner. The median matrix execution times agree to two decimal places."
+			<details id="release-samples">
+				<summary> 'Individual release timings (nanoseconds)'
+				<pre> readFileSync('src/content/compiler-release.csv', 'utf8').trimEnd()
 			<p className="upstream-links">
-				<a href="/nelua/assets/ecosystem-20261121/frontend-flags.csv"> "Interpreter build-flag samples"
-				<a href="/nelua/assets/ecosystem-20261121/nelua.csv"> "Compiler and program samples"
-				<a href="/nelua/assets/ecosystem-20261121/summary.csv"> "Quartiles and observed ranges"
-				<a href="/nelua/assets/ecosystem-20261121/replay.tar.gz"> "Replay scripts"
-				<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> "Versions and reproduction"
+				<a href="/nelua/assets/ecosystem-20261121/replay.tar.gz"> 'Replay script · compare-nelua.py'
 			<h2 className="section" id="performance"> 'Frontend compile times'
 			<p>
 				'On '
@@ -374,7 +374,7 @@ export def body
 				<dd>
 					<code> "make test"
 					" runs upstream's spec suite plus the fork's specs (const pointers, freestanding, target, bindgen, variant, optional, match, ownership, closures, the batteries libraries, comptime). All 609 specs passed on 21 November 2026 at fork revision "
-					<code> "874acdd"
+					<code> "0f29b8f"
 					" using Clang 23 and Bend 2.0.40."
 				<dt> "Examples"
 				<dd> "Every example in the fork guide was compiled and run with the checkout it documents and prints what its comments say."

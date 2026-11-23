@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 export const title = 'nebuild · Incremental build runner · Nelua at spacegho.st'
 export const description = 'Run incremental and parallel builds from a build.ne dependency graph with the standalone Nelua build runner.'
 
@@ -33,8 +34,8 @@ export def body
 		<h2 className="section" id="benchmarks"> 'Checking an unchanged target'
 		<p>
 			'On '
-			<time html:datetime="2026-11-21"> '21 November 2026'
-			', nebuild checked one up-to-date target in a 2,048-rule manifest in 3.689 ms. The previous build took 22.597 ms. The parser now scans manifest bytes directly and prepares the recipe signature only for targets the runner visits.'
+			<time html:datetime="2026-11-22"> '22 November 2026'
+			', nebuild checked one up-to-date target in a 2,048-rule manifest in 3.735 ms. The previous build took 22.931 ms. The parser now scans manifest bytes directly and prepares the recipe signature only for targets the runner visits.'
 		<div className="table-wrap" role="region" aria-label="Median elapsed time in milliseconds" html:tabindex="0">
 			<table>
 				<thead>
@@ -45,12 +46,15 @@ export def body
 						<th className="num" scope="col"> 'GNU make (ms)'
 						<th className="num" scope="col"> 'Ninja (ms)'
 				<tbody>
-					for row in [['256 rules', '3.218', '0.845', '0.987', '2.612'], ['2,048 rules', '22.597', '3.689', '4.105', '3.819']]
+					for row in [['256 rules', '3.097', '0.788', '0.912', '2.464'], ['2,048 rules', '22.931', '3.735', '4.014', '3.884']]
 						<tr>
 							<th scope="row"> row[0]
 							for value in row.slice(1)
 								<td className="num"> value
-		<p> 'Each median covers 31 warm runs on one CPU. Every rule copied the same source to a different output. Each invocation opened its manifest and checked one previously built output. The harness verified its contents and timestamp after every invocation. Clean builds and parallel recipe execution were outside this timing.'
+		<p> 'Each median covers 31 warm runs on logical CPU 5 of an Intel Core i5-10400. Every rule copied the same source to a different output. Each invocation opened its manifest and checked one previously built output. The harness verified its contents and timestamp after every invocation. Clean builds and parallel recipe execution were outside this timing.'
+		<details id="build-samples">
+			<summary> '22 November samples for both manifest sizes'
+			<pre> readFileSync('src/content/build-incremental.csv', 'utf8').trimEnd()
 		<h3 id="incremental-repeat"> "Independent manifest timing"
 		<p> "On 21 November 2026, twelve warm rounds repeated the unchanged-target check on one i7-9700K CPU. Every result retained the same output contents and timestamp."
 		<div className="table-wrap">

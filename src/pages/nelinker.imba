@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 export const title = 'nelinker · Static x86-64 linker · Nelua at spacegho.st'
 export const description = 'Link x86-64 ELF objects and static archives into a Linux executable or a relocatable PE32+ UEFI application.'
 
@@ -16,8 +17,8 @@ const timings = [
 ]
 
 const nelinkerPassRows = [
-	["SDK getpid member", "ld.bfd", "0.74", "3.39", "1,804", "4,944"]
-	["Bundled Lua and whole SDK", "TinyCC", "10.71", "16.31", "5,532", "5,528"]
+	["SDK archive member", "ld.bfd", "0.51", "1.85", "1,696", "4,936"]
+	["Whole interpreter", "TinyCC", "7.02", "7.15", "5,364", "5,420"]
 ]
 
 export def body
@@ -107,7 +108,7 @@ export def body
 			<a href="/nelua/assets/linker-20261121/method.txt"> 'Method, builds and checks'
 			<a href="/nelua/assets/linker-20261121/replay.tar.gz"> 'Replay the link inputs'
 		<h3 id="link-memory"> "Link time and peak resident memory"
-		<p> "On 21 November 2026 nelinker a349c2a linked a real SDK member and a complete Lua interpreter. Time and maximum resident set size came from separate invocations with identical inputs."
+		<p> "On 22 November 2026 a native necc build of nelinker a349c2a linked a real SDK member and a complete Lua interpreter. Time and maximum resident set size came from separate invocations with identical inputs."
 		<div className="table-wrap">
 			<table>
 				<thead>
@@ -127,21 +128,26 @@ export def body
 							<td className="num"> row[3]
 							<td className="num"> row[4]
 							<td className="num"> row[5]
-		<p> "The syscall executable returned 42 after calling getpid. The linked Lua interpreter evaluated a command and printed 42. The table reports warm medians on one i7-9700K logical CPU."
+		<p> "The syscall executable returned 42 after calling getpid. The linked Lua interpreter evaluated a command and printed 42. The table reports warm medians on logical CPU 5 of an Intel Core i7-11700F across 19 SDK pairs and 15 interpreter pairs."
+		<details id="link-samples">
+			<summary> 'Individual link times, peak memory and file sizes'
+			<p> 'SDK archive member'
+			<pre> readFileSync('src/content/linker-current.csv', 'utf8').trimEnd()
+			<p> 'Whole interpreter'
+			<pre> readFileSync('src/content/linker-vm-current.csv', 'utf8').trimEnd()
 		<p className="upstream-links">
-			<a href="/nelua/assets/ecosystem-20261121/link.csv"> "SDK link samples"
-			<a href="/nelua/assets/ecosystem-20261121/link-vm.csv"> "Interpreter link samples"
-			<a href="/nelua/assets/ecosystem-20261121/summary.csv"> "Quartiles and observed ranges"
-			<a href="/nelua/assets/ecosystem-20261121/replay.tar.gz"> "Replay scripts"
-			<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> "Versions and reproduction"
+			<a href="/nelua/assets/ecosystem-20261121/replay.tar.gz"> 'Replay scripts'
 		<h3> 'Creating an archive'
 		<p>
 			'On '
-			<time html:datetime="2026-11-21"> '21 November 2026'
-			', creating a deterministic archive from 256 x86-64 objects with short filenames took 3.343 ms, down from 4.231 ms. GNU ar took 22.216 ms. The new writer stores ordinary filenames directly in the member header and preserves short filenames containing spaces. The archive shrank from 215,484 to 213,376 bytes, matching the GNU archive size.'
+			<time html:datetime="2026-11-22"> '22 November 2026'
+			', creating a deterministic archive from 256 x86-64 objects with short filenames took 3.251 ms with native build a349c2a. The earlier TinyCC-built 0c27372 took 3.908 ms. GNU ar took 18.991 ms. The current writer stores ordinary filenames directly in the member header and preserves short filenames containing spaces. The output size fell from 215,484 to 213,376 bytes, matching the GNU archive size.'
 		<p> 'Archive creation used 31 interleaved warm runs on one Intel Core i5-10400 core. GNU ar listed the members, nm read their index, and both nelinker and GNU ld linked a program that returned 42.'
+		<details>
+			<summary> '22 November archive creation and lookup samples'
+			<pre> readFileSync('src/content/build-archive.csv', 'utf8').trimEnd()
 		<p className="upstream-links">
-			<a href="/nelua/assets/build-tools-20261121/archive.csv"> 'Archive creation samples (CSV)'
+			<a href="/nelua/assets/build-tools-20261121/archive.csv"> '21 November archive samples (CSV)'
 			<a href="/nelua/assets/build-tools-20261121/method.txt"> 'Archive writer method'
 		<p className="upstream-links">
 			<a href="/nelua/assets/toolchain-20261119/archives.csv"> '19 November archive link results (CSV)'

@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs'
 import { comparisons, field, phaseComparison } from '../necc-timings.mjs'
 
 export const title = 'necc · Native compiler driver · Nelua at spacegho.st'
@@ -9,9 +10,11 @@ const timings = [
 ]
 
 const neccPassRows = [
-	["Run one million Lua calls", "605.81", "498.10", "168.98"]
-	["Emit C for Nelua matrix multiplication", "1077.34", "984.03", "746.34"]
-	["Compile the Lua VM to an object", "160.26", "138.43", "23.77"]
+	["Run one million Lua calls", "227.21", "176.88", "68.89"]
+	["Emit C for Nelua matrix multiplication", "1132.31", "1408.89", "1158.48"]
+	["Compile the Lua VM to an object", "39.73", "38.32", "12.47"]
+	["Compile the arithmetic kernel", "1.62", "1.58", "0.83"]
+	["Run the arithmetic kernel", "0.53", "0.52", "8.98"]
 ]
 
 export def body
@@ -120,15 +123,15 @@ export def body
 			<a href="/nelua/assets/necc-codegen-20261121/method.txt"> 'Method and checks'
 			<a href="/nelua/assets/necc-codegen-20261121/runtime-replay.py"> 'Replay the runtime comparison'
 			<a href="/nelua/assets/necc-codegen-20261121/independent-checks.tar.gz"> 'Independent loop and Lua checks'
-		<h3 id="switch-dispatch"> "Dense switch dispatch"
-		<p> "On 21 November 2026 necc e1eab18 emitted relative jump tables for dense integer switches. Both runtime workloads used the same interpreter objects except for Lua’s VM. The third row times a separate compiler invocation."
+		<h3 id="switch-dispatch"> "Lua VM and arithmetic workloads"
+		<p> "On 22 November 2026 we rebuilt the Lua VM with two necc revisions and SDK TinyCC on an Intel Core i7-11700F. The interpreter shares every other object. Medians exclude one warm-up and cover 15 million-call runs, nine frontend runs and 11 object-build or arithmetic runs."
 		<div className="table-wrap">
 			<table>
 				<thead>
 					<tr>
 						<th scope="col"> "Workload"
-						<th scope="col"> "2ebbb9d (ms)"
 						<th scope="col"> "e1eab18 (ms)"
+						<th scope="col"> "22180f5 (ms)"
 						<th scope="col"> "TinyCC (ms)"
 				<tbody>
 					for row in neccPassRows
@@ -137,14 +140,17 @@ export def body
 							<td className="num"> row[1]
 							<td className="num"> row[2]
 							<td className="num"> row[3]
-		<p> "Each Lua workload returned the expected result. All three frontend runs emitted byte-identical C at the same output path. The small arithmetic control produced identical necc objects before and after."
+		<p> "Each Lua workload returned the expected result. All three frontend runs emitted byte-identical C at the same output path. All three arithmetic programs returned the same eight bytes."
+		<details id="vm-samples">
+			<summary> 'Individual VM and arithmetic samples (nanoseconds)'
+			<p> 'Million calls'
+			<pre> readFileSync('src/content/vm.csv', 'utf8').trimEnd()
+			<p> 'Frontend'
+			<pre> readFileSync('src/content/frontend-vm.csv', 'utf8').trimEnd()
+			<p> 'Object builds and arithmetic'
+			<pre> readFileSync('src/content/necc-three.csv', 'utf8').trimEnd()
 		<p className="upstream-links">
-			<a href="/nelua/assets/ecosystem-20261121/vm.csv"> "Lua runtime samples"
-			<a href="/nelua/assets/ecosystem-20261121/frontend-vm.csv"> "Frontend runtime samples"
-			<a href="/nelua/assets/ecosystem-20261121/necc-final.csv"> "C compilation and arithmetic samples"
-			<a href="/nelua/assets/ecosystem-20261121/summary.csv"> "Quartiles and observed ranges"
-			<a href="/nelua/assets/ecosystem-20261121/replay.tar.gz"> "Replay scripts"
-			<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> "Versions and reproduction"
+			<a href="/nelua/assets/ecosystem-20261121/replay.tar.gz"> 'Replay scripts'
 		<h3> 'Earlier SDK comparison'
 		<p> 'Earlier on 21 November, changing the SDK preprocessor cut the 128-function compile from 9.370 to 5.425 ms. Both SDKs used the same necc executable and emitted byte-identical objects. The old arithmetic executable took 9.729 ms against Zig’s 3.071 ms. Zig combined four recurrence steps per group, while that necc build executed one step at a time.'
 		<p className="upstream-links">

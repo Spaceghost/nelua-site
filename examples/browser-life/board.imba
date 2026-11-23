@@ -2,6 +2,7 @@ const board = document.querySelector('#life-board')
 const step = document.querySelector('#life-step')
 const play = document.querySelector('#life-play')
 const pattern = document.querySelector('#life-pattern')
+const reroll = document.querySelector('#life-reroll')
 const speed = document.querySelector('#life-speed')
 const counter = document.querySelector('#life-generation')
 let timer = null
@@ -9,6 +10,7 @@ const reset = document.querySelector('#life-reset')
 const status = document.querySelector('#life-status')
 const context = board.getContext('2d')
 let generation = 0
+const initial = new Uint16Array(16)
 let rows = new Uint16Array(16)
 
 def draw
@@ -28,22 +30,29 @@ def pause
 	play.textContent = 'Play'
 	status.textContent = 'Paused'
 
-def seed
+def restart
 	pause!
-	rows.fill(0)
-	if pattern.value == 'blinker'
-		rows[7] = 7 << 6
-	elif pattern.value == 'beacon'
-		rows[6] = rows[7] = 3 << 5
-		rows[8] = rows[9] = 3 << 7
-	elif pattern.value == 'block'
-		rows[7] = rows[8] = 3 << 7
-	else
-		rows[4] = 1 << 6
-		rows[5] = 1 << 7
-		rows[6] = 7 << 5
+	rows.set(initial)
 	generation = 0
 	draw!
+
+def seed
+	initial.fill(0)
+	reroll.hidden = pattern.value != 'random'
+	if pattern.value == 'random'
+		crypto.getRandomValues(initial)
+	elif pattern.value == 'blinker'
+		initial[7] = 7 << 6
+	elif pattern.value == 'beacon'
+		initial[6] = initial[7] = 3 << 5
+		initial[8] = initial[9] = 3 << 7
+	elif pattern.value == 'block'
+		initial[7] = initial[8] = 3 << 7
+	else
+		initial[4] = 1 << 6
+		initial[5] = 1 << 7
+		initial[6] = 7 << 5
+	restart!
 
 def load
 	try
@@ -81,7 +90,8 @@ def load
 		pattern.addEventListener('change', seed)
 		play.disabled = false
 		pattern.disabled = false
-		reset.addEventListener('click', seed)
+		reroll.addEventListener('click', seed)
+		reset.addEventListener('click', restart)
 		reset.disabled = false
 		step.disabled = false
 		seed!

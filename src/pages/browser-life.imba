@@ -24,21 +24,23 @@ export def body
 				<button id="life-play" type="button" className="button" html:disabled=""> 'Play'
 				<button id="life-step" type="button" className="button button-ghost" html:disabled=""> 'Step once'
 				<button id="life-reset" type="button" className="button button-ghost" html:disabled=""> 'Restart pattern'
-			<details className="life-settings">
-				<summary> 'Pattern and playback speed'
-				<label for="life-pattern"> 'Starting pattern'
-				<select id="life-pattern" html:disabled="">
-					<option value="glider"> 'Glider · travels (default)'
-					<option value="blinker"> 'Blinker · flips direction'
-					<option value="beacon"> 'Beacon · pulses'
-					<option value="block"> 'Block · stays still'
-				<label for="life-speed"> 'Playback speed'
-				<select id="life-speed" html:disabled="">
-					<option value="240"> 'Normal · 1× (default)'
-					<option value="480"> 'Slow · 0.5×'
-					<option value="120"> 'Fast · 2×'
-					<option value="60"> 'Fastest · 4×'
-				<p> 'Changing the pattern starts a fresh board. Change speed at any time.'
+			<div className="life-settings">
+				<div>
+					<label for="life-pattern"> 'Seed pattern'
+					<select id="life-pattern" html:disabled="">
+						<option value="glider"> 'Glider (default)'
+						<option value="blinker"> 'Blinker'
+						<option value="beacon"> 'Beacon'
+						<option value="block"> 'Block · still life'
+						<option value="random"> 'Random'
+				<div>
+					<label for="life-speed"> 'Playback speed'
+					<select id="life-speed" html:disabled="">
+						<option value="240"> 'Normal · 1× (default)'
+						<option value="480"> 'Slow · 0.5×'
+						<option value="120"> 'Fast · 2×'
+						<option value="60"> 'Fastest · 4×'
+				<button id="life-reroll" type="button" className="button button-ghost" html:hidden=""> 'New random seed'
 			<noscript> 'Enable JavaScript to play the simulation.'
 		<section>
 			<h2> 'One tick through the toolchain'

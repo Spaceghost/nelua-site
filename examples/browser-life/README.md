@@ -1,7 +1,9 @@
 # Browser Life
 
 Imba paints the board. Play advances the board every 240 ms by default. Pause to inspect a generation,
-or use Step once. Expand Pattern and playback speed to choose a preset or speed.
+or use Step once. Choose a seed pattern and playback speed beside the playback buttons.
+Random creates a new board. Restart pattern replays the same seed, and
+New random seed draws another one.
 Each generation calls the Nelua WebAssembly export
 `next_row` for each row. Each call invokes Bend’s JavaScript export
 `survives` once for each of the row’s 16 cells.

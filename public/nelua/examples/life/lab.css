@@ -5,6 +5,7 @@
 .life-lab pre { max-height: 28rem; }
 
 .life-readout { display: flex; gap: 1rem; font-variant-numeric: tabular-nums; }
-.life-settings { margin-top: 1rem; }
-.life-settings label { display: block; margin: .75rem 0 .25rem; font-weight: 600; }
+.life-settings { display: flex; flex-wrap: wrap; align-items: end; gap: .75rem; margin-top: 1rem; }
+#life-reroll[hidden] { display: none; }
+.life-settings label { display: block; margin: 0 0 .25rem; font-weight: 600; }
 .life-settings select { max-width: 100%; padding: .35rem; font: inherit; }

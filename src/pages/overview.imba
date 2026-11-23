@@ -5,16 +5,6 @@ import { highlight } from '../example-code.mjs'
 export const title = 'Nelua · Lua syntax for native programs'
 export const description = 'Nelua is a statically typed systems programming language with Lua-style syntax. Explore native compilation, C interoperability and compile-time programming through examples.'
 
-const point = {
-	key: 'point'
-	file: 'point.nelua'
-	project: 'Language basics'
-	title: 'Define a typed record'
-	note: 'Point declares two integer fields. The compiler infers the type of finish from its initializer.'
-	code: readFileSync('public/nelua/examples/point.nelua', 'utf8').trimEnd()
-}
-const sourceExamples = [point, ...files]
-
 export const core = [
 	{ title: 'Compiler', path: '/nelua/compiler/', kind: 'Language', description: 'A Nelua compiler fork with exhaustive matching, ownership, compile-time evaluation and file-local syntax extensions.' }
 	{ title: 'nelibc', path: '/nelua/nelibc/', kind: 'C library', description: 'A C library written in Nelua, with hybrid builds over glibc, musl and Cosmopolitan and a standalone Linux runtime.' }
@@ -80,9 +70,9 @@ export def body
 					<a href="https://nelua.io/installing/"> 'Install Nelua'
 			<div className="source-browser" id="examples">
 				<div className="source-tabs" html:role="tablist" aria-label="Nelua source files" html:hidden="">
-					for file in sourceExamples
+					for file in files
 						<button type="button" html:role="tab" id=("tab-" + file.key) aria-controls=("file-" + file.key)> file.file
-				for file in sourceExamples
+				for file in files
 					<article className="language-example source-file" id=("file-" + file.key)>
 						<header>
 							<span> file.project
@@ -108,9 +98,6 @@ export def body
 								<p> 'GameState:step as emitted by the Nelua fork at 0f29b8f.'
 								<pre>
 									<code innerHTML=highlight(readFileSync('src/content/gameoflife-step.c', 'utf8').trimEnd())>
-						if file.key == 'point'
-							<a className="file-origin" href="/nelua/examples/workshop/#point"> 'Run in the workbench'
-							<a className="file-origin" href="/nelua/examples/point.nelua" download="point.nelua"> 'Download point.nelua'
 						if file.key == 'boot'
 							<div className="example-output">
 								<span> 'Console'

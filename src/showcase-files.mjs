@@ -1,14 +1,5 @@
 export const files = [
   {
-    "key": "life",
-    "file": "gameoflife.nelua",
-    "project": "Upstream Nelua",
-    "title": "Advance a world by one generation",
-    "note": "Each cell reads its neighbors from field a and writes its next state to field b. A multiple assignment swaps the two field pointers when the generation is complete.",
-    "source": "https://github.com/edubart/nelua-lang/blob/a58450563e2d2ec49bff499865c8b5cfdf6ff81a/examples/gameoflife.nelua#L67-L74",
-    "code": "function GameState:step()\n  for y=0,GRID_HEIGHT-1 do\n    for x=0,GRID_WIDTH-1 do\n      self.b:set_alive(x, y, self.a:next(x, y))\n    end\n  end\n  self.a, self.b = self.b, self.a -- swap fields\nend"
-  },
-  {
     "key": "boot",
     "file": "earlyboot.nelua",
     "project": "Theseus Init",
@@ -25,6 +16,15 @@ export const files = [
     "note": "The lines marked ## run Lua inside the compiler. Each pass splices a name into a Nelua declaration, giving the driver assembler a typed constant for every opcode.",
     "source": "https://github.com/Spaceghost/drift/blob/c97083292cdd831a80cb51c3f76f0879088969bd/lib/drift/asm.nelua#L8-L13",
     "code": "## local names = {'HALT','LIT','MOV','ADD','SUB','MUL','DIV','AND','OR',\n##                'XOR','SHL','SHR','LD8','ST8','LD32','ST32','JMP',\n##                'JEQ','JNE','JLT','IO','EVENT','SLEEP'}\n## for i, name in ipairs(names) do\nlocal asm.#|name|#: uint8 <comptime> = #[i-1]#\n## end"
+  },
+  {
+    "key": "life",
+    "file": "gameoflife.nelua",
+    "project": "Upstream Nelua",
+    "title": "Advance a world by one generation",
+    "note": "Each cell reads its neighbors from field a and writes its next state to field b. A multiple assignment swaps the two field pointers when the generation is complete.",
+    "source": "https://github.com/edubart/nelua-lang/blob/a58450563e2d2ec49bff499865c8b5cfdf6ff81a/examples/gameoflife.nelua#L67-L74",
+    "code": "function GameState:step()\n  for y=0,GRID_HEIGHT-1 do\n    for x=0,GRID_WIDTH-1 do\n      self.b:set_alive(x, y, self.a:next(x, y))\n    end\n  end\n  self.a, self.b = self.b, self.a -- swap fields\nend"
   },
   {
     "key": "arena",

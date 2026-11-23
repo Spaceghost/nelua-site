@@ -22,6 +22,7 @@ import * as notFound from './pages/not-found.imba'
 const siteLinks = [
 	{ title: 'Overview', path: '/nelua/' }
 	{ title: 'Learn', path: 'https://nelua.io/tutorial/' }
+	{ title: 'Examples', path: '/nelua/examples/workshop/' }
 	{ title: 'Performance', path: '/nelua/performance/' }
 	{ title: 'Community', path: '/nelua/community/' }
 ]
@@ -89,7 +90,7 @@ def documentFor page
 
 const pages = [
 	{ source: workshop, path: '/nelua/examples/workshop/', body: workshop.body(), stylesheet: '/nelua/examples/workshop/workshop.css', scripts: ['/nelua/examples/workshop/workshop.js'] }
-	{ source: browserLife, path: '/nelua/examples/life/', body: browserLife.body(), stylesheet: '/nelua/examples/life/lab.css', scripts: ['/nelua/examples/life/board.js'] }
+	{ source: browserLife, path: '/nelua/examples/life/', active: '/nelua/examples/workshop/', body: browserLife.body(), stylesheet: '/nelua/examples/life/lab.css', scripts: ['/nelua/examples/life/board.js'] }
 	{ source: overview, path: '/nelua/', body: overview.body(), stylesheet: '/nelua/assets/language.css', scripts: ['/nelua/assets/source-tabs.js'] }
 	{ source: performancePage, path: '/nelua/performance/', body: performancePage.body(content('nelibc-overview')), stylesheet: '/nelua/assets/performance.css' }
 	{ source: compiler, path: '/nelua/compiler/', body: compiler.body() }

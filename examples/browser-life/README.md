@@ -1,6 +1,8 @@
 # Browser Life
 
-Imba paints the board. Its Step button calls the Nelua WebAssembly export
+Imba paints the board. Play advances the board every 240 ms by default. Pause to inspect a generation,
+or use Step once. Expand Pattern and playback speed to choose a preset or speed.
+Each generation calls the Nelua WebAssembly export
 `next_row` for each row. Each call invokes Bend’s JavaScript export
 `survives` once for each of the row’s 16 cells.
 

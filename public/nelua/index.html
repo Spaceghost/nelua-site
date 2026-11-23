@@ -25,7 +25,7 @@ uint32_t encode(uint32_t index, uint32_t a, uint32_t b, uint32_t c) {
     <span class="code-keyword">end</span>
   <span class="code-keyword">end</span>
   self.a, self.b = self.b, self.a -- swap fields
-<span class="code-keyword">end</span></code></pre><p>Each cell reads its neighbors from field a and writes its next state to field b. A multiple assignment swaps the two field pointers when the generation is complete.</p><!--  --><!--  --><!--  --><a class="file-origin" href="/nelua/examples/life/">Step a glider with Imba, Bend and WebAssembly</a><details class="generated-c"><summary>Show generated C</summary><p>GameState:step as emitted by the Nelua fork at 0f29b8f.</p><pre><code>void gameoflife_GameState_step(gameoflife_GameState_ptr self) {
+<span class="code-keyword">end</span></code></pre><p>Each cell reads its neighbors from field a and writes its next state to field b. A multiple assignment swaps the two field pointers when the generation is complete.</p><!--  --><!--  --><!--  --><a class="file-origin" href="/nelua/examples/life/">Play Game of Life with Imba, Bend and WebAssembly</a><details class="generated-c"><summary>Show generated C</summary><p>GameState:step as emitted by the Nelua fork at 0f29b8f.</p><pre><code>void gameoflife_GameState_step(gameoflife_GameState_ptr self) {
   <span class="code-keyword">for</span>(int64_t y = <span class="code-literal">0</span>; y &lt;= <span class="code-literal">14</span>; y += <span class="code-literal">1</span>) {
     <span class="code-keyword">for</span>(int64_t x = <span class="code-literal">0</span>; x &lt;= <span class="code-literal">39</span>; x += <span class="code-literal">1</span>) {
       gameoflife_CellField_set_alive(self-&gt;b, x, y, gameoflife_CellField_next(self-&gt;a, x, y));

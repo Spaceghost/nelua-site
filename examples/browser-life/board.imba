@@ -2,6 +2,8 @@ const board = document.querySelector('#life-board')
 const step = document.querySelector('#life-step')
 const play = document.querySelector('#life-play')
 const pattern = document.querySelector('#life-pattern')
+const speed = document.querySelector('#life-speed')
+const counter = document.querySelector('#life-generation')
 let timer = null
 const reset = document.querySelector('#life-reset')
 const status = document.querySelector('#life-status')
@@ -17,19 +19,23 @@ def draw
 			context.fillStyle = (rows[y] & (1 << x)) ? '#a5e2cc' : '#283b54'
 			context.fillRect(x * 20 + 1, y * 20 + 1, 18, 18)
 	board.setAttribute('aria-label', "Game of Life {pattern.value} at generation {generation}")
-	status.textContent = "Generation {generation}"
+	counter.textContent = "Generation {generation}"
 
 def pause
 	if timer != null
 		clearInterval(timer)
 	timer = null
 	play.textContent = 'Play'
+	status.textContent = 'Paused'
 
 def seed
 	pause!
 	rows.fill(0)
 	if pattern.value == 'blinker'
 		rows[7] = 7 << 6
+	elif pattern.value == 'beacon'
+		rows[6] = rows[7] = 3 << 5
+		rows[8] = rows[9] = 3 << 7
 	elif pattern.value == 'block'
 		rows[7] = rows[8] = 3 << 7
 	else
@@ -54,13 +60,20 @@ def load
 			rows = next
 			generation += 1
 			draw!
+		def start
+			clearInterval(timer)
+			timer = setInterval(advance, Number(speed.value))
+			play.textContent = 'Pause'
+			status.textContent = 'Playing'
+		speed.addEventListener('change') do
+			start! if timer != null
+		speed.disabled = false
 		step.addEventListener('click') do
 			pause!
 			advance!
 		play.addEventListener('click') do
 			if timer == null
-				timer = setInterval(advance, 240)
-				play.textContent = 'Pause'
+				start!
 			else
 				pause!
 		document.addEventListener('visibilitychange') do

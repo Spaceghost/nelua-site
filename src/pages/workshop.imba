@@ -21,7 +21,7 @@ export def body
 				<a href="#console-title"> 'Console'
 			<div className="actions">
 				<a href="/nelua/init/?boot=1#browser-demo"> 'Boot Theseus'
-				<a href="/nelua/examples/life/"> 'Step through Game of Life'
+				<a href="/nelua/examples/life/"> 'Play Game of Life'
 		<section id="assembler">
 			<p className="eyebrow"> 'Drift · instruction encoding'
 			<h2> 'Build an instruction word'

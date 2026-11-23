@@ -1,10 +1,37 @@
 <!doctype html>
 <html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Browser Life</title>
-<h1>Follow a glider</h1>
-<label>Starting pattern <select id="life-pattern" disabled><option value="glider">Glider</option><option value="blinker">Blinker</option><option value="block">Still life</option></select></label><br>
-<canvas id="life-board" width="320" height="320" aria-label="Game of Life board"></canvas>
-<p><button id="life-step" disabled>Step one generation</button> <button id="life-play" disabled>Play</button> <button id="life-reset" disabled>Reset</button></p>
-<p id="life-status" role="status">Loading the simulation…</p>
+<h1>Conway’s Game of Life</h1>
+<p>Press Play to follow the glider.</p>
+<canvas style="max-width:100%;height:auto;display:block" id="life-board" width="320" height="320" aria-label="Game of Life board">A 16 by 16 Game of Life board.</canvas>
+<p class="life-readout">
+<span id="life-status" role="status">Loading…</span>
+<span id="life-generation">
+</span>
+</p>
+<div class="actions">
+<button id="life-play" class="button" type="button" disabled="">Play</button>
+<button id="life-step" class="button button-ghost" type="button" disabled="">Step once</button>
+<button id="life-reset" class="button button-ghost" type="button" disabled="">Restart pattern</button>
+</div>
+<details class="life-settings">
+<summary>Pattern and playback speed</summary>
+<label for="life-pattern">Starting pattern</label>
+<select id="life-pattern" disabled="">
+<option value="glider">Glider · travels (default)</option>
+<option value="blinker">Blinker · flips direction</option>
+<option value="beacon">Beacon · pulses</option>
+<option value="block">Block · stays still</option>
+</select>
+<label for="life-speed">Playback speed</label>
+<select id="life-speed" disabled="">
+<option value="240">Normal · 1× (default)</option>
+<option value="480">Slow · 0.5×</option>
+<option value="120">Fast · 2×</option>
+<option value="60">Fastest · 4×</option>
+</select>
+<p>Changing the pattern starts a fresh board. Change speed at any time.</p>
+</details>
+<noscript>Enable JavaScript to play the simulation.</noscript>
 <script src="board.js" defer></script>
 </html>

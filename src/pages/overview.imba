@@ -93,7 +93,7 @@ export def body
 						if file.key != 'life'
 							emitted('showcase/' + file.key + '.c')
 						if file.key == 'life'
-							<a className="file-origin" href="/nelua/examples/life/"> 'Step a glider with Imba, Bend and WebAssembly'
+							<a className="file-origin" href="/nelua/examples/life/"> 'Play Game of Life with Imba, Bend and WebAssembly'
 							<details className="generated-c">
 								<summary> 'Show generated C'
 								<p> 'GameState:step as emitted by the Nelua fork at 0f29b8f.'

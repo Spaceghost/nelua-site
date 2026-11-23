@@ -3,7 +3,17 @@ import { readFileSync } from 'node:fs'
 import { highlight } from '../example-code.mjs'
 
 export const title = 'Nelua · Lua syntax for native programs'
-export const description = 'Boot Linux with a Nelua init and shell, then explore C interop and compile-time functions. Explore the Spaceghost compiler fork and projects built with it.'
+export const description = 'Nelua is a statically typed systems programming language with Lua-style syntax. Explore native compilation, C interoperability and compile-time programming through examples.'
+
+const point = {
+	key: 'point'
+	file: 'point.nelua'
+	project: 'Language basics'
+	title: 'Define a typed record'
+	note: 'Point declares two integer fields. The compiler infers the type of finish from its initializer.'
+	code: readFileSync('public/nelua/examples/point.nelua', 'utf8').trimEnd()
+}
+const sourceExamples = [point, ...files]
 
 export const core = [
 	{ title: 'Compiler', path: '/nelua/compiler/', kind: 'Language', description: 'A Nelua compiler fork with exhaustive matching, ownership, compile-time evaluation and file-local syntax extensions.' }
@@ -63,17 +73,16 @@ export def body
 		<section className="language-hero" aria-labelledby="overview-title">
 			<div>
 				<h1 id="overview-title"> 'Nelua'
-				<p className="language-lead"> 'Write the first program Linux runs.'
-				<p> 'When this Linux guest boots, the kernel hands control to Nelua code. Theseus Init mounts the filesystems and starts a Nebox shell. You can type commands at its console, right here in your browser.'
+				<p className="language-lead"> 'Lua syntax for native programs.'
+				<p> 'Nelua is a statically typed systems programming language. The compiler infers types, translates your code to C, and builds native executables. Call C libraries directly or use Lua to generate code at compile time.'
 				<div className="actions">
-					<a className="button" href="/nelua/init/?boot=1#browser-demo"> 'Boot Linux in your browser'
-					<a href="https://nelua.io/tutorial/"> 'Learn Nelua'
-				<p className="run-example"> 'About 30 MB to start the local VM.'
+					<a className="button" href="https://nelua.io/tutorial/"> 'Start the tutorial'
+					<a href="https://nelua.io/installing/"> 'Install Nelua'
 			<div className="source-browser" id="examples">
 				<div className="source-tabs" html:role="tablist" aria-label="Nelua source files" html:hidden="">
-					for file in files
+					for file in sourceExamples
 						<button type="button" html:role="tab" id=("tab-" + file.key) aria-controls=("file-" + file.key)> file.file
-				for file in files
+				for file in sourceExamples
 					<article className="language-example source-file" id=("file-" + file.key)>
 						<header>
 							<span> file.project
@@ -99,11 +108,16 @@ export def body
 								<p> 'GameState:step as emitted by the Nelua fork at 0f29b8f.'
 								<pre>
 									<code innerHTML=highlight(readFileSync('src/content/gameoflife-step.c', 'utf8').trimEnd())>
+						if file.key == 'point'
+							<a className="file-origin" href="/nelua/examples/workshop/#point"> 'Run in the workbench'
+							<a className="file-origin" href="/nelua/examples/point.nelua" download="point.nelua"> 'Download point.nelua'
 						if file.key == 'boot'
 							<div className="example-output">
 								<span> 'Console'
 								<samp> 'theseus: starting console shell'
-						<a className="file-origin" href=file.source> "View {file.file} on GitHub"
+							<a className="file-origin" href="/nelua/init/?boot=1#browser-demo"> 'Boot Linux in your browser'
+						if file.source
+							<a className="file-origin" href=file.source> "View {file.file} on GitHub"
 		<section className="overview-section" aria-labelledby="language">
 			<h2 id="language"> 'From source to executable'
 			<div className="language-tour">
@@ -116,7 +130,6 @@ export def body
 					<p> 'In the Spaceghost fork, a function marked <comptime> runs during compilation. Here the executable prints the precomputed tile count.'
 					example('comptime.nelua', '256')
 			<div className="core-guides">
-				<a href="https://nelua.io/installing/"> 'Install Nelua'
 				<a href="https://nelua.io/overview/"> 'Explore the language'
 				<a href="/nelua/examples/workshop/"> 'Open the example workbench'
 				<a href="/nelua/compiler/comptime/"> 'Compile-time programming in the fork'

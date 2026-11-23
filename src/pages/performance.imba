@@ -57,6 +57,27 @@ export def body comparison
 			<div className="bench-sources">
 				<a href=(timingsRoot + 'reproduce.txt')> 'Hardware, revisions and reproduction steps'
 				<a href=(timingsRoot + 'summary.csv')> 'Download medians, quartiles and ranges'
+		<section className="overview-section" aria-labelledby="lz4-shootout">
+			<h2 id="lz4-shootout"> 'LZ4 compresses the Nelua compiler source'
+			<p> 'Four compilers built the LZ4 1.10.0 block codec. Each build compressed the same 62 Lua files into 430,145 bytes at the default acceleration and restored all 1,141,485 input bytes exactly.'
+			<div className="table-wrap" html:role="region" aria-label="LZ4 compiler comparison" html:tabindex="0">
+				<table>
+					<caption> 'Median milliseconds · Intel Core i7-11700F · 11 rounds · 22 November 2026'
+					<thead>
+						<tr>
+							for label in ['Compiler', 'Build codec object', 'Compress', 'Decompress']
+								<th scope="col"> label
+					<tbody>
+						for row in [["TinyCC", "4.91", "9.32", "1.70"], ["necc", "15.30", "11.37", "2.11"], ["GCC -O2", "2,134.47", "1.83", "0.31"], ["Clang -O2", "1,117.72", "1.84", "0.29"]]
+							<tr>
+								<th scope="row"> row[0]
+								for value in row.slice(1)
+									<td> value
+			<p> 'Raising LZ4 acceleration from 1 to 4 reduced necc compression time from 11.37 to 9.82 ms. The compressed block grew by 46,982 bytes (10.9%).'
+			<details>
+				<summary> 'Inputs and measurement method'
+				<p> 'The input concatenates tracked .lua files under lualib/nelua at Nelua revision 0f29b8f in Git tree order. Each shuffled round builds the object once and runs nine in-memory compressions and decompressions per setting on logical CPU 5. Timings exclude linking, file I/O and verification from the codec runs. One warm-up round was discarded.'
+				<p> 'Toolchains were necc 2ebbb9d, TinyCC 0.9.27, GCC 16.2.1 and Clang 23.1.5. All used the same LZ4 source with portable memory access and an equivalent typedef-based static assertion for necc compatibility. The common driver was built with GCC -O2. All four compilers produced identical compressed bytes at each setting.'
 		<section className="overview-section" aria-labelledby="life-shootout">
 			<h2 id="life-shootout"> 'Game of Life compiler shootout'
 			<p> 'The original row update counted the neighbors around each cell from scratch. The new version keeps two column totals and counts only the column entering the window. Both call the same survival rule once per cell.'

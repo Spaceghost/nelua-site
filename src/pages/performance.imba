@@ -73,7 +73,7 @@ export def body comparison
 								<th scope="row"> row[0]
 								for value in row.slice(1)
 									<td> value
-			<p> 'necc used to push scalar arguments onto the stack and immediately pop them into call registers. The updated compiler loads eligible arguments directly and expands small private helpers at the call site. The LZ4 object’s machine code shrank from 34,524 to 34,311 bytes.'
+			<p> 'necc used to push scalar arguments onto the stack and immediately pop them into call registers. The updated compiler loads eligible arguments directly and expands small private helpers at the call site. The LZ4 object’s machine code shrank from 34,277 to 34,064 bytes.'
 			<p> 'Raising LZ4 acceleration from 1 to 4 reduced necc compression time from 8.84 to 7.74 ms. The compressed block grew by 46,982 bytes (10.9%).'
 			<details>
 				<summary> 'Inputs and measurement method'

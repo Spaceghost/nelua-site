@@ -145,7 +145,7 @@ export def body
 
 		<section className="ng-section" aria-labelledby="line-count">
 			<h2 id="line-count"> 'Counting lines in Nelibc source'
-			<p> 'Median elapsed milliseconds across 15 measured rounds on an i5-10400. Each process read the same 1,965,199-byte file. The line-only path now counts newline bytes directly.'
+			<p> '22 November 2026 · median elapsed milliseconds across 15 measured rounds on an i5-10400. Each process read the same 1,965,199-byte file. The line-only path now counts newline bytes directly.'
 			<div className="table-wrap">
 				<table>
 					<thead>
@@ -157,22 +157,22 @@ export def body
 					<tbody>
 						<tr>
 							<th scope="row"> '-l'
-							<td> '4.663'
-							<td> '1.612'
-							<td> '0.965'
+							<td> '5.031'
+							<td> '1.644'
+							<td> '1.045'
 						<tr>
 							<th scope="row"> '-lc'
-							<td> '4.659'
-							<td> '1.598'
-							<td> '0.948'
+							<td> '4.887'
+							<td> '1.697'
+							<td> '1.115'
 						<tr>
 							<th scope="row"> '-w'
-							<td> '4.689'
-							<td> '4.218'
-							<td> '9.762'
+							<td> '5.209'
+							<td> '4.398'
+							<td> '10.254'
 			<div className="ng-links">
-				<a href="/nelua/assets/ecosystem-20261121/wc.csv"> 'Individual timings and counts'
-				<a href="/nelua/assets/ecosystem-20261121/summary.csv"> 'Quartiles and ranges'
+				<a href="/nelua/assets/core-shootout.zip"> 'Individual timings and counts (ZIP)'
+				<a href="/nelua/assets/ecosystem-20261121/summary.csv"> '21 November quartiles and ranges'
 				<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> 'Builds and reproduction'
 
 export def footerLinks

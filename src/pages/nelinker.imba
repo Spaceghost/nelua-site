@@ -3,17 +3,17 @@ export const title = 'nelinker · Static x86-64 linker · Nelua at spacegho.st'
 export const description = 'Link x86-64 ELF objects and static archives into a Linux executable or a relocatable PE32+ UEFI application.'
 
 const timings = [
-	['Three loose objects', '1.449', '1.454', 'TinyCC · 1.526', '205', '727']
-	['257 loose objects', '3.123', '3.682', 'TinyCC · 5.900', '2,491', '3,015']
-	['32,768 relocations', '1.850', '2.422', 'GNU gold · 3.454', '270,336', '263,031']
-	['8,192 distinct symbols', '2.254', '4.530', 'TinyCC · 4.866', '106,496', '99,191']
-	['SDK syscall, loose objects', '1.445', '1.468', 'TinyCC · 1.553', '4,378', '1,088']
-	['SDK syscall, archive-suite control', '1.494', '1.479', 'TinyCC · 1.611', '4,378', '1,088']
-	['One member from the SDK archive', '1.564', '1.626', 'TinyCC · 1.812', '4,378', '1,088']
-	['One member from 256', '1.501', '1.544', 'TinyCC · 1.557', '196', '719']
-	['256 members, reverse dependency order', '1.986', '2.738', 'Wild · 3.909', '2,491', '3,015']
-	['All 256 archive members', '1.898', '2.371', 'Wild · 3.823', '1,726', '2,247']
-	['Whole SDK with allocator', '3.009', '4.527', 'TinyCC · 5.795', '995,860', '992,583']
+	["Three loose objects", "1.428", "1.435", "TinyCC · 1.504", "205", "727"]
+	["257 loose objects", "3.839", "3.747", "TinyCC · 6.053", "2,491", "3,015"]
+	["32,768 relocations", "2.551", "2.408", "GNU-gold · 3.477", "270,336", "263,031"]
+	["8,192 distinct symbols", "5.432", "4.494", "TinyCC · 4.910", "106,496", "99,191"]
+	["SDK syscall, loose objects", "1.436", "1.451", "TinyCC · 1.526", "4,378", "1,088"]
+	["SDK syscall, archive-suite control", "1.457", "1.459", "TinyCC · 1.537", "4,378", "1,088"]
+	["One member from the SDK archive", "1.614", "1.587", "TinyCC · 1.736", "4,378", "1,088"]
+	["One member from 256", "1.512", "1.493", "TinyCC · 1.504", "196", "719"]
+	["256 members, reverse dependency order", "2.863", "2.678", "GNU-gold · 5.034", "2,491", "3,015"]
+	["All 256 archive members", "2.389", "2.306", "GNU-gold · 3.870", "1,726", "2,247"]
+	["Whole SDK with allocator", "5.077", "4.677", "TinyCC · 5.783", "995,860", "992,583"]
 ]
 
 const nelinkerPassRows = [
@@ -79,15 +79,15 @@ export def body
 		<h2 className="section" id="benchmarks"> 'Link times and executable sizes'
 		<p>
 			'On '
-			<time html:datetime="2026-11-21"> '21 November 2026'
-			', both nelinker builds had a lower median than the fastest qualifying external linker in all 11 workloads on one Intel Core i7-11700F core. Both produced the smallest executable in five. For the single member from a 256-member archive, the distro build and TinyCC were within 0.013 ms of each other.'
-		<p> 'The first five rows use loose objects and 23 warm rounds. The remaining six use the archive harness and 31 rounds. Its explicit-syscall control also uses loose objects. Every timed link had to produce a program that returned 42. The external field consisted of GNU BFD, GNU gold, TinyCC, LLD 14, LLD 22 through Zig, mold and Wild.'
+			<time html:datetime="2026-11-22"> '22 November 2026'
+			', the faster of two nelinker builds beat the fastest qualifying external linker in 11 of 11 workloads. Both builds used nelinker a349c2a. The native necc backend built one binary and the SDK TinyCC backend built the other.'
+		<p> 'Every median covers 23 shuffled warm rounds on logical CPU 5 of an i7-11700F. Each executable had to return 42 within one second. Across both nelinker builds and seven external linkers, 93 of 99 combinations qualified. Only SDK TinyCC and the two nelinker builds qualified on the whole-SDK allocator.'
 		<div className="table-wrap" role="region" aria-label="Median elapsed link time and executable size" html:tabindex="0">
 			<table>
 				<thead>
 					<tr>
 						<th scope="col"> 'Workload'
-						<th className="num" scope="col"> 'GCC-built (ms)'
+						<th className="num" scope="col"> 'Native necc build (ms)'
 						<th className="num" scope="col"> 'Distro-built (ms)'
 						<th scope="col"> 'Fastest external (ms)'
 						<th className="num" scope="col"> 'nelinker bytes'
@@ -101,11 +101,10 @@ export def body
 							<td> row[3]
 							<td className="num"> row[4]
 							<td className="num"> row[5]
-		<p> 'The GCC build used GCC 12.2 at -O3. The distro build used necc and its staged TinyCC. The inputs and seven external binaries matched the earlier run by SHA-256. For the whole-SDK allocator, TinyCC was the only external linker whose program passed the execution check.'
+
 		<p className="upstream-links">
-			<a href="/nelua/assets/linker-20261121/summary.csv"> 'Full field and quartiles (CSV)'
-			<a href="/nelua/assets/linker-20261121/samples.csv"> 'Individual link times (CSV)'
-			<a href="/nelua/assets/linker-20261121/method.txt"> 'Method, builds and checks'
+			<a href="/nelua/assets/core-shootout.zip"> 'All linker medians, quartiles and individual samples (ZIP)'
+			<a href="/nelua/assets/linker-20261121/method.txt"> 'Original input set and checks'
 			<a href="/nelua/assets/linker-20261121/replay.tar.gz"> 'Replay the link inputs'
 		<h3 id="link-memory"> "Link time and peak resident memory"
 		<p> "On 22 November 2026 a native necc build of nelinker a349c2a linked a real SDK member and a complete Lua interpreter. Time and maximum resident set size came from separate invocations with identical inputs."

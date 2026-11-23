@@ -1,0 +1,8 @@
+{
+  "archives/whole-sdk-allocator/mold": "TimeoutExpired Command '[PosixPath('/work/program')]' timed out after 1 seconds",
+  "archives/whole-sdk-allocator/GNU-gold": "CalledProcessError Command '['ld.gold', '-static', '-s', '-e', '_start', '-o', '/work/program', '/work/fixture/archives/allocator.o', '--whole-archive', '/sdk/libnelibc.a', '--no-whole-archive', '/sd",
+  "archives/whole-sdk-allocator/LLD-22-Zig": "TimeoutExpired Command '[PosixPath('/work/program')]' timed out after 1 seconds",
+  "archives/whole-sdk-allocator/GNU-bfd": "TimeoutExpired Command '[PosixPath('/work/program')]' timed out after 1 seconds",
+  "archives/whole-sdk-allocator/Wild": "TimeoutExpired Command '[PosixPath('/work/program')]' timed out after 1 seconds",
+  "archives/whole-sdk-allocator/LLD-14": "TimeoutExpired Command '[PosixPath('/work/program')]' timed out after 1 seconds"
+}

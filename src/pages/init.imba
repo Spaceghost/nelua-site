@@ -14,10 +14,10 @@ export def body
 				' '
 				<a className="button button-ghost" href="https://github.com/Spaceghost/nebox#boot-with-theseus"> 'Boot Nebox in QEMU'
 		<h2 className="section" id="core-boot-time"> 'Time to a working serial shell'
-		<p> 'Theseus Init is a related project outside Nelua core. In the Cascadia Core developer image it starts the Nebox console. On 21 November 2026, five alternating pairs of QEMU software-emulated boots took a median 9.51 s from launch to a successful shell command with the gzip release image. Encoding the same cpio bytes with legacy LZ4 reduced the median to 7.24 s.'
-		<p> 'The gzip runs ranged from 8.67 to 10.58 s, and LZ4 ranged from 6.76 to 8.17 s. An independent paired control booted directly to the shell in 8.47 s with gzip, versus 9.34 s with the full service graph. Compression accounted for the larger measured difference.'
+		<p> 'Theseus Init is a related project outside Nelua core. In the Cascadia Core developer image it starts the Nebox console. On 22 November 2026 five alternating pairs under QEMU 10.2.2 TCG took a median 6.27 s with the gzip release image and 10.13 s with the same cpio bytes encoded as legacy LZ4. The clock starts at process launch and stops when a shell command returns.'
+		<p> 'On the i7-11700F, gzip ranged from 5.39 to 11.68 s and LZ4 from 7.97 to 28.75 s. The 21 November i7-9700K favored LZ4. The separate gzip control on this host took 5.80 s for a direct shell and 6.25 s with Theseus.'
 		<p className="upstream-links">
-			<a href="/nelua/assets/ecosystem-20261121/boot.csv"> 'Boot samples'
+			<a href="/nelua/assets/core-shootout.zip"> 'Boot samples (ZIP)'
 			<a href="https://github.com/Spaceghost/cascadia/blob/3fa30c5703ef7801b9ebd327f29d359f903026eb/docs/CORE-DEVELOPER.md#faster-repeated-boots-under-software-emulation"> 'Boot commands and timing harness'
 		<h2 className="section"> 'Supervise services'
 		<p>

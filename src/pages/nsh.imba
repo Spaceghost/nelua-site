@@ -36,11 +36,11 @@ export def body
 				<span> "recorded 2026-11-07"
 		<div className="page-details">
 			<h2 className="section" id="shell-time"> "Shell startup and catalog processing"
-			<p> "On 21 November 2026 a fresh Nebox shell printed 42 in 0.49 ms versus 0.71 ms for Debian dash. Reading the 439-line BusyBox applet catalog with shell builtins and counting its five sha-prefixed names took 14.77 ms versus 7.27 ms. Both figures are medians of 12 interleaved rounds on the same i5-10400."
+			<p> "On 22 November 2026 a fresh Nebox shell printed 42 in 0.36 ms versus 0.52 ms for Debian dash. Reading the 439-line BusyBox applet catalog with shell builtins and counting its five sha-prefixed names took 8.83 ms versus 4.46 ms. Both figures are medians of 12 interleaved rounds on the same i5-10400."
 			<p className="upstream-links">
-				<a href="/nelua/assets/ecosystem-20261121/shell.csv"> "Individual timings"
+				<a href="/nelua/assets/core-shootout.zip"> "Individual timings (ZIP)"
 				<a href="/nelua/assets/ecosystem-20261121/shell.py"> "Replay script"
-				<a href="/nelua/assets/ecosystem-20261121/summary.csv"> "Quartiles and ranges"
+				<a href="/nelua/assets/ecosystem-20261121/summary.csv"> "21 November quartiles and ranges"
 			<h2 className="section"> "A session"
 			<p className="lead">
 				"A replay of a real "

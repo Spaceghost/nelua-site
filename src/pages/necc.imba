@@ -77,13 +77,13 @@ export def body
 			'.'
 		<h2 className="section" id="benchmarks"> 'Compiler timings'
 		<h3 id="arithmetic"> 'Generated arithmetic'
-		<p> 'On 21 November 2026 the six-million-iteration kernel took 1.626 ms with necc, 9.318 ms with the previous necc and 2.979 ms with Zig cc -O2. The two reference executables are byte-for-byte identical to those in the earlier comparison.'
-		<p> 'When a register-only integer loop has a unit-stride counter and a state update that is linear in the state and counter, necc can combine 16 iterations. It uses the scalar loop for the remainder. The compiler derives the coefficients and any low-bit mask from the program. Calls, volatile accesses and other observable effects keep the original loop. The generated kernel grew from 69 to 154 bytes.'
+		<p> 'On 22 November 2026 the six-million-iteration kernel took 1.629 ms with necc 7ed048c, 1.612 ms with 22180f5 and 3.048 ms with Zig cc -O2. Both necc revisions already include the loop optimization.'
+		<p> 'When a register-only integer loop has a unit-stride counter and a state update that is linear in the state and counter, necc can combine 16 iterations. It uses the scalar loop for the remainder. The compiler derives the coefficients and any low-bit mask from the program. Calls, volatile accesses and other observable effects keep the original loop. Both necc builds emitted 154 bytes of machine code for this kernel.'
 		<p>
 			'Each time below is a median in milliseconds over 23 warm, interleaved rounds on one Intel Core i7-11700F core. The external field contains 13 compiler configurations. Text size is the number of bytes of machine code in necc’s object. The two Lua tables contain data.'
 		<div className="table-wrap" html:role="region" aria-label="Updated compiler medians and object sizes" html:tabindex="0">
 			<table>
-				<caption> 'Static x86-64 Linux · 21 November 2026'
+				<caption> 'Static x86-64 Linux · 22 November 2026'
 				<thead>
 					<tr>
 						<th scope="col"> 'Workload'
@@ -99,7 +99,7 @@ export def body
 							<td className="num"> row.after
 							<td> "{row.best} · {row.external}"
 							<td className="num"> row.bytes
-		<p> 'The optimized executable finished ahead of Zig in all 42 rounds of an independent repeat. Across 57 loop shapes, both necc versions matched the reference on 26,299 inputs. Lua’s string-hash routine kept identical machine code and passed 263,688 output checks.'
+		<p> 'In the 21 November validation, the optimized executable finished ahead of Zig in all 42 rounds of an independent repeat. Across 57 loop shapes, both necc versions matched the reference on 26,299 inputs. Lua’s string-hash routine kept identical machine code and passed 263,688 output checks.'
 		<details>
 			<summary> 'Compare every compiler configuration'
 			<div className="table-wrap" html:role="region" aria-label="Complete compiler field in milliseconds" html:tabindex="0">
@@ -117,8 +117,7 @@ export def body
 								for median in tool.medians
 									<td className="num"> median
 		<p className="upstream-links">
-			<a href="/nelua/assets/necc-codegen-20261121/summary.csv"> 'Timings, quartiles and object sizes (CSV)'
-			<a href="/nelua/assets/necc-codegen-20261121/samples.csv"> 'All 2,760 samples (CSV)'
+			<a href="/nelua/assets/core-shootout.zip"> '22 November medians and all 2,760 samples (ZIP)'
 			<a href="/nelua/assets/necc-codegen-20261121/focused-samples.csv"> 'Three-way arithmetic repeat (CSV)'
 			<a href="/nelua/assets/necc-codegen-20261121/method.txt"> 'Method and checks'
 			<a href="/nelua/assets/necc-codegen-20261121/runtime-replay.py"> 'Replay the runtime comparison'
@@ -160,10 +159,10 @@ export def body
 			<a href="/nelua/assets/necc-20261121/method.txt"> 'SDK comparison method'
 		<h3 id="compiler-phases"> 'Compiler phase timings'
 		<p>
-			'Preprocessing the 128-function input fell from 5.586 to 1.999 ms in a separate 25-round comparison. The updated necc frontend took 2.774 ms on that preprocessed C, and the SDK assembler took 2.684 ms on its output. TinyCC compiled the original C directly in 2.437 ms. Each figure includes a separate process launch.'
+			'Preprocessing the 128-function input fell from 5.337 to 1.979 ms in a separate 25-round comparison. The updated necc frontend took 2.736 ms on that preprocessed C, and the SDK assembler took 2.575 ms on its output. TinyCC compiled the original C directly in 2.371 ms. Each figure includes a separate process launch. The complete updated necc path took 5.231 ms. Standalone stage medians include repeated startup overhead and do not add up to the end-to-end time.'
 		<div className="table-wrap" html:role="region" aria-label="Individual compilation phases in milliseconds" html:tabindex="0">
 			<table>
-				<caption> 'Median milliseconds for each SDK · 21 November 2026'
+				<caption> 'Median milliseconds for each SDK · necc 7ed048c · 22 November 2026'
 				<thead>
 					<tr>
 						<th scope="col"> 'Phase'
@@ -178,9 +177,7 @@ export def body
 							for median in row.medians
 								<td className="num"> median
 		<p className="upstream-links">
-			<a href="/nelua/assets/necc-20261121/phase-summary.csv"> 'Phase medians and quartiles (CSV)'
-			<a href="/nelua/assets/necc-20261121/phase-samples.csv"> 'All 600 phase samples (CSV)'
-			<a href="/nelua/assets/necc-20261121/phase-outputs.csv"> 'Verified output hashes (CSV)'
+			<a href="/nelua/assets/core-shootout.zip"> 'Phase medians, 600 samples and verified output hashes (ZIP)'
 		<h3> '19 November 2026 toolchain comparison'
 		<p>
 			'In the '

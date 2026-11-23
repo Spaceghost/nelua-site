@@ -3,8 +3,8 @@ export const title = 'nebuild · Incremental build runner · Nelua at spacegho.s
 export const description = 'Run incremental and parallel builds from a build.ne dependency graph with the standalone Nelua build runner.'
 
 const nebuildPassRows = [
-	["256 rules", "3.86", "1.05", "1.70", "2.34"]
-	["2,048 rules", "28.12", "4.70", "3.92", "3.89"]
+	["256 rules", "2.249", "0.611", "0.995", "1.352"]
+	["2,048 rules", "17.041", "3.043", "2.783", "2.724"]
 ]
 
 export def body
@@ -56,7 +56,7 @@ export def body
 			<summary> '22 November samples for both manifest sizes'
 			<pre> readFileSync('src/content/build-incremental.csv', 'utf8').trimEnd()
 		<h3 id="incremental-repeat"> "Independent manifest timing"
-		<p> "On 21 November 2026, twelve warm rounds repeated the unchanged-target check on one i7-9700K CPU. Every result retained the same output contents and timestamp."
+		<p> "On 22 November 2026, twelve warm rounds repeated the unchanged-target check on logical CPU 7 of an i7-11700F. Every result retained the same output contents and timestamp."
 		<div className="table-wrap">
 			<table>
 				<thead>
@@ -74,13 +74,13 @@ export def body
 							<td className="num"> row[2]
 							<td className="num"> row[3]
 							<td className="num"> row[4]
-		<p> "Reading the larger manifest cost about 0.8 ms more than Ninja on this host. This comparison covers a single requested target."
+		<p> "Reading the larger manifest cost about 0.32 ms more than Ninja on this host. This comparison covers a single requested target."
 		<p className="upstream-links">
-			<a href="/nelua/assets/ecosystem-20261121/incremental.csv"> "Manifest timing samples"
-			<a href="/nelua/assets/ecosystem-20261121/summary.csv"> "Quartiles and observed ranges"
+			<a href="/nelua/assets/core-shootout.zip"> "Manifest timing samples (ZIP)"
+			<a href="/nelua/assets/ecosystem-20261121/summary.csv"> "21 November quartiles and observed ranges"
 			<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> "Versions and reproduction"
 		<p className="upstream-links">
-			<a href="/nelua/assets/build-tools-20261121/incremental.csv"> 'Individual times (CSV)'
+			<a href="/nelua/assets/build-tools-20261121/incremental.csv"> '21 November individual times (CSV)'
 			<a href="/nelua/assets/build-tools-20261121/method.txt"> 'Method and reproduction'
 		<h2 className="section"> 'Build nebuild'
 		<p> 'Clone the private nebuild repository with a GitHub account that has access. Build it with Nelua, Zig and the standalone Nelibc archive.'

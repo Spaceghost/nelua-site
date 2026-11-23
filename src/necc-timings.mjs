@@ -1,8 +1,8 @@
 // Render both compiler tables from the published medians.
 import { readFileSync } from 'node:fs';
 
-function readResults(name, directory = 'necc-20261121') {
-  const csv = readFileSync('public/nelua/assets/' + directory + '/' + name, 'utf8');
+function readResults(name) {
+  const csv = readFileSync('src/content/results-20261122/necc/' + name, 'utf8');
   const [header, ...lines] = csv.trim().split(/\r?\n/);
   const columns = header.split(',');
   return lines.map(line => {
@@ -11,7 +11,7 @@ function readResults(name, directory = 'necc-20261121') {
   });
 }
 
-const records = readResults('summary.csv', 'necc-codegen-20261121');
+const records = readResults('summary.csv');
 const workloads = [
   ['compile', 'tiny', 'Compile tiny C input', 'Tiny C'],
   ['compile', '128-functions', 'Compile 128 functions', '128 functions'],

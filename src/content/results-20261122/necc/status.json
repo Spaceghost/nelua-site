@@ -1,0 +1,748 @@
+{
+  "compile/tiny/necc-base": {
+    "ok": true,
+    "bytes": 991,
+    "text": 16,
+    "sha256": "4d2a537150bfb2c850591c6d845f71a65f89c6b738829c25d7326f4237d1cfe5"
+  },
+  "compile/128-functions/necc-base": {
+    "ok": true,
+    "bytes": 15135,
+    "text": 6166,
+    "sha256": "219a5d6bd00b295b86abab4561ae4a1f8f2d6c4a01ac8ff73befd879e11391d3"
+  },
+  "compile/arithmetic/necc-base": {
+    "ok": true,
+    "bytes": 1434,
+    "text": 154,
+    "sha256": "3b94f54406b4ab1188281294c1536109ae4b384b3e6fc9ba622462256ba2e157"
+  },
+  "compile/lua-lctype/necc-base": {
+    "ok": true,
+    "bytes": 1287,
+    "text": 0,
+    "sha256": "acec14d4c5abf74692a71125f601356929e1da2fd85c5c7bdeabe6e5e81f4640"
+  },
+  "compile/lua-lopcodes/necc-base": {
+    "ok": true,
+    "bytes": 1111,
+    "text": 0,
+    "sha256": "c851c8bf6bc9224ee3b28814de0b747972ecbf64cffd0e564f5ad6c52d813be8"
+  },
+  "compile/selfhost/necc-base": {
+    "ok": true,
+    "bytes": 40589,
+    "text": 9148,
+    "sha256": "71d4c70753787cdde4e5ac8b7163ab0a89050e08f462a2f5267b0a65a1073b39"
+  },
+  "compile-probe/lua-vm/necc-base": {
+    "ok": true,
+    "bytes": 145186,
+    "text": 72391,
+    "sha256": "5ff719aada04b3038041fc4637114606afee95c3e32b8dafaac06418ec35cfd2"
+  },
+  "compile/tiny/TinyCC": {
+    "ok": true,
+    "bytes": 1054,
+    "text": 29,
+    "sha256": "d7ea5bff10a2fb2f47c7ac5bd664b5b0ba143862bbd4cd5b0c6a9cea99d377ee"
+  },
+  "compile/128-functions/TinyCC": {
+    "ok": true,
+    "bytes": 26937,
+    "text": 8392,
+    "sha256": "1fb25932ff7f9c352068cd6d9c582ac7a81f5ac2a3a13c209eb8909167fbb2c4"
+  },
+  "compile/arithmetic/TinyCC": {
+    "ok": true,
+    "bytes": 1134,
+    "text": 97,
+    "sha256": "fa74637a0d56c9751509f362b90fe42e14af7044532abe25c5bc2a11ffe7decf"
+  },
+  "compile/lua-lctype/TinyCC": {
+    "ok": true,
+    "bytes": 1167,
+    "text": 0,
+    "sha256": "066fd10044a56e7ec3127e12a32e80585708501e1e3aaa7533c814abdfcc8591"
+  },
+  "compile/lua-lopcodes/TinyCC": {
+    "ok": true,
+    "bytes": 991,
+    "text": 0,
+    "sha256": "bc01471339795e7b095016e367b9554bde614314288824c35b7a50dd5c8d80ed"
+  },
+  "compile/selfhost/TinyCC": {
+    "ok": true,
+    "bytes": 31076,
+    "text": 7333,
+    "sha256": "cc887cda86c77c413fcb03c6baa69487a4fbc86b9545044a4486c47a3fa3f929"
+  },
+  "compile-probe/lua-vm/TinyCC": {
+    "ok": true,
+    "bytes": 55657,
+    "text": 42506,
+    "sha256": "6512746fabd13de0578428aa4e798d68d81ef6fa6dd9b8989c9c2721b64218f6"
+  },
+  "compile/tiny/GCC-O0": {
+    "ok": true,
+    "bytes": 1112,
+    "text": 22,
+    "sha256": "ca0ada8fe072ae875ae5e96e0c25927d39674c8ebe6ed2500f181241fb98adf7"
+  },
+  "compile/128-functions/GCC-O0": {
+    "ok": true,
+    "bytes": 21808,
+    "text": 6788,
+    "sha256": "a0dc7fa0004c7874e892cdd0aea5254f8d29a0c01328bd52681d4fca2c0748c6"
+  },
+  "compile/arithmetic/GCC-O0": {
+    "ok": true,
+    "bytes": 1176,
+    "text": 77,
+    "sha256": "d04e3c88f64721399d62cbe432f2163cd672fd513abc8574966fb83bf11a3846"
+  },
+  "compile/lua-lctype/GCC-O0": {
+    "ok": true,
+    "bytes": 1184,
+    "text": 0,
+    "sha256": "5988294f9be98241b44794e50d533f81b46118eecde346d9bc9a763e318c2f7f"
+  },
+  "compile/lua-lopcodes/GCC-O0": {
+    "ok": true,
+    "bytes": 1008,
+    "text": 0,
+    "sha256": "e5ddd3a7597a9d72d02df62e26dd33d702435933a19c06dd0b61169f38a63498"
+  },
+  "compile/selfhost/GCC-O0": {
+    "ok": true,
+    "bytes": 18096,
+    "text": 5469,
+    "sha256": "5bf457c93d4f442906b2929e572479ce5b831694d6061e694c2bd2c773757016"
+  },
+  "compile-probe/lua-vm/GCC-O0": {
+    "ok": true,
+    "bytes": 61000,
+    "text": 42997,
+    "sha256": "c99f6fa84b4aca686009272100fdb87ba3aa8740d8d3e4578d44857e4d1f7f34"
+  },
+  "compile/tiny/GCC-O2": {
+    "ok": true,
+    "bytes": 1088,
+    "text": 5,
+    "sha256": "8fa0e6bb000fef24488390ebc5822edfa4c688879cfc9b48a766b3bfb6829d85"
+  },
+  "compile/128-functions/GCC-O2": {
+    "ok": true,
+    "bytes": 17112,
+    "text": 6779,
+    "sha256": "84018950b5ce376380a29e372b95c32bc9355240ee773936120e5a6706494bdb"
+  },
+  "compile/arithmetic/GCC-O2": {
+    "ok": true,
+    "bytes": 1136,
+    "text": 46,
+    "sha256": "dc672c7fb1f800abfc1e46583fc0977749ec57d6724ed1e1d8e601dbed969d11"
+  },
+  "compile/lua-lctype/GCC-O2": {
+    "ok": true,
+    "bytes": 1184,
+    "text": 0,
+    "sha256": "5988294f9be98241b44794e50d533f81b46118eecde346d9bc9a763e318c2f7f"
+  },
+  "compile/lua-lopcodes/GCC-O2": {
+    "ok": true,
+    "bytes": 1008,
+    "text": 0,
+    "sha256": "e5ddd3a7597a9d72d02df62e26dd33d702435933a19c06dd0b61169f38a63498"
+  },
+  "compile/selfhost/GCC-O2": {
+    "ok": true,
+    "bytes": 23048,
+    "text": 5595,
+    "sha256": "5ab4160d926e7d672027841c79b6c261f14f4e56cb532558ed0516ea97a315bc"
+  },
+  "compile-probe/lua-vm/GCC-O2": {
+    "ok": true,
+    "bytes": 48816,
+    "text": 27743,
+    "sha256": "7ce92d62509971709cd95dfce975a5289244455b5760528700cab24ed7b220d4"
+  },
+  "compile/tiny/Clang14-O0": {
+    "ok": true,
+    "bytes": 968,
+    "text": 22,
+    "sha256": "80576441de48c78cfe5368d088357a46269082e7040d18f3fcac7bef400d563e"
+  },
+  "compile/128-functions/Clang14-O0": {
+    "ok": true,
+    "bytes": 22824,
+    "text": 7834,
+    "sha256": "786d1b3d068179b277022a48ae4e20ca96fb21de1e743667dd8cad6234ac3c92"
+  },
+  "compile/arithmetic/Clang14-O0": {
+    "ok": true,
+    "bytes": 1032,
+    "text": 80,
+    "sha256": "dc951eedd96a1e1ee06b35150c336d7d9c9927ce01830a0d81b05426b3c9087d"
+  },
+  "compile/lua-lctype/Clang14-O0": {
+    "ok": true,
+    "bytes": 1032,
+    "text": 0,
+    "sha256": "8a0407124ae11e52d86ed10a940dbe97e609a38545671897f543f39a9932a146"
+  },
+  "compile/lua-lopcodes/Clang14-O0": {
+    "ok": true,
+    "bytes": 856,
+    "text": 0,
+    "sha256": "83b8a8c1a3f67c9caff39d50bb6df79f8f0ee27f139fb002a48247fa8eb948a1"
+  },
+  "compile/selfhost/Clang14-O0": {
+    "ok": true,
+    "bytes": 18528,
+    "text": 7307,
+    "sha256": "0106f63d65164c06d5a77ea4e18300e0cdcf0d6cdd89df8f6cdff5c70d5f878e"
+  },
+  "compile-probe/lua-vm/Clang14-O0": {
+    "ok": true,
+    "bytes": 66672,
+    "text": 46501,
+    "sha256": "1507125caccb35dd67d2ab483b275003c3be2ebad1abebf61dee76b71adcdf3f"
+  },
+  "compile/tiny/Clang14-O2": {
+    "ok": true,
+    "bytes": 944,
+    "text": 5,
+    "sha256": "9ec0d6737fbbbb6bdfe4595e86d391a6d9b71d820411848789966b8a8aef3444"
+  },
+  "compile/128-functions/Clang14-O2": {
+    "ok": true,
+    "bytes": 16000,
+    "text": 5820,
+    "sha256": "93e3a09918dfa1ac70cdf3a27b5ca5f42634dd80a65aa2c1f1a7c6342a845437"
+  },
+  "compile/arithmetic/Clang14-O2": {
+    "ok": true,
+    "bytes": 1088,
+    "text": 140,
+    "sha256": "c5e5356a0ea344a6c54b2e9c9cfc4fc03eb39e511da15490a822f7e96bd91abe"
+  },
+  "compile/lua-lctype/Clang14-O2": {
+    "ok": true,
+    "bytes": 1032,
+    "text": 0,
+    "sha256": "8a0407124ae11e52d86ed10a940dbe97e609a38545671897f543f39a9932a146"
+  },
+  "compile/lua-lopcodes/Clang14-O2": {
+    "ok": true,
+    "bytes": 856,
+    "text": 0,
+    "sha256": "83b8a8c1a3f67c9caff39d50bb6df79f8f0ee27f139fb002a48247fa8eb948a1"
+  },
+  "compile/selfhost/Clang14-O2": {
+    "ok": true,
+    "bytes": 33464,
+    "text": 8765,
+    "sha256": "50394b2f791fa214645a71d0eb20a1d2fc3a558fbf4f14206f7210e6a567f53a"
+  },
+  "compile-probe/lua-vm/Clang14-O2": {
+    "ok": true,
+    "bytes": 39544,
+    "text": 20620,
+    "sha256": "235d9fe5d7a95ebd5ccc7bbf607abd828066025db8a6fdd06a9c3e9355e419c4"
+  },
+  "compile/tiny/Zig-cc-O0": {
+    "ok": true,
+    "bytes": 1112,
+    "text": 22,
+    "sha256": "608728f958d321da278041041f3eed479b484f282e60c1f4de27f6c4ebe7ab63"
+  },
+  "compile/128-functions/Zig-cc-O0": {
+    "ok": true,
+    "bytes": 22992,
+    "text": 7834,
+    "sha256": "79ddf84bd945357d4d66cd8a7ad8c6b2f96c3a4265db38c17f3340edd08ee16e"
+  },
+  "compile/arithmetic/Zig-cc-O0": {
+    "ok": true,
+    "bytes": 1176,
+    "text": 73,
+    "sha256": "6db9e7d92289f976b0a6f4a2a0f3e216e3555b10a2617159e19efcda3fb7435a"
+  },
+  "compile/lua-lctype/Zig-cc-O0": {
+    "ok": true,
+    "bytes": 1192,
+    "text": 0,
+    "sha256": "d5325170a54b02135895c3d52634d9fac24fc90730055edbd95a4534adffd153"
+  },
+  "compile/lua-lopcodes/Zig-cc-O0": {
+    "ok": true,
+    "bytes": 1032,
+    "text": 0,
+    "sha256": "1904fd2497c11b4a47ec3122569537842c7890b5511cea716ef8baf8f9956abb"
+  },
+  "compile/selfhost/Zig-cc-O0": {
+    "ok": true,
+    "bytes": 21760,
+    "text": 6025,
+    "sha256": "f95c5cac75c4f910141c6c3b1e0790ea7c3394d5f4bc477fb22c40d07a1e917d"
+  },
+  "compile-probe/lua-vm/Zig-cc-O0": {
+    "ok": true,
+    "bytes": 70048,
+    "text": 49303,
+    "sha256": "b0fff01627ca89a8da42ca0fd936ed366b6f1c40e8f3f8447286a6c59569e9f7"
+  },
+  "compile/tiny/Zig-cc-O2": {
+    "ok": true,
+    "bytes": 1104,
+    "text": 10,
+    "sha256": "ae3b8bccd485cc36d164fd1b97438865bb62bd1c06d13fcad447032f738d1bd4"
+  },
+  "compile/128-functions/Zig-cc-O2": {
+    "ok": true,
+    "bytes": 17696,
+    "text": 5820,
+    "sha256": "f0338b745ef790e30ffff7e3a29fc2512c9be8f64c5533ddec399cd4ab6b9705"
+  },
+  "compile/arithmetic/Zig-cc-O2": {
+    "ok": true,
+    "bytes": 1224,
+    "text": 121,
+    "sha256": "3e7d9ee29f5ddf8e04ceb112cab7b03e31e208da77db55a25accd07d6586f00d"
+  },
+  "compile/lua-lctype/Zig-cc-O2": {
+    "ok": true,
+    "bytes": 1192,
+    "text": 0,
+    "sha256": "3dd3f34873381fdda99b1320437143c748fdde98b4972555843b939961ad4b67"
+  },
+  "compile/lua-lopcodes/Zig-cc-O2": {
+    "ok": true,
+    "bytes": 1024,
+    "text": 0,
+    "sha256": "4a49e0b9c10d20923a2bd8191eb679aa4a9394563bbe6cc9e539d813489820ee"
+  },
+  "compile/selfhost/Zig-cc-O2": {
+    "ok": true,
+    "bytes": 38008,
+    "text": 9556,
+    "sha256": "d960c04d768e8e7aac955b8b39154cb53e2dbca950c7bd3a1accd710f930844a"
+  },
+  "compile-probe/lua-vm/Zig-cc-O2": {
+    "ok": true,
+    "bytes": 40792,
+    "text": 21824,
+    "sha256": "18f6e6d6a81461013e6949f7674afff3e16a06d159eacd1895d223ecfd02568c"
+  },
+  "compile/tiny/chibicc": {
+    "ok": true,
+    "bytes": 1920,
+    "text": 49,
+    "sha256": "ddab8ea6a0146369a811c33c76cabb66ff72113d4432bde24b2b0b83a4abd6d4"
+  },
+  "compile/128-functions/chibicc": {
+    "ok": true,
+    "bytes": 29248,
+    "text": 19490,
+    "sha256": "e341f7033e0f171f65ef564a89e38a495c5166bd924a1397b9625c3a91587827"
+  },
+  "compile/arithmetic/chibicc": {
+    "ok": true,
+    "bytes": 2152,
+    "text": 232,
+    "sha256": "e546e21456f54b9ce9047eeb9f3800413e43f6b37bceccc4b4216943f2b0c32a"
+  },
+  "compile/lua-lctype/chibicc": {
+    "ok": true,
+    "bytes": 3336,
+    "text": 797,
+    "sha256": "18a2f205a66f5015179007060ddbfe9e30e431572170315820b33e7e8c1ed15d"
+  },
+  "compile/lua-lopcodes/chibicc": {
+    "ok": true,
+    "bytes": 3160,
+    "text": 797,
+    "sha256": "c636ec90bc32045b08f5edb7b60cee9abef122362bcfed11669ee808ddd9ef6e"
+  },
+  "compile/selfhost/chibicc": {
+    "ok": true,
+    "bytes": 30808,
+    "text": 16189,
+    "sha256": "bf4ff47ba017bf83b9328221454e5cfec0016c148a1944bb232c558a2bddfc9c"
+  },
+  "compile-probe/lua-vm/chibicc": {
+    "ok": true,
+    "bytes": 147008,
+    "text": 123299,
+    "sha256": "ff8b87ba6148a2ce6b4059c0c2fbc7fa36b55b62fb631a2139b55d1c5a3d45c0"
+  },
+  "compile/tiny/lacc": {
+    "ok": true,
+    "bytes": 1132,
+    "text": 26,
+    "sha256": "c940725aa611282258a4219562d6e704418e7edda76252c682313f0e3e253103"
+  },
+  "compile/128-functions/lacc": {
+    "ok": true,
+    "bytes": 21628,
+    "text": 13846,
+    "sha256": "7e51e854894e67cf25f95aac605157f8abbae95b8fee3fec9582f361d8a2a3f5"
+  },
+  "compile/arithmetic/lacc": {
+    "ok": true,
+    "bytes": 1230,
+    "text": 119,
+    "sha256": "68a465adccbb4a996422fe5f77c9e5dc4b1e7de1cb185127e2cea9d13700e016"
+  },
+  "compile/lua-lctype/lacc": {
+    "ok": true,
+    "bytes": 1416,
+    "text": 0,
+    "sha256": "f3afb7d12fee62700ef375cb5d055dbc1532684ffbae3bb69d60423015c08c39"
+  },
+  "compile/lua-lopcodes/lacc": {
+    "ok": true,
+    "bytes": 1216,
+    "text": 0,
+    "sha256": "dc5327719bee95c01097c42a546f0a9a81efdc9462f5dce47f633c23579930ec"
+  },
+  "compile/selfhost/lacc": {
+    "ok": true,
+    "bytes": 32642,
+    "text": 8385,
+    "sha256": "ed4156c1ef758a2c45fbd53909c9c69725665e2e9ab2d9ceff76611741f09722"
+  },
+  "compile-probe/lua-vm/lacc": {
+    "ok": true,
+    "bytes": 98086,
+    "text": 87391,
+    "sha256": "1919508096be59494075db871b571fdb0c30509274714e1a219aab7b1b8785a2"
+  },
+  "compile/tiny/lacc-O2": {
+    "ok": true,
+    "bytes": 1132,
+    "text": 26,
+    "sha256": "c940725aa611282258a4219562d6e704418e7edda76252c682313f0e3e253103"
+  },
+  "compile/128-functions/lacc-O2": {
+    "ok": true,
+    "bytes": 21628,
+    "text": 13846,
+    "sha256": "7e51e854894e67cf25f95aac605157f8abbae95b8fee3fec9582f361d8a2a3f5"
+  },
+  "compile/arithmetic/lacc-O2": {
+    "ok": true,
+    "bytes": 1230,
+    "text": 119,
+    "sha256": "68a465adccbb4a996422fe5f77c9e5dc4b1e7de1cb185127e2cea9d13700e016"
+  },
+  "compile/lua-lctype/lacc-O2": {
+    "ok": true,
+    "bytes": 1416,
+    "text": 0,
+    "sha256": "f3afb7d12fee62700ef375cb5d055dbc1532684ffbae3bb69d60423015c08c39"
+  },
+  "compile/lua-lopcodes/lacc-O2": {
+    "ok": true,
+    "bytes": 1216,
+    "text": 0,
+    "sha256": "dc5327719bee95c01097c42a546f0a9a81efdc9462f5dce47f633c23579930ec"
+  },
+  "compile/selfhost/lacc-O2": {
+    "ok": true,
+    "bytes": 32630,
+    "text": 8375,
+    "sha256": "7037110284f6ea3eb790c803b3460503d42219b63fb877cae07557c8f9106c4e"
+  },
+  "compile-probe/lua-vm/lacc-O2": {
+    "ok": true,
+    "bytes": 97938,
+    "text": 87249,
+    "sha256": "8d1fd2b5f2ad6c94e92e0db58b5468a1a1e44ad009dcf11296029a8aaef114bf"
+  },
+  "compile/tiny/cproc-QBE": {
+    "ok": true,
+    "bytes": 712,
+    "text": 12,
+    "sha256": "801a2e14b5a9eb5e344bac85d324f496a3d97f1c02beb302fb13ed01a66ee47a"
+  },
+  "compile/128-functions/cproc-QBE": {
+    "ok": true,
+    "bytes": 12584,
+    "text": 5130,
+    "sha256": "2925b86a1cadd019aca1c89ae8e75c2ac7edfaddf6a92327b0cfc69c414a1ff1"
+  },
+  "compile/arithmetic/cproc-QBE": {
+    "ok": true,
+    "bytes": 752,
+    "text": 52,
+    "sha256": "90c171a8eee92438ebb81cd6697e395e5fbff5291883d7aeed1826f9a7900249"
+  },
+  "compile/lua-lctype/cproc-QBE": {
+    "ok": true,
+    "bytes": 968,
+    "text": 0,
+    "sha256": "a837fc00a78d229e60bde5bbcbf8f2f3d05405e4e15f6276a479108fecf2f41b"
+  },
+  "compile/lua-lopcodes/cproc-QBE": {
+    "ok": true,
+    "bytes": 792,
+    "text": 0,
+    "sha256": "01fc33f99111a62b96fe7ae888638d77307db7aca6398806a478b4dc42744ea8"
+  },
+  "compile/selfhost/cproc-QBE": {
+    "ok": true,
+    "bytes": 17096,
+    "text": 6260,
+    "sha256": "a6f9caabe982ae1864fda003cc35243eaff6f3c2ce1ae731f76ceb5934dc4a4d"
+  },
+  "compile-probe/lua-vm/cproc-QBE": {
+    "ok": false,
+    "reason": "/bench/pkg/bench/inputs/image/work/src/nelua/src/lua/lvm.c:1170:21: error: volatile store is not yet supported\ncproc: compile: process 655 exited with status 1\ncproc: preprocess: process signaled: Terminated\ncproc: assemble: process signaled: Terminated\ncproc: codegen: process signaled: Terminated"
+  },
+  "compile/tiny/PCC": {
+    "ok": true,
+    "bytes": 840,
+    "text": 45,
+    "sha256": "d7c4310f34d6511752d0aecce009a3d2f16a2fd9e6420fc7aeea513a31e01e65"
+  },
+  "compile/128-functions/PCC": {
+    "ok": true,
+    "bytes": 20000,
+    "text": 12448,
+    "sha256": "575ae0b24b6d87dacc97bf77ffbef0b033dabeb61d343987d2711df9e46384f4"
+  },
+  "compile/arithmetic/PCC": {
+    "ok": true,
+    "bytes": 912,
+    "text": 107,
+    "sha256": "e701188668158105a5f720e1074daf23bfa6bed5c334ea603936d543c12063eb"
+  },
+  "compile/lua-lctype/PCC": {
+    "ok": true,
+    "bytes": 1128,
+    "text": 0,
+    "sha256": "1e522f44f6f2296a80fbecc0bc6a2340d198e55403bf3775f1af5f2d2f4869a8"
+  },
+  "compile/lua-lopcodes/PCC": {
+    "ok": true,
+    "bytes": 960,
+    "text": 0,
+    "sha256": "3429c65eb30ba1fb16e1698f2ca44b790bb376ec12e8055a304bab4003c36652"
+  },
+  "compile/selfhost/PCC": {
+    "ok": true,
+    "bytes": 21160,
+    "text": 10213,
+    "sha256": "6888641ff3915579fb0845c37dd152b8292f2b16e61ffb7f50abc96da387c594"
+  },
+  "compile-probe/lua-vm/PCC": {
+    "ok": true,
+    "bytes": 70960,
+    "text": 55911,
+    "sha256": "381e0a6d0fc6b6b40b456757ad27db6db5b23ade8bb907395f9182717ecfdcf6"
+  },
+  "compile/tiny/PCC-O": {
+    "ok": true,
+    "bytes": 808,
+    "text": 17,
+    "sha256": "7a91dc43c76b71d2f293f6fc89f9ef6b28123c8e263199cad36b441eef5ea120"
+  },
+  "compile/128-functions/PCC-O": {
+    "ok": true,
+    "bytes": 16456,
+    "text": 8905,
+    "sha256": "4d2a1ad086b55ebeb0b40dafd8dfa6af16aaef513d060196f69062dc32247707"
+  },
+  "compile/arithmetic/PCC-O": {
+    "ok": true,
+    "bytes": 864,
+    "text": 60,
+    "sha256": "1727bdac64a5d2133879bccdcfafb11bda1da299b1c3cd95a9d43a35c741d854"
+  },
+  "compile/lua-lctype/PCC-O": {
+    "ok": true,
+    "bytes": 1128,
+    "text": 0,
+    "sha256": "1e522f44f6f2296a80fbecc0bc6a2340d198e55403bf3775f1af5f2d2f4869a8"
+  },
+  "compile/lua-lopcodes/PCC-O": {
+    "ok": true,
+    "bytes": 960,
+    "text": 0,
+    "sha256": "3429c65eb30ba1fb16e1698f2ca44b790bb376ec12e8055a304bab4003c36652"
+  },
+  "compile/selfhost/PCC-O": {
+    "ok": true,
+    "bytes": 17704,
+    "text": 6783,
+    "sha256": "077b788cf58ee9e42a794b543e87ec3939b4026b9607357f8bfc3192d48a0575"
+  },
+  "compile-probe/lua-vm/PCC-O": {
+    "ok": false,
+    "reason": "Command '['/bench/pkg/bench/tools/debian/usr/bin/pcc', '-B/bench/pkg/bench/tools/debian/usr/bin/', '-O', '-nostdinc', '-I/bench/pkg/sdk/include', '-I/bench/pkg/sdk/tcc/include', '-I/bench/pkg/sdk/uapi', '-I/bench/pkg/bench/inputs/image/work/src/nelua/src/lua', '-DNDEBUG', '-DNELIBC_STANDALONE', '-DNEBENCH_SAMPLE=0', '-c', '/bench/pkg/bench/inputs/image/work/src/nelua/src/lua/lvm.c', '-o', '/bench/pkg/bench/prep/core-nov22/lua-vm-PCC-O.o']' timed out after 20 seconds"
+  },
+  "compile/tiny/necc-next": {
+    "ok": true,
+    "bytes": 991,
+    "text": 16,
+    "sha256": "4d2a537150bfb2c850591c6d845f71a65f89c6b738829c25d7326f4237d1cfe5"
+  },
+  "compile/128-functions/necc-next": {
+    "ok": true,
+    "bytes": 15135,
+    "text": 6166,
+    "sha256": "219a5d6bd00b295b86abab4561ae4a1f8f2d6c4a01ac8ff73befd879e11391d3"
+  },
+  "compile/arithmetic/necc-next": {
+    "ok": true,
+    "bytes": 1434,
+    "text": 154,
+    "sha256": "3b94f54406b4ab1188281294c1536109ae4b384b3e6fc9ba622462256ba2e157"
+  },
+  "compile/lua-lctype/necc-next": {
+    "ok": true,
+    "bytes": 1287,
+    "text": 0,
+    "sha256": "acec14d4c5abf74692a71125f601356929e1da2fd85c5c7bdeabe6e5e81f4640"
+  },
+  "compile/lua-lopcodes/necc-next": {
+    "ok": true,
+    "bytes": 1111,
+    "text": 0,
+    "sha256": "c851c8bf6bc9224ee3b28814de0b747972ecbf64cffd0e564f5ad6c52d813be8"
+  },
+  "compile/selfhost/necc-next": {
+    "ok": true,
+    "bytes": 40589,
+    "text": 9148,
+    "sha256": "71d4c70753787cdde4e5ac8b7163ab0a89050e08f462a2f5267b0a65a1073b39"
+  },
+  "compile-probe/lua-vm/necc-next": {
+    "ok": true,
+    "bytes": 145170,
+    "text": 72371,
+    "sha256": "8b7963c7cc32a3d6eabd11d685d3b94a841a29cad3e30d94d6b377eaae5e41b5"
+  },
+  "run/arithmetic/necc-base": {
+    "ok": true,
+    "expected": 1017555
+  },
+  "run/selfhost/necc-base": {
+    "ok": true,
+    "expected": "selfhost"
+  },
+  "run/arithmetic/TinyCC": {
+    "ok": true,
+    "expected": 1017555
+  },
+  "run/selfhost/TinyCC": {
+    "ok": true,
+    "expected": "selfhost"
+  },
+  "run/arithmetic/GCC-O0": {
+    "ok": true,
+    "expected": 1017555
+  },
+  "run/selfhost/GCC-O0": {
+    "ok": true,
+    "expected": "selfhost"
+  },
+  "run/arithmetic/GCC-O2": {
+    "ok": true,
+    "expected": 1017555
+  },
+  "run/selfhost/GCC-O2": {
+    "ok": true,
+    "expected": "selfhost"
+  },
+  "run/arithmetic/Clang14-O0": {
+    "ok": true,
+    "expected": 1017555
+  },
+  "run/selfhost/Clang14-O0": {
+    "ok": true,
+    "expected": "selfhost"
+  },
+  "run/arithmetic/Clang14-O2": {
+    "ok": true,
+    "expected": 1017555
+  },
+  "run/selfhost/Clang14-O2": {
+    "ok": true,
+    "expected": "selfhost"
+  },
+  "run/arithmetic/Zig-cc-O0": {
+    "ok": true,
+    "expected": 1017555
+  },
+  "run/selfhost/Zig-cc-O0": {
+    "ok": true,
+    "expected": "selfhost"
+  },
+  "run/arithmetic/Zig-cc-O2": {
+    "ok": true,
+    "expected": 1017555
+  },
+  "run/selfhost/Zig-cc-O2": {
+    "ok": true,
+    "expected": "selfhost"
+  },
+  "run/arithmetic/chibicc": {
+    "ok": true,
+    "expected": 1017555
+  },
+  "run/selfhost/chibicc": {
+    "ok": true,
+    "expected": "selfhost"
+  },
+  "run/arithmetic/lacc": {
+    "ok": true,
+    "expected": 1017555
+  },
+  "run/selfhost/lacc": {
+    "ok": true,
+    "expected": "selfhost"
+  },
+  "run/arithmetic/lacc-O2": {
+    "ok": true,
+    "expected": 1017555
+  },
+  "run/selfhost/lacc-O2": {
+    "ok": true,
+    "expected": "selfhost"
+  },
+  "run/arithmetic/cproc-QBE": {
+    "ok": true,
+    "expected": 1017555
+  },
+  "run/selfhost/cproc-QBE": {
+    "ok": true,
+    "expected": "selfhost"
+  },
+  "run/arithmetic/PCC": {
+    "ok": true,
+    "expected": 1017555
+  },
+  "run/selfhost/PCC": {
+    "ok": true,
+    "expected": "selfhost"
+  },
+  "run/arithmetic/PCC-O": {
+    "ok": true,
+    "expected": 1017555
+  },
+  "run/selfhost/PCC-O": {
+    "ok": true,
+    "expected": "selfhost"
+  },
+  "run/arithmetic/necc-next": {
+    "ok": true,
+    "expected": 1017555
+  },
+  "run/selfhost/necc-next": {
+    "ok": true,
+    "expected": "selfhost"
+  }
+}

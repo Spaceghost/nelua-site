@@ -11,10 +11,11 @@ export def body
 				<a className="button" href="#run"> 'Boot in QEMU'
 				<a className="text-link" href="#ovmf"> 'See the OVMF results'
 		<h2 className="section" id="efi-boot-time"> 'Time through the Core boot menu'
-		<p> 'On 21 November 2026, four QEMU TCG boots of the Core EFI image reached the menu in a median 3.99 s. With the first entry selected immediately, kernel loading through the StartImage handoff took 0.26 s. The next 12.37 s elapsed before the serial shell reported the Theseus PID 1 executable.'
+		<p> 'On 22 November 2026 four QEMU 10.2.2 TCG boots on an i7-11700F reached the Core menu in a median 1.35 s. Selecting the first entry took 4.00 s to reach the marker before StartImage. The median from that marker to a shell command identifying Theseus as PID 1 was 28.30 s. Each run started with fresh EFI variables and powered off successfully.'
+		<p> 'This disk was rebuilt with neboot b8c56a8, necc 7ed048c, nelinker a349c2a, the core-dev-2026.11.20 release kernel and gzip initramfs. The four handoff-to-command intervals varied substantially on this host.'
 		<p className="upstream-links">
-			<a href="/nelua/assets/ecosystem-20261121/efi.csv"> 'Four boot timings'
-			<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> 'Firmware, inputs and reproduction'
+			<a href="/nelua/assets/core-shootout.zip"> 'Four boot timings (ZIP)'
+			<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> 'Original 21 November firmware and replay procedure'
 		<h2 className="section" id="run"> 'Boot in QEMU'
 		<p>
 			'In the '

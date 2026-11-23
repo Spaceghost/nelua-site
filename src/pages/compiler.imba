@@ -3,18 +3,18 @@ export const title = "Nelua compiler fork · spacegho.st/nelua"
 export const description = "Spaceghost/nelua: upstream Nelua plus variants, optionals, an exhaustive match statement, owned records with move, closures, structured compile-time evaluation, const pointers, a compiler-enforced freestanding pragma, cross-compilation with --target and nelua-bindgen."
 
 const frontendTimings = [
-	["Check syntax · extension tour", "38.16", "23.90", "1.60×"]
-	["Emit C · hello world", "29.47", "29.30", "1.01×"]
-	["Emit C · matrix multiplication", "131.19", "130.63", "1.00×"]
-	["Emit C · standard library test suite", "1,383.74", "1,379.74", "1.00×"]
-	["Emit C · 2,048 runtime assertions (synthetic)", "282.06", "146.39", "1.93×"]
+	["Check syntax · extension tour", "32.50", "32.30", "1.006×"]
+	["Emit C · hello world", "41.06", "40.69", "1.009×"]
+	["Emit C · matrix multiplication", "175.55", "173.02", "1.015×"]
+	["Emit C · standard library test suite", "1,847.48", "1,801.25", "1.026×"]
+	["Emit C · 2,048 runtime assertions (synthetic)", "193.97", "193.02", "1.005×"]
 ]
 
 const compilerPassRows = [
-	["Hello world · compile", "61.43", "58.25"]
-	["Hello world · run", "0.62", "0.53"]
-	["Matrix multiplication · compile", "516.77", "489.60"]
-	["Matrix multiplication · run", "15.65", "15.65"]
+	["Hello world · compile", "68.95", "69.29", "64.44"]
+	["Hello world · run", "0.34", "0.35", "0.35"]
+	["Matrix multiplication · compile", "766.23", "757.87", "742.55"]
+	["Matrix multiplication · run", "29.61", "29.57", "29.50"]
 ]
 
 export def body
@@ -47,44 +47,51 @@ export def body
 					" · 2026-11-22"
 				<span>
 					<strong> "Fork revision "
-					<code> "0f29b8f"
+					<code> "c95493e"
 			<p>
 				<a href="/nelua/necc/"> 'necc'
 				' packages this frontend with a standalone Linux toolchain.'
 		<div className="page-details">
 			<h2 className="section" id="release-timing"> "Release compilation and generated programs"
-			<p> "On 22 November 2026 the fork at 0f29b8f and upstream at a584505 used the same bundled interpreter binary, fork input files and GCC 16.2.1 on logical CPU 3 of an Intel Core i7-11700F with ccache disabled. The compile interval includes C generation, compilation and linking. The execution interval starts with a fresh process."
+			<p> "On 22 November 2026 both fork revisions and upstream used the same interpreter binary, input files and GCC 15.2.0 on logical CPU 3 of an Intel Core i5-10400. Each release build regenerates C, invokes GCC and links a new executable. Each runtime sample starts a fresh process."
 			<div className="table-wrap">
 				<table>
 					<thead>
 						<tr>
 							<th scope="col"> "Workload"
-							<th scope="col"> "Fork (ms)"
-							<th scope="col"> "Upstream (ms)"
+							<th scope="col"> "Fork before · 0f29b8f (ms)"
+							<th scope="col"> "Fork updated · c95493e (ms)"
+							<th scope="col"> "Upstream · a584505 (ms)"
 					<tbody>
 						for row in compilerPassRows
 							<tr>
 								<th scope="row"> row[0]
 								<td className="num"> row[1]
 								<td className="num"> row[2]
-			<p> "Each median covers seven alternating rounds after warm-up. Both generated matrix programs printed −18.8963499125. Upstream compiled both examples sooner. The median matrix execution times agree to two decimal places."
+								<td className="num"> row[3]
+			<p> "Fifteen shuffled rounds followed a warm-up. The matrix build improved by 8.36 ms. The fork still took 15.32 ms longer than upstream. Every matrix executable printed the same result."
+			<p> "The updated compiler builds ownership diagnostics only on an error and reuses empty ownership snapshots. A vector or hash map whose elements need no cleanup also emits no cleanup helper. The matrix program previously emitted four such empty helpers."
 			<details id="release-samples">
-				<summary> 'Individual release timings (nanoseconds)'
+				<summary> 'Individual release samples, wall and child CPU time (ms)'
+				<p> 'control = 0f29b8f, candidate = c95493e, upstream = a584505. Round zero is the warm-up.'
+				<pre> readFileSync('src/content/release-pair.csv', 'utf8').trimEnd()
+			<details>
+				<summary> 'Isolating ownership analysis · 15 pairs'
+				<p> 'With just the ownership analyzer changes enabled, emitting the standard-library test suite fell from 1,847.48 to 1,801.25 ms. The compiler produced byte-identical C for every input in this comparison.'
+				<pre> readFileSync('src/content/ownership.csv', 'utf8').trimEnd()
+			<details>
+				<summary> 'Earlier i7-11700F release study · 7 pairs'
+				<p> 'At 0f29b8f the fork built the matrix program in 516.77 ms and upstream took 489.60 ms. Both programs ran in 15.65 ms. This study used GCC 16.2.1 and logical CPU 3.'
 				<pre> readFileSync('src/content/compiler-release.csv', 'utf8').trimEnd()
-			<p className="upstream-links">
-				<a href="/nelua/assets/ecosystem-20261121/replay.tar.gz"> 'Replay script · compare-nelua.py'
 			<h2 className="section" id="performance"> 'Frontend compile times'
-			<p>
-				'On '
-				<time html:datetime="2026-11-21"> '21 November 2026'
-				', the two biggest differences came from syntax checking and source-location lookups. A syntax-only invocation can skip the built-in code generator and analyzer. During C generation, the compiler now indexes source line breaks once per file so repeated runtime diagnostics can find their source locations cheaply.'
+			<p> 'On 22 November we isolated the analyzer changes in c95493e. Each compiler used the 0f29b8f standard library. Fifteen alternating pairs used fresh processes on an Intel Core i5-10400, with both revisions taking turns at the same path. The table gives median wall times.'
 			<div className="table-wrap" html:role="region" aria-label="Median frontend wall time in milliseconds" html:tabindex="0">
 				<table>
 					<thead>
 						<tr>
 							<th scope="col"> 'Workload'
-							<th className="num" scope="col"> '5995eba (ms)'
-							<th className="num" scope="col"> '874acdd (ms)'
+							<th className="num" scope="col"> '0f29b8f (ms)'
+							<th className="num" scope="col"> 'Analyzer update (ms)'
 							<th className="num" scope="col"> 'Old / new'
 					<tbody>
 						for row in frontendTimings
@@ -93,10 +100,11 @@ export def body
 								<td className="num"> row[1]
 								<td className="num"> row[2]
 								<td className="num"> row[3]
-			<p> 'Each median covers 30 alternating pairs in two batches on one Intel Core i7-11700F logical CPU under Debian 12. A fresh process parsed the input and either exited after the syntax check or wrote C. All four C workloads produced byte-identical output across the two revisions. The 2,048-assertion fixture compiled 1.93× as fast. Hello world, matrix multiplication and the standard library suite moved by less than 1% in the pooled medians.'
+			<p> 'All four C workloads emitted identical bytes across revisions. The syntax-only control took about the same time. In the separate 21 November study, skipping the backend on syntax checks and indexing line breaks improved different workloads.'
 			<p className="upstream-links">
-				<a href="/nelua/assets/frontend-20261121/samples.csv"> 'All 300 samples (CSV)'
-				<a href="/nelua/assets/frontend-20261121/method.txt"> 'Method and reproduction'
+				<a href="/nelua/assets/core-shootout.zip"> '22 November frontend samples (ZIP)'
+				<a href="/nelua/assets/frontend-20261121/samples.csv"> '21 November startup and source-location comparison (CSV)'
+				<a href="/nelua/assets/frontend-20261121/method.txt"> '21 November method and reproduction'
 			<h2 className="section"> "What the fork adds"
 			<p className="lead">
 				"Everything below is opt-in syntax or tooling. Code written for upstream Nelua compiles unchanged. The first five are language features that fit together: variants and optionals carry \"one of these\" data, "
@@ -374,7 +382,7 @@ export def body
 				<dd>
 					<code> "make test"
 					" runs upstream's spec suite plus the fork's specs (const pointers, freestanding, target, bindgen, variant, optional, match, ownership, closures, the batteries libraries, comptime). All 609 specs passed on 21 November 2026 at fork revision "
-					<code> "0f29b8f"
+					<code> "c95493e"
 					" using Clang 23 and Bend 2.0.40."
 				<dt> "Examples"
 				<dd> "Every example in the fork guide was compiled and run with the checkout it documents and prints what its comments say."

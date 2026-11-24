@@ -35,8 +35,8 @@ export def body
 		<h2 className="section" id="aarch64"> 'AArch64 Linux'
 		<p> 'The AArch64 mode links fixed-address static ELF executables. In Fedora Incus under QEMU, it linked and ran a program that used separate object files, archive extraction, branches, a global offset table and relocated data.'
 		<pre><code> 'nelinker --aarch64 -o program start.o libprogram.a'
-		<p> 'AArch64 TLS and PE/EFI linking remain open.'
-		<p><a href="https://github.com/Spaceghost/nelinker/tree/7071dc7#aarch64-static-elf"> 'Build and test AArch64 Nelinker'
+		<p> 'Nelinker also relinked Nelibc’s freestanding AArch64 test. It ran preinit and init constructors, initialized aligned thread-local storage, and confirmed isolation in a worker thread. AArch64 PE/EFI output remains open.'
+		<p><a href="https://github.com/Spaceghost/nelinker/tree/9933f8f#aarch64-static-elf"> 'Build and test AArch64 Nelinker'
 		<h2 className="section" id="archive"> 'Link an archive'
 		<p>
 			'Save '

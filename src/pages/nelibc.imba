@@ -42,10 +42,11 @@ export def body comparison, stats
 				'.'
 			<p>
 				'In Fedora Incus, the '
-				<a href="https://github.com/Spaceghost/nelibc/blob/c8b2f6b/docs/quickstart.md#aarch64-freestanding-startup"> 'freestanding AArch64 tests'
+				<a href="https://github.com/Spaceghost/nelibc/blob/0b4233a/docs/quickstart.md#aarch64-freestanding-startup"> 'freestanding AArch64 tests'
 				' checked thread-local storage, file metadata, descriptor waits and signals. The select test covered readiness and timeout writeback. The setjmp tests checked saved registers and signal-mask restoration.'
 			<p> 'A static startup fixture verified constructor order, atexit handlers, destructors, the stdio flush call, and the exit status from main.'
-			<p> 'The full GCC profiles still build x86-64 SIMD code. A standalone AArch64 runtime for Nebox still needs the public pthread implementation and other architecture-specific routines.'
+			<p> 'The standalone pthread test passed in Fedora Incus and on a Fedora AArch64 kernel booted through Neboot. It checked thread creation, join, detach, cancellation, and isolation of thread-local storage and errno.'
+			<p> 'A full standalone AArch64 build of Nebox still needs the math and stdio ports.'
 			<p>
 				<a href="/nelua/compiler/#linux-arm64"> 'Build the Nelua compiler on Linux AArch64'
 			<h2 className="section" html:id="profiles"> "Five runtime arrangements"

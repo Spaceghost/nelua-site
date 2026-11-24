@@ -23,6 +23,22 @@ export def body comparison, stats
 				" is experimental, Linux x86-64, with hybrid builds working and the standalone profile in progress. The implementations are Nelua, with x86-64 assembly for memory primitives and C adapters at the runtime boundaries."
 			<p className="stats" innerHTML=stats>
 		<div className="page-details">
+			<h2 className="section" id="linux-arm64"> 'Linux AArch64 status'
+			<p>
+				'Nelibc’s library profiles currently target x86-64. On '
+				<time html:datetime="2026-11-24"> '24 November 2026'
+				', the character classification module from '
+				<a href="https://github.com/Spaceghost/nelibc/commit/4f498d3"> 'revision 4f498d3'
+				' compiled to an AArch64 object and passed a C ABI smoke test under QEMU in Fedora Incus. The test covered '
+				<code> 'isalpha'
+				', '
+				<code> 'isdigit'
+				' and '
+				<code> 'isalnum'
+				'.'
+			<p> 'The GCC profiles still build x86-64 SIMD memory code. Standalone Linux also needs AArch64 startup, syscalls and thread-local storage before it can provide a runtime for Nebox.'
+			<p>
+				<a href="/nelua/compiler/#linux-arm64"> 'Build the Nelua compiler on Linux AArch64'
 			<h2 className="section" html:id="profiles"> "Five runtime arrangements"
 			<p className="lead"> "The C interface stays familiar while ownership changes. Compiler choice (GCC, Zig or TinyCC) is a separate axis from the runtime supplying the missing functions."
 			<div className="table-wrap">

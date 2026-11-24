@@ -420,7 +420,10 @@ export def body
 				<a className="button" href="https://github.com/Spaceghost/nelua/blob/master/docs/arm64-fedora-incus.md"> 'Fedora Incus build guide'
 				<a href="https://github.com/Spaceghost/nelua/releases/download/latest/nelua-linux-aarch64-latest.tar.xz"> 'Download the portable Linux AArch64 compiler'
 				<a href="https://github.com/Spaceghost/nelua/releases/download/latest/nelua-linux-aarch64-fedora44-7977531.tar.xz"> 'Download the Fedora Incus build'
-			<p> 'On AArch64, nebuild can use the host C library and nelgop can run its wire decoder without a C runtime. The standalone nelibc, nebox and necc builds, nelinker targets, and neboot firmware currently target x86-64.'
+			<p>
+				'On AArch64, nebuild can use the host C library and nelgop can run its wire decoder without a C runtime. The '
+				<a href="/nelua/nelibc/#linux-arm64"> 'Nelibc library profiles'
+				', standalone nebox and necc builds, nelinker targets, and neboot firmware currently target x86-64.'
 			<h2 className="section"> "How changes are gated"
 			<dl className="kv">
 				<dt> "Specs"

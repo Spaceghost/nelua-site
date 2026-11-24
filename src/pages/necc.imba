@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 import { comparisons, field, phaseComparison } from '../necc-timings.mjs'
 
 export const title = 'necc · Native compiler driver · Nelua at spacegho.st'
-export const description = 'Build C and Nelua programs for x86-64 Linux, run Lua, and compile freestanding code that calls UEFI firmware.'
+export const description = 'Build C and Nelua programs for x86-64 or freestanding AArch64 Linux, run Lua, and compile x86-64 UEFI objects.'
 
 const timings = [
 	['Compile 128 functions', '16.038', '8.727', '1.506', 'TinyCC']
@@ -47,6 +47,11 @@ export def body
 				<code> 'necc --direct program.nelua'
 				' selects the self-hosted Nelua subset frontend and the native C backend.'
 		<p> 'The C frontend is written in Nelua. Its native backend uses the x86-64 System V calling convention by default.'
+		<h2 className="section" id="aarch64"> 'AArch64 freestanding builds'
+		<p> 'The hosted driver uses AArch64 GCC for C and assembly, the Nelua compiler for Nelua inputs, and Nelinker for the static link. Supply the program entry point and any runtime objects or archives.'
+		<pre><code> 'necc-hosted --aarch64 start.s main.c math.nelua -o program'
+		<p> 'The mixed-source and archive smoke tests compiled, linked and ran in Fedora Incus with QEMU. NeCC’s native code generator and standalone SDK still target x86-64.'
+		<p><a href="https://github.com/Spaceghost/necc/tree/e880398#aarch64-freestanding-builds"> 'Build and test AArch64 NeCC'
 		<h2 className="section" id="uefi"> 'Call x86-64 UEFI firmware'
 		<p>
 			'When the '

@@ -143,6 +143,10 @@ export def body
 				<pre>
 					<code> "git clone https://github.com/Spaceghost/nelibc\nmake -C nelibc lib-standalone-zig\ngit clone https://github.com/Spaceghost/nebox\nmake -C nebox NELIBC=../nelibc\nmake -C nebox NELIBC=../nelibc test"
 
+			<p>
+				'A static AArch64 prototype built in Fedora Incus and ran echo, wc, and printf under QEMU. Full applet conformance and runtime coverage remain in progress. '
+				<a href="/nelua/nelibc/#linux-arm64"> 'See the AArch64 runtime tests.'
+
 		<section className="ng-section" aria-labelledby="line-count">
 			<h2 id="line-count"> 'Counting lines in Nelibc source'
 			<p> '22 November 2026 · median elapsed milliseconds across 15 measured rounds on an i5-10400. Each process read the same 1,965,199-byte file. The line-only path now counts newline bytes directly.'

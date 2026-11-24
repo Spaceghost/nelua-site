@@ -42,9 +42,10 @@ export def body comparison, stats
 				'.'
 			<p>
 				'In Fedora Incus, the '
-				<a href="https://github.com/Spaceghost/nelibc/blob/0e8d7fe/docs/quickstart.md#aarch64-freestanding-startup"> 'freestanding AArch64 smoke'
-				' ran static executables with and without thread-local storage. It checked initialized and over-aligned zero-filled TLS, constructor order before main, isolated TLS in a kernel thread, and Linux platform operations including file-backed mapping, file metadata, pipe polling, epoll and fork. A separate static test exercised public signal handling, including blocking, delivery and returning from the handler.'
-			<p> 'The full GCC profiles still build x86-64 SIMD code. A standalone AArch64 runtime for Nebox still needs ABI adapters for operations such as select, plus integration with the public pthread API and the standalone exit path.'
+				<a href="https://github.com/Spaceghost/nelibc/blob/c8b2f6b/docs/quickstart.md#aarch64-freestanding-startup"> 'freestanding AArch64 tests'
+				' checked thread-local storage, file metadata, descriptor waits and signals. The select test covered readiness and timeout writeback. The setjmp tests checked saved registers and signal-mask restoration.'
+			<p> 'A static startup fixture verified constructor order, atexit handlers, destructors, the stdio flush call, and the exit status from main.'
+			<p> 'The full GCC profiles still build x86-64 SIMD code. A standalone AArch64 runtime for Nebox still needs the public pthread implementation and other architecture-specific routines.'
 			<p>
 				<a href="/nelua/compiler/#linux-arm64"> 'Build the Nelua compiler on Linux AArch64'
 			<h2 className="section" html:id="profiles"> "Five runtime arrangements"

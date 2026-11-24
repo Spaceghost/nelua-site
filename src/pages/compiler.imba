@@ -421,7 +421,7 @@ export def body
 				<a href="https://github.com/Spaceghost/nelua/releases/download/latest/nelua-linux-aarch64-latest.tar.xz"> 'Download the portable Linux AArch64 compiler'
 				<a href="https://github.com/Spaceghost/nelua/releases/download/latest/nelua-linux-aarch64-fedora44-7977531.tar.xz"> 'Download the Fedora Incus build'
 			<p>
-				'On AArch64, nebuild can use the host C library and nelgop can run its wire decoder without a C runtime. The '
+				'On AArch64, nebuild can use the host C library. The '
 				<a href="/nelua/nelibc/#linux-arm64"> 'Nelibc library profiles'
 				' and standalone nebox builds currently target x86-64. '
 				<a href="/nelua/necc/#aarch64"> 'The hosted NeCC driver can build freestanding AArch64 programs.'
@@ -430,6 +430,9 @@ export def body
 				' '
 				<a href="/nelua/neboot/#aarch64"> 'Neboot’s AArch64 UEFI menu and chainloader'
 				' build and run under QEMU.'
+			<p>
+				'Nelgop can capture a frame in AArch64 UEFI and decode the serial stream. Its Linux AArch64 decoder can run without a C runtime. '
+				<a href="https://github.com/Spaceghost/nelgop/blob/ecf07ef/uefi/README.md#aarch64-firmware-smoke-test"> 'Reproduce the GOP capture in Fedora Incus.'
 			<h2 className="section"> "How changes are gated"
 			<dl className="kv">
 				<dt> "Specs"

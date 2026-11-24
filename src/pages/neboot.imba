@@ -43,6 +43,9 @@ export def body
 		<h2 className="section" id="aarch64"> 'AArch64 firmware'
 		<p> 'Neboot builds BOOTAA64.EFI and its child application with Nelua and Clang. The firmware test passed with lld-link and with Nelinker. In Fedora Incus, QEMU TCG with AArch64 EDK2 relocated the menu, showed the missing-kernel diagnostic, and chainloaded the child before returning to the menu.'
 		<p> 'On 24 November 2026, Neboot also booted Fedora’s 7.3.4-200.fc44.aarch64 EFI-stub kernel. Both linker builds reached a minimal test initramfs running as PID 1 and powered off cleanly. The ARM Cascadia and Theseus boot path still needs an integration test.'
+		<p>
+			'A Nelgop EFI test also captured a 160×100 frame from QEMU’s VirtIO display over UEFI Serial I/O. The Wasm decoder matched every RGB channel in the test pattern. '
+			<a href="https://github.com/Spaceghost/nelgop/blob/ecf07ef/uefi/README.md#aarch64-firmware-smoke-test"> 'Run the Nelgop firmware test.'
 		<div className="actions">
 			<a className="button" href="/nelua/neboot/neboot-aarch64-nelinker-23691f3.zip"> 'Download the Nelinker EFI build'
 			<a href="/nelua/neboot/neboot-aarch64-09596e2.zip"> 'Download the lld-link EFI build'

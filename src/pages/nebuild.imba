@@ -83,9 +83,12 @@ export def body
 			<a href="/nelua/assets/build-tools-20261121/incremental.csv"> '21 November individual times (CSV)'
 			<a href="/nelua/assets/build-tools-20261121/method.txt"> 'Method and reproduction'
 		<h2 className="section"> 'Build nebuild'
-		<p> 'Clone the private nebuild repository with a GitHub account that has access. Build it with Nelua, Zig and the standalone Nelibc archive.'
+		<p> 'Build the standalone x86-64 runner with Nelua, Zig and the standalone Nelibc archive.'
 		<pre>
 			<code> "git clone https://github.com/Spaceghost/nebuild\ncd nebuild\nmake NELIBC=/path/to/nelibc\nmake NELIBC=/path/to/nelibc test\nmake NELIBC=/path/to/nelibc install PREFIX=\"$HOME/.local\""
+		<p> 'For Linux AArch64 or x86-64 with a system C library, build the hosted runner with Nelua and GCC. The test target also needs Python.'
+		<pre>
+			<code> "make hosted NELUA=/path/to/nelua CC=gcc\nmake test-hosted NELUA=/path/to/nelua CC=gcc"
 		<div className="actions">
 			<a className="button" href="https://github.com/Spaceghost/nebuild"> 'nebuild repository'
 			' '

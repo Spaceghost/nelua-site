@@ -144,7 +144,9 @@ export def body
 				<div>
 					<h2 id="build"> 'Build the stack'
 					<p> 'Build the compiler fork, the standalone Nelibc archive and nebox on Linux x86-64 with Git, Make and Zig installed.'
-					<a href="/nelua/compiler/#freestanding"> 'About freestanding builds'
+					<p>
+						<a href="/nelua/compiler/#freestanding"> 'About freestanding builds'
+					<a href="/nelua/compiler/#linux-arm64"> 'Build the compiler on Linux AArch64'
 				<pre>
 					<code> 'git clone https://github.com/Spaceghost/nelua\nmake -C nelua\ngit clone https://github.com/Spaceghost/nelibc\nmake -C nelibc lib-standalone-zig\ngit clone https://github.com/Spaceghost/nebox\nmake -C nebox NELIBC=../nelibc test'
 		<div className="overview-section outer-rings">

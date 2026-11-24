@@ -414,6 +414,13 @@ export def body
 				"Pinning: the nelibc gate and nebox's container builds run the fork at "
 				<code> "dabbd9ef"
 				". nelibc and nebox compile with upstream-compatible syntax plus const pointers; the newer additions are available to them but not yet required."
+			<h2 className="section" id="linux-arm64"> 'Linux AArch64'
+			<p> 'Build the hosted Nelua compiler with GCC inside an emulated Fedora AArch64 userspace on an x86-64 Incus host. The guide shows how to build and run an AArch64 executable and package the compiler.'
+			<div className="actions">
+				<a className="button" href="https://github.com/Spaceghost/nelua/blob/master/docs/arm64-fedora-incus.md"> 'Fedora Incus build guide'
+				<a href="https://github.com/Spaceghost/nelua/releases/download/latest/nelua-linux-aarch64-latest.tar.xz"> 'Download the portable Linux AArch64 compiler'
+				<a href="https://github.com/Spaceghost/nelua/releases/download/latest/nelua-linux-aarch64-fedora44-7977531.tar.xz"> 'Download the Fedora Incus build'
+			<p> 'On AArch64, nebuild can use the host C library and nelgop can run its wire decoder without a C runtime. The standalone nelibc, nebox and necc builds, nelinker targets, and neboot firmware currently target x86-64.'
 			<h2 className="section"> "How changes are gated"
 			<dl className="kv">
 				<dt> "Specs"

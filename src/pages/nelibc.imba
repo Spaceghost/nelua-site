@@ -25,7 +25,7 @@ export def body comparison, stats
 		<div className="page-details">
 			<section className="arm64-results" aria-labelledby="linux-arm64">
 				<h2 className="section" id="linux-arm64"> 'Linux AArch64'
-				<p className="lead"> 'Development builds ran under QEMU in Fedora Incus. The standalone archive and binary128 math routines are still in progress.'
+				<p className="lead"> 'The tested source ran under QEMU in Fedora Incus. The standalone archive and binary128 math routines are still in progress.'
 				<dl className="arm64-measurements">
 					<div>
 						<dt> 'Binary64 remainder operations'
@@ -40,9 +40,9 @@ export def body comparison, stats
 					<div>
 						<dt> 'Binary128 input and output'
 						<dd className="arm64-count"> '128'
-						<dd> 'Decimal round trips matched glibc. The development build also matched hexadecimal conversions and narrow and wide scanning.'
+						<dd> 'Decimal round trips matched glibc. Hexadecimal conversions and narrow and wide scanning matched too.'
 				<div className="actions arm64-actions">
-					<a className="button" href="https://github.com/Spaceghost/nelibc/blob/6033734/docs/quickstart.md#aarch64-freestanding-startup"> 'Run the published runtime tests'
+					<a className="button" href="https://github.com/Spaceghost/nelibc/blob/e8bbfdf/docs/quickstart.md#aarch64-freestanding-startup"> 'Run the tested AArch64 checks'
 					<a className="text-link" href="/nelua/compiler/#linux-arm64"> 'Build the AArch64 compiler'
 				<details>
 					<summary> 'What the runtime tests cover'

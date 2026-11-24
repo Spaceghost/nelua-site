@@ -40,7 +40,11 @@ export def body comparison, stats
 				'The AArch64 memory archive builds the portable byte operations with GCC. Its Fedora Incus differential test exercised bytewise references, guard pages and overlapping moves. See the '
 				<a href="https://github.com/Spaceghost/nelibc/blob/main/docs/quickstart.md#aarch64-memory-archive"> 'archive build and test commands'
 				'.'
-			<p> 'The GCC profiles still build x86-64 SIMD memory code. Standalone Linux also needs AArch64 startup, syscalls and thread-local storage before it can provide a runtime for Nebox.'
+			<p>
+				'In Fedora Incus, the '
+				<a href="https://github.com/Spaceghost/nelibc/blob/9e01899/docs/quickstart.md#aarch64-freestanding-startup"> 'freestanding AArch64 smoke'
+				' ran a static executable with Nelibc’s entry point and raw Linux syscalls. It checked program arguments, environment, file-backed memory mapping and exit status.'
+			<p> 'The full GCC profiles still build x86-64 SIMD code. A standalone AArch64 runtime for Nebox also needs a platform-operation dispatcher, TLS setup and constructor execution.'
 			<p>
 				<a href="/nelua/compiler/#linux-arm64"> 'Build the Nelua compiler on Linux AArch64'
 			<h2 className="section" html:id="profiles"> "Five runtime arrangements"

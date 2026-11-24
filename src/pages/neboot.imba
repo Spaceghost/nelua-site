@@ -1,11 +1,11 @@
 export const title = 'neboot · Cascadia’s UEFI boot menu · Nelua at spacegho.st'
-export const description = 'Boot Cascadia from loose files with neboot, an x86-64 UEFI application written in Nelua. See how necc and nelinker build it and what ran under OVMF.'
+export const description = 'Neboot is a UEFI boot menu written in Nelua. Boot Cascadia on x86-64 or build and test the AArch64 menu and chainloader.'
 
 export def body
 	<div className="boot-lab boot-lab-neboot">
 		<section className="boot-lab-hero" aria-labelledby="boot-title">
 			<div className="boot-lab-intro">
-				<p className="boot-lab-kicker"> 'Core / x86-64 UEFI'
+				<p className="boot-lab-kicker"> 'Core / UEFI'
 				<h1 id="boot-title"> 'neboot'
 				<p className="boot-lab-lead"> 'A boot menu before Linux.'
 				<p> 'A UEFI application written in Nelua. Start Cascadia with Theseus Init, choose OpenRC recovery, or launch a second EFI application from the same disk.'
@@ -20,6 +20,7 @@ export def body
 		<nav className="boot-lab-nav" aria-label="neboot project links">
 			<a href="#build"> 'How neboot builds'
 			<a href="#ovmf"> 'Native OVMF results'
+			<a href="#aarch64"> 'AArch64 firmware'
 			<a href="/nelua/init/"> 'Meet Theseus Init'
 		<section className="boot-lab-proof" aria-labelledby="browser-boot">
 			<div>
@@ -39,6 +40,12 @@ export def body
 		<p className="upstream-links">
 			<a href="/nelua/assets/core-shootout.zip"> 'Four boot timings (ZIP)'
 			<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> 'Original 21 November firmware and replay procedure'
+		<h2 className="section" id="aarch64"> 'AArch64 firmware'
+		<p> 'Neboot builds BOOTAA64.EFI and its child application with Nelua, Clang and lld-link. In Fedora Incus, QEMU TCG with AArch64 EDK2 relocated the menu, showed the missing-kernel diagnostic, and chainloaded the child before returning to the menu.'
+		<p> 'The archive contains both EFI applications and their checksums. The AArch64 Cascadia kernel and initramfs boot path still needs an integration test.'
+		<div className="actions">
+			<a className="button" href="/nelua/neboot/neboot-aarch64-09596e2.zip"> 'Download the AArch64 EFI build'
+			<a href="https://github.com/Spaceghost/neboot/tree/09596e2#aarch64-uefi"> 'Fedora Incus build and smoke test'
 		<h2 className="section" id="run"> 'Boot in QEMU'
 		<p>
 			'In the '

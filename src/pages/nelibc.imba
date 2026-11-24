@@ -46,8 +46,9 @@ export def body comparison, stats
 				' checked thread-local storage, file metadata, descriptor waits and signals. The select test covered readiness and timeout writeback. The setjmp tests checked saved registers and signal-mask restoration.'
 			<p> 'A static startup fixture verified constructor order, atexit handlers, destructors, the stdio flush call, and the exit status from main.'
 			<p> 'The standalone pthread test passed in Fedora Incus and on a Fedora AArch64 kernel booted through Neboot. It checked thread creation, join, detach, cancellation, and isolation of thread-local storage and errno.'
-			<p> 'The AArch64 floating-point environment test verified rounding modes, exception flags, and restoring saved state. The binary64 remainder primitive matched glibc in 50,121 cases. Mixed arguments passed in narrow and wide stdio formatting and scanning.'
-			<p> 'Full standalone AArch64 coverage still needs binary128 and the remaining math routines.'
+			<p> 'The AArch64 floating-point environment test verified rounding modes, exception flags, and restoring saved state. Mixed arguments passed in narrow and wide stdio formatting and scanning.'
+			<p> 'Development builds in Fedora Incus matched glibc on binary128 decimal and hexadecimal formatting and parsing, narrow and wide scanning, and 128 decimal round trips. Binary64 fmod, remainder, and remquo matched the system math library across 50,283 input pairs.'
+			<p> 'The full standalone AArch64 archive and binary128 math routines remain in progress.'
 			<p>
 				<a href="/nelua/compiler/#linux-arm64"> 'Build the Nelua compiler on Linux AArch64'
 			<h2 className="section" html:id="profiles"> "Five runtime arrangements"

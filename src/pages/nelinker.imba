@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
-export const title = 'nelinker · Static x86-64 linker · Nelua at spacegho.st'
-export const description = 'Link x86-64 ELF objects and static archives into a Linux executable or a relocatable PE32+ UEFI application.'
+export const title = 'nelinker · Static ELF linker · Nelua at spacegho.st'
+export const description = 'Link x86-64 and AArch64 ELF objects and static archives into Linux executables, or link x86-64 PE32+ UEFI applications.'
 
 const timings = [
 	["Three loose objects", "1.428", "1.435", "TinyCC · 1.504", "205", "727"]
@@ -26,12 +26,17 @@ export def body
 		<section className="hero">
 			<p className="eyebrow"> 'Core · the linker'
 			<h1> 'nelinker'
-			<p className="tagline"> 'A static linker written in Nelua for x86-64 Linux executables and UEFI applications.'
+			<p className="tagline"> 'A static linker written in Nelua for x86-64 and AArch64 Linux executables and x86-64 UEFI applications.'
 			<p className="blurb"> 'Give it object files and Unix archives. It resolves symbols, applies relocations and writes an executable. The same linker performs the final link of both itself and the necc compiler driver.'
 			<p><a href="https://github.com/Spaceghost/nelinker"> 'nelinker source on GitHub'
 			<div className="actions">
 				<a className="button" href="#archive"> 'Link an archive'
 				<a className="text-link" href="#benchmarks"> 'Compare link times'
+		<h2 className="section" id="aarch64"> 'AArch64 Linux'
+		<p> 'The AArch64 mode links fixed-address static ELF executables. In Fedora Incus under QEMU, it linked and ran a program that used separate object files, archive extraction, branches, a global offset table and relocated data.'
+		<pre><code> 'nelinker --aarch64 -o program start.o libprogram.a'
+		<p> 'AArch64 TLS and PE/EFI linking remain open.'
+		<p><a href="https://github.com/Spaceghost/nelinker/tree/7071dc7#aarch64-static-elf"> 'Build and test AArch64 Nelinker'
 		<h2 className="section" id="archive"> 'Link an archive'
 		<p>
 			'Save '
@@ -52,7 +57,7 @@ export def body
 			<code> '--end-group'
 			' around archives that depend on one another.'
 		<h2 className="section" id="inputs"> 'Supported inputs'
-		<p> 'In Linux mode, nelinker produces fixed-address static executables from x86-64 ELF objects. It reads regular GNU/SysV and BSD archives, resolves strong and weak symbols, and supports static GOT entries and local-exec TLS. PIE, shared libraries, thin archives, LTO and custom linker scripts are outside the current scope.'
+		<p> 'The default Linux mode produces fixed-address static executables from x86-64 ELF objects. It reads regular GNU/SysV and BSD archives, resolves strong and weak symbols, and supports static GOT entries and local-exec TLS. PIE, shared libraries, thin archives, LTO and custom linker scripts are outside the current scope.'
 		<p>
 			'For C or Nelua programs using '
 			<a href="/nelua/nelibc/"> 'nelibc'

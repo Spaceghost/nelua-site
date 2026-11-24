@@ -423,7 +423,9 @@ export def body
 			<p>
 				'On AArch64, nebuild can use the host C library and nelgop can run its wire decoder without a C runtime. The '
 				<a href="/nelua/nelibc/#linux-arm64"> 'Nelibc library profiles'
-				', standalone nebox and necc builds, and nelinker targets currently target x86-64. '
+				', and standalone nebox and necc builds currently target x86-64. '
+				<a href="/nelua/nelinker/#aarch64"> 'Nelinker can link static AArch64 Linux executables.'
+				' '
 				<a href="/nelua/neboot/#aarch64"> 'Neboot’s AArch64 UEFI menu and chainloader'
 				' build and run under QEMU.'
 			<h2 className="section"> "How changes are gated"

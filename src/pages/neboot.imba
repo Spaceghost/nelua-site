@@ -41,11 +41,12 @@ export def body
 			<a href="/nelua/assets/core-shootout.zip"> 'Four boot timings (ZIP)'
 			<a href="/nelua/assets/ecosystem-20261121/reproduce.txt"> 'Original 21 November firmware and replay procedure'
 		<h2 className="section" id="aarch64"> 'AArch64 firmware'
-		<p> 'Neboot builds BOOTAA64.EFI and its child application with Nelua, Clang and lld-link. In Fedora Incus, QEMU TCG with AArch64 EDK2 relocated the menu, showed the missing-kernel diagnostic, and chainloaded the child before returning to the menu.'
-		<p> 'On 24 November 2026, Neboot also booted Fedora’s 7.3.4-200.fc44.aarch64 EFI-stub kernel. The kernel ran a minimal test initramfs as PID 1 and powered off cleanly. The ARM Cascadia and Theseus boot path still needs an integration test.'
+		<p> 'Neboot builds BOOTAA64.EFI and its child application with Nelua and Clang. The firmware test passed with lld-link and with Nelinker. In Fedora Incus, QEMU TCG with AArch64 EDK2 relocated the menu, showed the missing-kernel diagnostic, and chainloaded the child before returning to the menu.'
+		<p> 'On 24 November 2026, Neboot also booted Fedora’s 7.3.4-200.fc44.aarch64 EFI-stub kernel. Both linker builds reached a minimal test initramfs running as PID 1 and powered off cleanly. The ARM Cascadia and Theseus boot path still needs an integration test.'
 		<div className="actions">
-			<a className="button" href="/nelua/neboot/neboot-aarch64-09596e2.zip"> 'Download the AArch64 EFI build'
-			<a href="https://github.com/Spaceghost/neboot/tree/ea76d02#aarch64-uefi"> 'Fedora Incus build and Linux handoff tests'
+			<a className="button" href="/nelua/neboot/neboot-aarch64-nelinker-23691f3.zip"> 'Download the Nelinker EFI build'
+			<a href="/nelua/neboot/neboot-aarch64-09596e2.zip"> 'Download the lld-link EFI build'
+			<a href="https://github.com/Spaceghost/neboot/tree/23691f3#aarch64-uefi"> 'Fedora Incus build and Linux handoff tests'
 		<h2 className="section" id="run"> 'Boot in QEMU'
 		<p>
 			'In the '

@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 export const title = 'nelinker · Static ELF linker · Nelua at spacegho.st'
-export const description = 'Link x86-64 and AArch64 ELF objects and static archives into Linux executables, or link x86-64 PE32+ UEFI applications.'
+export const description = 'Link x86-64 and AArch64 ELF objects and static archives into Linux executables, or link PE32+ UEFI applications for either architecture.'
 
 const timings = [
 	["Three loose objects", "1.428", "1.435", "TinyCC · 1.504", "205", "727"]
@@ -26,7 +26,7 @@ export def body
 		<section className="hero">
 			<p className="eyebrow"> 'Core · the linker'
 			<h1> 'nelinker'
-			<p className="tagline"> 'A static linker written in Nelua for x86-64 and AArch64 Linux executables and x86-64 UEFI applications.'
+			<p className="tagline"> 'A static linker written in Nelua for x86-64 and AArch64 Linux executables and UEFI applications.'
 			<p className="blurb"> 'Give it object files and Unix archives. It resolves symbols, applies relocations and writes an executable. The same linker performs the final link of both itself and the necc compiler driver.'
 			<p><a href="https://github.com/Spaceghost/nelinker"> 'nelinker source on GitHub'
 			<div className="actions">
@@ -35,8 +35,10 @@ export def body
 		<h2 className="section" id="aarch64"> 'AArch64 Linux'
 		<p> 'The AArch64 mode links fixed-address static ELF executables. In Fedora Incus under QEMU, it linked and ran a program that used separate object files, archive extraction, branches, a global offset table and relocated data.'
 		<pre><code> 'nelinker --aarch64 -o program start.o libprogram.a'
-		<p> 'Nelinker also relinked Nelibc’s freestanding AArch64 test. It ran preinit and init constructors, initialized aligned thread-local storage, and confirmed isolation in a worker thread. AArch64 PE/EFI output remains open.'
-		<p><a href="https://github.com/Spaceghost/nelinker/tree/9933f8f#aarch64-static-elf"> 'Build and test AArch64 Nelinker'
+		<p> 'Nelinker also relinked Nelibc’s freestanding AArch64 test. It ran preinit and init constructors, initialized aligned thread-local storage, and confirmed isolation in a worker thread.'
+		<p><a href="https://github.com/Spaceghost/nelinker/tree/46c05bb#aarch64-static-elf"> 'Build and test AArch64 Nelinker'
+		<p> 'With the same linker, combine --aarch64 and --efi-app to write a relocatable PE32+ EFI application.'
+		<p><a href="/nelua/neboot/#aarch64"> 'See the Nelinker-built Neboot firmware test'
 		<h2 className="section" id="archive"> 'Link an archive'
 		<p>
 			'Save '

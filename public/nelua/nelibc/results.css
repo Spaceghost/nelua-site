@@ -36,3 +36,45 @@
   .explorer .field, .explorer .search-field { flex-basis: 100%; }
   .explorer .explorer-summary { grid-template-columns: 1fr; }
 }
+
+.arm64-measurements {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 1.5rem 0 1rem;
+  border: 1px solid var(--line);
+  background: var(--line);
+}
+
+.arm64-measurements > div {
+  min-width: 0;
+  padding: clamp(16px, 3vw, 28px);
+  background: var(--quiet);
+}
+
+.arm64-measurements dt {
+  color: var(--muted);
+  font: 600 .75rem/1.5 var(--mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.arm64-measurements dd { margin: 0; }
+
+.arm64-measurements .arm64-count {
+  margin-block: .4rem .55rem;
+  color: var(--accent);
+  font-size: clamp(2.15rem, 5vw, 3.6rem);
+  font-weight: 550;
+  line-height: 1;
+  letter-spacing: -.055em;
+  font-variant-numeric: tabular-nums;
+}
+
+.arm64-actions { align-items: center; }
+.arm64-results details .kv { gap: .6rem 1.1rem; margin-bottom: 0; }
+
+@media (max-width: 40rem) {
+  .arm64-measurements { grid-template-columns: minmax(0, 1fr); }
+  .arm64-results details .kv { row-gap: .2rem; }
+}

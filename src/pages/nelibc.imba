@@ -23,34 +23,43 @@ export def body comparison, stats
 				" is experimental, Linux x86-64, with hybrid builds working and the standalone profile in progress. The implementations are Nelua, with x86-64 assembly for memory primitives and C adapters at the runtime boundaries."
 			<p className="stats" innerHTML=stats>
 		<div className="page-details">
-			<h2 className="section" id="linux-arm64"> 'Linux AArch64 status'
-			<p>
-				'Nelibc’s library profiles currently target x86-64. On '
-				<time html:datetime="2026-11-24"> '24 November 2026'
-				', the character classification module from '
-				<a href="https://github.com/Spaceghost/nelibc/commit/4f498d3"> 'revision 4f498d3'
-				' compiled to an AArch64 object and passed a C ABI smoke test under QEMU in Fedora Incus. The test covered '
-				<code> 'isalpha'
-				', '
-				<code> 'isdigit'
-				' and '
-				<code> 'isalnum'
-				'.'
-			<p>
-				'The AArch64 memory archive builds the portable byte operations with GCC. Its Fedora Incus differential test exercised bytewise references, guard pages and overlapping moves. See the '
-				<a href="https://github.com/Spaceghost/nelibc/blob/main/docs/quickstart.md#aarch64-memory-archive"> 'archive build and test commands'
-				'.'
-			<p>
-				'In Fedora Incus, the '
-				<a href="https://github.com/Spaceghost/nelibc/blob/6033734/docs/quickstart.md#aarch64-freestanding-startup"> 'AArch64 build and test commands'
-				' checked thread-local storage, file metadata, descriptor waits and signals. The select test covered readiness and timeout writeback. The setjmp tests checked saved registers and signal-mask restoration.'
-			<p> 'A static startup fixture verified constructor order, atexit handlers, destructors, the stdio flush call, and the exit status from main.'
-			<p> 'The standalone pthread test passed in Fedora Incus and on a Fedora AArch64 kernel booted through Neboot. It checked thread creation, join, detach, cancellation, and isolation of thread-local storage and errno.'
-			<p> 'The AArch64 floating-point environment test verified rounding modes, exception flags, and restoring saved state. Mixed arguments passed in narrow and wide stdio formatting and scanning.'
-			<p> 'Development builds in Fedora Incus matched glibc on binary128 decimal and hexadecimal formatting and parsing, narrow and wide scanning, and 128 decimal round trips. Binary64 fmod, remainder, and remquo matched the system math library across 50,283 input pairs.'
-			<p> 'The full standalone AArch64 archive and binary128 math routines remain in progress.'
-			<p>
-				<a href="/nelua/compiler/#linux-arm64"> 'Build the Nelua compiler on Linux AArch64'
+			<section className="arm64-results" aria-labelledby="linux-arm64">
+				<h2 className="section" id="linux-arm64"> 'Linux AArch64'
+				<p className="lead"> 'Development builds ran under QEMU in Fedora Incus. The standalone archive and binary128 math routines are still in progress.'
+				<dl className="arm64-measurements">
+					<div>
+						<dt> 'Binary64 remainder operations'
+						<dd className="arm64-count"> '50,283'
+						<dd> 'Input pairs matched the system math library across '
+							<code> 'fmod'
+							', '
+							<code> 'remainder'
+							', and '
+							<code> 'remquo'
+							'.'
+					<div>
+						<dt> 'Binary128 input and output'
+						<dd className="arm64-count"> '128'
+						<dd> 'Decimal round trips matched glibc. The development build also matched hexadecimal conversions and narrow and wide scanning.'
+				<div className="actions arm64-actions">
+					<a className="button" href="https://github.com/Spaceghost/nelibc/blob/6033734/docs/quickstart.md#aarch64-freestanding-startup"> 'Run the published runtime tests'
+					<a className="text-link" href="/nelua/compiler/#linux-arm64"> 'Build the AArch64 compiler'
+				<details>
+					<summary> 'What the runtime tests cover'
+					<dl className="kv">
+						<dt> 'Startup and threads'
+						<dd> 'Static startup, constructor and exit order, and pthread creation, join, detach, cancellation, and thread-local storage. The pthread test also passed on a Fedora AArch64 kernel booted through Neboot.'
+						<dt> 'Linux interfaces'
+						<dd> 'File metadata, signals, descriptor waits, select timeout writeback, and setjmp register and signal-mask restoration.'
+						<dt> 'Memory and characters'
+						<dd>
+							'The '
+							<a href="https://github.com/Spaceghost/nelibc/blob/main/docs/quickstart.md#aarch64-memory-archive"> 'memory archive'
+							' passed guard-page and overlapping-move checks. The '
+							<a href="https://github.com/Spaceghost/nelibc/commit/4f498d3"> 'character classification module'
+							' passed C ABI smoke checks.'
+						<dt> 'Floating-point state'
+						<dd> 'Rounding modes, exception flags, and saving and restoring state. The stdio test also passed mixed arguments in narrow and wide formatting and scanning.'
 			<h2 className="section" html:id="profiles"> "Five runtime arrangements"
 			<p className="lead"> "The C interface stays familiar while ownership changes. Compiler choice (GCC, Zig or TinyCC) is a separate axis from the runtime supplying the missing functions."
 			<div className="table-wrap">

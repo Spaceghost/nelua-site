@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Boot Theseus and send real keyboard input to a Wayland client inside your browser.">
+<title>Theseus Wayland Lab · Nelua</title>
+<link rel="canonical" href="https://nelua.tech/init/wayland/">
+<link rel="stylesheet" href="./lab.css">
+<script type="module" src="./app.mjs"></script>
+</head>
+<body>
+<main>
+  <a class="back" href="../">← Theseus Init</a>
+  <header>
+    <p class="label">NELUA WORKSHOP / LIVE LAB</p>
+    <h1>Wayland inside Theseus</h1>
+    <p>Boot a Linux guest with Theseus as PID 1. Newayland, a compositor written in Nelua, draws a real Wayland test client inside the guest.</p>
+  </header>
+  <section class="screen" aria-label="Live guest output">
+    <div class="screen-label">ARM64 GUEST <span>320 × 240 · SOFTWARE</span></div>
+    <canvas id="display" width="320" height="240" tabindex="0" aria-label="Guest Wayland output. Focus here and press Space to repaint.">This demo requires a browser with canvas support.</canvas>
+    <div class="controls">
+      <button id="boot" type="button">Start Theseus</button>
+      <button id="send-space" type="button" disabled>Send Space</button>
+    </div>
+    <p id="state" role="status">Not started. Nothing boots until you select Start Theseus.</p>
+  </section>
+  <p class="help">After boot, press Space on the display or select Send Space. Both send a keypress to the guest client. This is software rendering, not a full desktop. The guest has no network connection or persistent disk.</p>
+  <p class="help"><a href="./sources/">Source code and licenses</a> · Runtime by <a href="https://github.com/pithings/unkernel">unkernel</a></p>
+  <noscript>Enable JavaScript to start the guest.</noscript>
+</main>
+</body>
+</html>

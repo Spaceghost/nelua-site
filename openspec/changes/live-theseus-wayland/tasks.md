@@ -1,0 +1,4 @@
+- [x] Build and verify a minimal read-only EROFS image.
+- [x] Verify Chrome boot and two input controls under the site CSP.
+- [x] Mirror source, license and build materials alongside the demo.
+- [x] Verify the live Chrome path, alias bytes and unchanged baseline pages.

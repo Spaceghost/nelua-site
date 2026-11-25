@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wayland Lab source and licenses · Nelua</title><link rel="stylesheet" href="../lab.css"></head><body><main>
+<a href="../">← Wayland lab</a><h1>Source and licenses</h1>
+<p>Source archives match the November 25, 2026 build. The parts keep their own licenses. The Linux kernel is under GPL-2.0; the unkernel SDK and Theseus use MIT. The guest libraries and their notices are included separately.</p>
+<ul><li><a href="unkernel-source.tgz">unkernel 4e58555, including Linux patches, configuration, and build scripts</a></li>
+<li><a href="theseus-newayland-source.tar.gz">Theseus and Newayland, guest build recipe and generated sources</a></li>
+<li><a href="busybox-alpine-source.tar.gz">BusyBox 1.37.0-r31, Alpine recipe and musl source</a></li>
+<li><a href="glibc-source.tar.gz">Debian glibc 2.41-12+deb13u4</a></li>
+<li><a href="libffi-source.tar.gz">Debian libffi 3.4.8-2</a></li>
+<li><a href="libxkbcommon-source.tar.gz">Debian libxkbcommon 1.7.0-2</a></li>
+<li><a href="wayland-source.tar.gz">Debian Wayland 1.23.1-3</a></li>
+<li><a href="wayland-protocols-source.tar.gz">Wayland protocols 1.44-1</a></li>
+<li><a href="xkeyboard-config-source.tar.gz">Debian xkeyboard-config 2.42-1</a></li></ul>
+<h2>Linux 7.3.4 base source</h2><p>Download all eight pieces and concatenate them in order. The unkernel source has the patches and build configuration.</p>
+<p><a href="linux/linux-7.3.4.tar.xz.part-00">1</a> · <a href="linux/linux-7.3.4.tar.xz.part-01">2</a> · <a href="linux/linux-7.3.4.tar.xz.part-02">3</a> · <a href="linux/linux-7.3.4.tar.xz.part-03">4</a> · <a href="linux/linux-7.3.4.tar.xz.part-04">5</a> · <a href="linux/linux-7.3.4.tar.xz.part-05">6</a> · <a href="linux/linux-7.3.4.tar.xz.part-06">7</a> · <a href="linux/linux-7.3.4.tar.xz.part-07">8</a></p><pre><code>cat linux-7.3.4.tar.xz.part-* &gt; linux-7.3.4.tar.xz</code></pre>
+<p>Full Linux archive SHA-256: <code>b11b6df8295e8e991ff040b71aaa4994a8b55caa23b6b092907f195b5840fd1f</code></p>
+<p><a href="./SHA256SUMS">Checksums</a> · <a href="./LICENSE">unkernel GPL text</a> · <a href="./LICENSE-MIT">unkernel MIT text</a></p>
+<p>Package notices: <a href="notices/libc6.txt">libc6</a> · <a href="notices/libffi8.txt">libffi8</a> · <a href="notices/libwayland-client0.txt">libwayland-client0</a> · <a href="notices/libwayland-server0.txt">libwayland-server0</a> · <a href="notices/libxkbcommon0.txt">libxkbcommon0</a> · <a href="notices/xkb-data.txt">xkb-data</a></p>
+</main></body></html>

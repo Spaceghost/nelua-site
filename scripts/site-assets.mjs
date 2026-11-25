@@ -22,3 +22,6 @@ for (const path of readdirSync('public/nelua', { recursive: true })) {
 const profiles = join(output, 'assets/nelibc-coverage-profiles.json');
 writeFileSync(profiles, readFileSync(profiles, 'utf8').replaceAll('"/nelua/assets/', '"/assets/'));
 cpSync('public/_headers', join(output, '_headers'));
+
+// Keep the interactive release unchanged when publishing the daily snapshot.
+await (await import("./wayland-release/hydrate.mjs")).hydrateWayland(output);

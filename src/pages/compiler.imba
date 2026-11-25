@@ -414,25 +414,26 @@ export def body
 				"Pinning: the nelibc gate and nebox's container builds run the fork at "
 				<code> "dabbd9ef"
 				". nelibc and nebox compile with upstream-compatible syntax plus const pointers; the newer additions are available to them but not yet required."
-			<h2 className="section" id="linux-arm64"> 'Linux AArch64'
-			<p> 'Build the hosted Nelua compiler with GCC inside an emulated Fedora AArch64 userspace on an x86-64 Incus host. The guide shows how to build and run an AArch64 executable and package the compiler.'
+			<h2 className="section" id="linux-arm64"> 'Linux ARM64'
+			<p>
+				'Download the prebuilt compiler for 64-bit ARM Linux (AArch64). Extract the archive, open the extracted directory, and run '
+				<code> './nelua --version'
+				'. Install GCC to compile Nelua programs.'
 			<div className="actions">
-				<a className="button" href="https://github.com/Spaceghost/nelua/blob/master/docs/arm64-fedora-incus.md"> 'Fedora Incus build guide'
-				<a href="https://github.com/Spaceghost/nelua/releases/download/latest/nelua-linux-aarch64-latest.tar.xz"> 'Download the portable Linux AArch64 compiler'
-				<a href="https://github.com/Spaceghost/nelua/releases/download/latest/nelua-linux-aarch64-fedora44-7977531.tar.xz"> 'Download the Fedora Incus build'
+				<a className="button" href="https://github.com/Spaceghost/nelua/releases/download/latest/nelua-linux-aarch64-latest.tar.xz"> 'Download for Linux ARM64'
+			<p> 'To build from source on an ARM64 Linux machine, install Git, Make, and GCC, then run these commands:'
+			<pre>
+				<code> "git clone https://github.com/Spaceghost/nelua.git\ncd nelua\nmake\n./nelua examples/helloworld.nelua"
 			<p>
-				'On AArch64, nebuild can use the host C library. The '
-				<a href="/nelua/nelibc/#linux-arm64"> 'Nelibc library profiles'
-				' and standalone nebox builds currently target x86-64. '
-				<a href="/nelua/necc/#aarch64"> 'The hosted NeCC driver can build freestanding AArch64 programs.'
-				' '
-				<a href="/nelua/nelinker/#aarch64"> 'Nelinker can link static AArch64 Linux executables.'
-				' '
-				<a href="/nelua/neboot/#aarch64"> 'Neboot’s AArch64 UEFI menu and chainloader'
-				' build and run under QEMU.'
-			<p>
-				'Nelgop can capture a frame in AArch64 UEFI and decode the serial stream. Its Linux AArch64 decoder can run without a C runtime. '
-				<a href="https://github.com/Spaceghost/nelgop/blob/ecf07ef/uefi/README.md#aarch64-firmware-smoke-test"> 'Reproduce the GOP capture in Fedora Incus.'
+				'For related ARM64 tooling, see the '
+				<a href="/nelua/nelibc/#linux-arm64"> 'Nelibc runtime tests'
+				', '
+				<a href="/nelua/necc/#aarch64"> 'NeCC freestanding builds'
+				', '
+				<a href="/nelua/nelinker/#aarch64"> 'Nelinker static executables'
+				', and '
+				<a href="/nelua/neboot/#aarch64"> 'Neboot UEFI support'
+				'. Nelgop can capture a frame in AArch64 UEFI and decode the serial stream on Linux.'
 			<h2 className="section"> "How changes are gated"
 			<dl className="kv">
 				<dt> "Specs"

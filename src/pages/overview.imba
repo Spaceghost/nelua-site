@@ -17,6 +17,7 @@ export const core = [
 ]
 
 const workshop = [
+	{ title: 'Ghostty Dalamud', path: 'https://github.com/Spaceghost/ghostty-dalamud/blob/master/agent/capture_wayland.nelua', description: 'A headless Wayland compositor written in Nelua that uses wlroots to stream Linux application windows into Final Fantasy XIV.' }
 	{ title: 'Theseus Init', path: '/nelua/init/', description: 'Boot Linux and supervise services with native CUE definitions and an adapter for OpenRC services.' }
 	{ title: 'Drift', path: 'https://github.com/Spaceghost/drift', description: 'Portable Virtio, xHCI, NVMe, Ethernet and AHCI drivers written in Nelua.' }
 	{ title: 'Atlas firmware', path: 'https://github.com/Spaceghost/atlas-firmware', description: 'ESP32-S3 LoRa field controllers using Nelua alongside Lua and ESP-IDF.' }

@@ -141,11 +141,11 @@ export def body
 						<a href="https://github.com/Spaceghost/nebox"> 'Nebox repository'
 						<a href="https://github.com/Spaceghost/nebox/blob/master/tests/run.sh"> 'Conformance suite'
 				<pre>
-					<code> "git clone https://github.com/Spaceghost/nelibc\nmake -C nelibc lib-standalone-zig\ngit clone https://github.com/Spaceghost/nebox\nmake -C nebox NELIBC=../nelibc\nmake -C nebox NELIBC=../nelibc test"
+					<code> "git clone https://github.com/Spaceghost/nelibc\ngit clone https://github.com/Spaceghost/nebox\nmake -C nebox nebox nebuild NELIBC=../nelibc\nmake -C nebox NELIBC=../nelibc test"
 
 			<p>
-				'The ARM64 build supplies the shell and utilities in Cascadia Edge. The signed packages were built on Fedora and tested by running the public migration in an Alpine aarch64 guest. '
-				<a href="/nelua/#cascadia-arm64"> 'Stage the ARM64 base root.'
+				'On AArch64 Linux, Make selects GCC and the standalone Nelibc archive for both Nebox and nebuild. The Fedora build was tested in an AArch64 guest, where the Nebox shell ran commands and nebuild built a target and reused it on the next run. '
+				<a href="/nelua/nelibc/#linux-arm64"> 'AArch64 archive and runtime checks'
 
 		<section className="ng-section" aria-labelledby="line-count">
 			<h2 id="line-count"> 'Counting lines in Nelibc source'

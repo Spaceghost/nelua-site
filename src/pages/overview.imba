@@ -156,23 +156,6 @@ export def body
 				<p className="lead"> 'Libraries and programs built on the Nelua core.'
 				projectList(workshop)
 				<ul className="project-list">
-					<li id="cascadia-arm64">
-						<a href="https://spacegho.st/cascadia/download/arm64/2026-11-26.1/cascadia-live-aarch64.iso"> 'Download the Cascadia ARM64 live ISO'
-						<p>
-							'Boot the ISO in an AArch64 UEFI virtual machine to use the Nebox serial console with Theseus or OpenRC recovery. '
-							<a href="https://spacegho.st/cascadia/#arm64-qemu"> 'QEMU boot command'
-							' · '
-							<a href="https://spacegho.st/cascadia/download/arm64/2026-11-26.1/SHA256SUMS"> 'SHA-256 checksum'
-						<p>
-							'On Alpine Linux (aarch64), run this command to stage the signed Cascadia base system at '
-							<code> '/var/lib/cascadia/edge'
-							'. The installer needs a new destination and leaves the running Alpine system in place.'
-						<pre>
-							<code> 'curl -fsSL https://spacegho.st/cascadia/migrate.sh | sh'
-						<p>
-							'Enter the new root as root with '
-							<code> 'chroot /var/lib/cascadia/edge /bin/sh'
-							'. Its shell and utilities come from Nebox, built against the standalone ARM64 Nelibc archive.'
 					<li>
 						<a href="https://github.com/Spaceghost/cascadia/releases/tag/core-dev-2026.11.20"> 'Cascadia developer image'
 						<p> 'Boot an x86-64 VM and rebuild Core from its Nebox login shell. These files are available to accounts with access to the Cascadia repository.'

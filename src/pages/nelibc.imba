@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 export const title = "nelibc · a C library written in Nelua · spacegho.st/nelua"
-export const description = "nelibc replaces C library functions with Nelua implementations: hybrid archives over glibc, musl or Cosmopolitan, a standalone Linux x86-64 runtime, and a host profile for kernels. Compare symbol coverage for glibc, musl and Cosmopolitan."
+export const description = "nelibc replaces C library functions with Nelua implementations: hybrid archives over glibc, musl or Cosmopolitan, standalone runtimes for Linux x86-64 and AArch64, and a host profile for kernels. Compare symbol coverage for glibc, musl and Cosmopolitan."
 
 const nelibcPassRows = [
 	["strstr · ab / aa", "39.00", "3.58", "2.39"]
@@ -20,12 +20,13 @@ export def body comparison, stats
 			<p className="blurb">
 				"Replace selected libc functions with Nelua implementations, using glibc, musl or Cosmopolitan for the rest; or use the standalone runtime with no external libc. "
 				<a html:href="https://github.com/Spaceghost/nelibc"> "Spaceghost/nelibc"
-				" is experimental, Linux x86-64, with hybrid builds working and the standalone profile in progress. The implementations are Nelua, with x86-64 assembly for memory primitives and C adapters at the runtime boundaries."
+				" supports hybrid builds on Linux x86-64 and standalone builds on x86-64 and AArch64. The implementations are Nelua, with x86-64 assembly for memory primitives and C adapters at the runtime boundaries."
 			<p className="stats" innerHTML=stats>
 		<div className="page-details">
 			<section className="arm64-results" aria-labelledby="linux-arm64">
 				<h2 className="section" id="linux-arm64"> 'Linux AArch64'
-				<p className="lead"> 'Cascadia Edge uses the standalone AArch64 archive to link Nebox and nebuild. The ARM64 packages were built on Fedora. Binary128 math routines remain in progress.'
+				<p className="lead"> 'The native GCC build produces a static archive with AArch64 startup code and Linux system calls. Nebox and nebuild both link against it.'
+				<pre><code> 'make lib-standalone-aarch64-gcc'
 				<dl className="arm64-measurements">
 					<div>
 						<dt> 'Binary64 remainder operations'
@@ -42,16 +43,15 @@ export def body comparison, stats
 						<dd className="arm64-count"> '128'
 						<dd> 'Decimal round trips matched glibc. Hexadecimal conversions and narrow and wide scanning matched too.'
 				<div className="actions arm64-actions">
-					<a className="button" href="https://github.com/Spaceghost/nelibc/blob/9af5d79/docs/quickstart.md#aarch64-freestanding-startup"> 'Run the tested AArch64 checks'
+					<a className="button" href="https://github.com/Spaceghost/nelibc/blob/9af5d79/docs/quickstart.md#aarch64-standalone-archive"> 'Run the tested AArch64 checks'
 					<a className="text-link" href="/nelua/compiler/#linux-arm64"> 'Build the AArch64 compiler'
-					<a className="text-link" href="/nelua/#cascadia-arm64"> 'Try the archive in Cascadia Edge'
 				<details>
 					<summary> 'What the runtime tests cover'
 					<dl className="kv">
 						<dt> 'Startup and threads'
 						<dd> 'Static startup, constructor and exit order, and pthread creation, join, detach, cancellation, and thread-local storage. The pthread test also passed on a Fedora AArch64 kernel booted through Neboot.'
 						<dt> 'Linux interfaces'
-						<dd> 'File metadata, signals, descriptor waits, select timeout writeback, and setjmp register and signal-mask restoration.'
+						<dd> 'Directory traversal, file metadata, signals, descriptor waits, select timeout writeback, and setjmp register and signal-mask restoration.'
 						<dt> 'Memory and characters'
 						<dd>
 							'The '

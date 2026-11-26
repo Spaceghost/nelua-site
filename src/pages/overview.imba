@@ -157,7 +157,12 @@ export def body
 				projectList(workshop)
 				<ul className="project-list">
 					<li id="cascadia-arm64">
-						<a href="https://spacegho.st/cascadia/migrate.sh"> 'Cascadia Edge for ARM64'
+						<a href="https://spacegho.st/cascadia/download/arm64/2026-11-26.1/cascadia-live-aarch64.iso"> 'Download the Cascadia ARM64 live ISO'
+						<p>
+							'Boot the ISO in an AArch64 UEFI virtual machine to use the Nebox serial console with Theseus or OpenRC recovery. '
+							<a href="https://spacegho.st/cascadia/#arm64-qemu"> 'QEMU boot command'
+							' · '
+							<a href="https://spacegho.st/cascadia/download/arm64/2026-11-26.1/SHA256SUMS"> 'SHA-256 checksum'
 						<p>
 							'On Alpine Linux (aarch64), run this command to stage the signed Cascadia base system at '
 							<code> '/var/lib/cascadia/edge'

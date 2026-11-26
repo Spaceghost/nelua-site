@@ -25,7 +25,7 @@ export def body comparison, stats
 		<div className="page-details">
 			<section className="arm64-results" aria-labelledby="linux-arm64">
 				<h2 className="section" id="linux-arm64"> 'Linux AArch64'
-				<p className="lead"> 'The tested source ran under QEMU in Fedora Incus. The standalone archive and binary128 math routines are still in progress.'
+				<p className="lead"> 'Cascadia Edge uses the standalone AArch64 archive to link Nebox and nebuild. The ARM64 packages were built on Fedora. Binary128 math routines remain in progress.'
 				<dl className="arm64-measurements">
 					<div>
 						<dt> 'Binary64 remainder operations'
@@ -42,8 +42,9 @@ export def body comparison, stats
 						<dd className="arm64-count"> '128'
 						<dd> 'Decimal round trips matched glibc. Hexadecimal conversions and narrow and wide scanning matched too.'
 				<div className="actions arm64-actions">
-					<a className="button" href="https://github.com/Spaceghost/nelibc/blob/e8bbfdf/docs/quickstart.md#aarch64-freestanding-startup"> 'Run the tested AArch64 checks'
+					<a className="button" href="https://github.com/Spaceghost/nelibc/blob/9af5d79/docs/quickstart.md#aarch64-freestanding-startup"> 'Run the tested AArch64 checks'
 					<a className="text-link" href="/nelua/compiler/#linux-arm64"> 'Build the AArch64 compiler'
+					<a className="text-link" href="/nelua/#cascadia-arm64"> 'Try the archive in Cascadia Edge'
 				<details>
 					<summary> 'What the runtime tests cover'
 					<dl className="kv">

@@ -97,7 +97,7 @@ export def body
 					' build adds '
 					<code> 'init'
 					' for a total of 139. '
-					<a href="/cascadia/#system"> 'See what ships in Cascadia.'
+					<a href="https://spacegho.st/cascadia/#system"> 'See what ships in Cascadia.'
 		<section className="ng-section" aria-labelledby="compatibility">
 			<h2 id="compatibility"> 'Using the toolbox'
 			<div className="ng-features">
@@ -144,8 +144,8 @@ export def body
 					<code> "git clone https://github.com/Spaceghost/nelibc\nmake -C nelibc lib-standalone-zig\ngit clone https://github.com/Spaceghost/nebox\nmake -C nebox NELIBC=../nelibc\nmake -C nebox NELIBC=../nelibc test"
 
 			<p>
-				'A static AArch64 prototype built in Fedora Incus and ran echo, wc, and printf under QEMU. Full applet conformance and runtime coverage remain in progress. '
-				<a href="/nelua/nelibc/#linux-arm64"> 'See the AArch64 runtime tests.'
+				'The ARM64 build supplies the shell and utilities in Cascadia Edge. The signed packages were built on Fedora and tested by running the public migration in an Alpine aarch64 guest. '
+				<a href="/nelua/#cascadia-arm64"> 'Stage the ARM64 base root.'
 
 		<section className="ng-section" aria-labelledby="line-count">
 			<h2 id="line-count"> 'Counting lines in Nelibc source'

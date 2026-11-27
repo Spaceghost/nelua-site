@@ -146,6 +146,11 @@ export def body
 			<p>
 				'On AArch64 Linux, Make selects GCC and the standalone Nelibc archive for both Nebox and nebuild. The Fedora build was tested in an AArch64 guest, where the Nebox shell ran commands and nebuild built a target and reused it on the next run. '
 				<a href="/nelua/nelibc/#linux-arm64"> 'AArch64 archive and runtime checks'
+			<p>
+				'Try the Nebox serial shell in the Cascadia ARM64 live ISO. The default entry starts Theseus, and the UEFI menu offers OpenRC recovery. '
+				<a href="https://spacegho.st/cascadia/#download-arm64"> 'ISO download and signed checksums'
+				' · '
+				<a href="https://spacegho.st/cascadia/#arm64-qemu"> 'QEMU boot instructions'
 
 		<section className="ng-section" aria-labelledby="line-count">
 			<h2 id="line-count"> 'Counting lines in Nelibc source'
